@@ -288,7 +288,7 @@ function App() {
               { length: Math.floor(PROCESS_STEPS.length / 3) },
               (_, rowIndex) => (
                 <div
-                  key={rowIndex}
+                  key={`process-row-${rowIndex * 3}-${(rowIndex + 1) * 3}`}
                   className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5"
                 >
                   {PROCESS_STEPS.slice(rowIndex * 3, (rowIndex + 1) * 3).map(

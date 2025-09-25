@@ -97,7 +97,7 @@ export const profileFormSchema = z.object({
         if (!match) return false;
 
         const [, amount, unit] = match;
-        const numAmount = parseInt(amount);
+        const numAmount = parseInt(amount, 10);
 
         // Convert to MB for comparison
         let totalMB = numAmount;
@@ -199,7 +199,7 @@ export const parseStorageUsage = (usageString: string): number => {
   if (!match) return 0;
 
   const [, amount, unit] = match;
-  const numAmount = parseInt(amount);
+  const numAmount = parseInt(amount, 10);
 
   switch (unit.toUpperCase()) {
     case "MB":

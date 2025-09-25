@@ -302,7 +302,9 @@ export function WelcomeForm() {
                   Region
                 </FormLabel>
                 <Select
-                  onValueChange={(value) => handleRegionChange(parseInt(value))}
+                  onValueChange={(value) =>
+                    handleRegionChange(parseInt(value, 10))
+                  }
                   disabled={isLoading || isLoadingLocations}
                 >
                   <FormControl>
@@ -327,7 +329,7 @@ export function WelcomeForm() {
                 </FormLabel>
                 <Select
                   onValueChange={(value) =>
-                    handleCountryChange(parseInt(value))
+                    handleCountryChange(parseInt(value, 10))
                   }
                   disabled={
                     isLoading || isLoadingLocations || !selectedRegionId
@@ -357,7 +359,9 @@ export function WelcomeForm() {
                   City
                 </FormLabel>
                 <Select
-                  onValueChange={(value) => setSelectedCityId(parseInt(value))}
+                  onValueChange={(value) =>
+                    setSelectedCityId(parseInt(value, 10))
+                  }
                   disabled={
                     isLoading || isLoadingLocations || !selectedCountryId
                   }
