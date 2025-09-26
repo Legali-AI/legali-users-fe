@@ -1,17 +1,25 @@
 name: Build and Deploy
 
+# TEMPORARILY DISABLED - Server not ready yet
+# Uncomment the 'on' section below when ready to enable deployment
+#
+# on:
+#   push:
+#     branches: ["main", "dev"]
+#   workflow_run:
+#     workflows: ["CI"]
+#     types:
+#       - completed
+#     branches: ["main", "dev"]
+
+# Workflow disabled - will not trigger automatically
 on:
-  push:
-    branches: ["main"]
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
-    branches: ["main"]
+  workflow_dispatch:  # Can still be triggered manually if needed
 
 jobs:
   build-and-push-dockerfile-image:
-    if: startsWith(github.repository, 'Inkubator-IT/template-') == false && (github.event_name == 'push' || github.event.workflow_run.conclusion == 'success')
+    # Only run if manually triggered and not a template repository
+    if: startsWith(github.repository, 'Inkubator-IT/template-') == false && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
 
     steps:
@@ -42,8 +50,8 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/legali-users-fe:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/legali-users-fe:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/legali-users-fe:${{ github.ref_name == 'main' && 'latest' || 'dev' }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/legali-users-fe:${{ github.ref_name }}-${{ github.sha }}
           platforms: linux/amd64
           cache-from: type=gha
           cache-to: type=gha,mode=max
