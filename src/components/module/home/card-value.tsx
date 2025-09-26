@@ -16,7 +16,13 @@ export function CardValue({ valueProposition, index }: CardValueProps) {
       )}
     >
       {/* Image */}
-      <div className="h-[200px] w-full max-w-[546px] rounded-xl bg-slate-400 sm:h-[243px]" />
+      <div
+        className="h-[200px] w-full max-w-[546px] rounded-xl sm:h-[243px]"
+        style={{
+          background:
+            "radial-gradient(166.66% 50.29% at 50% 38.41%, #F7F7F7 0%, #EDFAFF 100%)",
+        }}
+      />
       {/* Text */}
       <div className={cn("flex-1 space-y-2", index % 2 === 1 && "sm:ml-4")}>
         {/* Headline */}

@@ -1,8 +1,8 @@
-import type { Problem } from "../../../data/home.data";
+import type { ProblemAboutUs } from "../../../data/home.data";
 import { P } from "../../elements/typography";
 
 interface CardProblemProps {
-  problem: Problem;
+  problem: ProblemAboutUs;
 }
 
 export function CardProblem({ problem }: CardProblemProps) {
@@ -10,19 +10,23 @@ export function CardProblem({ problem }: CardProblemProps) {
     <div
       style={{
         background:
-          "radial-gradient(129.59% 55.61% at 40.76% 84.27%, #FFF 0%, #EDFAFF 100%)",
+          "radial-gradient(152.91% 48.81% at 69.85% 56.49%, #FFF 0%, #EDFAFF 100%)",
       }}
-      className="w-full space-y-2 rounded-xl border border-white-400 p-4 sm:p-6"
+      className="w-full space-y-3 rounded-xl border border-white-400 p-4 sm:p-6"
     >
-      <div className="mb-3 h-8 w-8 rounded-sm bg-sky-blue-800" />
-      <P
-        level={"h5"}
-        weight={"semibold"}
-        className="text-sky-blue-900"
-        align={"left"}
-      >
-        {problem.title}
-      </P>
+      <div className="flex items-center gap-2">
+        <div className="h-fit w-fit rounded-sm bg-sky-blue-800 p-1.5">
+          <problem.icon className="h-5 w-5 text-white" />
+        </div>
+        <P
+          level={"h5"}
+          weight={"semibold"}
+          className="text-sky-blue-900"
+          align={"left"}
+        >
+          {problem.title}
+        </P>
+      </div>
       <P level={"title"} className="text-brand-slate" align={"left"}>
         {problem.description}
       </P>

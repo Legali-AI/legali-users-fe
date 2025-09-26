@@ -1,4 +1,5 @@
 import { Linkedin } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import type { Attorney } from "../../../data/home.data";
 import { cn } from "../../../lib/utils";
@@ -25,10 +26,30 @@ export function CardAttorney({ attorney, index, collapse }: CardAttorneyProps) {
         ]
       )}
     >
-      <div className="aspect-square h-[230px] w-full bg-slate-500" />
-      <div className="relative z-[2px] -mt-10 h-8 w-full bg-white blur-3xl" />
+      {/* Image */}
+      <div
+        className="flex aspect-square h-[230px] w-full flex-col items-center  overflow-hidden"
+        style={{
+          background: "linear-gradient(223deg, #EDFAFF 2.59%, #FFF 100%)",
+        }}
+      >
+        {attorney.imageUrl && (
+          <Image
+            src={attorney.imageUrl}
+            alt={attorney.name}
+            width={230}
+            height={230}
+            className="object-contain object-center"
+          />
+        )}
+      </div>
 
+      {/* Divider */}
+      <div className="relative z-[10px] -mt-8 h-8 w-full bg-white blur-lg" />
+
+      {/* Text */}
       <div className="flex flex-col gap-2 p-5">
+        {/* Name */}
         <H4
           weight={"semibold"}
           className="text-sky-blue-900"
@@ -36,9 +57,11 @@ export function CardAttorney({ attorney, index, collapse }: CardAttorneyProps) {
         >
           {attorney.name}
         </H4>
+        {/* Address */}
         <P level={collapse ? "label" : "body"} className="text-brand-slate">
           {attorney.address}
         </P>
+        {/* LinkedIn */}
         {attorney.linkedinUrl && (
           <div className="flex items-center gap-2">
             <Linkedin size={16} />
@@ -46,24 +69,27 @@ export function CardAttorney({ attorney, index, collapse }: CardAttorneyProps) {
               level={collapse ? "label" : "body"}
               className="text-sky-blue-900"
             >
-              <Link href={attorney.linkedinUrl}>{attorney.linkedinUrl}</Link>
+              <Link href={attorney.linkedinUrl}>{attorney.name}</Link>
             </P>
           </div>
         )}
-        <Badge variant={"sky-blue"} level={collapse ? "label" : "body"}>
+        {/* Specialization */}
+        <Badge variant={"outline"} level={collapse ? "label" : "body"}>
           {attorney.specialization}
         </Badge>
+        {/* Hourly Rate */}
         <Badge
-          variant={"outline-warm-orange"}
+          variant={"ghost"}
           level={collapse ? "label" : "body"}
           weight={"semibold"}
         >
           {attorney.hourlyRate}
         </Badge>
+        {/* Connect Button */}
         {!collapse && (
           <Button
             className="ml-auto w-fit rounded-full"
-            variant={"orange"}
+            variant={"outline"}
             size={"lg"}
           >
             Connect

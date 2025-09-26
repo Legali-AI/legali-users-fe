@@ -79,7 +79,7 @@ export const FOOTER_SECTIONS: FooterSection[] = [
 ];
 export function Footer() {
   return (
-    <footer className="relative w-full overflow-hidden bg-brand-gray-50 p-4 sm:p-6 lg:p-10">
+    <footer className="relative w-full overflow-hidden bg-sky-blue-100 p-4 sm:p-6 lg:p-10">
       <div className="flex flex-col items-start justify-center gap-8 sm:flex-row sm:gap-16 lg:gap-32">
         {/* Logo */}
         <div className="flex-none">

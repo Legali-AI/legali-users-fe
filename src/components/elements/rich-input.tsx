@@ -268,7 +268,6 @@ export default function RichInput({
               disabled || (!text.trim() && files.length === 0 && !audioBlob)
             }
             className="h-10 w-10 rounded-full"
-            variant={"orange"}
             aria-label="Send"
           >
             <Send className="h-4 w-4 text-white" />
