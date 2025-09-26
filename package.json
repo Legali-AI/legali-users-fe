@@ -10,6 +10,7 @@
     "lint:fix": "biome check --write",
     "lint:fix:all": "biome check --write --unsafe",
     "format": "biome format --write",
+    "format:check": "biome format",
     "type-check": "tsc --noEmit",
     "check-all": "npm run type-check && npm run lint",
     "lint:ci": "./.github/scripts/lint-check.sh",
