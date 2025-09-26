@@ -2,9 +2,9 @@ name: Required Checks
 
 on:
   push:
-    branches: [ main, develop, 'feature/**', 'bugfix/**', 'hotfix/**' ]
+    branches: [ main, dev, develop, 'feature/**', 'bugfix/**', 'hotfix/**' ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main, dev, develop ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
