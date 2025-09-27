@@ -10,17 +10,19 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-deep-navy text-primary-foreground shadow-xs",
+        black: "bg-black text-white shadow-xs",
         destructive:
           "bg-brand-rose text-white shadow-xs hover:bg-brand-rose/90 focus-visible:ring-brand-rose/20 dark:bg-brand-rose/60 dark:focus-visible:ring-brand-rose/40",
         outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+          "border bg-background shadow-sm hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         orange: "bg-warm-orange-400 text-white",
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
-        "gradient-blue": "bg-gradient-to-b from-white to-[#A4D1E8] text-black",
+        "gradient-blue":
+          "bg-gradient-to-b from-white to-[#A4D1E8] font-semibold text-black",
       },
       size: {
         default: "px-4 py-2",

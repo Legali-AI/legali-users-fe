@@ -1,4 +1,4 @@
-import { Linkedin } from "lucide-react";
+import { ExternalLink, Linkedin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Attorney } from "../../../data/home.data";
@@ -64,7 +64,7 @@ export function CardAttorney({ attorney, index, collapse }: CardAttorneyProps) {
         {/* LinkedIn */}
         {attorney.linkedinUrl && (
           <div className="flex items-center gap-2">
-            <Linkedin size={16} />
+            <Linkedin size={16} className="text-sky-blue-900" />
             <P
               level={collapse ? "label" : "body"}
               className="text-sky-blue-900"
@@ -89,10 +89,10 @@ export function CardAttorney({ attorney, index, collapse }: CardAttorneyProps) {
         {!collapse && (
           <Button
             className="ml-auto w-fit rounded-full"
-            variant={"outline"}
-            size={"lg"}
+            variant={"gradient-blue"}
           >
             Connect
+            <ExternalLink />
           </Button>
         )}
       </div>

@@ -427,7 +427,7 @@
   --light-gray-900: #3c4043;
   --light-gray-950: #202124;
 
-  --card: oklch(1 0 0);
+  --card: #fff;
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);

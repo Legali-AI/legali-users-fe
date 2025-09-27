@@ -132,15 +132,20 @@ export default function ProfilePage() {
         {!isEditing ? (
           <Button
             onClick={handleEdit}
-            variant={"orange"}
             disabled={isSubmitting}
+            className="rounded-md"
           >
             <Edit className="h-4 w-4" />
             Edit
           </Button>
         ) : (
           <div className="flex items-center gap-3">
-            <Button type="submit" form={formId} disabled={isSubmitting}>
+            <Button
+              type="submit"
+              form={formId}
+              disabled={isSubmitting}
+              className="rounded-md"
+            >
               {isSubmitting ? "Saving..." : "Save"}
             </Button>
             <Button
@@ -148,6 +153,7 @@ export default function ProfilePage() {
               onClick={handleCancel}
               variant="outline"
               disabled={isSubmitting}
+              className="rounded-md"
             >
               Cancel
             </Button>
@@ -173,6 +179,7 @@ export default function ProfilePage() {
                   <FormItem>
                     <FormControl>
                       <ProfileUpload
+                        variant="gray"
                         value={field.value}
                         onChange={handleProfileImageChange}
                         disabled={!isEditing || isSubmitting}
@@ -408,7 +415,7 @@ export default function ProfilePage() {
 
           {/* Footer with Logout Button */}
           <div className="flex justify-end">
-            <LogoutButton variant="destructive" />
+            <LogoutButton variant="destructive" className="rounded-md" />
           </div>
         </form>
       </Form>

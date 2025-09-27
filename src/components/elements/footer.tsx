@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "../../lib/utils";
 import { H4, P } from "./typography";
 
 interface FooterLink {
@@ -77,9 +81,21 @@ export const FOOTER_SECTIONS: FooterSection[] = [
     ],
   },
 ];
-export function Footer() {
+const backgroundMap = {
+  "/": "bg-sky-blue-100",
+};
+
+export default function Footer() {
+  const pathname = usePathname();
+  const background =
+    backgroundMap[pathname as keyof typeof backgroundMap] || "bg-sky-blue-200";
   return (
-    <footer className="relative w-full overflow-hidden bg-sky-blue-100 p-4 sm:p-6 lg:p-10">
+    <footer
+      className={cn(
+        "relative w-full overflow-hidden p-4 sm:p-6 lg:p-10",
+        background
+      )}
+    >
       <div className="flex flex-col items-start justify-center gap-8 sm:flex-row sm:gap-16 lg:gap-32">
         {/* Logo */}
         <div className="flex-none">
@@ -124,5 +140,3 @@ export function Footer() {
     </footer>
   );
 }
-
-export default Footer;

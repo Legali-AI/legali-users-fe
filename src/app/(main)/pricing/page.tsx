@@ -1,0 +1,61 @@
+import type { Metadata } from "next";
+import { H1 } from "../../../components/elements/typography";
+import { PRICING_DATA } from "../../../data/pricing.data";
+import PricingCard from "./pricing-card";
+
+export const metadata: Metadata = {
+  title: "Pricing Plans",
+  description:
+    "Choose the perfect pricing plan for your legal needs. Flexible credit-based plans designed to fit your budget and requirements.",
+  keywords: [
+    "pricing plans",
+    "legal services pricing",
+    "attorney consultation costs",
+    "legal credits",
+    "subscription plans",
+  ],
+  openGraph: {
+    title: "Pricing Plans",
+    description:
+      "Choose the perfect pricing plan for your legal needs. Flexible credit-based plans designed to fit your budget and requirements.",
+  },
+};
+
+export default function PricingPage() {
+  return (
+    <main
+      className="relative z-10 flex w-full flex-col items-center justify-center overflow-hidden bg-sky-blue-200 px-32 py-40"
+      aria-label="Attorney connection page"
+    >
+      {/* Background decorations */}
+      {/* Bottom Left */}
+      <div
+        className="absolute -bottom-[100px] -left-[200px] -z-10 aspect-[3/2] w-[700px] rotate-45"
+        style={{
+          borderRadius: "686.309px",
+          background: "linear-gradient(90deg, #E5F8FF 0%, #9BDBF3 100%)",
+          filter: "blur(43.400001525878906px)",
+        }}
+      />
+      {/* Bottom Right */}
+      <div
+        className="absolute -right-[200px] -bottom-[100px] -z-10 aspect-[3/2] w-[700px] rotate-45"
+        style={{
+          borderRadius: "686.309px",
+          background: "linear-gradient(90deg, #E5F8FF 0%, #9BDBF3 100%)",
+          filter: "blur(43.400001525878906px)",
+        }}
+      />
+
+      {/* Page header */}
+      <H1 weight={"semibold"}>Pricing</H1>
+
+      {/* Attorney cards grid */}
+      <div className="mt-10 grid w-full max-w-5xl grid-cols-2 gap-10">
+        {PRICING_DATA.map((pricing) => (
+          <PricingCard key={pricing.name} {...pricing} />
+        ))}
+      </div>
+    </main>
+  );
+}

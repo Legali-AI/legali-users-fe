@@ -18,7 +18,7 @@ const badgeVariants = cva(
           "border-transparent bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90",
         outline:
           "rounded-full text-sky-blue-900 ring-1 ring-sky-blue-900 [a&]:hover:bg-sky-blue-900 [a&]:hover:text-sky-blue-900 ",
-        ghost: "rounded-full text-brand-slate ring-0",
+        ghost: "rounded-full border-none text-brand-slate ring-0",
         coral: "rounded-full border-transparent bg-brand-rose text-white",
         "warm-orange":
           "rounded-full border-transparent bg-warm-orange-400 text-white",

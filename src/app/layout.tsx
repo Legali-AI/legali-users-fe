@@ -93,7 +93,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${inter.className} overflow-x-hidden overflow-y-auto bg-brand-gray-50 antialiased`}
+        className={`${inter.variable} ${inter.className} overflow-x-hidden overflow-y-auto bg-sky-blue-100 antialiased`}
         suppressHydrationWarning={true}
       >
         {/* Skip to main content link for screen readers */}

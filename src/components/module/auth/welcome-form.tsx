@@ -19,7 +19,7 @@ import {
   updateProfileApiAuthProfilePut,
 } from "../../../sdk/sdk.gen";
 import { ProfileUpload } from "../../elements/profile-upload";
-import { H1, P } from "../../elements/typography";
+import { H1 } from "../../elements/typography";
 import { Button } from "../../ui/button";
 import {
   Form,
@@ -209,22 +209,6 @@ export function WelcomeForm() {
         </H1>
       </div>
 
-      {/* Debug Info */}
-      {Object.keys(form.formState.errors).length > 0 && (
-        <div className="w-full rounded-md bg-red-50 p-4">
-          <h4 className="text-sm font-medium text-red-800">
-            Form Validation Errors:
-          </h4>
-          <ul className="mt-2 text-sm text-red-700">
-            {Object.entries(form.formState.errors).map(([field, error]) => (
-              <li key={field}>
-                {field}: {String(error?.message || "Invalid")}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
       {/* Form */}
       <Form {...form}>
         <form
@@ -387,28 +371,18 @@ export function WelcomeForm() {
               <Button
                 type="button"
                 variant="outline"
-                className="h-10 rounded-full border-light-gray-400 bg-white px-6 text-slate-gray-400 hover:bg-slate-50"
                 disabled={isLoading}
                 onClick={() => form.reset()}
               >
-                <P
-                  level="body"
-                  weight="semibold"
-                  className="text-slate-gray-400"
-                >
-                  Cancel
-                </P>
+                Cancel
               </Button>
 
               <Button
                 type="submit"
-                variant="orange"
-                className="h-10 rounded-full bg-warm-orange-400 px-6"
+                variant="gradient-blue"
                 disabled={isLoading || isSubmitting}
               >
-                <P level="body" weight="semibold" className="text-white">
-                  {isSubmitting ? "Updating Profile..." : "Finish"}
-                </P>
+                {isSubmitting ? "Updating Profile..." : "Finish"}
               </Button>
             </div>
           </div>

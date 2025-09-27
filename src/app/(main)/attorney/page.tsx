@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 export default function AttorneyPage() {
   return (
     <main
-      className="relative flex w-full flex-col items-center justify-center overflow-hidden px-32 py-40"
+      className="relative flex w-full flex-col items-center justify-center overflow-hidden bg-sky-blue-200 px-32 py-40"
       aria-label="Attorney connection page"
     >
       {/* Background decorations */}
