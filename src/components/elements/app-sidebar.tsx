@@ -1,5 +1,6 @@
 "use client";
 import {
+  AlertTriangle,
   Calendar,
   FileText,
   Home,
@@ -71,6 +72,12 @@ export const MAIN_MENU_ITEMS: MenuItem[] = [
     label: "Messages",
     icon: MessageSquare,
     href: "/messages",
+  },
+  {
+    id: "forum",
+    label: "Forum",
+    icon: AlertTriangle,
+    href: "/forum",
   },
 ];
 

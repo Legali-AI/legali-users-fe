@@ -1,5 +1,5 @@
-import { Paperclip } from "lucide-react";
 import type { Metadata } from "next";
+import { FileAttachmentContainer } from "../../../../components/elements/attachments/file-attachment-container";
 import { H3, H5, P, Span } from "../../../../components/elements/typography";
 import { getTicketById } from "../../../../data/support.data";
 import { cn } from "../../../../lib/utils";
@@ -115,19 +115,11 @@ export default function TicketDetailPage({
           Attachments
         </H5>
 
-        <div className="flex flex-wrap gap-2">
-          {ticket.attachments.map((attachment) => (
-            <div
-              key={attachment.id}
-              className={cn(cardStyle, "flex items-center gap-2")}
-            >
-              <Paperclip size={18} className="text-slate-gray-400" />
-              <P level="title" className="text-deep-navy">
-                {attachment.name}
-              </P>
-            </div>
-          ))}
-        </div>
+        <FileAttachmentContainer
+          attachments={ticket.attachments.map((att) => att.name)}
+          maxVisible={5}
+          showRemaining={true}
+        />
       </div>
 
       {/* Response Section */}

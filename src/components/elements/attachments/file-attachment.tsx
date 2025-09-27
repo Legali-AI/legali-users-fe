@@ -1,9 +1,10 @@
 "use client";
 
-import { Paperclip, Plus, X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { P } from "../elements/typography";
+import { P } from "../typography";
+import { FileAttachmentItem } from "./file-attachment-item";
 
 export interface FileAttachmentProps {
   value?: File[];
@@ -73,14 +74,6 @@ export function FileAttachment({
     }
   };
 
-  const truncateFileName = (fileName: string, maxLength: number = 20) => {
-    if (fileName.length <= maxLength) return fileName;
-    const extension = fileName.split(".").pop();
-    const nameWithoutExt = fileName.substring(0, fileName.lastIndexOf("."));
-    const truncatedName = nameWithoutExt.substring(0, maxLength - 3);
-    return `${truncatedName}...${extension ? `.${extension}` : ""}`;
-  };
-
   return (
     <div className={cn("flex w-full flex-col gap-[5px]", className)}>
       {/* Upload Button */}
@@ -116,12 +109,12 @@ export function FileAttachment({
           {value.map((file, index) => (
             <div
               key={`${file.name}-${index}`}
-              className="flex h-[39px] items-center gap-5 rounded-md border border-white-500 bg-white px-6"
+              className="flex h-[39px] items-center gap-2 rounded-md border border-white-500 bg-white px-6"
             >
-              <Paperclip size={18} className="text-slate-gray-400" />
-              <P level="body" className="text-slate-gray-400">
-                {truncateFileName(file.name)}
-              </P>
+              <FileAttachmentItem
+                filename={file.name}
+                className="h-auto border-none bg-transparent px-0 py-0"
+              />
               <button
                 type="button"
                 onClick={() => removeFile(index)}

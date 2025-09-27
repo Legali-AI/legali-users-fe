@@ -4,9 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { FileAttachment } from "../../../../components/elements/attachments/file-attachment";
 import { H3, H5 } from "../../../../components/elements/typography";
 import { Button } from "../../../../components/ui/button";
-import { FileAttachment } from "../../../../components/ui/file-attachment";
 import {
   Form,
   FormControl,

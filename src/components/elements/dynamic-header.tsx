@@ -13,6 +13,7 @@ const PAGE_CONFIGS: Record<string, string> = {
   "/documents": "Legal Documents",
   "/appointments": "Appointments",
   "/messages": "Messages",
+  "/forum": "Forum & Community",
 };
 
 const DEFAULT_CONFIG: string = "Dashboard";
