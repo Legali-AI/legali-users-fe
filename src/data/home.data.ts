@@ -18,48 +18,39 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
-import type { BadgeVariantType } from "../components/ui/badge";
 
 export interface Feature {
   label: string;
-  color: BadgeVariantType["variant"];
   icon: LucideIcon;
 }
 
 export const NAVIGATION_FEATURES: Feature[] = [
   {
     label: "Red Flag Alerts",
-    color: "coral",
     icon: AlertTriangle,
   },
   {
     label: "Legal Template",
-    color: "warm-orange",
     icon: FileText,
   },
   {
     label: "Lawyers Marketplace",
-    color: "sky-blue-light",
     icon: Users,
   },
   {
     label: "Fund Your Litigation: For Investors",
-    color: "emerald",
     icon: TrendingUp,
   },
   {
     label: "Legal Dossier Builder",
-    color: "emerald",
     icon: FolderOpen,
   },
   {
     label: "Case and Timeline Builder",
-    color: "emerald",
     icon: Clock,
   },
   {
     label: "Fund Your Litigation: For Litigants",
-    color: "emerald",
     icon: HandHeart,
   },
 ];

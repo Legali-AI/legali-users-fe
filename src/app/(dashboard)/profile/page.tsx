@@ -126,7 +126,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="flex w-full flex-1 flex-col gap-10 overflow-hidden">
+    <main className="flex w-full flex-1 flex-col gap-10 overflow-hidden">
       {/* Header with Action Buttons */}
       <div className="flex items-center gap-3">
         {!isEditing ? (
@@ -419,6 +419,6 @@ export default function ProfilePage() {
           </div>
         </form>
       </Form>
-    </div>
+    </main>
   );
 }

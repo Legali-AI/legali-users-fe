@@ -19,22 +19,15 @@ const badgeVariants = cva(
         outline:
           "rounded-full text-sky-blue-900 ring-1 ring-sky-blue-900 [a&]:hover:bg-sky-blue-900 [a&]:hover:text-sky-blue-900 ",
         ghost: "rounded-full border-none text-brand-slate ring-0",
-        coral: "rounded-full border-transparent bg-brand-rose text-white",
-        "warm-orange":
-          "rounded-full border-transparent bg-warm-orange-400 text-white",
-        "sky-blue-light":
-          "rounded-full border-transparent bg-sky-blue-500 text-white",
-        "sky-blue":
-          "rounded-full border-transparent bg-sky-blue-900 text-white",
-        "outline-warm-orange":
-          "rounded-full bg-warm-orange-200 text-warm-orange-400",
-        emerald:
-          "rounded-full border-transparent bg-emerald-green-400 text-white",
         "gradient-blue":
           "rounded-full bg-gradient-to-b from-white to-[#A4D1E8] text-black",
+        emerald:
+          "rounded-full border-transparent bg-emerald-green-300 text-emerald-green-700",
+        gray: "rounded-full border-transparent bg-slate-gray-100 text-brand-slate",
       },
       size: {
         default: "px-3 py-2",
+        md: "px-4 py-2",
         lg: "px-4 py-2.5",
         icon: "px-2 py-1",
       },

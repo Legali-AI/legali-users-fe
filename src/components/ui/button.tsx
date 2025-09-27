@@ -3,6 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 
 import { cn } from "@/lib/utils";
+import { typographyConfig } from "../elements/typography/typography.config";
 
 const buttonVariants = cva(
   "inline-flex shrink-0 items-center justify-center gap-2 rounded-full text-sm font-medium whitespace-nowrap transition-all outline-none hover:brightness-90 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-brand-rose aria-invalid:ring-brand-rose/20 dark:aria-invalid:ring-brand-rose/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
@@ -30,10 +31,16 @@ const buttonVariants = cva(
         lg: "rounded-full px-6 py-3 has-[>svg]:px-4",
         icon: "px-0 py-0",
       },
+      level: typographyConfig.variants.level,
+      weight: typographyConfig.variants.weight,
+      align: typographyConfig.variants.align,
     },
     defaultVariants: {
       variant: "default",
       size: "default",
+      level: typographyConfig.defaultVariants.level,
+      weight: typographyConfig.defaultVariants.weight,
+      align: typographyConfig.defaultVariants.align,
     },
   }
 );
@@ -42,6 +49,9 @@ function Button({
   className,
   variant,
   size,
+  level,
+  weight,
+  align,
   asChild = false,
   ...props
 }: React.ComponentProps<"button"> &
@@ -53,7 +63,9 @@ function Button({
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(
+        buttonVariants({ variant, size, level, weight, align, className })
+      )}
       {...props}
     />
   );
