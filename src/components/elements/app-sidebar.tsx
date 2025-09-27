@@ -1,12 +1,14 @@
 "use client";
 import {
   AlertTriangle,
-  Calendar,
-  FileText,
-  Home,
+  BookOpen,
+  Clock,
+  FileEdit,
+  Flag,
+  FolderOpen,
+  Headphones,
   type LucideIcon,
   MessageSquare,
-  Users,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -44,40 +46,52 @@ export interface MenuGroup {
 
 export const MAIN_MENU_ITEMS: MenuItem[] = [
   {
-    id: "dashboard",
-    label: "Dashboard",
-    icon: Home,
-    href: "/dashboard",
+    id: "red-flag-alerts",
+    label: "Red Flag Alerts",
+    icon: Flag,
+    href: "/red-flag-alerts",
   },
   {
-    id: "attorneys",
-    label: "Attorneys",
-    icon: Users,
-    href: "/attorneys",
+    id: "case-timeline",
+    label: "Case & Timeline",
+    icon: Clock,
+    href: "/case-timeline",
   },
   {
-    id: "legal-documents",
-    label: "Legal Documents",
-    icon: FileText,
-    href: "/documents",
+    id: "document-builder",
+    label: "Document Builder",
+    icon: FileEdit,
+    href: "/document-builder",
   },
   {
-    id: "appointments",
-    label: "Appointments",
-    icon: Calendar,
-    href: "/appointments",
+    id: "file-organization",
+    label: "File Organization",
+    icon: FolderOpen,
+    href: "/file",
   },
   {
-    id: "messages",
-    label: "Messages",
-    icon: MessageSquare,
-    href: "/messages",
+    id: "legal-dossier",
+    label: "Legal Dossier",
+    icon: BookOpen,
+    href: "/legal-dossier",
   },
   {
     id: "forum",
     label: "Forum",
-    icon: AlertTriangle,
+    icon: MessageSquare,
     href: "/forum",
+  },
+  {
+    id: "support-ticket",
+    label: "Support - Ticket",
+    icon: AlertTriangle,
+    href: "/support",
+  },
+  {
+    id: "support-chat",
+    label: "Support - Chat & Call",
+    icon: Headphones,
+    href: "/support-chat",
   },
 ];
 

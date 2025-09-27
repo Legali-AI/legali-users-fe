@@ -4,9 +4,9 @@ import { MessageCircle, Send, User } from "lucide-react";
 import { use, useState } from "react";
 import { FileAttachmentContainer } from "../../../../components/elements/attachments/file-attachment-container";
 import { ImageAttachmentPreview } from "../../../../components/elements/attachments/image-attachment-preview";
-import { CommentCard } from "../../../../components/elements/forum/comment-card";
-import { DeleteConfirmationDialog } from "../../../../components/elements/forum/delete-confirmation-dialog";
 import { H3, P, Small } from "../../../../components/elements/typography";
+import { CommentCard } from "../../../../components/module/forum/comment-card";
+import { DeleteConfirmationDialog } from "../../../../components/module/forum/delete-confirmation-dialog";
 import {
   Avatar,
   AvatarFallback,

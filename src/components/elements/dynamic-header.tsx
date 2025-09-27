@@ -9,11 +9,14 @@ import { Span } from "./typography";
 const PAGE_CONFIGS: Record<string, string> = {
   "/dashboard": "Dashboard",
   "/profile": "Your Profile",
-  "/attorneys": "Attorneys",
-  "/documents": "Legal Documents",
-  "/appointments": "Appointments",
-  "/messages": "Messages",
+  "/red-flag-alerts": "Red Flag Alerts",
+  "/case-timeline": "Case & Timeline",
+  "/document-builder": "Document Builder",
+  "/file": "File Organization",
+  "/legal-dossier": "Legal Dossier",
   "/forum": "Forum & Community",
+  "/support": "Support - Ticket",
+  "/support-chat": "Support - Chat & Call",
 };
 
 const DEFAULT_CONFIG: string = "Dashboard";

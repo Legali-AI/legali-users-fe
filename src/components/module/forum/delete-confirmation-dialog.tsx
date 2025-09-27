@@ -1,5 +1,6 @@
 "use client";
 
+import { H5, Span } from "../../elements/typography";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,7 +10,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../../ui/alert-dialog";
-import { H5, Span } from "../typography";
 
 export interface DeleteConfirmationDialogProps {
   open: boolean;

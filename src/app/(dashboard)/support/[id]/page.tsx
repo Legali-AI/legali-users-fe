@@ -49,7 +49,7 @@ export default function TicketDetailPage({
   }
 
   return (
-    <main className="flex w-full flex-1 flex-col gap-5 overflow-hidden">
+    <main className="flex w-full flex-1 flex-col gap-5">
       {/* Header Section */}
       <div className="flex w-full items-center justify-between gap-2">
         <P level="label" className="text-slate-gray-400">

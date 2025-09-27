@@ -4,8 +4,8 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { DeleteConfirmationDialog } from "../../../components/elements/forum/delete-confirmation-dialog";
 import { H5, P } from "../../../components/elements/typography";
+import { DeleteConfirmationDialog } from "../../../components/module/forum/delete-confirmation-dialog";
 import { Button } from "../../../components/ui/button";
 import {
   Tabs,
@@ -56,7 +56,7 @@ export default function ForumPage() {
   ];
 
   return (
-    <main className="flex w-full flex-1 flex-col gap-5 overflow-hidden">
+    <main className="flex w-full flex-1 flex-col gap-5 ">
       {/* Tab Navigation */}
       <div className="flex w-full flex-col justify-between gap-4">
         <Tabs

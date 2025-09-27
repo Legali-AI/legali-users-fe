@@ -16,24 +16,9 @@ import {
   FormMessage,
 } from "../../../../components/ui/form";
 import { Input } from "../../../../components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../../components/ui/select";
 import { Textarea } from "../../../../components/ui/textarea";
 
-const URGENCY_OPTIONS = [
-  { label: "Low", value: "low" },
-  { label: "Medium", value: "medium" },
-  { label: "High", value: "high" },
-  { label: "Critical", value: "critical" },
-];
-
-const supportTicketSchema = z.object({
-  urgency: z.string().min(1, "Please select an urgency level"),
+const supportIssueSchema = z.object({
   issue: z
     .string()
     .min(1, "Please describe your issue")
@@ -45,22 +30,21 @@ const supportTicketSchema = z.object({
   attachments: z.array(z.instanceof(File)).optional(),
 });
 
-type SupportTicketFormData = z.infer<typeof supportTicketSchema>;
+type SupportIssueFormData = z.infer<typeof supportIssueSchema>;
 
-export default function SubmitSupportPage() {
+export default function CreateForumPage() {
   const [attachmentError, setAttachmentError] = React.useState<string>("");
 
-  const form = useForm<SupportTicketFormData>({
-    resolver: zodResolver(supportTicketSchema),
+  const form = useForm<SupportIssueFormData>({
+    resolver: zodResolver(supportIssueSchema),
     defaultValues: {
-      urgency: "",
       issue: "",
       description: "",
       attachments: [],
     },
   });
 
-  const onSubmit = (data: SupportTicketFormData) => {
+  const onSubmit = (data: SupportIssueFormData) => {
     console.log("Form submitted:", data);
     setAttachmentError("");
   };
@@ -69,7 +53,7 @@ export default function SubmitSupportPage() {
     <main className="flex w-full flex-1 flex-col gap-5">
       {/* Header */}
       <H5 weight="semibold" level="h5">
-        Create your ticket
+        Create your issue
       </H5>
 
       <Form {...form}>
@@ -77,39 +61,6 @@ export default function SubmitSupportPage() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full space-y-5"
         >
-          {/* Urgency Field */}
-          <FormField
-            control={form.control}
-            name="urgency"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  <H3 weight="semibold" level="title">
-                    Urgency
-                  </H3>
-                </FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select your urgency" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {URGENCY_OPTIONS.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
           {/* Issue Field */}
           <FormField
             control={form.control}

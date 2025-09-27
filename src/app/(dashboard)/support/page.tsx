@@ -11,11 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../components/ui/select";
-import {
-  getSupportStats,
-  STATUS_OPTIONS,
-  SUPPORT_TICKETS,
-} from "../../../data/support.data";
+import { STATUS_OPTIONS, SUPPORT_TICKETS } from "../../../data/support.data";
 
 export const metadata: Metadata = {
   title: "Support Tickets",
@@ -47,10 +43,8 @@ const TICKETS = SUPPORT_TICKETS.map((ticket) => ({
 }));
 
 export default function SupportPage() {
-  const stats = getSupportStats();
-
   return (
-    <main className="flex w-full flex-1 flex-col gap-10 overflow-hidden">
+    <main className="flex w-full flex-1 flex-col gap-10">
       <Link href="/support/submit" className="w-full">
         <Button
           variant={"outline"}
@@ -66,42 +60,6 @@ export default function SupportPage() {
           </Span>
         </Button>
       </Link>
-
-      {/* Statistics Section */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-        <div className="rounded-lg border border-white-400 bg-white p-4">
-          <H3 weight="semibold" level="h5" className="text-deep-navy">
-            Total Tickets
-          </H3>
-          <P level="h5" className="text-slate-gray-400">
-            {stats.total}
-          </P>
-        </div>
-        <div className="rounded-lg border border-white-400 bg-white p-4">
-          <H3 weight="semibold" level="h5" className="text-deep-navy">
-            Pending
-          </H3>
-          <P level="h5" className="text-slate-gray-400">
-            {stats.byStatus.pending}
-          </P>
-        </div>
-        <div className="rounded-lg border border-white-400 bg-white p-4">
-          <H3 weight="semibold" level="h5" className="text-deep-navy">
-            In Progress
-          </H3>
-          <P level="h5" className="text-slate-gray-400">
-            {stats.byStatus.inProgress}
-          </P>
-        </div>
-        <div className="rounded-lg border border-white-400 bg-white p-4">
-          <H3 weight="semibold" level="h5" className="text-deep-navy">
-            Completed
-          </H3>
-          <P level="h5" className="text-slate-gray-400">
-            {stats.byStatus.completed}
-          </P>
-        </div>
-      </div>
 
       <section className="flex flex-col gap-4">
         <div className="flex items-center justify-between gap-4">
@@ -130,41 +88,46 @@ export default function SupportPage() {
         </div>
         <div className="flex flex-col gap-4">
           {TICKETS.map((ticket) => (
-            <div
+            <Link
               key={ticket.id}
-              className="flex items-center justify-between rounded-lg border border-sky-blue-700 px-6 py-3"
-              style={{
-                background:
-                  "linear-gradient(89deg, #EDFAFF 0%, #FCFEFF 39.26%)",
-              }}
+              href={`/support/${ticket.id}`}
+              className="block"
             >
-              <H3
-                level="title"
-                weight={"semibold"}
-                className="text-sky-blue-900"
+              <div
+                className="flex cursor-pointer items-center justify-between rounded-lg border border-sky-blue-700 px-6 py-3 transition-colors hover:bg-sky-blue-100"
+                style={{
+                  background:
+                    "linear-gradient(89deg, #EDFAFF 0%, #FCFEFF 39.26%)",
+                }}
               >
-                {ticket.title}
-              </H3>
-              <div className="flex items-center gap-2">
-                <Badge
-                  size={"md"}
-                  variant={ticket.status === "Pending" ? "gray" : "emerald"}
-                  level="body"
+                <H3
+                  level="title"
+                  weight={"semibold"}
+                  className="text-sky-blue-900"
                 >
-                  {ticket.status}
-                </Badge>
-                <Button
-                  level="body"
-                  className="flex items-center gap-2"
-                  asChild
-                >
-                  <Link href={`/support/${ticket.id}`}>
-                    See Details
-                    <ChevronRight size={16} />
-                  </Link>
-                </Button>
+                  {ticket.title}
+                </H3>
+                <div className="flex items-center gap-2">
+                  <Badge
+                    size={"md"}
+                    variant={ticket.status === "Pending" ? "gray" : "emerald"}
+                    level="body"
+                  >
+                    {ticket.status}
+                  </Badge>
+                  <Button
+                    level="body"
+                    className="flex items-center gap-2"
+                    asChild
+                  >
+                    <span>
+                      See Details
+                      <ChevronRight size={16} />
+                    </span>
+                  </Button>
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
