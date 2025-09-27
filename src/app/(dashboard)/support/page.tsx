@@ -11,6 +11,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../components/ui/select";
+import {
+  getSupportStats,
+  STATUS_OPTIONS,
+  SUPPORT_TICKETS,
+} from "../../../data/support.data";
 
 export const metadata: Metadata = {
   title: "Support Tickets",
@@ -30,32 +35,20 @@ export const metadata: Metadata = {
   },
 };
 
-const STATUS_OPTIONS = [
-  { label: "All Status", value: "all" },
-  { label: "Pending", value: "pending" },
-  { label: "Completed", value: "completed" },
-  { label: "In Progress", value: "in-progress" },
-];
-
-const TICKETS = [
-  {
-    id: 1,
-    title: "Ticket 1",
-    status: "Pending",
-  },
-  {
-    id: 2,
-    title: "Ticket 2",
-    status: "Completed",
-  },
-  {
-    id: 3,
-    title: "Ticket 3",
-    status: "In Progress",
-  },
-];
+// Use imported data from support.data.ts
+const TICKETS = SUPPORT_TICKETS.map((ticket) => ({
+  id: ticket.id,
+  title: ticket.title,
+  status:
+    ticket.status.charAt(0).toUpperCase() +
+    ticket.status.slice(1).replace("-", " "),
+  urgency: ticket.urgency,
+  createdAt: ticket.createdAt,
+}));
 
 export default function SupportPage() {
+  const stats = getSupportStats();
+
   return (
     <main className="flex w-full flex-1 flex-col gap-10 overflow-hidden">
       <Link href="/support/submit" className="w-full">
@@ -73,6 +66,43 @@ export default function SupportPage() {
           </Span>
         </Button>
       </Link>
+
+      {/* Statistics Section */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+        <div className="rounded-lg border border-white-400 bg-white p-4">
+          <H3 weight="semibold" level="h5" className="text-deep-navy">
+            Total Tickets
+          </H3>
+          <P level="h5" className="text-slate-gray-400">
+            {stats.total}
+          </P>
+        </div>
+        <div className="rounded-lg border border-white-400 bg-white p-4">
+          <H3 weight="semibold" level="h5" className="text-deep-navy">
+            Pending
+          </H3>
+          <P level="h5" className="text-slate-gray-400">
+            {stats.byStatus.pending}
+          </P>
+        </div>
+        <div className="rounded-lg border border-white-400 bg-white p-4">
+          <H3 weight="semibold" level="h5" className="text-deep-navy">
+            In Progress
+          </H3>
+          <P level="h5" className="text-slate-gray-400">
+            {stats.byStatus.inProgress}
+          </P>
+        </div>
+        <div className="rounded-lg border border-white-400 bg-white p-4">
+          <H3 weight="semibold" level="h5" className="text-deep-navy">
+            Completed
+          </H3>
+          <P level="h5" className="text-slate-gray-400">
+            {stats.byStatus.completed}
+          </P>
+        </div>
+      </div>
+
       <section className="flex flex-col gap-4">
         <div className="flex items-center justify-between gap-4">
           <H3 level="label">Your Tickets</H3>
@@ -123,9 +153,15 @@ export default function SupportPage() {
                 >
                   {ticket.status}
                 </Badge>
-                <Button level="body" className="flex items-center gap-2">
-                  See Details
-                  <ChevronRight size={16} />
+                <Button
+                  level="body"
+                  className="flex items-center gap-2"
+                  asChild
+                >
+                  <Link href={`/support/${ticket.id}`}>
+                    See Details
+                    <ChevronRight size={16} />
+                  </Link>
                 </Button>
               </div>
             </div>
