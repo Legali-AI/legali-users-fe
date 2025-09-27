@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 export default function AttorneyPage() {
   return (
     <main
-      className="relative flex w-full flex-col items-center justify-center overflow-hidden bg-sky-blue-200 px-32 py-40"
+      className="relative z-10 flex w-full flex-col items-center justify-center gap-4 overflow-hidden bg-sky-blue-200 px-8 py-40 sm:px-10 md:px-16 lg:px-32"
       aria-label="Attorney connection page"
     >
       {/* Background decorations */}
@@ -33,7 +33,7 @@ export default function AttorneyPage() {
         width={250}
         height={250}
         alt=""
-        className="absolute top-1/2 left-0"
+        className="absolute top-1/2 left-0 -z-10"
         aria-hidden="true"
         sizes="250px"
       />
@@ -42,19 +42,21 @@ export default function AttorneyPage() {
         width={250}
         height={250}
         alt=""
-        className="absolute top-1/4 right-0 rotate-180"
+        className="absolute top-1/4 right-0 -z-10 rotate-180"
         aria-hidden="true"
         sizes="250px"
       />
 
       {/* Page header */}
-      <H1 weight={"semibold"}>Connect with Attorneys</H1>
-      <H2 level={"title"} className="text-brand-slate">
+      <H1 weight={"semibold"} align={"center"}>
+        Connect with Attorneys
+      </H1>
+      <H2 level={"title"} className="text-brand-slate" align={"center"}>
         Get instantly matched with trusted lawyers who understand your needs.
       </H2>
 
       {/* Attorney cards grid */}
-      <div className="mt-6 grid max-w-7xl grid-cols-3 gap-10 md:mt-8 xl:mt-10">
+      <div className="mt-6 grid max-w-7xl grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-6 md:mt-8 md:gap-8 lg:grid-cols-3 xl:mt-10 xl:gap-10">
         {ATTORNEYS.map((attorney, index) => (
           <CardAttorney key={attorney.name} attorney={attorney} index={index} />
         ))}

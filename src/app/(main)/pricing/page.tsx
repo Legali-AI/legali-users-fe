@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 export default function PricingPage() {
   return (
     <main
-      className="relative z-10 flex w-full flex-col items-center justify-center overflow-hidden bg-sky-blue-200 px-32 py-40"
+      className="relative z-10 flex w-full flex-col items-center justify-center overflow-hidden bg-sky-blue-200 px-8 py-40 sm:px-10 md:px-16 lg:px-32"
       aria-label="Attorney connection page"
     >
       {/* Background decorations */}
@@ -51,7 +51,7 @@ export default function PricingPage() {
       <H1 weight={"semibold"}>Pricing</H1>
 
       {/* Attorney cards grid */}
-      <div className="mt-6 grid w-full max-w-5xl grid-cols-2 gap-10 md:mt-8 xl:mt-10">
+      <div className="mt-6 grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:mt-8 md:gap-8 xl:mt-10 xl:gap-10">
         {PRICING_DATA.map((pricing) => (
           <PricingCard key={pricing.name} {...pricing} />
         ))}
