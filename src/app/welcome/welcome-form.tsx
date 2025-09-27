@@ -201,7 +201,7 @@ export function WelcomeForm() {
       {/* Header */}
       <div className="flex flex-col items-center justify-center gap-4">
         <Image src="/logo.png" width={80} height={50} alt="Logo" />
-        <H1 level="h3" weight="semibold" className="text-deep-navy">
+        <H1 level="h3" weight="semibold">
           Fill your credentials
         </H1>
       </div>

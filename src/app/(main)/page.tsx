@@ -32,7 +32,7 @@ function App() {
         <ConnectAttorneySection />
         {/* CTA */}
         <section
-          className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-5 py-10 sm:py-16 lg:py-20"
+          className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-2 py-10 sm:py-16 md:gap-3 lg:gap-5 lg:py-20"
           aria-labelledby="cta-heading"
         >
           {/* Main headline */}

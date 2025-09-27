@@ -20,7 +20,7 @@ export default function AboutUsSection() {
       {/* Content */}
       <div className="space-y-5">
         {/* Problems grid */}
-        <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:mt-8 lg:grid-cols-3 lg:gap-6 xl:mt-10">
           {CORE_PROBLEMS.map((problem) => (
             <CardProblem key={problem.title} problem={problem} />
           ))}

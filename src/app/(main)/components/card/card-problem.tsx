@@ -18,16 +18,11 @@ export function CardProblem({ problem }: CardProblemProps) {
         <div className="h-fit w-fit rounded-sm bg-sky-blue-800 p-1.5">
           <problem.icon className="h-5 w-5 text-white" />
         </div>
-        <P
-          level={"h5"}
-          weight={"semibold"}
-          className="text-sky-blue-900"
-          align={"left"}
-        >
+        <P level={"h5"} weight={"semibold"}>
           {problem.title}
         </P>
       </div>
-      <P level={"title"} className="text-brand-slate" align={"left"}>
+      <P level={"title"} className="text-brand-slate">
         {problem.description}
       </P>
     </div>

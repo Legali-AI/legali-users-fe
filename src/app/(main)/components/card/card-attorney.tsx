@@ -19,16 +19,16 @@ export function CardAttorney({ attorney, index, collapse }: CardAttorneyProps) {
       className={cn(
         "flex h-fit w-full flex-col gap-2 overflow-hidden rounded-xl border border-white-500 bg-white",
         collapse && [
-          "max-w-[290px]",
-          index === 0 && "sm:-mr-10",
-          index === 1 && "relative z-10 sm:mt-5",
-          index !== 0 && index !== 1 && "sm:-ml-10",
+          "max-w-[240px] lg:max-w-[290px]",
+          index === 0 && "-mr-20 lg:-mr-10",
+          index === 1 && "relative z-10 mt-5",
+          index !== 0 && index !== 1 && "-ml-20 lg:-ml-10",
         ]
       )}
     >
       {/* Image */}
       <div
-        className="flex aspect-square h-[230px] w-full flex-col items-center  overflow-hidden"
+        className="flex aspect-square h-[180px] w-full flex-col items-center overflow-hidden  lg:h-[230px]"
         style={{
           background: "linear-gradient(223deg, #EDFAFF 2.59%, #FFF 100%)",
         }}
@@ -48,7 +48,7 @@ export function CardAttorney({ attorney, index, collapse }: CardAttorneyProps) {
       <div className="relative z-[10px] -mt-8 h-8 w-full bg-white blur-lg" />
 
       {/* Text */}
-      <div className="flex flex-col gap-2 p-5">
+      <div className="flex flex-col gap-2 p-4 lg:p-5">
         {/* Name */}
         <H4
           weight={"semibold"}

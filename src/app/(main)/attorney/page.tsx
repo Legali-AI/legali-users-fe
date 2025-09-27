@@ -54,7 +54,7 @@ export default function AttorneyPage() {
       </H2>
 
       {/* Attorney cards grid */}
-      <div className="mt-10 grid max-w-7xl grid-cols-3 gap-10">
+      <div className="mt-6 grid max-w-7xl grid-cols-3 gap-10 md:mt-8 xl:mt-10">
         {ATTORNEYS.map((attorney, index) => (
           <CardAttorney key={attorney.name} attorney={attorney} index={index} />
         ))}

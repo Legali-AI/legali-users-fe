@@ -39,13 +39,14 @@ export default function HeroSection() {
       {/* Hero content */}
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-5">
         {/* Main headline */}
-        <H1 weight={"semibold"}>Meet your first AI-law firm</H1>
+        <H1 weight={"semibold"} align={"center"}>
+          Meet your first AI-law firm
+        </H1>
 
         {/* Subtitle */}
-        <H2 level={"title"} className="text-brand-slate" align="center">
-          Legali helps you build cases, organize evidence, draft documents, spot
-          legal risks, connect with affordable attorneys, and even crowdfund
-          litigation—all on a secure, AI-driven platform.
+        <H2 level={"title"} className="text-brand-slate" align={"center"}>
+          Legali lets you build cases, manage evidence, and fund litigation—all
+          on one secure AI platform.
         </H2>
 
         {/* Search input */}
@@ -54,9 +55,14 @@ export default function HeroSection() {
         </div>
 
         {/* Feature badges */}
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
           {NAVIGATION_FEATURES.map((feature) => (
-            <Badge key={feature.label} variant={"gradient-blue"} size={"lg"}>
+            <Badge
+              key={feature.label}
+              level={"body"}
+              variant={"gradient-blue"}
+              size={"lg"}
+            >
               <feature.icon size={30} aria-hidden="true" />
               <span className="sr-only">Feature: </span>
               {feature.label}

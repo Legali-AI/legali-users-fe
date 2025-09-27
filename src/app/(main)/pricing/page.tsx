@@ -51,7 +51,7 @@ export default function PricingPage() {
       <H1 weight={"semibold"}>Pricing</H1>
 
       {/* Attorney cards grid */}
-      <div className="mt-10 grid w-full max-w-5xl grid-cols-2 gap-10">
+      <div className="mt-6 grid w-full max-w-5xl grid-cols-2 gap-10 md:mt-8 xl:mt-10">
         {PRICING_DATA.map((pricing) => (
           <PricingCard key={pricing.name} {...pricing} />
         ))}

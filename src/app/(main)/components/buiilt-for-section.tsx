@@ -47,7 +47,10 @@ export default function BuiltForSection() {
 
         {/* Benefits */}
         {BENEFITS.map((b) => (
-          <div key={b.title} className="my-10 flex flex-col gap-7">
+          <div
+            key={b.title}
+            className="my-6 flex flex-col gap-7 md:my-8 xl:my-10"
+          >
             <H4
               id={`benefit-${b.title.toLowerCase().replace(/\s+/g, "-")}`}
               level={"h5"}

@@ -96,7 +96,7 @@ export default function Footer() {
         background
       )}
     >
-      <div className="flex flex-col items-start justify-center gap-8 sm:flex-row sm:gap-16 lg:gap-32">
+      <div className="flex flex-col items-center justify-center gap-8 lg:flex-row lg:items-start lg:gap-32">
         {/* Logo */}
         <div className="flex-none">
           <Image
@@ -109,7 +109,7 @@ export default function Footer() {
         </div>
 
         {/* Footer Sections */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-2 justify-center gap-8 lg:grid-cols-5">
           {FOOTER_SECTIONS.map((section) => (
             <div
               key={section.title}

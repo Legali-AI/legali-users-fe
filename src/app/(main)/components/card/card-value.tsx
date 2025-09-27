@@ -17,7 +17,7 @@ export function CardValue({ valueProposition, index }: CardValueProps) {
     >
       {/* Image */}
       <div
-        className="h-[200px] w-full max-w-[546px] rounded-xl sm:h-[243px]"
+        className="h-[160px] w-full max-w-[546px] rounded-xl sm:h-[243px] lg:h-[200px]"
         style={{
           background:
             "radial-gradient(166.66% 50.29% at 50% 38.41%, #F7F7F7 0%, #EDFAFF 100%)",

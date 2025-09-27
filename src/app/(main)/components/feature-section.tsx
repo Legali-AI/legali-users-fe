@@ -26,14 +26,14 @@ export default function FeatureSection() {
       </H4>
 
       {/* Process steps */}
-      <div className="mt-10 space-y-5">
+      <div className="mt-6 space-y-5 md:mt-8 xl:mt-10">
         {/* Full rows */}
         {Array.from(
           { length: Math.floor(PROCESS_STEPS.length / 3) },
           (_, rowIndex) => (
             <div
               key={`process-row-${rowIndex * 3}-${(rowIndex + 1) * 3}`}
-              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5"
+              className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-5"
             >
               {PROCESS_STEPS.slice(rowIndex * 3, (rowIndex + 1) * 3).map(
                 (processStep, index) => (
@@ -50,12 +50,7 @@ export default function FeatureSection() {
 
         {/* Remaining items */}
         {PROCESS_STEPS.length % 3 !== 0 && (
-          <div
-            className="mx-auto grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5"
-            style={{
-              gridTemplateColumns: `repeat(${PROCESS_STEPS.length % 3}, 1fr)`,
-            }}
-          >
+          <div className="mx-auto grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-5">
             {PROCESS_STEPS.slice(Math.floor(PROCESS_STEPS.length / 3) * 3).map(
               (processStep, index) => (
                 <CardProcessStep

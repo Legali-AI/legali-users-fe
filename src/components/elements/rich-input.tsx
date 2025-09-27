@@ -198,11 +198,11 @@ export default function RichInput({
         onChange={(e) => setText(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
-        className="focus-visible:outline-non min-h-20 resize-y border-none shadow-none placeholder:text-base placeholder:text-slate-gray-300 focus-visible:border-none focus-visible:ring-0"
+        className="focus-visible:outline-non min-h-20 resize-y border-none shadow-none placeholder:text-[14px] placeholder:text-slate-gray-300 focus-visible:border-none focus-visible:ring-0 lg:placeholder:text-base"
       />
 
       {/* Footer row */}
-      <div className="flex w-full items-start justify-between gap-16">
+      <div className="flex w-full items-start justify-between gap-4 md:gap-8 lg:gap-12 xl:gap-16">
         {/* Add files */}
         <div>
           <Button

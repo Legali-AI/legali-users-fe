@@ -7,7 +7,7 @@ import { CardAttorney } from "./card/card-attorney";
 export default function ConnectAttorneySection() {
   return (
     <section
-      className="flex flex-col items-center justify-center gap-6 rounded-md bg-white p-4 shadow-sm sm:flex-row sm:gap-10 sm:p-10"
+      className="flex flex-col-reverse items-center justify-center gap-6 overflow-hidden rounded-md bg-white p-4 shadow-sm md:p-6 lg:p-10 xl:flex-row xl:gap-10"
       aria-labelledby="connect-heading"
     >
       {/* Content */}
@@ -20,7 +20,7 @@ export default function ConnectAttorneySection() {
           understands your case.
         </P>
         <Button
-          className="w-fit"
+          className="w-fit max-md:ml-auto"
           variant={"gradient-blue"}
           aria-label="Find more attorneys"
         >
@@ -30,7 +30,7 @@ export default function ConnectAttorneySection() {
       </div>
 
       {/* Attorney cards */}
-      <div className="flex flex-col gap-4 sm:flex-row">
+      <div className="flex gap-4">
         {ATTORNEYS.slice(0, 3).map((attorney, index) => (
           <CardAttorney
             collapse

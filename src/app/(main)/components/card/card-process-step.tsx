@@ -11,7 +11,7 @@ interface CardProcessStepProps {
 export function CardProcessStep({ processStep, index }: CardProcessStepProps) {
   return (
     <div
-      className="flex flex-col gap-2 overflow-hidden rounded-xl border border-white-400 bg-white p-5"
+      className="flex flex-col gap-2 overflow-hidden rounded-xl border border-white-400 bg-white p-3 md:p-4 lg:p-5"
       style={{
         background: processStep.colorHex
           ? `linear-gradient(204deg, #FFF 15.34%, ${processStep.colorHex} 127.14%)`
@@ -39,8 +39,8 @@ export function CardProcessStep({ processStep, index }: CardProcessStepProps) {
           width={546}
           height={233}
           className={cn(
-            "mt-2 h-[233px] w-full rounded-md object-contain object-center",
-            index === 4 && "-ml-5 object-left-bottom"
+            "mt-2 h-[180px] w-full rounded-md object-contain  md:h-[200px] lg:h-[233px]",
+            index === 4 ? "-ml-5 object-left-bottom" : "object-center"
           )}
         />
       )}

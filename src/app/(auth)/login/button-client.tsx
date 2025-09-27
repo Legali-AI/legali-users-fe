@@ -16,7 +16,7 @@ export default function ButtonClient() {
     }
   };
   return (
-    <div className="mt-10 flex w-full max-w-sm flex-col gap-3">
+    <div className="mt-6 flex w-full max-w-sm flex-col gap-3 md:mt-8 xl:mt-10">
       {/* Google Button */}
       <Button
         variant={"black"}
