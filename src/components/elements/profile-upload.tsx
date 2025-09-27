@@ -82,7 +82,7 @@ export function ProfileUpload({
       {/* biome-ignore lint: Need div to avoid nested buttons */}
       <div
         className={cn(
-          "relative flex aspect-square h-[153px] w-[153px] cursor-pointer items-center justify-center rounded-full transition-all hover:brightness-90",
+          "relative flex aspect-square h-[110px] w-auto cursor-pointer items-center justify-center rounded-full transition-all hover:brightness-90 md:h-[130px] lg:h-[153px]",
           profileUploadVariants({ variant }),
           disabled && "cursor-not-allowed opacity-50"
         )}
@@ -108,7 +108,10 @@ export function ProfileUpload({
         ) : (
           <UserIcon
             size={80}
-            className={profileUploadVariants({ textVariant: variant })}
+            className={cn(
+              "size-16 md:size-20",
+              profileUploadVariants({ textVariant: variant })
+            )}
           />
         )}
 

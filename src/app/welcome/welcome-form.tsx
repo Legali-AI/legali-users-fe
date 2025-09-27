@@ -103,7 +103,6 @@ export function WelcomeForm() {
       setCountries([]);
       setCities([]);
 
-      // Update form region field
       form.setValue("region", regionId.toString());
 
       const response = await getAllCountriesApiLocationsCountriesGet({
@@ -146,16 +145,12 @@ export function WelcomeForm() {
     try {
       setIsSubmitting(true);
 
-      // Prepare profile update data
       const updateData = {
         first_name: data.firstName,
         last_name: data.lastName,
         city_id: selectedCityId,
-        // Note: profile_picture_url would need to be handled separately
-        // as it requires file upload
       };
 
-      // Update profile using SDK (automatic token refresh handled by client)
       const response = await updateProfileApiAuthProfilePut({
         body: updateData,
         headers: {
@@ -164,7 +159,6 @@ export function WelcomeForm() {
       });
 
       if (response.data?.data) {
-        // Update local user data
         const updatedUser = response.data.data;
 
         updateProfileCache({
@@ -176,14 +170,12 @@ export function WelcomeForm() {
           city_id: updatedUser.city_id || null,
         });
 
-        // Redirect to profile page
         router.push("/profile");
       } else {
         throw new Error("No data received from profile update");
       }
     } catch (error) {
       console.error("Profile update error:", error);
-      // Show error message to user
       alert(
         `Profile update failed: ${error instanceof Error ? error.message : "Unknown error"}`
       );
@@ -197,7 +189,7 @@ export function WelcomeForm() {
   } = form;
 
   return (
-    <div className="flex w-full max-w-2xl flex-col items-center justify-center gap-8">
+    <div className="flex w-full max-w-3xl flex-col items-center justify-center gap-8 px-8">
       {/* Header */}
       <div className="flex flex-col items-center justify-center gap-4">
         <Image src="/logo.png" width={80} height={50} alt="Logo" />
@@ -210,35 +202,33 @@ export function WelcomeForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="m-auto flex w-full flex-1 gap-8 self-center"
+          className="m-auto flex w-full flex-1 items-center gap-6 self-center max-md:flex-col md:items-start md:gap-8 lg:gap-10 xl:gap-12"
         >
           {/* Profile Image Upload */}
-          <div className="flex justify-center">
-            <FormField
-              control={form.control}
-              name="profileImage"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <ProfileUpload
-                      value={field.value}
-                      onChange={field.onChange}
-                      disabled={isLoading}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <FormField
+            control={form.control}
+            name="profileImage"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <ProfileUpload
+                    value={field.value}
+                    onChange={field.onChange}
+                    disabled={isLoading}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          <div className="flex w-full flex-col gap-4">
+          <div className="flex w-full flex-col gap-3 xl:gap-4">
             {/* First Name */}
             <FormField
               control={form.control}
               name="firstName"
               render={({ field }) => (
-                <FormItem className="space-y-1">
+                <FormItem className="space-y-0.5 md:space-y-1">
                   <FormLabel className="text-base font-semibold text-deep-navy">
                     First Name
                   </FormLabel>
@@ -259,7 +249,7 @@ export function WelcomeForm() {
               control={form.control}
               name="lastName"
               render={({ field }) => (
-                <FormItem className="space-y-1">
+                <FormItem className="space-y-0.5 md:space-y-1">
                   <FormLabel className="text-base font-semibold text-deep-navy">
                     Last Name
                   </FormLabel>
@@ -275,93 +265,83 @@ export function WelcomeForm() {
               )}
             />
 
-            {/* Location Selection */}
-            <div className="space-y-4">
-              {/* Region */}
-              <FormItem className="space-y-1">
-                <FormLabel className="text-base font-semibold text-deep-navy">
-                  Region
-                </FormLabel>
-                <Select
-                  onValueChange={(value) =>
-                    handleRegionChange(parseInt(value, 10))
-                  }
-                  disabled={isLoading || isLoadingLocations}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select Region" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {regions.map((region) => (
-                      <SelectItem key={region.id} value={region.id.toString()}>
-                        {region.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
+            {/* Region */}
+            <FormItem className="space-y-0.5 md:space-y-1">
+              <FormLabel className="text-base font-semibold text-deep-navy">
+                Region
+              </FormLabel>
+              <Select
+                onValueChange={(value) =>
+                  handleRegionChange(parseInt(value, 10))
+                }
+                disabled={isLoading || isLoadingLocations}
+              >
+                <FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select Region" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {regions.map((region) => (
+                    <SelectItem key={region.id} value={region.id.toString()}>
+                      {region.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormItem>
 
-              {/* Country */}
-              <FormItem className="space-y-1">
-                <FormLabel className="text-base font-semibold text-deep-navy">
-                  Country
-                </FormLabel>
-                <Select
-                  onValueChange={(value) =>
-                    handleCountryChange(parseInt(value, 10))
-                  }
-                  disabled={
-                    isLoading || isLoadingLocations || !selectedRegionId
-                  }
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select Country" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {countries.map((country) => (
-                      <SelectItem
-                        key={country.id}
-                        value={country.id.toString()}
-                      >
-                        {country.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
+            {/* Country */}
+            <FormItem className="space-y-0.5 md:space-y-1">
+              <FormLabel className="text-base font-semibold text-deep-navy">
+                Country
+              </FormLabel>
+              <Select
+                onValueChange={(value) =>
+                  handleCountryChange(parseInt(value, 10))
+                }
+                disabled={isLoading || isLoadingLocations || !selectedRegionId}
+              >
+                <FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select Country" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {countries.map((country) => (
+                    <SelectItem key={country.id} value={country.id.toString()}>
+                      {country.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormItem>
 
-              {/* City */}
-              <FormItem className="space-y-1">
-                <FormLabel className="text-base font-semibold text-deep-navy">
-                  City
-                </FormLabel>
-                <Select
-                  onValueChange={(value) =>
-                    setSelectedCityId(parseInt(value, 10))
-                  }
-                  disabled={
-                    isLoading || isLoadingLocations || !selectedCountryId
-                  }
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select City" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {cities.map((city) => (
-                      <SelectItem key={city.id} value={city.id.toString()}>
-                        {city.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            </div>
+            {/* City */}
+            <FormItem className="space-y-0.5 md:space-y-1">
+              <FormLabel className="text-base font-semibold text-deep-navy">
+                City
+              </FormLabel>
+              <Select
+                onValueChange={(value) =>
+                  setSelectedCityId(parseInt(value, 10))
+                }
+                disabled={isLoading || isLoadingLocations || !selectedCountryId}
+              >
+                <FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select City" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {cities.map((city) => (
+                    <SelectItem key={city.id} value={city.id.toString()}>
+                      {city.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormItem>
 
             {/* Action Buttons */}
             <div className="flex items-center justify-between gap-2.5">
