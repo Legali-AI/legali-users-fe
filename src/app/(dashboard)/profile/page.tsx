@@ -126,7 +126,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <main className="flex w-full flex-1 flex-col gap-10 overflow-hidden">
+    <main className="flex w-full flex-1 flex-col gap-6 lg:gap-10">
       {/* Header with Action Buttons */}
       <div className="flex items-center gap-3">
         {!isEditing ? (
@@ -166,12 +166,11 @@ export default function ProfilePage() {
         <form
           id={formId}
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex w-full flex-1 flex-col space-y-5"
+          className="mx-auto flex w-full flex-1 flex-col space-y-4 max-lg:max-w-2xl lg:space-y-5"
         >
-          <div className="flex w-full gap-10">
-            {/* Left Column */}
-            <div className="flex flex-col gap-5 px-10">
-              {/* Profile Avatar */}
+          <div className="flex w-full flex-col gap-6 lg:flex-row lg:gap-10">
+            {/* Left Column - Profile Avatar */}
+            <div className="flex flex-col gap-5 px-4 lg:px-10">
               <FormField
                 control={form.control}
                 name="profileImage"
@@ -192,10 +191,10 @@ export default function ProfilePage() {
               />
             </div>
 
-            {/* Right Column */}
-            <div className="grid flex-1 grid-cols-2 flex-col gap-5">
+            {/* Right Column - Form Fields */}
+            <div className="grid flex-1 grid-cols-1 gap-5 lg:grid-cols-2">
               {/* Form Fields */}
-              <div className="space-y-5">
+              <div className="space-y-4 lg:space-y-5">
                 {/* First Name */}
                 <FormField
                   control={form.control}
@@ -317,7 +316,7 @@ export default function ProfilePage() {
                 />
               </div>
 
-              <div className="space-y-5">
+              <div className="space-y-4 lg:space-y-5">
                 {/* Region */}
                 <FormField
                   control={form.control}

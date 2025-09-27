@@ -125,7 +125,7 @@ export function Navbar() {
                     <Typography
                       weight="medium"
                       level="body"
-                      className="text-sm text-slate-gray-400 peer-hover:text-black sm:text-base"
+                      className="text-slate-gray-400 peer-hover:text-black"
                     >
                       {item.title}
                     </Typography>
@@ -151,7 +151,7 @@ export function Navbar() {
                   <Typography
                     weight="medium"
                     level="body"
-                    className="text-sm text-slate-gray-400 sm:text-base"
+                    className="text-slate-gray-400"
                   >
                     {item.title}
                   </Typography>
@@ -194,7 +194,7 @@ export function Navbar() {
                     <div key={item.title} className="space-y-2">
                       <Link
                         href={item.href}
-                        className="block py-2 text-base font-medium text-slate-700 transition-colors hover:text-slate-900"
+                        className="block py-2 font-medium text-slate-700 transition-colors hover:text-slate-900"
                       >
                         {item.title}
                       </Link>
@@ -205,7 +205,7 @@ export function Navbar() {
                             <Link
                               key={subItem.title}
                               href={subItem.href}
-                              className="block py-1 text-sm text-slate-600 transition-colors hover:text-slate-800"
+                              className="block py-1 text-slate-600 transition-colors hover:text-slate-800"
                             >
                               {subItem.title}
                             </Link>
@@ -239,11 +239,7 @@ export function Navbar() {
         <NavigationMenuItem className="flex-shrink-0 max-lg:hidden">
           <Button className="rounded-xl bg-deep-navy-400 px-3 py-1.5 hover:bg-deep-navy-500 sm:px-4 sm:py-2">
             <Link href="/login">
-              <Typography
-                weight="medium"
-                level="body"
-                className="text-sm text-white sm:text-base"
-              >
+              <Typography weight="medium" level="body" className="text-white">
                 Log In
               </Typography>
             </Link>
