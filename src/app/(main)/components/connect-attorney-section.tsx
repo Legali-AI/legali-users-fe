@@ -1,8 +1,8 @@
 import { Pencil } from "lucide-react";
 import { H4, P } from "../../../components/elements/typography";
-import { CardAttorney } from "../../../components/module/home/card-attorney";
 import { Button } from "../../../components/ui/button";
 import { ATTORNEYS } from "../../../data/home.data";
+import { CardAttorney } from "./card/card-attorney";
 
 export default function ConnectAttorneySection() {
   return (

@@ -1,7 +1,7 @@
 import Image from "next/image";
-import type { ProcessStep } from "../../../data/home.data";
-import { cn } from "../../../lib/utils";
-import { H4, H5, Span } from "../../elements/typography";
+import { H4, H5, Span } from "../../../../components/elements/typography";
+import type { ProcessStep } from "../../../../data/home.data";
+import { cn } from "../../../../lib/utils";
 
 interface CardProcessStepProps {
   processStep: ProcessStep;

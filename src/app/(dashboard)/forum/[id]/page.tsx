@@ -4,9 +4,8 @@ import { MessageCircle, Send, User } from "lucide-react";
 import { use, useState } from "react";
 import { FileAttachmentContainer } from "../../../../components/elements/attachments/file-attachment-container";
 import { ImageAttachmentPreview } from "../../../../components/elements/attachments/image-attachment-preview";
+import { DeleteConfirmationDialog } from "../../../../components/elements/delete-confirmation-dialog";
 import { H3, P, Small } from "../../../../components/elements/typography";
-import { CommentCard } from "../../../../components/module/forum/comment-card";
-import { DeleteConfirmationDialog } from "../../../../components/module/forum/delete-confirmation-dialog";
 import {
   Avatar,
   AvatarFallback,
@@ -15,6 +14,7 @@ import {
 import { Button } from "../../../../components/ui/button";
 import { Textarea } from "../../../../components/ui/textarea";
 import { getIssueById } from "../../../../data/issue.data";
+import { CommentCard } from "../components/comment-card";
 
 export default function ForumDetailPage({
   params,

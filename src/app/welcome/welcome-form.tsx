@@ -6,21 +6,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { getAccessToken } from "@/lib/auth";
-import { useAuth } from "../../../hooks/use-auth";
-import { useUpdateProfileCache } from "../../../hooks/use-profile";
-import {
-  type WelcomeFormData,
-  welcomeFormSchema,
-} from "../../../schema/welcome";
-import {
-  getAllCitiesApiLocationsCitiesGet,
-  getAllCountriesApiLocationsCountriesGet,
-  getAllRegionsApiLocationsRegionsGet,
-  updateProfileApiAuthProfilePut,
-} from "../../../sdk/sdk.gen";
-import { ProfileUpload } from "../../elements/profile-upload";
-import { H1 } from "../../elements/typography";
-import { Button } from "../../ui/button";
+import { ProfileUpload } from "../../components/elements/profile-upload";
+import { H1 } from "../../components/elements/typography";
+import { Button } from "../../components/ui/button";
 import {
   Form,
   FormControl,
@@ -28,15 +16,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../ui/form";
-import { Input } from "../../ui/input";
+} from "../../components/ui/form";
+import { Input } from "../../components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../ui/select";
+} from "../../components/ui/select";
+import { useAuth } from "../../hooks/use-auth";
+import { useUpdateProfileCache } from "../../hooks/use-profile";
+import { type WelcomeFormData, welcomeFormSchema } from "../../schema/welcome";
+import {
+  getAllCitiesApiLocationsCitiesGet,
+  getAllCountriesApiLocationsCountriesGet,
+  getAllRegionsApiLocationsRegionsGet,
+  updateProfileApiAuthProfilePut,
+} from "../../sdk/sdk.gen";
 
 export function WelcomeForm() {
   const router = useRouter();

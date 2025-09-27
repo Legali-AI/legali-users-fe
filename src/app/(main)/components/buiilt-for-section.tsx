@@ -1,6 +1,6 @@
 import { H3, H4 } from "../../../components/elements/typography";
-import { CardBenefit } from "../../../components/module/home/card-benefit";
 import { BENEFITS } from "../../../data/home.data";
+import { CardBenefit } from "./card/card-benefit";
 
 export default function BuiltForSection() {
   return (

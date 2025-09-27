@@ -1,6 +1,6 @@
 import { H3, H4 } from "../../../components/elements/typography";
-import { CardProcessStep } from "../../../components/module/home/card-process-step";
 import { PROCESS_STEPS } from "../../../data/home.data";
+import { CardProcessStep } from "./card/card-process-step";
 
 export default function FeatureSection() {
   return (

@@ -1,9 +1,13 @@
 "use client";
 
 import { MessageCircle, User } from "lucide-react";
-import { ImageAttachmentPreview } from "../../elements/attachments/image-attachment-preview";
-import { H5, P, Small } from "../../elements/typography";
-import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import { ImageAttachmentPreview } from "../../../../components/elements/attachments/image-attachment-preview";
+import { H5, P, Small } from "../../../../components/elements/typography";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "../../../../components/ui/avatar";
 
 export interface CommentCardProps {
   author: string;

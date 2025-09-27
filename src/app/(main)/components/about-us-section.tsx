@@ -1,7 +1,7 @@
 import { H4 } from "../../../components/elements/typography";
-import { CardProblem } from "../../../components/module/home/card-problem";
-import { CardValue } from "../../../components/module/home/card-value";
 import { CORE_PROBLEMS, VALUE_PROPOSITIONS } from "../../../data/home.data";
+import { CardProblem } from "./card/card-problem";
+import { CardValue } from "./card/card-value";
 
 export default function AboutUsSection() {
   return (

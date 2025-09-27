@@ -3,8 +3,8 @@
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useAuth } from "../../../hooks/use-auth";
-import { Button } from "../../ui/button";
+import { useAuth } from "../../hooks/use-auth";
+import { Button } from "../ui/button";
 
 interface LogoutButtonProps {
   className?: string;

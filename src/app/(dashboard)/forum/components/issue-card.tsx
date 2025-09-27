@@ -2,16 +2,16 @@
 
 import { MessageCircle, User } from "lucide-react";
 import Link from "next/link";
-import { FileAttachmentContainer } from "../../../components/elements/attachments/file-attachment-container";
-import { ImageAttachmentPreview } from "../../../components/elements/attachments/image-attachment-preview";
-import { H5, P, Small } from "../../../components/elements/typography";
+import { FileAttachmentContainer } from "../../../../components/elements/attachments/file-attachment-container";
+import { ImageAttachmentPreview } from "../../../../components/elements/attachments/image-attachment-preview";
+import { H5, P, Small } from "../../../../components/elements/typography";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "../../../components/ui/avatar";
-import { Button } from "../../../components/ui/button";
-import { cn } from "../../../lib/utils";
+} from "../../../../components/ui/avatar";
+import { Button } from "../../../../components/ui/button";
+import { cn } from "../../../../lib/utils";
 
 export interface IssueCardProps {
   id: string;

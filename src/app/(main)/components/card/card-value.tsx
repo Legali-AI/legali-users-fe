@@ -1,6 +1,6 @@
-import type { ValueProposition } from "../../../data/home.data";
-import { cn } from "../../../lib/utils";
-import { H4, P } from "../../elements/typography";
+import { H4, P } from "../../../../components/elements/typography";
+import type { ValueProposition } from "../../../../data/home.data";
+import { cn } from "../../../../lib/utils";
 
 interface CardValueProps {
   valueProposition: ValueProposition;

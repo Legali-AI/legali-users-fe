@@ -1,5 +1,5 @@
-import type { ProblemAboutUs } from "../../../data/home.data";
-import { P } from "../../elements/typography";
+import { P } from "../../../../components/elements/typography";
+import type { ProblemAboutUs } from "../../../../data/home.data";
 
 interface CardProblemProps {
   problem: ProblemAboutUs;

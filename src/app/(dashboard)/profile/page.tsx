@@ -4,9 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit } from "lucide-react";
 import { useId, useState } from "react";
 import { useForm } from "react-hook-form";
+import { LogoutButton } from "@/components/elements/logout-button";
 import { ProfileUpload } from "@/components/elements/profile-upload";
 import { Typography } from "@/components/elements/typography";
-import { LogoutButton } from "@/components/module/auth/logout-button";
 import { Button } from "@/components/ui/button";
 import {
   Form,

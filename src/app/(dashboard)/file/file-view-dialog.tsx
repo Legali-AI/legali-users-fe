@@ -1,6 +1,6 @@
 "use client";
 
-import { X } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { P, Span } from "../../../components/elements/typography";
 import { Button } from "../../../components/ui/button";
 import {
@@ -27,50 +27,33 @@ export function FileViewDialog({
 }: FileViewDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent
-        className="w-[793px] rounded-[10px] border border-white-400 bg-white p-5"
-        showCloseButton={true}
-      >
+      <DialogContent showCloseButton={true}>
         <DialogHeader className="space-y-5">
-          {/* Close Button */}
-          <div className="flex justify-end">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="h-[14px] w-[14px] p-0"
-            >
-              <X className="text-slate-gray h-[14px] w-[14px]" />
-            </Button>
-          </div>
-
           {/* File Name */}
-          <DialogTitle className="flex items-center justify-center">
-            <Span level="h5" weight="semibold" className="text-deep-navy">
+          <DialogTitle>
+            <Span level="h5" weight="semibold">
               {fileName}
             </Span>
           </DialogTitle>
 
           {/* View PDF Button */}
-          <div className="flex justify-center">
-            <Button
-              variant="outline"
-              onClick={onViewPDF}
-              className="h-[39px] w-[113px] rounded-[100px] border border-white-400 bg-white px-5"
-            >
-              <P level="body" className="text-slate-gray">
-                View PDF
-              </P>
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            onClick={onViewPDF}
+            className="h-[39px] w-[113px] rounded-[100px] border border-white-400 bg-white px-5"
+          >
+            <P level="body" className="text-slate-gray">
+              View PDF
+            </P>
+          </Button>
         </DialogHeader>
 
         {/* AI Summary Section */}
         <div className="space-y-[10px]">
           {/* AI Summary Header */}
           <div className="flex items-center gap-[10px]">
-            <div className="h-[20px] w-[18px] rounded bg-deep-navy" />
-            <P level="body" weight="semibold" className="text-deep-navy">
+            <Sparkles size={20} className="text-deep-navy" />
+            <P level="body" weight="semibold">
               AI Summary
             </P>
           </div>

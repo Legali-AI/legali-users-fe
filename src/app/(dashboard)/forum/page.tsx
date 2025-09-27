@@ -4,8 +4,8 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { DeleteConfirmationDialog } from "../../../components/elements/delete-confirmation-dialog";
 import { H5, P } from "../../../components/elements/typography";
-import { DeleteConfirmationDialog } from "../../../components/module/forum/delete-confirmation-dialog";
 import { Button } from "../../../components/ui/button";
 import {
   Tabs,
@@ -14,7 +14,7 @@ import {
   TabsTrigger,
 } from "../../../components/ui/tabs";
 import { getIssuesByCategory } from "../../../data/issue.data";
-import { IssueCard } from "./issue-card";
+import { IssueCard } from "./components/issue-card";
 
 export default function ForumPage() {
   const router = useRouter();

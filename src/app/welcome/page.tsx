@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { WelcomeForm } from "../../components/module/auth/welcome-form";
+import { WelcomeForm } from "./welcome-form";
 
 export const metadata: Metadata = {
   title: "Welcome to Legali",

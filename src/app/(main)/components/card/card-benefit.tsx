@@ -1,5 +1,5 @@
-import type { Problem } from "../../../data/home.data";
-import { H5 } from "../../elements/typography";
+import { H5 } from "../../../../components/elements/typography";
+import type { Problem } from "../../../../data/home.data";
 
 interface CardBenefitProps {
   benefit: Problem;

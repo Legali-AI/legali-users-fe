@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { H1, H2 } from "../../../components/elements/typography";
-import { CardAttorney } from "../../../components/module/home/card-attorney";
 import { ATTORNEYS } from "../../../data/home.data";
+import { CardAttorney } from "../components/card/card-attorney";
 
 export const metadata: Metadata = {
   title: "Connect with Attorneys",

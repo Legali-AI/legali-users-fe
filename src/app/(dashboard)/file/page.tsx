@@ -10,8 +10,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import * as React from "react";
+import { DeleteConfirmationDialog } from "../../../components/elements/delete-confirmation-dialog";
 import { Small } from "../../../components/elements/typography";
-import { DeleteConfirmationDialog } from "../../../components/module/forum/delete-confirmation-dialog";
 import { Input } from "../../../components/ui/input";
 import {
   Pagination,

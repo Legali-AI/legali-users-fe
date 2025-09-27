@@ -1,11 +1,11 @@
 import { ExternalLink, Linkedin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import type { Attorney } from "../../../data/home.data";
-import { cn } from "../../../lib/utils";
-import { H4, P } from "../../elements/typography";
-import { Badge } from "../../ui/badge";
-import { Button } from "../../ui/button";
+import { H4, P } from "../../../../components/elements/typography";
+import { Badge } from "../../../../components/ui/badge";
+import { Button } from "../../../../components/ui/button";
+import type { Attorney } from "../../../../data/home.data";
+import { cn } from "../../../../lib/utils";
 
 interface CardAttorneyProps {
   attorney: Attorney;
