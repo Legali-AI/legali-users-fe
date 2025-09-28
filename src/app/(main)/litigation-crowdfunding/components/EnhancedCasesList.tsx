@@ -1,5 +1,7 @@
 "use client";
 
+import { AlertCircle, Search, SlidersHorizontal } from "lucide-react";
+import { useMemo, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,8 +14,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { CaseStats, LitigationCase } from "@/types/litigation";
-import { AlertCircle, Search, SlidersHorizontal } from "lucide-react";
-import { useMemo, useState } from "react";
 import {
   fundingStages,
   mockCases,
@@ -42,7 +42,7 @@ export default function EnhancedCasesList({
   const [showFilters, setShowFilters] = useState(false);
 
   const filteredAndSortedCases = useMemo(() => {
-    let filtered = mockCases.filter(caseItem => {
+    const filtered = mockCases.filter((caseItem) => {
       // Only show approved cases to public
       if (caseItem.adminStatus !== "Approved") return false;
 
@@ -65,7 +65,7 @@ export default function EnhancedCasesList({
 
       // Return range filtering
       const returnRange = returnRanges.find(
-        range => range.label === selectedReturnRange
+        (range) => range.label === selectedReturnRange
       );
       const matchesReturnRange =
         selectedReturnRange === "All Returns" ||
@@ -93,12 +93,13 @@ export default function EnhancedCasesList({
           );
         case "highest-return":
           return b.expectedReturnMax - a.expectedReturnMax;
-        case "lowest-risk":
+        case "lowest-risk": {
           const riskOrder = { Low: 1, Medium: 2, High: 3 };
           return (
             riskOrder[a.riskLevel as keyof typeof riskOrder] -
             riskOrder[b.riskLevel as keyof typeof riskOrder]
           );
+        }
         case "funding-high":
           return b.amountRaised - a.amountRaised;
         case "progress":
@@ -121,10 +122,14 @@ export default function EnhancedCasesList({
   ]);
 
   const stats = useMemo((): CaseStats => {
-    const approvedCases = mockCases.filter(c => c.adminStatus === "Approved");
+    const approvedCases = mockCases.filter((c) => c.adminStatus === "Approved");
     const totalCases = approvedCases.length;
-    const activeCases = approvedCases.filter(c => c.status === "Active").length;
-    const fundedCases = approvedCases.filter(c => c.status === "Funded").length;
+    const activeCases = approvedCases.filter(
+      (c) => c.status === "Active"
+    ).length;
+    const fundedCases = approvedCases.filter(
+      (c) => c.status === "Funded"
+    ).length;
     const totalRaised = approvedCases.reduce(
       (sum, c) => sum + c.amountRaised,
       0
@@ -202,7 +207,7 @@ export default function EnhancedCasesList({
               <Input
                 placeholder="Search cases by title, description, or law firm..."
                 value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="h-12 pl-10"
               />
             </div>
@@ -216,7 +221,7 @@ export default function EnhancedCasesList({
                   <SelectValue placeholder="Practice Area" />
                 </SelectTrigger>
                 <SelectContent>
-                  {practiceAreas.map(area => (
+                  {practiceAreas.map((area) => (
                     <SelectItem key={area} value={area}>
                       {area}
                     </SelectItem>
@@ -232,7 +237,7 @@ export default function EnhancedCasesList({
                   <SelectValue placeholder="Funding Stage" />
                 </SelectTrigger>
                 <SelectContent>
-                  {fundingStages.map(stage => (
+                  {fundingStages.map((stage) => (
                     <SelectItem key={stage} value={stage}>
                       {stage}
                     </SelectItem>
@@ -283,7 +288,7 @@ export default function EnhancedCasesList({
                       <SelectItem value="All Risk Levels">
                         All Risk Levels
                       </SelectItem>
-                      {Object.keys(riskLevels).map(risk => (
+                      {Object.keys(riskLevels).map((risk) => (
                         <SelectItem key={risk} value={risk}>
                           {risk} Risk
                         </SelectItem>
@@ -304,7 +309,7 @@ export default function EnhancedCasesList({
                       <SelectValue placeholder="All Returns" />
                     </SelectTrigger>
                     <SelectContent>
-                      {returnRanges.map(range => (
+                      {returnRanges.map((range) => (
                         <SelectItem key={range.label} value={range.label}>
                           {range.label}
                         </SelectItem>
@@ -419,7 +424,7 @@ export default function EnhancedCasesList({
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredAndSortedCases.map(caseItem => (
+          {filteredAndSortedCases.map((caseItem) => (
             <CaseCard
               key={caseItem.id}
               case={caseItem}

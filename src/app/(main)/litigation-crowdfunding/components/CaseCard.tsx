@@ -1,3 +1,4 @@
+import { Clock, MapPin, Scale, TrendingUp, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,7 +10,6 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import type { LitigationCase } from "@/types/litigation";
-import { Clock, MapPin, Scale, TrendingUp, Users } from "lucide-react";
 import { riskLevels } from "../mock-data";
 
 interface CaseCardProps {
@@ -121,7 +121,7 @@ export default function CaseCard({ case: caseData, onClick }: CaseCardProps) {
             variant="outline"
             size="sm"
             className="flex-1"
-            onClick={e => {
+            onClick={(e) => {
               e.stopPropagation();
               onClick();
             }}
@@ -131,7 +131,7 @@ export default function CaseCard({ case: caseData, onClick }: CaseCardProps) {
           <Button
             size="sm"
             className="flex-1 bg-blue-600 hover:bg-blue-700"
-            onClick={e => {
+            onClick={(e) => {
               e.stopPropagation();
               // Handle invest action
             }}

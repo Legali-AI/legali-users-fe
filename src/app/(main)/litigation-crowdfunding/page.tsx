@@ -1,10 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import CaseDetail from "@/app/(main)/litigation-crowdfunding/components/CaseDetail";
 import EnhancedCasesList from "@/app/(main)/litigation-crowdfunding/components/EnhancedCasesList";
 import InvestmentFlow from "@/app/(main)/litigation-crowdfunding/components/InvestmentFlow";
 import type { LitigationCase } from "@/types/litigation";
-import { useState } from "react";
 
 type CurrentView = "cases" | "case-detail" | "investment-flow";
 

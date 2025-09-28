@@ -1,11 +1,5 @@
 "use client";
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowLeft,
   ArrowRight,
@@ -16,6 +10,12 @@ import {
   Shield,
 } from "lucide-react";
 import { useState } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 import { useToast } from "@/hooks/use-toast";
 import type {
@@ -150,7 +150,7 @@ export default function InvestmentFlow({
   };
 
   const updateInvestmentData = (updates: Partial<InvestmentData>) => {
-    setInvestmentData(prev => ({ ...prev, ...updates }));
+    setInvestmentData((prev) => ({ ...prev, ...updates }));
   };
 
   return (
@@ -243,7 +243,7 @@ export default function InvestmentFlow({
                         type="number"
                         placeholder={`Minimum ${formatCurrency(caseData.minimumInvestment)}`}
                         value={investmentData.amount}
-                        onChange={e =>
+                        onChange={(e) =>
                           updateInvestmentData({ amount: e.target.value })
                         }
                         className="text-lg"
@@ -283,7 +283,7 @@ export default function InvestmentFlow({
                       id="note"
                       placeholder="Any comments, questions, or special instructions..."
                       value={investmentData.investorNote}
-                      onChange={e =>
+                      onChange={(e) =>
                         updateInvestmentData({ investorNote: e.target.value })
                       }
                     />
@@ -331,7 +331,7 @@ export default function InvestmentFlow({
                       <Checkbox
                         id="disclosure"
                         checked={investmentData.disclosureAcknowledged}
-                        onCheckedChange={checked =>
+                        onCheckedChange={(checked) =>
                           updateInvestmentData({
                             disclosureAcknowledged: !!checked,
                           })
@@ -357,7 +357,7 @@ export default function InvestmentFlow({
                       <Checkbox
                         id="risk"
                         checked={investmentData.riskAcknowledged}
-                        onCheckedChange={checked =>
+                        onCheckedChange={(checked) =>
                           updateInvestmentData({ riskAcknowledged: !!checked })
                         }
                       />
@@ -373,7 +373,7 @@ export default function InvestmentFlow({
                       <Checkbox
                         id="kyc"
                         checked={investmentData.kycConfirmed}
-                        onCheckedChange={checked =>
+                        onCheckedChange={(checked) =>
                           updateInvestmentData({ kycConfirmed: !!checked })
                         }
                       />
@@ -447,7 +447,7 @@ export default function InvestmentFlow({
                       <Checkbox
                         id="terms"
                         checked={investmentData.termsAccepted}
-                        onCheckedChange={checked =>
+                        onCheckedChange={(checked) =>
                           updateInvestmentData({ termsAccepted: !!checked })
                         }
                       />

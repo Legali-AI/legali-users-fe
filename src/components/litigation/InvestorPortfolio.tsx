@@ -1,9 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import type { LitigationCase } from "@/types/litigation";
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -12,6 +8,10 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import type { LitigationCase } from "@/types/litigation";
 
 interface InvestorPortfolioProps {
   investments: Array<{
@@ -40,10 +40,10 @@ export default function InvestorPortfolio({
     0
   );
   const activeInvestments = investments.filter(
-    inv => inv.status === "Active"
+    (inv) => inv.status === "Active"
   ).length;
   const settledInvestments = investments.filter(
-    inv => inv.status === "Settled"
+    (inv) => inv.status === "Settled"
   ).length;
 
   const formatCurrency = (amount: number) => {

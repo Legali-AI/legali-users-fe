@@ -1,15 +1,5 @@
 "use client";
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
-import type { LitigationCase } from "@/types/litigation";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -25,6 +15,16 @@ import {
   Users,
 } from "lucide-react";
 import { useState } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import type { LitigationCase } from "@/types/litigation";
 import { riskLevels } from "../mock-data";
 
 interface CaseDetailProps {
@@ -497,7 +497,7 @@ export default function CaseDetail({
                         type="number"
                         placeholder={`Min. ${formatCurrency(caseData.minimumInvestment)}`}
                         value={investmentAmount}
-                        onChange={e => setInvestmentAmount(e.target.value)}
+                        onChange={(e) => setInvestmentAmount(e.target.value)}
                       />
                     </div>
                     <div>
@@ -511,7 +511,7 @@ export default function CaseDetail({
                         id="note"
                         placeholder="Any comments or questions..."
                         value={investorNote}
-                        onChange={e => setInvestorNote(e.target.value)}
+                        onChange={(e) => setInvestorNote(e.target.value)}
                       />
                     </div>
                     <div className="flex gap-2">
