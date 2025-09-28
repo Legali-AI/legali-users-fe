@@ -28,6 +28,8 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 # Disable Turbopack to avoid compatibility issues with Bun
 ENV NEXT_TURBOPACK=0
+# Enable standalone output for Docker builds
+ENV DOCKER_BUILD=true
 RUN bun run build
 
 # Production image, copy all the files and run next

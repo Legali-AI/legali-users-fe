@@ -1,9 +1,13 @@
 import type { NextConfig } from "next";
 
 const isNetlifyBuild = process.env.NETLIFY === "true";
+const isDockerBuild = process.env.DOCKER_BUILD === "true";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  ...(isDockerBuild && {
+    output: "standalone",
+  }),
   ...(isNetlifyBuild && {
     output: "export",
     trailingSlash: true,
