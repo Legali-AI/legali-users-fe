@@ -42,14 +42,8 @@ export function useLogin() {
         city_id: user.city_id || null,
       });
 
-      // Redirect based on user role
-      router.push("/welcome");
-
-      // if (user.role === "lawyer") {
-      //   router.push("/lawyers");
-      // } else {
-      //   router.push("/");
-      // }
+      // Redirect to onboarding page
+      router.push("/onboard");
 
       return { success: true };
     } catch (error) {
