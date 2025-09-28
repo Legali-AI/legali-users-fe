@@ -4,15 +4,40 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { User } from "@/lib/auth";
 import { getAccessToken } from "@/lib/auth";
 import { getProfileApiAuthProfileGet } from "@/sdk/sdk.gen";
+import { HARDCODED_USERS } from "@/data/auth.data";
 
 // Query key for profile
 export const PROFILE_QUERY_KEY = ["profile"] as const;
 
 // Profile query function
 async function fetchProfile(): Promise<User | null> {
+  const token = getAccessToken();
+  if (!token) throw new Error("No access token");
+
+  // Check if this is a mock token
+  try {
+    const payload = JSON.parse(atob(token));
+    const mockUser = HARDCODED_USERS.find(user => user.id === payload.userId);
+    
+    if (mockUser) {
+      // Return mock user data directly
+      return {
+        id: mockUser.id,
+        email: mockUser.email,
+        first_name: mockUser.first_name,
+        last_name: mockUser.last_name,
+        profile_picture_url: mockUser.profile_picture_url || null,
+        city_id: mockUser.city_id || null,
+      };
+    }
+  } catch (error) {
+    // If token parsing fails, continue with real API call
+  }
+
+  // Use real API for non-mock users
   const response = await getProfileApiAuthProfileGet({
     headers: {
-      Authorization: `Bearer ${getAccessToken()}`,
+      Authorization: `Bearer ${token}`,
     },
   });
 

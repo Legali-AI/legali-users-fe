@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit } from "lucide-react";
-import { useId, useState } from "react";
+import { useId, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { ProfileUpload } from "@/components/elements/profile-upload";
 import { Typography } from "@/components/elements/typography";
@@ -34,6 +34,7 @@ import {
 } from "@/schema/profile";
 import { updateProfileApiAuthProfilePut } from "@/sdk/sdk.gen";
 import { getAccessToken } from "../../../lib/auth";
+import { isMockAuthentication, mockUpdateProfile } from "@/data/mock-profile.data";
 
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
@@ -65,6 +66,22 @@ export default function ProfilePage() {
     setIsEditing(false);
   };
 
+  // Update form values when user data changes
+  useEffect(() => {
+    if (user) {
+      form.reset({
+        firstName: user.first_name || "Legali",
+        lastName: user.last_name || "Legali",
+        profileImage: user.profile_picture_url || null,
+        dateOfBirth: "1990-01-01",
+        subscriptionType: "Premium",
+        region: "united-states",
+        tokenUsage: 5000,
+        storageUsage: "20000 MB",
+      });
+    }
+  }, [user, form]);
+
   // Function to handle profile picture upload
   const handleProfileImageChange = async (file: File | null) => {
     if (!file) {
@@ -92,12 +109,19 @@ export default function ProfilePage() {
           typeof data.profileImage === "string" ? data.profileImage : null,
       };
 
-      const response = await updateProfileApiAuthProfilePut({
-        body: updateData,
-        headers: {
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
-      });
+      let response;
+      
+      // Use mock service for mock users, real API for others
+      if (isMockAuthentication()) {
+        response = await mockUpdateProfile(updateData);
+      } else {
+        response = await updateProfileApiAuthProfilePut({
+          body: updateData,
+          headers: {
+            Authorization: `Bearer ${getAccessToken()}`,
+          },
+        });
+      }
 
       if (response.data?.data) {
         const updatedUser = response.data.data;
@@ -127,6 +151,22 @@ export default function ProfilePage() {
 
   return (
     <div className="flex w-full flex-1 flex-col gap-10 overflow-hidden">
+      {/* Mock User Indicator */}
+      {isMockAuthentication() && (
+        <div className="rounded-lg bg-sky-blue-100 border border-sky-blue-300 p-4">
+          <div className="flex items-center gap-2">
+            <div className="h-2 w-2 rounded-full bg-sky-blue-500"></div>
+            <p className="text-sm font-medium text-sky-blue-800">
+              Test Account Mode
+            </p>
+          </div>
+          <p className="text-xs text-sky-blue-700 mt-1">
+            You are logged in with a test account. Profile changes will be saved locally during this session.
+            {user?.email?.includes('lawyers') ? ' (Lawyer Account)' : ' (User Account)'}
+          </p>
+        </div>
+      )}
+      
       {/* Header with Action Buttons */}
       <div className="flex items-center gap-3">
         {!isEditing ? (
