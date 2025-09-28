@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GlobalLayout } from "../../components/layout/global-layout";
 import { PurposeSelectionForm } from "../../components/module/auth/purpose-selection-form";
 
 export const metadata: Metadata = {
@@ -21,34 +22,28 @@ export const metadata: Metadata = {
 
 export default function OnboardPage() {
   return (
-    <main
-      className="bg-gradient-sky-blue relative flex h-screen items-center justify-center overflow-hidden px-4 py-16"
-      aria-label="Onboarding page"
+    <GlobalLayout
+      variant="no-padding"
+      className="bg-gradient-sky-blue relative min-h-screen overflow-hidden"
     >
-      {/* Decorative blur elements */}
-      <div aria-hidden="true">
-        <div
-          className="absolute top-[-100px] left-[-100px] -z-10 aspect-square h-auto w-[400px] opacity-40 blur-3xl"
-          style={{ backgroundColor: "rgba(255, 255, 255, 0.8)" }}
-        />
-        <div
-          className="absolute top-[-100px] right-[-100px] -z-10 aspect-square h-auto w-[400px] opacity-40 blur-3xl"
-          style={{ backgroundColor: "rgba(255, 255, 255, 0.8)" }}
-        />
-        <div
-          className="absolute bottom-[-100px] left-[-100px] -z-10 aspect-square h-auto w-[400px] opacity-40 blur-3xl"
-          style={{ backgroundColor: "rgba(255, 255, 255, 0.8)" }}
-        />
-        <div
-          className="absolute right-[-100px] bottom-[-100px] -z-10 aspect-square h-auto w-[400px] opacity-40 blur-3xl"
-          style={{ backgroundColor: "rgba(255, 255, 255, 0.8)" }}
-        />
+      {/* Decorative Elements */}
+      <div className="pointer-events-none absolute inset-0">
+        {/* Top-right decoration */}
+        <div className="absolute top-0 right-0 h-96 w-96 translate-x-48 -translate-y-48 transform rounded-full bg-white/5 blur-3xl" />
+
+        {/* Bottom-left decoration */}
+        <div className="absolute bottom-0 left-0 h-64 w-64 -translate-x-32 translate-y-32 transform rounded-full bg-purple-500/10 blur-3xl" />
+
+        {/* Grid pattern */}
+        <div className="bg-grid-pattern absolute inset-0" />
       </div>
 
-      {/* Main content with glass effect */}
-      <div className="mx-4 w-full max-w-4xl rounded-3xl border border-white/30 bg-white/90 p-8 shadow-xl backdrop-blur-sm">
-        <PurposeSelectionForm />
+      {/* Main Content */}
+      <div className="relative z-10 flex min-h-screen items-center justify-center p-6">
+        <div className="w-full max-w-5xl">
+          <PurposeSelectionForm />
+        </div>
       </div>
-    </main>
+    </GlobalLayout>
   );
 }

@@ -9,7 +9,8 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-deep-navy text-primary-foreground shadow-xs",
+        default:
+          "bg-deep-navy text-primary-foreground shadow-xs hover:bg-deep-navy/90 focus-visible:ring-deep-navy/20 active:bg-deep-navy/95",
         destructive:
           "bg-brand-rose text-white shadow-xs hover:bg-brand-rose/90 focus-visible:ring-brand-rose/20 dark:bg-brand-rose/60 dark:focus-visible:ring-brand-rose/40",
         outline:
@@ -17,6 +18,8 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         orange: "bg-warm-orange-400 text-white",
+        "sky-blue":
+          "bg-sky-blue-600 text-white shadow-xs hover:bg-sky-blue-700 focus-visible:ring-sky-blue-500/20",
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
@@ -24,7 +27,7 @@ const buttonVariants = cva(
       size: {
         default: "px-4 py-2",
         sm: "h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5",
-        lg: "rounded-full px-6 py-3 has-[>svg]:px-4",
+        lg: "rounded-xl px-6 py-3 has-[>svg]:px-4",
         icon: "px-0 py-0",
       },
     },

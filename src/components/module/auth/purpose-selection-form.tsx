@@ -1,11 +1,11 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Bot, Scale, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 interface PurposeOption {
   id: string;
@@ -62,12 +62,12 @@ export function PurposeSelectionForm() {
 
     // Find the selected option
     const selectedOption = purposeOptions.find(
-      (option) => option.id === selectedPurpose
+      option => option.id === selectedPurpose
     );
 
     if (selectedOption) {
       // Add a small delay for better UX
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      await new Promise(resolve => setTimeout(resolve, 300));
       router.push(selectedOption.route);
     }
 
@@ -100,34 +100,53 @@ export function PurposeSelectionForm() {
       </div>
 
       {/* Purpose Options */}
-      <div className="grid gap-4 sm:gap-6">
-        {purposeOptions.map((option) => (
+      <div className="grid gap-6 lg:grid-cols-3">
+        {purposeOptions.map(option => (
           <button
             key={option.id}
             type="button"
             onClick={() => setSelectedPurpose(option.id)}
             className={cn(
-              "relative rounded-2xl border-2 p-6 text-left transition-all duration-300 sm:p-8",
-              "transform-gpu hover:scale-[1.02] hover:shadow-lg",
+              "group relative rounded-2xl border-2 p-8 text-center transition-all duration-300",
+              "transform-gpu hover:scale-[1.02] hover:shadow-xl",
               "focus:ring-2 focus:ring-sky-blue-500 focus:ring-offset-2 focus:outline-none",
+              "flex min-h-[280px] flex-col justify-between",
               selectedPurpose === option.id
-                ? "bg-sky-blue-50 scale-[1.02] border-sky-blue-500 shadow-lg ring-2 ring-sky-blue-200"
+                ? "bg-sky-blue-50 scale-[1.02] border-sky-blue-500 shadow-xl ring-2 ring-sky-blue-200"
                 : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
             )}
           >
-            <div className="flex items-start gap-4 sm:gap-6">
+            {/* Selection Indicator - Top Right */}
+            <div className="absolute top-4 right-4">
+              <div
+                className={cn(
+                  "flex h-6 w-6 items-center justify-center rounded-full border-2 transition-all",
+                  selectedPurpose === option.id
+                    ? "border-sky-blue-500 bg-sky-blue-500"
+                    : "border-gray-300 group-hover:border-gray-400"
+                )}
+              >
+                {selectedPurpose === option.id && (
+                  <div className="h-3 w-3 rounded-full bg-white" />
+                )}
+              </div>
+            </div>
+
+            {/* Main Content */}
+            <div className="flex flex-col items-center space-y-6">
               {/* Icon */}
               <div
                 className={cn(
-                  "flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-xl sm:h-20 sm:w-20",
+                  "flex h-20 w-20 items-center justify-center rounded-2xl transition-all",
                   selectedPurpose === option.id
                     ? "bg-sky-blue-100"
-                    : option.bgColor
+                    : option.bgColor,
+                  "group-hover:scale-110"
                 )}
               >
                 <option.icon
                   className={cn(
-                    "h-8 w-8 sm:h-10 sm:w-10",
+                    "h-10 w-10 transition-all",
                     selectedPurpose === option.id
                       ? "text-sky-blue-600"
                       : option.iconColor
@@ -136,29 +155,18 @@ export function PurposeSelectionForm() {
               </div>
 
               {/* Content */}
-              <div className="min-w-0 flex-1">
-                <h3 className="mb-2 text-lg font-semibold text-gray-900 sm:mb-3 sm:text-xl">
+              <div className="space-y-3">
+                <h3 className="text-xl leading-tight font-bold text-gray-900">
                   {option.title}
                 </h3>
-                <p className="text-sm leading-relaxed text-gray-600 sm:text-base">
+                <p className="px-2 text-sm leading-relaxed text-gray-600">
                   {option.description}
                 </p>
               </div>
-
-              {/* Selection Indicator */}
-              <div
-                className={cn(
-                  "flex h-6 w-6 items-center justify-center rounded-full border-2",
-                  selectedPurpose === option.id
-                    ? "border-sky-blue-500 bg-sky-blue-500"
-                    : "border-gray-300"
-                )}
-              >
-                {selectedPurpose === option.id && (
-                  <div className="h-3 w-3 rounded-full bg-white" />
-                )}
-              </div>
             </div>
+
+            {/* Bottom Spacer */}
+            <div className="mt-4" />
           </button>
         ))}
       </div>
@@ -168,7 +176,7 @@ export function PurposeSelectionForm() {
         <Button
           onClick={handleContinue}
           disabled={!selectedPurpose || isLoading}
-          className="rounded-xl bg-sky-blue-600 px-12 py-3 text-lg font-medium hover:bg-sky-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="px-12 py-3 text-lg font-medium disabled:cursor-not-allowed disabled:opacity-50"
           size="lg"
         >
           {isLoading ? "Loading..." : "Continue"}
