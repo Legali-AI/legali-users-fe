@@ -27,7 +27,7 @@ const formatUrgency = (urgency: string) => {
 };
 
 const cardStyle =
-  "flex items-center justify-center rounded-[10px] border border-white-500 bg-white px-5 py-2.5";
+  "flex items-center justify-center rounded-[10px] border border-white-500 bg-white px-3 py-2 lg:px-5 lg:py-2.5";
 
 export default function TicketDetailPage({
   params,
@@ -49,34 +49,34 @@ export default function TicketDetailPage({
   }
 
   return (
-    <main className="flex w-full flex-1 flex-col gap-5">
+    <main className="flex w-full flex-1 flex-col gap-4 lg:gap-5">
       {/* Header Section */}
-      <div className="flex w-full items-center justify-between gap-2">
+      <div className="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-2">
         <P level="label" className="text-slate-gray-400">
           Ticket Details
         </P>
 
         {/* Urgency Badge */}
-        <div className={cardStyle}>
+        <div className={cn(cardStyle, "flex w-fit items-center gap-2")}>
           <H5
             level="title"
-            className="flex items-center gap-2 text-slate-gray-400"
+            className="flex w-fit items-center gap-2 text-slate-gray-400"
           >
             Urgency
-            <Span level={"title"} weight={"semibold"} className="text-black">
-              {formatUrgency(ticket.urgency)}
-            </Span>
           </H5>
+          <Span level={"title"} weight={"semibold"} className="text-black">
+            {formatUrgency(ticket.urgency)}
+          </Span>
         </div>
       </div>
 
       {/* Ticket Info Row */}
-      <div className="flex w-full items-start gap-5">
+      <div className="flex w-full flex-col gap-3 md:flex-row md:items-start md:gap-5">
         {/* Sender */}
-        <div className={cardStyle}>
+        <div className={cn(cardStyle, "flex w-fit items-center gap-2")}>
           <H5
             level="title"
-            className="flex items-center gap-2 text-slate-gray-400"
+            className="flex w-fit items-center gap-2 text-slate-gray-400"
           >
             Sender
             <Span level={"title"} weight={"semibold"} className="text-black">
@@ -86,7 +86,7 @@ export default function TicketDetailPage({
         </div>
 
         {/* Issue */}
-        <div className={cardStyle}>
+        <div className={cn(cardStyle, "flex w-fit items-center gap-2")}>
           <H5
             level="title"
             className="flex items-center gap-2 text-slate-gray-400"
@@ -104,7 +104,11 @@ export default function TicketDetailPage({
         <H5 level="title" className="text-slate-gray-400">
           Description
         </H5>
-        <Span level={"title"} weight={"medium"} className="text-black">
+        <Span
+          level={"title"}
+          weight={"medium"}
+          className="break-words text-black"
+        >
           {ticket.description}
         </Span>
       </div>
@@ -139,7 +143,7 @@ export default function TicketDetailPage({
             key={ticket.responses.id}
             className={cn(cardStyle, "flex flex-col items-start gap-1")}
           >
-            <P level="body" className="text-deep-navy">
+            <P level="body" className="break-words text-deep-navy">
               {ticket.responses.message}
             </P>
           </div>

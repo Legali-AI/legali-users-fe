@@ -42,6 +42,7 @@ import {
   getFilesByCaseType,
   SHOW_COUNT_OPTIONS,
 } from "../../../data/file.data";
+import { cn } from "../../../lib/utils";
 import { createFileTableColumns } from "./file-table-columns";
 import { FileViewDialog } from "./file-view-dialog";
 
@@ -121,14 +122,14 @@ export default function FilePage() {
   });
 
   return (
-    <main className="flex h-full w-full flex-1 flex-col gap-5 overflow-hidden bg-gradient-to-b from-white to-sky-blue-100">
+    <main className="flex h-full w-full flex-1 flex-col gap-4 overflow-hidden bg-gradient-to-b from-white to-sky-blue-100 lg:gap-5">
       {/* Filters Row */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         {/* Left Filters */}
-        <div className="flex items-center gap-[10px]">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-[10px]">
           {/* Case Type Filter */}
           <Select value={selectedCaseType} onValueChange={setSelectedCaseType}>
-            <SelectTrigger className="border-white-400 bg-white">
+            <SelectTrigger className="w-full border-white-400 bg-white sm:w-auto">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -149,7 +150,7 @@ export default function FilePage() {
             onChange={(event) =>
               table.getColumn("fileName")?.setFilterValue(event.target.value)
             }
-            className="border-white-400 bg-white"
+            className="w-full border-white-400 bg-white sm:w-auto"
           />
         </div>
 
@@ -160,7 +161,7 @@ export default function FilePage() {
             value={table.getState().pagination.pageSize.toString()}
             onValueChange={(value) => table.setPageSize(Number(value))}
           >
-            <SelectTrigger className="border-white-400 bg-white">
+            <SelectTrigger className="w-20 border-white-400 bg-white">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -176,9 +177,9 @@ export default function FilePage() {
       </div>
 
       {/* Files Table */}
-      <div className="flex w-full flex-col bg-gradient-to-b from-white to-sky-blue-100">
-        <div className="overflow-hidden rounded-[20px]">
-          <Table>
+      <div className="flex w-full flex-1 flex-col overflow-hidden bg-gradient-to-b from-white to-sky-blue-100">
+        <div className="overflow-x-auto overflow-y-hidden rounded-[20px]">
+          <Table className="min-w-full">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id} className="border-white-400">
@@ -186,7 +187,7 @@ export default function FilePage() {
                     return (
                       <TableHead
                         key={header.id}
-                        className="h-[64px] border-white-400 bg-white px-5 text-center"
+                        className="h-[56px] border-white-400  bg-white px-3 text-center whitespace-nowrap md:h-[60px] lg:px-5 xl:h-[64px]"
                       >
                         {header.isPlaceholder
                           ? null
@@ -206,12 +207,16 @@ export default function FilePage() {
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    className={`h-[67px] border-white-400 ${
+                    className={cn(
+                      "h-[60px] border-white-400 md:h-[64px] xl:h-[67px]",
                       index % 2 === 0 ? "bg-white" : "bg-sky-blue-100"
-                    }`}
+                    )}
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="px-5 text-center">
+                      <TableCell
+                        key={cell.id}
+                        className="px-3 text-center whitespace-nowrap lg:px-5"
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()

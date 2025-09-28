@@ -1,6 +1,6 @@
 "use client";
 
-import { Hamburger, User } from "lucide-react";
+import { Menu, User } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
@@ -37,7 +37,7 @@ export default function DynamicHeader() {
         }}
       >
         <SidebarTrigger className="h-8 w-8">
-          <Hamburger className="size-4" />
+          <Menu className="size-6" size={24} />
           <span className="sr-only">Open sidebar</span>
         </SidebarTrigger>
       </div>

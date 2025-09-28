@@ -44,7 +44,7 @@ const TICKETS = SUPPORT_TICKETS.map((ticket) => ({
 
 export default function SupportPage() {
   return (
-    <main className="flex w-full flex-1 flex-col gap-10">
+    <main className="flex w-full flex-1 flex-col gap-6 lg:gap-10">
       <Link href="/support/submit" className="w-full">
         <Button
           variant={"outline"}
@@ -62,18 +62,20 @@ export default function SupportPage() {
       </Link>
 
       <section className="flex flex-col gap-4">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <H3 level="label">Your Tickets</H3>
 
           {/* Filter */}
-          <div className="flex items-center gap-2">
-            <Filter size={14} />
-            <P level="label" className="mr-4 text-brand-slate">
-              Filter By
-            </P>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-2">
+            <div className="flex items-center gap-2">
+              <Filter size={14} />
+              <P level="label" className="text-brand-slate">
+                Filter By
+              </P>
+            </div>
             {/* By pending and completed */}
             <Select>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="All Status" />
               </SelectTrigger>
               <SelectContent>
@@ -94,7 +96,7 @@ export default function SupportPage() {
               className="block"
             >
               <div
-                className="flex cursor-pointer items-center justify-between rounded-lg border border-sky-blue-700 px-6 py-3 transition-colors hover:bg-sky-blue-100"
+                className="flex cursor-pointer flex-col gap-3 rounded-lg border border-sky-blue-700 px-3 py-2.5 transition-colors hover:bg-sky-blue-100 sm:flex-row sm:items-center sm:justify-between sm:gap-4 md:px-4 md:py-3 lg:px-6"
                 style={{
                   background:
                     "linear-gradient(89deg, #EDFAFF 0%, #FCFEFF 39.26%)",
@@ -103,21 +105,22 @@ export default function SupportPage() {
                 <H3
                   level="title"
                   weight={"semibold"}
-                  className="text-sky-blue-900"
+                  className="flex-1 text-sky-blue-900"
                 >
                   {ticket.title}
                 </H3>
-                <div className="flex items-center gap-2">
+                <div className="flex justify-end gap-2 sm:items-center sm:gap-2">
                   <Badge
                     size={"md"}
                     variant={ticket.status === "Pending" ? "gray" : "emerald"}
                     level="body"
+                    className="self-end sm:self-auto"
                   >
                     {ticket.status}
                   </Badge>
                   <Button
                     level="body"
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 self-end sm:self-auto"
                     asChild
                   >
                     <span>
