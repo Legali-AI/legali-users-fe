@@ -29,12 +29,13 @@ const formatUrgency = (urgency: string) => {
 const cardStyle =
   "flex items-center justify-center rounded-[10px] border border-white-500 bg-white px-3 py-2 lg:px-5 lg:py-2.5";
 
-export default function TicketDetailPage({
+export default async function TicketDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const ticket = getTicketById(params.id);
+  const { id } = await params;
+  const ticket = getTicketById(id);
 
   if (!ticket) {
     return (

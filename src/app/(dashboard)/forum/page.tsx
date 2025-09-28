@@ -3,7 +3,7 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { DeleteConfirmationDialog } from "../../../components/elements/delete-confirmation-dialog";
 import { H5, P } from "../../../components/elements/typography";
 import { Button } from "../../../components/ui/button";
@@ -16,7 +16,7 @@ import {
 import { getIssuesByCategory } from "../../../data/issue.data";
 import { IssueCard } from "./components/issue-card";
 
-export default function ForumPage() {
+function ForumContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const activeTab =
@@ -143,5 +143,13 @@ export default function ForumPage() {
         cancelText="Cancel"
       />
     </div>
+  );
+}
+
+export default function ForumPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ForumContent />
+    </Suspense>
   );
 }

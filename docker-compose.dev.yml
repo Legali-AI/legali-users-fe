@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  # Next.js Frontend Application (Development)
+  legali-frontend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: legali-frontend-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    restart: unless-stopped
+    networks:
+      - legali-network
+    command: bun run dev
+
+networks:
+  legali-network:
+    driver: bridge
