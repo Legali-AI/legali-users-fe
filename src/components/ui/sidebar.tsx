@@ -165,7 +165,7 @@ function Sidebar({
           data-mobile="true"
           className="w-[280px] bg-sidebar p-0 text-sidebar-foreground sm:w-[320px] [&>button]:hidden"
           side="left">
-          <SheetHeader className="sr-only">
+          <SheetHeader className="sr-only hidden">
             <SheetTitle>Navigation Sidebar</SheetTitle>
             <SheetDescription>Displays the mobile navigation sidebar.</SheetDescription>
           </SheetHeader>
@@ -236,7 +236,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
       }}
       {...props}>
       <Menu size={24} className="aspect-square size-6 h-auto w-6" />
-      <span className="sr-only">Toggle Sidebar</span>
+      <span className="sr-only hidden">Toggle Sidebar</span>
     </Button>
   );
 }

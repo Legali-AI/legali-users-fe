@@ -1,5 +1,5 @@
-import { homePageMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
+import { homePageMetadata } from "@/lib/seo/metadata";
 import { H3, P, Span } from "../../components/elements/typography";
 import AboutUsSection from "./components/about-us-section";
 import BuiltForSection from "./components/buiilt-for-section";
@@ -12,7 +12,7 @@ export const metadata: Metadata = homePageMetadata;
 
 function App() {
   return (
-    <main className="relative z-10 flex w-full flex-col overflow-x-hidden bg-sky-blue-100 px-4 py-40 sm:px-8 md:px-16 lg:px-32">
+    <main className="relative z-10 flex w-full flex-col overflow-x-hidden bg-sky-blue-100 px-4 py-40 sm:px-8 md:px-16 md:py-0 lg:px-32">
       {/* Hero section */}
       <HeroSection />
 

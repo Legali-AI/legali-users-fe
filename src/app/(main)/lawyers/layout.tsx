@@ -1,4 +1,4 @@
-import { QueryProvider } from "../../lib/query-client";
+import { QueryProvider } from "../../../lib/query-client";
 
 export default function DashboardLayout({
   children,

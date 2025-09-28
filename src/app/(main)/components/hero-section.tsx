@@ -64,7 +64,7 @@ export default function HeroSection() {
             <div key={feature.label} data-aos="flip-up" data-aos-duration="600" data-aos-delay={400 + index * 50}>
               <Badge level={"body"} variant={"gradient-blue"} size={"lg"}>
                 <feature.icon size={30} aria-hidden="true" />
-                <span className="sr-only">Feature: </span>
+                <span className="sr-only hidden">Feature: </span>
                 {feature.label}
               </Badge>
             </div>

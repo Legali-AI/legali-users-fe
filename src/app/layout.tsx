@@ -90,14 +90,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${inter.className} bg-sky-blue-100 overflow-y-auto overflow-x-hidden antialiased`}
+        className={`${inter.variable} ${inter.className} overflow-x-hidden overflow-y-auto bg-sky-blue-100 antialiased`}
         suppressHydrationWarning={true}>
-        {/* Skip to main content link for screen readers */}
-        <a
-          href="#main-content"
-          className="focus:bg-sky-blue-500 focus:ring-sky-blue-500 sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:px-4 focus:py-2 focus:text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
-          Skip to main content
-        </a>
         {children}
       </body>
     </html>
