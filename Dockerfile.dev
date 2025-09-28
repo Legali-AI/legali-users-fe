@@ -1,0 +1,23 @@
+# Development Dockerfile for Next.js with Bun
+FROM oven/bun:alpine
+
+WORKDIR /app
+
+# Install dependencies
+COPY package.json bun.lock* ./
+RUN bun install
+
+# Copy source code
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Set environment variables
+ENV NODE_ENV=development
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# Start development server
+CMD ["bun", "run", "dev"]
+

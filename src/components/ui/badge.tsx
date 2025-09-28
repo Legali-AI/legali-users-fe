@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { typographyConfig } from "../elements/typography/typography.config";
 
 const badgeVariants = cva(
-  "inline-flex w-fit shrink-0 items-center justify-center gap-2 overflow-hidden rounded-md border px-2 py-0.5 font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3",
+  "inline-flex w-fit shrink-0 items-center justify-center gap-2 overflow-hidden rounded-md border px-2 py-0.5 font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 [&>svg]:pointer-events-none [&>svg]:size-3",
   {
     variants: {
       variant: {
@@ -15,23 +15,19 @@ const badgeVariants = cva(
         secondary:
           "border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
         destructive:
-          "border-transparent bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90",
+          "border-transparent bg-destructive text-white focus-visible:ring-destructive/20 [a&]:hover:bg-destructive/90",
         outline:
-          "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
-        coral: "rounded-full border-transparent bg-brand-rose text-white",
-        "warm-orange":
-          "rounded-full border-transparent bg-warm-orange-400 text-white",
-        "sky-blue-light":
-          "rounded-full border-transparent bg-sky-blue-500 text-white",
-        "sky-blue":
-          "rounded-full border-transparent bg-sky-blue-900 text-white",
-        "outline-warm-orange":
-          "rounded-full bg-warm-orange-200 text-warm-orange-400",
+          "rounded-full text-sky-blue-900 ring-1 ring-sky-blue-900 [a&]:hover:bg-sky-blue-900 [a&]:hover:text-sky-blue-900 ",
+        ghost: "rounded-full border-none text-brand-slate ring-0",
+        "gradient-blue":
+          "rounded-full bg-gradient-to-b from-white to-[#A4D1E8] text-black",
         emerald:
-          "rounded-full border-transparent bg-emerald-green-400 text-white",
+          "rounded-full border-transparent bg-emerald-green-300 text-emerald-green-700",
+        gray: "rounded-full border-transparent bg-slate-gray-100 text-brand-slate",
       },
       size: {
         default: "px-3 py-2",
+        md: "px-3 py-1.5 lg:px-4 lg:py-2",
         lg: "px-4 py-2.5",
         icon: "px-2 py-1",
       },

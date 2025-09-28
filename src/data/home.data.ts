@@ -1,75 +1,80 @@
 import {
   AlertTriangle,
+  BriefcaseBusiness,
   Clock,
+  Dices,
+  DollarSign,
   FileText,
+  Folder,
   FolderOpen,
+  Gavel,
   HandHeart,
+  Handshake,
+  Home,
   type LucideIcon,
+  ScaleIcon,
+  ScrollTextIcon,
+  SearchIcon,
   TrendingUp,
   Users,
 } from "lucide-react";
-import type { BadgeVariantType } from "../components/ui/badge";
 
 export interface Feature {
   label: string;
-  color: BadgeVariantType["variant"];
   icon: LucideIcon;
 }
 
 export const NAVIGATION_FEATURES: Feature[] = [
   {
     label: "Red Flag Alerts",
-    color: "coral",
     icon: AlertTriangle,
   },
   {
     label: "Legal Template",
-    color: "warm-orange",
     icon: FileText,
   },
   {
     label: "Lawyers Marketplace",
-    color: "sky-blue-light",
     icon: Users,
   },
   {
     label: "Fund Your Litigation: For Investors",
-    color: "emerald",
     icon: TrendingUp,
   },
   {
     label: "Legal Dossier Builder",
-    color: "emerald",
     icon: FolderOpen,
   },
   {
     label: "Case and Timeline Builder",
-    color: "emerald",
     icon: Clock,
   },
   {
     label: "Fund Your Litigation: For Litigants",
-    color: "emerald",
     icon: HandHeart,
   },
 ];
-export interface Problem {
+export interface ProblemAboutUs {
   title: string;
   description: string;
+  icon: LucideIcon;
 }
-export const CORE_PROBLEMS: Problem[] = [
+export const CORE_PROBLEMS: ProblemAboutUs[] = [
   {
     title: 'Stuck in the "missing middle"?',
     description:
       "Your case is too big for small claims, too small for big firms.",
+    icon: BriefcaseBusiness,
   },
   {
     title: "Unfair settlements?",
     description: "Don't feel forced to accept lowball offers.",
+    icon: Gavel,
   },
   {
     title: "Sky-high legal fees?",
     description: "Stop gambling your future just to stay in the game.",
+    icon: TrendingUp,
   },
 ];
 
@@ -89,6 +94,7 @@ export const VALUE_PROPOSITIONS: ValueProposition[] = [
 export interface Problem {
   title: string;
   description: string;
+  icon: LucideIcon;
 }
 
 export interface Benefits {
@@ -104,31 +110,37 @@ export const BENEFITS: Benefits[] = [
         title: "Navigating the law blindfolded",
         description:
           "Feel lost trying to understand legal processes without guidance.",
+        icon: ScaleIcon,
       },
       {
         title: "Searching endlessly for answers",
         description:
           "Hours wasted Googling legal info and still unsure what's right.",
+        icon: SearchIcon,
       },
       {
         title: "Worried about $400/hour fees",
         description:
           "Fear of massive legal bills stopping you from taking action.",
+        icon: DollarSign,
       },
       {
         title: "Forced into impossible trade-offs",
         description:
           "Choosing between pursuing justice or protecting your finances.",
+        icon: Dices,
       },
       {
         title: "Family/property disputes",
         description:
           "Tense disagreements over inheritance, custody, or real estate.",
+        icon: Home,
       },
       {
         title: "Business, inheritance, or real estate conflicts",
         description:
           "Complex cases too high-stakes for small claims yet out of reach for big firms.",
+        icon: BriefcaseBusiness,
       },
     ],
   },
@@ -139,16 +151,19 @@ export const BENEFITS: Benefits[] = [
         title: "Reduce time on paperwork",
         description:
           "Automate repetitive legal tasks and focus on higher-value work.",
+        icon: ScrollTextIcon,
       },
       {
         title: "Take on more clients",
         description:
           "Serve more people with streamlined workflows and prepared cases.",
+        icon: Handshake,
       },
       {
         title: "Receive well-organized cases",
         description:
           "Get neatly packaged evidence and documents, ready to act on.",
+        icon: Folder,
       },
     ],
   },
@@ -157,6 +172,8 @@ export const BENEFITS: Benefits[] = [
 export interface ProcessStep {
   title: string;
   description: string;
+  colorHex?: string;
+  imageUrl?: string;
 }
 
 export const PROCESS_STEPS: ProcessStep[] = [
@@ -164,26 +181,34 @@ export const PROCESS_STEPS: ProcessStep[] = [
     title: "Tell Us Your Story",
     description:
       "Text, voice, or photo—capture every key detail or event, instantly, so nothing is forgotten.",
+    colorHex: "#ECD7FF",
+    imageUrl: "/home/process/1.png",
   },
   {
     title: "We Build Your Case",
     description:
       "Watch your events, documents, and evidence come together as an interactive timeline. Organize uploads and communications with drag-and-drop ease.",
+    colorHex: "#F5F3C3",
+    imageUrl: "/home/process/2.png",
   },
   {
     title: "Get Red Flag Alerts",
     description:
       'Our AI reviews your case as you build it—warning you about common manipulation tactics, missing proof, or legal "danger zones" before they become showstoppers.',
+    colorHex: "#FCCEC4",
+    imageUrl: "/home/process/3.png",
   },
   {
     title: "Generate Your Legal Dossier",
     description:
       "Download a complete, organized packet: timeline, key docs, legal summary, and action plan—ready for court, mediation, or affordable attorney review.",
+    imageUrl: "/home/process/4.png",
   },
   {
     title: "Find Help—When, Not If, You Need It",
     description:
       "Connect with fixed-fee lawyers (no surprise bills), or crowdfund help from friends and allies—right from your dashboard. No more expensive, confusing surprises.",
+    imageUrl: "/home/process/5.png",
   },
 ];
 
@@ -241,6 +266,7 @@ export interface Attorney {
   specialization: string;
   hourlyRate?: string;
   linkedinUrl?: string;
+  imageUrl?: string;
 }
 
 export const ATTORNEYS: Attorney[] = [
@@ -250,6 +276,7 @@ export const ATTORNEYS: Attorney[] = [
     specialization: "Criminal Defense",
     hourlyRate: "$300 / hour",
     linkedinUrl: "https://www.linkedin.com/",
+    imageUrl: "/home/attorneys/1.png",
   },
   {
     name: "Jamal Henderson",
@@ -257,6 +284,7 @@ export const ATTORNEYS: Attorney[] = [
     specialization: "Real Estate Law",
     hourlyRate: "$300 / hour",
     linkedinUrl: "https://www.linkedin.com/",
+    imageUrl: "/home/attorneys/2.png",
   },
   {
     name: "Daniel Whitmore",
@@ -264,6 +292,7 @@ export const ATTORNEYS: Attorney[] = [
     specialization: "Corporate Law",
     hourlyRate: "$300 / hour",
     linkedinUrl: "https://www.linkedin.com/",
+    imageUrl: "/home/attorneys/3.png",
   },
 ];
 

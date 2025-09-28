@@ -4,9 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit } from "lucide-react";
 import { useId, useState } from "react";
 import { useForm } from "react-hook-form";
+import { LogoutButton } from "@/components/elements/logout-button";
 import { ProfileUpload } from "@/components/elements/profile-upload";
 import { Typography } from "@/components/elements/typography";
-import { LogoutButton } from "@/components/module/auth/logout-button";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -126,21 +126,26 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="flex w-full flex-1 flex-col gap-10 overflow-hidden">
+    <main className="flex w-full flex-1 flex-col gap-6 lg:gap-10">
       {/* Header with Action Buttons */}
       <div className="flex items-center gap-3">
         {!isEditing ? (
           <Button
             onClick={handleEdit}
-            variant={"orange"}
             disabled={isSubmitting}
+            className="rounded-md"
           >
             <Edit className="h-4 w-4" />
             Edit
           </Button>
         ) : (
           <div className="flex items-center gap-3">
-            <Button type="submit" form={formId} disabled={isSubmitting}>
+            <Button
+              type="submit"
+              form={formId}
+              disabled={isSubmitting}
+              className="rounded-md"
+            >
               {isSubmitting ? "Saving..." : "Save"}
             </Button>
             <Button
@@ -148,6 +153,7 @@ export default function ProfilePage() {
               onClick={handleCancel}
               variant="outline"
               disabled={isSubmitting}
+              className="rounded-md"
             >
               Cancel
             </Button>
@@ -160,12 +166,11 @@ export default function ProfilePage() {
         <form
           id={formId}
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex w-full flex-1 flex-col space-y-5"
+          className="mx-auto flex w-full flex-1 flex-col space-y-4 max-lg:max-w-2xl lg:space-y-5"
         >
-          <div className="flex w-full gap-10">
-            {/* Left Column */}
-            <div className="flex flex-col gap-5 px-10">
-              {/* Profile Avatar */}
+          <div className="flex w-full flex-col gap-6 lg:flex-row lg:gap-10">
+            {/* Left Column - Profile Avatar */}
+            <div className="flex flex-col gap-5 px-4 lg:px-10">
               <FormField
                 control={form.control}
                 name="profileImage"
@@ -173,6 +178,7 @@ export default function ProfilePage() {
                   <FormItem>
                     <FormControl>
                       <ProfileUpload
+                        variant="gray"
                         value={field.value}
                         onChange={handleProfileImageChange}
                         disabled={!isEditing || isSubmitting}
@@ -185,10 +191,10 @@ export default function ProfilePage() {
               />
             </div>
 
-            {/* Right Column */}
-            <div className="grid flex-1 grid-cols-2 flex-col gap-5">
+            {/* Right Column - Form Fields */}
+            <div className="grid flex-1 grid-cols-1 gap-5 lg:grid-cols-2">
               {/* Form Fields */}
-              <div className="space-y-5">
+              <div className="space-y-4 lg:space-y-5">
                 {/* First Name */}
                 <FormField
                   control={form.control}
@@ -310,7 +316,7 @@ export default function ProfilePage() {
                 />
               </div>
 
-              <div className="space-y-5">
+              <div className="space-y-4 lg:space-y-5">
                 {/* Region */}
                 <FormField
                   control={form.control}
@@ -408,10 +414,10 @@ export default function ProfilePage() {
 
           {/* Footer with Logout Button */}
           <div className="flex justify-end">
-            <LogoutButton variant="destructive" />
+            <LogoutButton variant="destructive" className="rounded-md" />
           </div>
         </form>
       </Form>
-    </div>
+    </main>
   );
 }
