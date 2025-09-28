@@ -79,7 +79,7 @@ export default function LawyersPage() {
   return (
     <GlobalLayout
       variant="no-padding"
-      className="mobile-safe-bottom min-h-screen bg-gray-50"
+      className="mobile-safe-bottom bg-gradient-sky-blue min-h-screen"
     >
       {/* Header */}
       {/* <Header showActions={false} /> */}

@@ -38,7 +38,10 @@ export default function LitigationCrowdfundingPage() {
   };
 
   return (
-    <GlobalLayout variant="no-padding" className="min-h-screen">
+    <GlobalLayout
+      variant="no-padding"
+      className="bg-gradient-sky-blue min-h-screen"
+    >
       {currentView === "cases" && (
         <EnhancedCasesList onCaseSelect={handleCaseSelect} />
       )}
