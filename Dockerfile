@@ -1,5 +1,5 @@
 # syntax=docker.io/docker/dockerfile:1
-# OFFICIAL FROM NEXTJS DOCS https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile 
+# OFFICIAL FROM NEXTJS DOCS https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
 # (MODIFIED TO USE BUN by @satriadhikara)
 
 FROM oven/bun:alpine AS base

@@ -33,21 +33,51 @@ function App() {
         {/* CTA */}
         <section
           className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-2 py-10 sm:py-16 md:gap-3 lg:gap-5 lg:py-20"
-          aria-labelledby="cta-heading">
+          aria-labelledby="cta-heading"
+          data-aos="fade-up"
+          data-aos-duration="800"
+          data-aos-delay="100">
           {/* Main headline */}
-          <H3 level={"huge"} align={"center"} weight={"semibold"}>
+          <H3
+            level={"huge"}
+            align={"center"}
+            weight={"semibold"}
+            data-aos="zoom-in"
+            data-aos-duration="600"
+            data-aos-delay="200">
             Legali puts the law on your side.
           </H3>
 
           {/* Subtitle */}
-          <P level={"h2"} align={"center"} weight={"bold"} className="text-brand-navy">
+          <P
+            level={"h2"}
+            align={"center"}
+            weight={"bold"}
+            className="text-brand-navy"
+            data-aos="fade-up"
+            data-aos-duration="600"
+            data-aos-delay="300">
             Your better chance at justice.
           </P>
 
           {/* Final CTA */}
-          <P level={"h2"} align={"center"} weight={"bold"} className="text-brand-navy">
+          <P
+            level={"h2"}
+            align={"center"}
+            weight={"bold"}
+            className="text-brand-navy"
+            data-aos="fade-up"
+            data-aos-duration="600"
+            data-aos-delay="400">
             Let's do it,{" "}
-            <Span level={"h2"} align={"center"} weight={"bold"} className="text-brand-navy italic">
+            <Span
+              level={"h2"}
+              align={"center"}
+              weight={"bold"}
+              className="text-brand-navy italic"
+              data-aos="pulse"
+              data-aos-duration="1000"
+              data-aos-delay="500">
               legali.
             </Span>
           </P>

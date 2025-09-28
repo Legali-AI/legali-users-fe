@@ -23,8 +23,12 @@ export default function LoginPage() {
         background: "linear-gradient(112deg, #7CC9E6 9.96%, #FFF 70.66%, #7CC9E6 103.48%)",
       }}>
       {/* Left side - Login form */}
-      <div className="flex flex-col justify-center gap-4 px-6 py-8 max-md:items-center sm:px-8 sm:py-12 md:px-12 md:py-16 lg:px-16 xl:px-20 2xl:px-40">
-        <div className="space-y-2">
+      <div
+        className="flex flex-col justify-center gap-4 px-6 py-8 max-md:items-center sm:px-8 sm:py-12 md:px-12 md:py-16 lg:px-16 xl:px-20 2xl:px-40"
+        data-aos="fade-right"
+        data-aos-duration="800"
+        data-aos-delay="100">
+        <div className="space-y-2" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
           <H1 level={"label"} className="text-sky-900 " weight={"semibold"}>
             Welcome to,
           </H1>
@@ -38,13 +42,17 @@ export default function LoginPage() {
             sizes="(max-width: 640px) 120px, (max-width: 768px) 140px, (max-width: 1024px) 160px, 180px"
           />
         </div>
-        <div className="mt-4">
+        <div className="mt-4" data-aos="fade-up" data-aos-duration="600" data-aos-delay="300">
           <ButtonClient />
         </div>
       </div>
 
       {/* Right side - Hero image */}
-      <div className="-pt-40 relative flex h-full w-full items-start justify-end">
+      <div
+        className="-pt-40 relative flex h-full w-full items-start justify-end"
+        data-aos="fade-left"
+        data-aos-duration="800"
+        data-aos-delay="200">
         <Image
           src="/login.png"
           width={1920}
@@ -53,6 +61,9 @@ export default function LoginPage() {
           priority
           className="absolute right-0 bottom-0 -z-10 h-auto w-[90%] object-contain object-center lg:h-full"
           sizes="(max-width: 1024px) 100vw, 50vw"
+          data-aos="zoom-in"
+          data-aos-duration="1000"
+          data-aos-delay="400"
         />
       </div>
     </main>
