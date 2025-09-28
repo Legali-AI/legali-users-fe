@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-// import { Header } from "@/components/header";
 import { FilterSidebar } from "@/components/filter-sidebar";
+import { GlobalLayout } from "@/components/layout/global-layout";
 import { SearchBar } from "@/components/search-bar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -77,7 +77,10 @@ export default function LawyersPage() {
   );
 
   return (
-    <div className="mobile-safe-bottom min-h-screen bg-gray-50">
+    <GlobalLayout
+      variant="no-padding"
+      className="mobile-safe-bottom min-h-screen bg-gray-50"
+    >
       {/* Header */}
       {/* <Header showActions={false} /> */}
 
@@ -283,6 +286,6 @@ export default function LawyersPage() {
           </div>
         </div>
       </div>
-    </div>
+    </GlobalLayout>
   );
 }
