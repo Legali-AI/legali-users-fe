@@ -12,7 +12,7 @@ export const metadata: Metadata = homePageMetadata;
 
 function App() {
   return (
-    <main className="relative z-10 flex w-full flex-col overflow-x-hidden bg-sky-blue-100 px-4 py-40 sm:px-8 md:px-16 md:py-0 lg:px-32">
+    <main className="relative z-10 flex w-full flex-col overflow-x-hidden bg-sky-blue-100 px-4 py-20 sm:px-8 md:px-16 md:py-20 lg:px-32">
       {/* Hero section */}
       <HeroSection />
 

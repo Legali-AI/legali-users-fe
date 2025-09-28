@@ -43,7 +43,7 @@ export default function HeroSection() {
         </div>
 
         {/* Subtitle */}
-        <div data-aos="slide-up" data-aos-duration="600" data-aos-delay="100">
+        <div data-aos="zoom-in" data-aos-duration="600" data-aos-delay="100">
           <H2 level={"title"} className="text-brand-slate" align={"center"}>
             Legali lets you build cases, manage evidence, and fund litigation—all on one secure AI platform.
           </H2>

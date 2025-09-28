@@ -7,7 +7,7 @@ export default function AboutUsSection() {
   return (
     <section className="flex flex-col gap-3" aria-labelledby="about-heading">
       {/* Main text */}
-      <div data-aos="slide-down" data-aos-duration="600">
+      <div data-aos="slide-up" data-aos-duration="600">
         <H4 level={"h2"} className="mx-auto max-w-5xl" weight={"semibold"} align={"center"}>
           We build Legali so everyone can navigate the legal system better, easier, faster, and smarter.
         </H4>

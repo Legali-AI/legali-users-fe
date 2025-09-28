@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   ...(isDockerBuild && {
     output: "standalone",
+    outputFileTracingRoot: "/app",
   }),
   ...(isNetlifyBuild && {
     output: "export",
