@@ -5,6 +5,8 @@ import {
   Home,
   type LucideIcon,
   MessageSquare,
+  Scale,
+  TrendingUp,
   Users,
 } from "lucide-react";
 import Image from "next/image";
@@ -47,6 +49,18 @@ export const MAIN_MENU_ITEMS: MenuItem[] = [
     label: "Dashboard",
     icon: Home,
     href: "/dashboard",
+  },
+  {
+    id: "lawyers",
+    label: "Lawyers",
+    icon: Scale,
+    href: "/lawyers",
+  },
+  {
+    id: "litigation-crowdfunding",
+    label: "Litigation Crowdfunding",
+    icon: TrendingUp,
+    href: "/litigation-crowdfunding",
   },
   {
     id: "attorneys",

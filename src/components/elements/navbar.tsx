@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { LogoutButton } from "@/components/module/auth/logout-button";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -12,6 +13,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { useAuth } from "@/hooks/use-auth";
 import { cn } from "../../lib/utils";
 import { Typography } from "./typography";
 
@@ -27,6 +29,54 @@ const ListItem = ({ href, title }: { href: string; title: string }) => {
         </Link>
       </NavigationMenuLink>
     </li>
+  );
+};
+
+const AuthSection = () => {
+  const { isAuthenticated, user } = useAuth();
+
+  if (isAuthenticated && user) {
+    return (
+      <NavigationMenuItem className="flex items-center gap-3">
+        {/* User Info */}
+        <Link
+          href="/profile"
+          className="flex items-center gap-2 transition-opacity hover:opacity-80"
+        >
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sky-blue-100">
+            <Typography
+              level="caption"
+              className="font-medium text-sky-blue-600"
+            >
+              {user.email?.charAt(0).toUpperCase()}
+            </Typography>
+          </div>
+          <Typography level="body" className="hidden text-gray-700 sm:block">
+            {user.email}
+          </Typography>
+        </Link>
+
+        {/* Logout Button */}
+        <LogoutButton
+          variant="ghost"
+          className="p-2 text-gray-600 hover:text-gray-900"
+        >
+          <Typography level="caption">Logout</Typography>
+        </LogoutButton>
+      </NavigationMenuItem>
+    );
+  }
+
+  return (
+    <NavigationMenuItem>
+      <Button className="rounded-xl bg-deep-navy-400 hover:bg-deep-navy-500">
+        <Link href="/login">
+          <Typography weight="medium" level="body" className="text-white">
+            Log In
+          </Typography>
+        </Link>
+      </Button>
+    </NavigationMenuItem>
   );
 };
 
@@ -148,16 +198,8 @@ export function Navbar() {
           ))}
         </div>
 
-        {/* Login */}
-        <NavigationMenuItem>
-          <Button className="rounded-xl bg-deep-navy-400 hover:bg-deep-navy-500">
-            <Link href="/login">
-              <Typography weight="medium" level="body" className="text-white">
-                Log In
-              </Typography>
-            </Link>
-          </Button>
-        </NavigationMenuItem>
+        {/* Auth Section */}
+        <AuthSection />
       </NavigationMenuList>
     </NavigationMenu>
   );
