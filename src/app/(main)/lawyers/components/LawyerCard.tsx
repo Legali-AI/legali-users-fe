@@ -11,11 +11,7 @@ interface LawyerCardProps {
   showFullDetails?: boolean;
 }
 
-export function LawyerCard({
-  lawyer,
-  variant = "default",
-  showFullDetails = false,
-}: LawyerCardProps) {
+export function LawyerCard({ lawyer, variant = "default", showFullDetails = false }: LawyerCardProps) {
   const isCompact = variant === "compact";
   const isFeatured = variant === "featured";
 
@@ -25,26 +21,14 @@ export function LawyerCard({
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="mb-2 flex items-center space-x-2">
-              <CardTitle
-                className={`${
-                  isFeatured ? "text-xl" : "text-lg"
-                } text-gray-900`}
-              >
-                {lawyer.name}
-              </CardTitle>
-              {lawyer.verificationStatus === "verified" && (
-                <Shield className="h-5 w-5 text-green-600" />
-              )}
+              <CardTitle className={`${isFeatured ? "text-xl" : "text-lg"} text-gray-900`}>{lawyer.name}</CardTitle>
+              {lawyer.verificationStatus === "verified" && <Shield className="h-5 w-5 text-green-600" />}
             </div>
             <div className="flex items-center space-x-4 text-sm text-gray-700">
               <div className="flex items-center">
                 <Star className="mr-1 h-4 w-4 text-yellow-500" />
-                <span className="font-medium text-gray-900">
-                  {lawyer.rating}
-                </span>
-                <span className="ml-1 text-gray-600">
-                  ({lawyer.reviewCount})
-                </span>
+                <span className="font-medium text-gray-900">{lawyer.rating}</span>
+                <span className="ml-1 text-gray-600">({lawyer.reviewCount})</span>
               </div>
               <div className="flex items-center text-gray-600">
                 <Clock className="mr-1 h-4 w-4" />
@@ -53,11 +37,7 @@ export function LawyerCard({
             </div>
           </div>
           <div className="text-right">
-            <div
-              className={`${
-                isFeatured ? "text-2xl" : "text-xl"
-              } font-bold text-gray-900`}
-            >
+            <div className={`${isFeatured ? "text-2xl" : "text-xl"} font-bold text-gray-900`}>
               {formatCurrency(lawyer.hourlyRate)}
             </div>
             <div className="text-sm text-gray-600">per hour</div>
@@ -68,22 +48,15 @@ export function LawyerCard({
         <div className="space-y-3">
           {/* Specialties */}
           <div>
-            {showFullDetails && (
-              <p className="mb-1 text-sm font-medium text-gray-900">
-                Specialties:
-              </p>
-            )}
+            {showFullDetails && <p className="mb-1 text-sm font-medium text-gray-900">Specialties:</p>}
             <div className="mb-2 flex flex-wrap gap-1">
-              {lawyer.specialties
-                .slice(0, isCompact ? 2 : 3)
-                .map((specialty) => (
-                  <span
-                    key={specialty}
-                    className="inline-block rounded-full border border-blue-100 bg-blue-50 px-2 py-1 text-xs text-blue-700"
-                  >
-                    {specialty}
-                  </span>
-                ))}
+              {lawyer.specialties.slice(0, isCompact ? 2 : 3).map(specialty => (
+                <span
+                  key={specialty}
+                  className="inline-block rounded-full border border-blue-100 bg-blue-50 px-2 py-1 text-xs text-blue-700">
+                  {specialty}
+                </span>
+              ))}
               {lawyer.specialties.length > (isCompact ? 2 : 3) && (
                 <span className="inline-block rounded-full border border-gray-100 bg-gray-50 px-2 py-1 text-xs text-gray-700">
                   +{lawyer.specialties.length - (isCompact ? 2 : 3)} more
@@ -99,21 +72,13 @@ export function LawyerCard({
           </div>
 
           {/* Bio (only if not compact) */}
-          {!isCompact && (
-            <p className="line-clamp-2 text-sm leading-relaxed text-gray-700">
-              {lawyer.bio}
-            </p>
-          )}
+          {!isCompact && <p className="line-clamp-2 text-sm leading-relaxed text-gray-700">{lawyer.bio}</p>}
 
           {/* Languages (only for featured cards with full details) */}
           {showFullDetails && (
             <div>
-              <p className="mb-1 text-sm font-medium text-gray-900">
-                Languages:
-              </p>
-              <p className="text-sm text-gray-700">
-                {lawyer.languages.join(", ")}
-              </p>
+              <p className="mb-1 text-sm font-medium text-gray-900">Languages:</p>
+              <p className="text-sm text-gray-700">{lawyer.languages.join(", ")}</p>
             </div>
           )}
 
@@ -127,17 +92,11 @@ export function LawyerCard({
                     : lawyer.availability === "busy"
                       ? "bg-yellow-500"
                       : "bg-red-500"
-                }`}
-              ></div>
-              <span className="text-xs font-medium text-gray-600 capitalize">
-                {lawyer.availability}
-              </span>
+                }`}></div>
+              <span className="text-xs font-medium text-gray-600 capitalize">{lawyer.availability}</span>
             </div>
             <Link href={`/lawyers/${lawyer.id}`}>
-              <Button
-                size="sm"
-                className="bg-blue-600 text-white hover:bg-blue-700"
-              >
+              <Button size="sm" className="bg-blue-600 text-white hover:bg-blue-700">
                 {isFeatured ? (
                   <>
                     View Profile & Book

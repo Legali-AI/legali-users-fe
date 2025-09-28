@@ -13,8 +13,7 @@ export function CardValue({ valueProposition, index }: CardValueProps) {
       className={cn(
         "flex flex-col items-center gap-4 rounded-md bg-white p-4 sm:flex-row sm:gap-10",
         index % 2 === 1 && "sm:flex-row-reverse"
-      )}
-    >
+      )}>
       {/* Image */}
       <div className="h-[200px] w-full max-w-[546px] rounded-xl bg-slate-400 sm:h-[243px]" />
       {/* Text */}

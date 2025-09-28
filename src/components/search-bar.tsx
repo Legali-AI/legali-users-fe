@@ -53,26 +53,15 @@ export function SearchBar({
         className={`
           relative flex items-center rounded-lg border border-gray-200 bg-white
           shadow-sm transition-all duration-200
-          ${
-            isFocused
-              ? "border-blue-500 ring-2 ring-blue-100"
-              : "hover:border-gray-300"
-          }
+          ${isFocused ? "border-blue-500 ring-2 ring-blue-100" : "hover:border-gray-300"}
           ${getSizeClasses()}
-        `}
-      >
+        `}>
         {/* Search Icon */}
         <div className="pointer-events-none absolute left-3 flex items-center">
           <Search
             className={`
               text-gray-400 transition-colors
-              ${
-                size === "sm"
-                  ? "h-4 w-4"
-                  : size === "lg"
-                    ? "h-6 w-6"
-                    : "h-5 w-5"
-              }
+              ${size === "sm" ? "h-4 w-4" : size === "lg" ? "h-6 w-6" : "h-5 w-5"}
               ${isFocused ? "text-blue-500" : ""}
             `}
           />
@@ -82,20 +71,14 @@ export function SearchBar({
         <input
           type="text"
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={e => onChange(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           placeholder={placeholder}
           disabled={isLoading}
           className={`
             flex-1 border-0 bg-transparent text-gray-900 placeholder-gray-500 outline-none
-            ${
-              size === "sm"
-                ? "pr-3 pl-9 text-sm"
-                : size === "lg"
-                  ? "pr-4 pl-12 text-lg"
-                  : "pr-4 pl-10 text-base"
-            }
+            ${size === "sm" ? "pr-3 pl-9 text-sm" : size === "lg" ? "pr-4 pl-12 text-lg" : "pr-4 pl-10 text-base"}
             disabled:cursor-not-allowed disabled:opacity-50
           `}
         />
@@ -117,8 +100,7 @@ export function SearchBar({
               text-gray-400 transition-colors duration-200
               hover:bg-gray-100 hover:text-gray-600
               ${size === "sm" ? "h-6 w-6" : "h-7 w-7"}
-            `}
-          >
+            `}>
             <X className={size === "sm" ? "h-4 w-4" : "h-5 w-5"} />
           </button>
         )}

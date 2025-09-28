@@ -31,13 +31,8 @@ export const HARDCODED_USERS: HardcodedUser[] = [
   },
 ];
 
-export function authenticateUser(
-  email: string,
-  password: string
-): HardcodedUser | null {
-  const user = HARDCODED_USERS.find(
-    (u) => u.email === email && u.password === password
-  );
+export function authenticateUser(email: string, password: string): HardcodedUser | null {
+  const user = HARDCODED_USERS.find(u => u.email === email && u.password === password);
   return user || null;
 }
 

@@ -12,11 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  useCancelBooking,
-  useCreateBooking,
-  useUserBookings,
-} from "@/hooks/use-bookings";
+import { useCancelBooking, useCreateBooking, useUserBookings } from "@/hooks/use-bookings";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import type { Booking } from "@/types";
 
@@ -26,11 +22,7 @@ interface BookingFormProps {
   clientId: string;
 }
 
-export function BookingForm({
-  lawyerId,
-  packageId,
-  clientId,
-}: BookingFormProps) {
+export function BookingForm({ lawyerId, packageId, clientId }: BookingFormProps) {
   const dateId = useId();
   const timeId = useId();
   const amountId = useId();
@@ -89,8 +81,8 @@ export function BookingForm({
               id={dateId}
               type="date"
               value={formData.scheduledDate}
-              onChange={(e) =>
-                setFormData((prev) => ({
+              onChange={e =>
+                setFormData(prev => ({
                   ...prev,
                   scheduledDate: e.target.value,
                 }))
@@ -105,8 +97,8 @@ export function BookingForm({
               id={timeId}
               type="time"
               value={formData.scheduledTime}
-              onChange={(e) =>
-                setFormData((prev) => ({
+              onChange={e =>
+                setFormData(prev => ({
                   ...prev,
                   scheduledTime: e.target.value,
                 }))
@@ -121,8 +113,8 @@ export function BookingForm({
               id={amountId}
               type="number"
               value={formData.totalAmount}
-              onChange={(e) =>
-                setFormData((prev) => ({
+              onChange={e =>
+                setFormData(prev => ({
                   ...prev,
                   totalAmount: Number(e.target.value),
                 }))
@@ -136,18 +128,12 @@ export function BookingForm({
             <Textarea
               id={notesId}
               value={formData.notes}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, notes: e.target.value }))
-              }
+              onChange={e => setFormData(prev => ({ ...prev, notes: e.target.value }))}
               placeholder="Any additional notes..."
             />
           </div>
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={createBookingMutation.isPending}
-          >
+          <Button type="submit" className="w-full" disabled={createBookingMutation.isPending}>
             {createBookingMutation.isPending ? "Creating..." : "Create Booking"}
           </Button>
         </form>
@@ -162,11 +148,7 @@ interface UserBookingsListProps {
 
 export function UserBookingsList({ userId }: UserBookingsListProps) {
   const [page, setPage] = useState(1);
-  const {
-    data: bookingsData,
-    isLoading,
-    error,
-  } = useUserBookings(userId, page);
+  const { data: bookingsData, isLoading, error } = useUserBookings(userId, page);
   const cancelBookingMutation = useCancelBooking();
 
   const handleCancelBooking = async (bookingId: string) => {
@@ -200,7 +182,7 @@ export function UserBookingsList({ userId }: UserBookingsListProps) {
     <div className="space-y-4">
       <h2 className="text-2xl font-bold">Your Bookings</h2>
 
-      {bookingsData.bookings.map((booking) => (
+      {bookingsData.bookings.map(booking => (
         <Card key={booking.id}>
           <CardContent className="p-4">
             <div className="flex items-start justify-between">
@@ -228,8 +210,7 @@ export function UserBookingsList({ userId }: UserBookingsListProps) {
                           : booking.status === "cancelled"
                             ? "bg-red-100 text-red-800"
                             : "bg-gray-100 text-gray-800"
-                    }`}
-                  >
+                    }`}>
                     {booking.status}
                   </span>
                 </p>
@@ -245,8 +226,7 @@ export function UserBookingsList({ userId }: UserBookingsListProps) {
                   variant="destructive"
                   size="sm"
                   onClick={() => handleCancelBooking(booking.id)}
-                  disabled={cancelBookingMutation.isPending}
-                >
+                  disabled={cancelBookingMutation.isPending}>
                   {cancelBookingMutation.isPending ? "Cancelling..." : "Cancel"}
                 </Button>
               )}
@@ -257,11 +237,7 @@ export function UserBookingsList({ userId }: UserBookingsListProps) {
 
       {/* Pagination */}
       <div className="flex items-center justify-between">
-        <Button
-          variant="outline"
-          onClick={() => setPage((p) => Math.max(1, p - 1))}
-          disabled={page === 1}
-        >
+        <Button variant="outline" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}>
           Previous
         </Button>
 
@@ -269,11 +245,7 @@ export function UserBookingsList({ userId }: UserBookingsListProps) {
           Page {page} of {bookingsData.totalPages}
         </span>
 
-        <Button
-          variant="outline"
-          onClick={() => setPage((p) => p + 1)}
-          disabled={page >= bookingsData.totalPages}
-        >
+        <Button variant="outline" onClick={() => setPage(p => p + 1)} disabled={page >= bookingsData.totalPages}>
           Next
         </Button>
       </div>

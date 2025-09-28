@@ -10,25 +10,17 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          "border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90",
-        secondary:
-          "border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
+        default: "border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90",
+        secondary: "border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
         destructive:
           "border-transparent bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90",
-        outline:
-          "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
+        outline: "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         coral: "rounded-full border-transparent bg-brand-rose text-white",
-        "warm-orange":
-          "rounded-full border-transparent bg-warm-orange-400 text-white",
-        "sky-blue-light":
-          "rounded-full border-transparent bg-sky-blue-500 text-white",
-        "sky-blue":
-          "rounded-full border-transparent bg-sky-blue-900 text-white",
-        "outline-warm-orange":
-          "rounded-full bg-warm-orange-200 text-warm-orange-400",
-        emerald:
-          "rounded-full border-transparent bg-emerald-green-400 text-white",
+        "warm-orange": "rounded-full border-transparent bg-warm-orange-400 text-white",
+        "sky-blue-light": "rounded-full border-transparent bg-sky-blue-500 text-white",
+        "sky-blue": "rounded-full border-transparent bg-sky-blue-900 text-white",
+        "outline-warm-orange": "rounded-full bg-warm-orange-200 text-warm-orange-400",
+        emerald: "rounded-full border-transparent bg-emerald-green-400 text-white",
       },
       size: {
         default: "px-3 py-2",
@@ -63,10 +55,7 @@ function Badge({
   return (
     <Comp
       data-slot="badge"
-      className={cn(
-        badgeVariants({ variant, level, weight, align, size }),
-        className
-      )}
+      className={cn(badgeVariants({ variant, level, weight, align, size }), className)}
       {...props}
     />
   );

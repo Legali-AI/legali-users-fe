@@ -71,9 +71,7 @@ export function LawyerCardGrid({
               ? "xl:grid-cols-4"
               : "";
 
-    return [baseClasses, smClass, mdClass, lgClass, xlClass]
-      .filter(Boolean)
-      .join(" ");
+    return [baseClasses, smClass, mdClass, lgClass, xlClass].filter(Boolean).join(" ");
   };
 
   // Loading skeleton
@@ -84,8 +82,7 @@ export function LawyerCardGrid({
         {Array.from({ length: skeletonCount }, () => (
           <div
             key={`${variant}-skeleton-${skeletonCount}-${Math.random().toString(36).substr(2, 9)}`}
-            className="animate-pulse rounded-lg border border-gray-100 bg-white p-6"
-          >
+            className="animate-pulse rounded-lg border border-gray-100 bg-white p-6">
             <div className="mb-4 flex items-start justify-between">
               <div className="flex-1">
                 <div className="mb-2 h-6 w-3/4 rounded bg-gray-200"></div>
@@ -116,9 +113,7 @@ export function LawyerCardGrid({
     if (emptyState) {
       return (
         <div className="py-12 text-center">
-          <h3 className="mb-2 text-lg font-medium text-gray-900">
-            {emptyState.title}
-          </h3>
+          <h3 className="mb-2 text-lg font-medium text-gray-900">{emptyState.title}</h3>
           <p className="mb-4 text-gray-600">{emptyState.description}</p>
           {emptyState.action}
         </div>
@@ -126,12 +121,8 @@ export function LawyerCardGrid({
     }
     return (
       <div className="py-12 text-center">
-        <h3 className="mb-2 text-lg font-medium text-gray-900">
-          No lawyers found
-        </h3>
-        <p className="text-gray-600">
-          Try adjusting your search criteria or removing some filters.
-        </p>
+        <h3 className="mb-2 text-lg font-medium text-gray-900">No lawyers found</h3>
+        <p className="text-gray-600">Try adjusting your search criteria or removing some filters.</p>
       </div>
     );
   }
@@ -139,13 +130,8 @@ export function LawyerCardGrid({
   // Lawyer cards grid
   return (
     <div className={getGridClasses()}>
-      {lawyers.map((lawyer) => (
-        <LawyerCard
-          key={lawyer.id}
-          lawyer={lawyer}
-          variant={variant}
-          showFullDetails={showFullDetails}
-        />
+      {lawyers.map(lawyer => (
+        <LawyerCard key={lawyer.id} lawyer={lawyer} variant={variant} showFullDetails={showFullDetails} />
       ))}
     </div>
   );

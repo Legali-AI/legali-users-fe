@@ -41,9 +41,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL || "https://legali.com"
-  ),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://legali.com"),
   alternates: {
     canonical: "/",
   },
@@ -94,13 +92,11 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${inter.variable} ${inter.className} overflow-x-hidden overflow-y-auto bg-brand-gray-50 antialiased`}
-        suppressHydrationWarning={true}
-      >
+        suppressHydrationWarning={true}>
         {/* Skip to main content link for screen readers */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-sky-blue-500 focus:px-4 focus:py-2 focus:text-white focus:ring-2 focus:ring-sky-blue-500 focus:ring-offset-2 focus:outline-none"
-        >
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-sky-blue-500 focus:px-4 focus:py-2 focus:text-white focus:ring-2 focus:ring-sky-blue-500 focus:ring-offset-2 focus:outline-none">
           Skip to main content
         </a>
         <QueryProvider>{children}</QueryProvider>

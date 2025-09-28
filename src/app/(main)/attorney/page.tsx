@@ -8,12 +8,7 @@ export const metadata: Metadata = {
   title: "Connect with Attorneys",
   description:
     "Get instantly matched with trusted lawyers who understand your needs and can help with your legal case.",
-  keywords: [
-    "attorney matching",
-    "lawyer connection",
-    "legal professionals",
-    "case consultation",
-  ],
+  keywords: ["attorney matching", "lawyer connection", "legal professionals", "case consultation"],
   openGraph: {
     title: "Connect with Attorneys",
     description:
@@ -25,8 +20,7 @@ export default function AttorneyPage() {
   return (
     <main
       className="relative flex w-full flex-col items-center justify-center overflow-hidden px-32 py-40"
-      aria-label="Attorney connection page"
-    >
+      aria-label="Attorney connection page">
       {/* Background decorations */}
       <Image
         src="/attorney-decor.svg"

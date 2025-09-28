@@ -12,8 +12,7 @@ export function CardProcessStep({ processStep, index }: CardProcessStepProps) {
       <div className="flex items-center gap-4">
         <Span
           className="flex aspect-square h-7 w-auto items-center justify-center rounded-md bg-slate-gray-300 text-brand-slate"
-          weight={"semibold"}
-        >
+          weight={"semibold"}>
           {index + 1}
         </Span>
         <H4 level={"h5"} weight={"semibold"}>

@@ -13,7 +13,7 @@
     "enabled": true,
     "indentStyle": "space",
     "indentWidth": 2,
-    "lineWidth": 80,
+    "lineWidth": 100,
     "lineEnding": "lf"
   },
   "linter": {
@@ -40,7 +40,8 @@
         "noLabelWithoutControl": "warn",
         "useButtonType": "warn",
         "noStaticElementInteractions": "warn",
-        "useKeyWithClickEvents": "warn"
+        "useKeyWithClickEvents": "warn",
+        "useSemanticElements": "off"
       },
       "performance": {
         "noDelete": "error"
@@ -64,7 +65,10 @@
       "quoteStyle": "double",
       "jsxQuoteStyle": "double",
       "quoteProperties": "asNeeded",
-      "trailingCommas": "es5"
+      "trailingCommas": "es5",
+      "arrowParentheses": "asNeeded",
+      "bracketSameLine": false,
+      "bracketSpacing": true
     }
   },
   "json": {
@@ -89,6 +93,18 @@
       },
       "formatter": {
         "enabled": false
+      }
+    },
+    {
+      "includes": ["**/*.tsx", "**/*.jsx"],
+      "formatter": {
+        "lineWidth": 120
+      },
+      "javascript": {
+        "formatter": {
+          "arrowParentheses": "asNeeded",
+          "bracketSameLine": true
+        }
       }
     }
   ]

@@ -40,26 +40,22 @@ export function PriceRangeFilter({
       <div className="space-y-3">
         <div className="grid grid-cols-2 gap-2">
           <div className="relative">
-            <div className="absolute top-1/2 left-3 -translate-y-1/2 transform text-sm text-gray-500">
-              {currency}
-            </div>
+            <div className="absolute top-1/2 left-3 -translate-y-1/2 transform text-sm text-gray-500">{currency}</div>
             <Input
               type="number"
               placeholder={minPlaceholder}
               value={value.min || ""}
-              onChange={(e) => handleMinChange(Number(e.target.value) || 0)}
+              onChange={e => handleMinChange(Number(e.target.value) || 0)}
               className="pl-8"
             />
           </div>
           <div className="relative">
-            <div className="absolute top-1/2 left-3 -translate-y-1/2 transform text-sm text-gray-500">
-              {currency}
-            </div>
+            <div className="absolute top-1/2 left-3 -translate-y-1/2 transform text-sm text-gray-500">{currency}</div>
             <Input
               type="number"
               placeholder={maxPlaceholder}
               value={value.max || ""}
-              onChange={(e) => handleMaxChange(Number(e.target.value) || 0)}
+              onChange={e => handleMaxChange(Number(e.target.value) || 0)}
               className="pl-8"
             />
           </div>
@@ -81,7 +77,7 @@ export function PriceRangeFilter({
             { label: "$100-300", min: 100, max: 300 },
             { label: "$300-500", min: 300, max: 500 },
             { label: "$500+", min: 500, max: 10000 },
-          ].map((range) => (
+          ].map(range => (
             <button
               key={range.label}
               type="button"
@@ -93,8 +89,7 @@ export function PriceRangeFilter({
                     ? "border-blue-300 bg-blue-100 text-blue-700"
                     : "border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100"
                 }
-              `}
-            >
+              `}>
               {range.label}
             </button>
           ))}

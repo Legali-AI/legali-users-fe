@@ -14,9 +14,7 @@ function GoogleCallbackContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { login } = useAuth();
-  const [status, setStatus] = useState<"loading" | "success" | "error">(
-    "loading"
-  );
+  const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
   const [message, setMessage] = useState("");
   const hasProcessed = useRef(false);
 
@@ -41,8 +39,7 @@ function GoogleCallbackContent() {
         });
 
         if (response.data?.data) {
-          const { access_token, refresh_token, user, is_new } =
-            response.data.data;
+          const { access_token, refresh_token, user, is_new } = response.data.data;
 
           login({
             access_token,
@@ -175,8 +172,7 @@ export default function GoogleCallbackPage() {
             </CardContent>
           </Card>
         </div>
-      }
-    >
+      }>
       <GoogleCallbackContent />
     </Suspense>
   );

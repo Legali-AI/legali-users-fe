@@ -4,28 +4,17 @@ import { PurposeSelectionForm } from "../../components/module/auth/purpose-selec
 
 export const metadata: Metadata = {
   title: "Get Started - Select Your Purpose",
-  description:
-    "Choose how you'd like to use Legali's AI-powered legal platform to get started.",
-  keywords: [
-    "platform selection",
-    "legal services",
-    "AI assistance",
-    "legal consultation",
-    "litigation funding",
-  ],
+  description: "Choose how you'd like to use Legali's AI-powered legal platform to get started.",
+  keywords: ["platform selection", "legal services", "AI assistance", "legal consultation", "litigation funding"],
   openGraph: {
     title: "Get Started - Select Your Purpose",
-    description:
-      "Choose how you'd like to use Legali's AI-powered legal platform to get started.",
+    description: "Choose how you'd like to use Legali's AI-powered legal platform to get started.",
   },
 };
 
 export default function OnboardPage() {
   return (
-    <GlobalLayout
-      variant="no-padding"
-      className="bg-gradient-sky-blue relative min-h-screen overflow-hidden"
-    >
+    <GlobalLayout variant="no-padding" className="bg-gradient-sky-blue relative min-h-screen overflow-hidden">
       {/* Decorative Elements */}
       <div className="pointer-events-none absolute inset-0">
         {/* Top-right decoration */}

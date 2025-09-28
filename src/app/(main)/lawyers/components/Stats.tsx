@@ -17,13 +17,7 @@ interface StatsProps {
   className?: string;
 }
 
-export function Stats({
-  stats,
-  layout = "grid",
-  variant = "card",
-  size = "md",
-  className = "",
-}: StatsProps) {
+export function Stats({ stats, layout = "grid", variant = "card", size = "md", className = "" }: StatsProps) {
   const getLayoutClasses = () => {
     switch (layout) {
       case "horizontal":
@@ -99,48 +93,34 @@ export function Stats({
 
   return (
     <div className={`${getLayoutClasses()} ${className}`}>
-      {stats.map((stat) => (
+      {stats.map(stat => (
         <div
           key={`${stat.label}-${stat.value}`}
-          className={`${baseItemClasses} ${
-            layout === "horizontal" ? "min-w-0 flex-1" : ""
-          }`}
-        >
+          className={`${baseItemClasses} ${layout === "horizontal" ? "min-w-0 flex-1" : ""}`}>
           <div className={sizeClasses.spacing}>
             {/* Icon and Label */}
             <div className="flex items-center justify-between">
-              <p
-                className={`${sizeClasses.label} tracking-wide text-gray-600 uppercase`}
-              >
-                {stat.label}
-              </p>
+              <p className={`${sizeClasses.label} tracking-wide text-gray-600 uppercase`}>{stat.label}</p>
               {stat.icon && <div className="text-gray-400">{stat.icon}</div>}
             </div>
 
             {/* Value */}
             <div className="flex items-baseline">
-              <p className={`${sizeClasses.value} text-gray-900`}>
-                {stat.value}
-              </p>
+              <p className={`${sizeClasses.value} text-gray-900`}>{stat.value}</p>
               {stat.change && (
                 <span
                   className={`
                     ml-2 ${sizeClasses.change} flex items-center font-medium
                     ${getChangeClasses(stat.change.type)}
-                  `}
-                >
-                  <span className="mr-1">
-                    {getChangeIcon(stat.change.type)}
-                  </span>
+                  `}>
+                  <span className="mr-1">{getChangeIcon(stat.change.type)}</span>
                   {stat.change.value}
                 </span>
               )}
             </div>
 
             {/* Description */}
-            {stat.description && (
-              <p className="mt-1 text-xs text-gray-500">{stat.description}</p>
-            )}
+            {stat.description && <p className="mt-1 text-xs text-gray-500">{stat.description}</p>}
           </div>
         </div>
       ))}

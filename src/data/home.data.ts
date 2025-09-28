@@ -60,8 +60,7 @@ export interface Problem {
 export const CORE_PROBLEMS: Problem[] = [
   {
     title: 'Stuck in the "missing middle"?',
-    description:
-      "Your case is too big for small claims, too small for big firms.",
+    description: "Your case is too big for small claims, too small for big firms.",
   },
   {
     title: "Unfair settlements?",
@@ -102,28 +101,23 @@ export const BENEFITS: Benefits[] = [
     items: [
       {
         title: "Navigating the law blindfolded",
-        description:
-          "Feel lost trying to understand legal processes without guidance.",
+        description: "Feel lost trying to understand legal processes without guidance.",
       },
       {
         title: "Searching endlessly for answers",
-        description:
-          "Hours wasted Googling legal info and still unsure what's right.",
+        description: "Hours wasted Googling legal info and still unsure what's right.",
       },
       {
         title: "Worried about $400/hour fees",
-        description:
-          "Fear of massive legal bills stopping you from taking action.",
+        description: "Fear of massive legal bills stopping you from taking action.",
       },
       {
         title: "Forced into impossible trade-offs",
-        description:
-          "Choosing between pursuing justice or protecting your finances.",
+        description: "Choosing between pursuing justice or protecting your finances.",
       },
       {
         title: "Family/property disputes",
-        description:
-          "Tense disagreements over inheritance, custody, or real estate.",
+        description: "Tense disagreements over inheritance, custody, or real estate.",
       },
       {
         title: "Business, inheritance, or real estate conflicts",
@@ -137,18 +131,15 @@ export const BENEFITS: Benefits[] = [
     items: [
       {
         title: "Reduce time on paperwork",
-        description:
-          "Automate repetitive legal tasks and focus on higher-value work.",
+        description: "Automate repetitive legal tasks and focus on higher-value work.",
       },
       {
         title: "Take on more clients",
-        description:
-          "Serve more people with streamlined workflows and prepared cases.",
+        description: "Serve more people with streamlined workflows and prepared cases.",
       },
       {
         title: "Receive well-organized cases",
-        description:
-          "Get neatly packaged evidence and documents, ready to act on.",
+        description: "Get neatly packaged evidence and documents, ready to act on.",
       },
     ],
   },
@@ -204,8 +195,7 @@ export const FAQ_ITEMS: FAQItem[] = [
       "Absolutely. You can access bite-size templates, fixed-fee reviews, or plain-English advice.",
   },
   {
-    question:
-      "I only need help with a specific document or strategy. Is that possible?",
+    question: "I only need help with a specific document or strategy. Is that possible?",
     answer:
       "Absolutely. You can access bite-size templates, fixed-fee reviews, or plain-English advice.",
   },

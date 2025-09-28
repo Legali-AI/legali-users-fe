@@ -38,28 +38,15 @@ export default function LitigationCrowdfundingPage() {
   };
 
   return (
-    <GlobalLayout
-      variant="no-padding"
-      className="bg-gradient-sky-blue min-h-screen"
-    >
-      {currentView === "cases" && (
-        <EnhancedCasesList onCaseSelect={handleCaseSelect} />
-      )}
+    <GlobalLayout variant="no-padding" className="bg-gradient-sky-blue min-h-screen">
+      {currentView === "cases" && <EnhancedCasesList onCaseSelect={handleCaseSelect} />}
 
       {currentView === "case-detail" && selectedCase && (
-        <CaseDetail
-          case={selectedCase}
-          onBack={handleBack}
-          onInvestmentStart={handleInvestmentStart}
-        />
+        <CaseDetail case={selectedCase} onBack={handleBack} onInvestmentStart={handleInvestmentStart} />
       )}
 
       {currentView === "investment-flow" && selectedCase && (
-        <InvestmentFlow
-          case={selectedCase}
-          onBack={handleBack}
-          onComplete={handleInvestmentComplete}
-        />
+        <InvestmentFlow case={selectedCase} onBack={handleBack} onComplete={handleInvestmentComplete} />
       )}
     </GlobalLayout>
   );

@@ -3,6 +3,7 @@
 import { User } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useAuth } from "@/hooks/use-auth";
 import { Span } from "./typography";
 
@@ -27,9 +28,9 @@ export default function DynamicHeader() {
       className="flex justify-between gap-4 rounded-lg border border-white-400 p-6"
       style={{
         background: "linear-gradient(90deg, #EDFAFF 0.01%, #FFF 30.33%)",
-      }}
-    >
+      }}>
       <div className="flex items-center gap-4">
+        <SidebarTrigger className="md:hidden" />
         <Span level={"h5"} weight={"semibold"} className="text-brand-navy">
           {title}
         </Span>

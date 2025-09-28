@@ -1793,58 +1793,55 @@ export type DownloadDocumentPublicApiDocumentsDocumentIdDownloadGetResponses = {
   200: unknown;
 };
 
-export type DownloadDocumentSecureApiDocumentsDocumentIdDownloadSecureGetData =
-  {
-    body?: never;
-    path: {
-      document_id: string;
-    };
-    query?: never;
-    url: "/api/documents/{document_id}/download/secure";
+export type DownloadDocumentSecureApiDocumentsDocumentIdDownloadSecureGetData = {
+  body?: never;
+  path: {
+    document_id: string;
   };
+  query?: never;
+  url: "/api/documents/{document_id}/download/secure";
+};
 
-export type DownloadDocumentSecureApiDocumentsDocumentIdDownloadSecureGetErrors =
-  {
-    /**
-     * Bad Request
-     */
-    400: BadRequestResponse;
-    /**
-     * Unauthorized
-     */
-    401: UnauthorizedResponse;
-    /**
-     * Forbidden
-     */
-    403: ForbiddenResponse;
-    /**
-     * Not Found
-     */
-    404: NotFoundResponse;
-    /**
-     * Conflict
-     */
-    409: ErrorResponse;
-    /**
-     * Validation Error
-     */
-    422: ErrorResponse;
-    /**
-     * Internal Server Error
-     */
-    500: ErrorResponse;
-  };
+export type DownloadDocumentSecureApiDocumentsDocumentIdDownloadSecureGetErrors = {
+  /**
+   * Bad Request
+   */
+  400: BadRequestResponse;
+  /**
+   * Unauthorized
+   */
+  401: UnauthorizedResponse;
+  /**
+   * Forbidden
+   */
+  403: ForbiddenResponse;
+  /**
+   * Not Found
+   */
+  404: NotFoundResponse;
+  /**
+   * Conflict
+   */
+  409: ErrorResponse;
+  /**
+   * Validation Error
+   */
+  422: ErrorResponse;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
 
 export type DownloadDocumentSecureApiDocumentsDocumentIdDownloadSecureGetError =
   DownloadDocumentSecureApiDocumentsDocumentIdDownloadSecureGetErrors[keyof DownloadDocumentSecureApiDocumentsDocumentIdDownloadSecureGetErrors];
 
-export type DownloadDocumentSecureApiDocumentsDocumentIdDownloadSecureGetResponses =
-  {
-    /**
-     * Successful Response
-     */
-    200: unknown;
-  };
+export type DownloadDocumentSecureApiDocumentsDocumentIdDownloadSecureGetResponses = {
+  /**
+   * Successful Response
+   */
+  200: unknown;
+};
 
 export type GetUserStorageInfoApiDocumentsStorageInfoGetData = {
   body?: never;

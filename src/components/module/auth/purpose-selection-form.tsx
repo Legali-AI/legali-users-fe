@@ -21,8 +21,7 @@ const purposeOptions: PurposeOption[] = [
   {
     id: "ai-assistant",
     title: "Use Legali AI",
-    description:
-      "Get AI-powered legal assistance for your daily legal needs and questions",
+    description: "Get AI-powered legal assistance for your daily legal needs and questions",
     icon: Bot,
     route: "/",
     bgColor: "bg-blue-50",
@@ -31,8 +30,7 @@ const purposeOptions: PurposeOption[] = [
   {
     id: "legal-consultation",
     title: "Legal Consultation & Marketplace",
-    description:
-      "Connect with lawyers for initial consultation and explore our attorney marketplace",
+    description: "Connect with lawyers for initial consultation and explore our attorney marketplace",
     icon: Scale,
     route: "/lawyers",
     bgColor: "bg-green-50",
@@ -41,8 +39,7 @@ const purposeOptions: PurposeOption[] = [
   {
     id: "litigation-funding",
     title: "Litigation Crowdfunding",
-    description:
-      "Explore and invest in legal cases through our crowdfunding platform",
+    description: "Explore and invest in legal cases through our crowdfunding platform",
     icon: TrendingUp,
     route: "/litigation-crowdfunding",
     bgColor: "bg-purple-50",
@@ -61,13 +58,11 @@ export function PurposeSelectionForm() {
     setIsLoading(true);
 
     // Find the selected option
-    const selectedOption = purposeOptions.find(
-      (option) => option.id === selectedPurpose
-    );
+    const selectedOption = purposeOptions.find(option => option.id === selectedPurpose);
 
     if (selectedOption) {
       // Add a small delay for better UX
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      await new Promise(resolve => setTimeout(resolve, 300));
       router.push(selectedOption.route);
     }
 
@@ -90,18 +85,16 @@ export function PurposeSelectionForm() {
           />
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-          Please select your purpose
-        </h1>
+        <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">Please select your purpose</h1>
         <p className="mx-auto max-w-2xl px-4 text-base leading-relaxed text-gray-600 sm:text-lg">
-          Choose what you'd like to do on the Legali platform to get started
-          with the right tools and resources for your legal needs.
+          Choose what you'd like to do on the Legali platform to get started with the right tools and resources for your
+          legal needs.
         </p>
       </div>
 
       {/* Purpose Options */}
       <div className="grid gap-6 lg:grid-cols-3">
-        {purposeOptions.map((option) => (
+        {purposeOptions.map(option => (
           <button
             key={option.id}
             type="button"
@@ -114,8 +107,7 @@ export function PurposeSelectionForm() {
               selectedPurpose === option.id
                 ? "bg-sky-blue-50 scale-[1.02] border-sky-blue-500 shadow-xl ring-2 ring-sky-blue-200"
                 : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
-            )}
-          >
+            )}>
             {/* Selection Indicator - Top Right */}
             <div className="absolute top-4 right-4">
               <div
@@ -124,11 +116,8 @@ export function PurposeSelectionForm() {
                   selectedPurpose === option.id
                     ? "border-sky-blue-500 bg-sky-blue-500"
                     : "border-gray-300 group-hover:border-gray-400"
-                )}
-              >
-                {selectedPurpose === option.id && (
-                  <div className="h-3 w-3 rounded-full bg-white" />
-                )}
+                )}>
+                {selectedPurpose === option.id && <div className="h-3 w-3 rounded-full bg-white" />}
               </div>
             </div>
 
@@ -138,30 +127,21 @@ export function PurposeSelectionForm() {
               <div
                 className={cn(
                   "flex h-20 w-20 items-center justify-center rounded-2xl transition-all",
-                  selectedPurpose === option.id
-                    ? "bg-sky-blue-100"
-                    : option.bgColor,
+                  selectedPurpose === option.id ? "bg-sky-blue-100" : option.bgColor,
                   "group-hover:scale-110"
-                )}
-              >
+                )}>
                 <option.icon
                   className={cn(
                     "h-10 w-10 transition-all",
-                    selectedPurpose === option.id
-                      ? "text-sky-blue-600"
-                      : option.iconColor
+                    selectedPurpose === option.id ? "text-sky-blue-600" : option.iconColor
                   )}
                 />
               </div>
 
               {/* Content */}
               <div className="space-y-3">
-                <h3 className="text-xl leading-tight font-bold text-gray-900">
-                  {option.title}
-                </h3>
-                <p className="px-2 text-sm leading-relaxed text-gray-600">
-                  {option.description}
-                </p>
+                <h3 className="text-xl leading-tight font-bold text-gray-900">{option.title}</h3>
+                <p className="px-2 text-sm leading-relaxed text-gray-600">{option.description}</p>
               </div>
             </div>
 
@@ -177,16 +157,14 @@ export function PurposeSelectionForm() {
           onClick={handleContinue}
           disabled={!selectedPurpose || isLoading}
           className="px-12 py-3 text-lg font-medium disabled:cursor-not-allowed disabled:opacity-50"
-          size="lg"
-        >
+          size="lg">
           {isLoading ? "Loading..." : "Continue"}
         </Button>
 
         <button
           type="button"
           onClick={() => router.push("/profile")}
-          className="text-sm font-medium text-gray-500 transition-colors hover:text-gray-700"
-        >
+          className="text-sm font-medium text-gray-500 transition-colors hover:text-gray-700">
           Skip for now
         </button>
       </div>

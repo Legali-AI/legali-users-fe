@@ -4,8 +4,7 @@ import { QueryProvider } from "../../lib/query-client";
 
 export const metadata: Metadata = {
   title: "Welcome to Legali",
-  description:
-    "Complete your profile to get started with Legali's AI-powered legal platform.",
+  description: "Complete your profile to get started with Legali's AI-powered legal platform.",
 };
 
 export default function WelcomeLayout({

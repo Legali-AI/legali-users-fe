@@ -162,11 +162,7 @@ export type Options<
 export const rootGet = <ThrowOnError extends boolean = false>(
   options?: Options<RootGetData, ThrowOnError>
 ) => {
-  return (options?.client ?? _heyApiClient).get<
-    unknown,
-    RootGetError,
-    ThrowOnError
-  >({
+  return (options?.client ?? _heyApiClient).get<unknown, RootGetError, ThrowOnError>({
     url: "/",
     ...options,
   });
@@ -184,7 +180,7 @@ export const getUsersApiAdminUsersGet = <ThrowOnError extends boolean = false>(
     GetUsersApiAdminUsersGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zGetUsersApiAdminUsersGetResponse.parseAsync(data);
     },
     url: "/api/admin/users",
@@ -196,9 +192,7 @@ export const getUsersApiAdminUsersGet = <ThrowOnError extends boolean = false>(
  * Get User Details
  * Get detailed information for a specific user
  */
-export const getUserDetailsApiAdminUsersUserIdGet = <
-  ThrowOnError extends boolean = false,
->(
+export const getUserDetailsApiAdminUsersUserIdGet = <ThrowOnError extends boolean = false>(
   options: Options<GetUserDetailsApiAdminUsersUserIdGetData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).get<
@@ -206,10 +200,8 @@ export const getUserDetailsApiAdminUsersUserIdGet = <
     GetUserDetailsApiAdminUsersUserIdGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
-      return await zGetUserDetailsApiAdminUsersUserIdGetResponse.parseAsync(
-        data
-      );
+    responseValidator: async data => {
+      return await zGetUserDetailsApiAdminUsersUserIdGetResponse.parseAsync(data);
     },
     url: "/api/admin/users/{user_id}",
     ...options,
@@ -220,9 +212,7 @@ export const getUserDetailsApiAdminUsersUserIdGet = <
  * Update User
  * Update user data by admin
  */
-export const updateUserApiAdminUsersUserIdPut = <
-  ThrowOnError extends boolean = false,
->(
+export const updateUserApiAdminUsersUserIdPut = <ThrowOnError extends boolean = false>(
   options: Options<UpdateUserApiAdminUsersUserIdPutData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).put<
@@ -230,7 +220,7 @@ export const updateUserApiAdminUsersUserIdPut = <
     UpdateUserApiAdminUsersUserIdPutError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zUpdateUserApiAdminUsersUserIdPutResponse.parseAsync(data);
     },
     url: "/api/admin/users/{user_id}",
@@ -246,23 +236,16 @@ export const updateUserApiAdminUsersUserIdPut = <
  * Get Storage Summary
  * Get overall storage usage summary across all users
  */
-export const getStorageSummaryApiAdminStorageSummaryGet = <
-  ThrowOnError extends boolean = false,
->(
-  options?: Options<
-    GetStorageSummaryApiAdminStorageSummaryGetData,
-    ThrowOnError
-  >
+export const getStorageSummaryApiAdminStorageSummaryGet = <ThrowOnError extends boolean = false>(
+  options?: Options<GetStorageSummaryApiAdminStorageSummaryGetData, ThrowOnError>
 ) => {
   return (options?.client ?? _heyApiClient).get<
     GetStorageSummaryApiAdminStorageSummaryGetResponse,
     GetStorageSummaryApiAdminStorageSummaryGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
-      return await zGetStorageSummaryApiAdminStorageSummaryGetResponse.parseAsync(
-        data
-      );
+    responseValidator: async data => {
+      return await zGetStorageSummaryApiAdminStorageSummaryGetResponse.parseAsync(data);
     },
     url: "/api/admin/storage/summary",
     ...options,
@@ -273,9 +256,7 @@ export const getStorageSummaryApiAdminStorageSummaryGet = <
  * Google OAuth URL
  * Get Google OAuth authorization URL
  */
-export const googleAuthUrlApiAuthGoogleUrlPost = <
-  ThrowOnError extends boolean = false,
->(
+export const googleAuthUrlApiAuthGoogleUrlPost = <ThrowOnError extends boolean = false>(
   options?: Options<GoogleAuthUrlApiAuthGoogleUrlPostData, ThrowOnError>
 ) => {
   return (options?.client ?? _heyApiClient).post<
@@ -283,7 +264,7 @@ export const googleAuthUrlApiAuthGoogleUrlPost = <
     GoogleAuthUrlApiAuthGoogleUrlPostError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zGoogleAuthUrlApiAuthGoogleUrlPostResponse.parseAsync(data);
     },
     url: "/api/auth/google/url",
@@ -295,9 +276,7 @@ export const googleAuthUrlApiAuthGoogleUrlPost = <
  * Google OAuth Login
  * Authenticate user with Google OAuth authorization code and return JWT tokens
  */
-export const googleLoginApiAuthGoogleCallbackPost = <
-  ThrowOnError extends boolean = false,
->(
+export const googleLoginApiAuthGoogleCallbackPost = <ThrowOnError extends boolean = false>(
   options: Options<GoogleLoginApiAuthGoogleCallbackPostData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).post<
@@ -305,10 +284,8 @@ export const googleLoginApiAuthGoogleCallbackPost = <
     GoogleLoginApiAuthGoogleCallbackPostError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
-      return await zGoogleLoginApiAuthGoogleCallbackPostResponse.parseAsync(
-        data
-      );
+    responseValidator: async data => {
+      return await zGoogleLoginApiAuthGoogleCallbackPostResponse.parseAsync(data);
     },
     url: "/api/auth/google/callback",
     ...options,
@@ -323,9 +300,7 @@ export const googleLoginApiAuthGoogleCallbackPost = <
  * Refresh Access Token
  * Generate a new access token using a valid refresh token
  */
-export const refreshTokenApiAuthRefreshPost = <
-  ThrowOnError extends boolean = false,
->(
+export const refreshTokenApiAuthRefreshPost = <ThrowOnError extends boolean = false>(
   options: Options<RefreshTokenApiAuthRefreshPostData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).post<
@@ -333,7 +308,7 @@ export const refreshTokenApiAuthRefreshPost = <
     RefreshTokenApiAuthRefreshPostError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zRefreshTokenApiAuthRefreshPostResponse.parseAsync(data);
     },
     url: "/api/auth/refresh",
@@ -357,7 +332,7 @@ export const logoutApiAuthLogoutPost = <ThrowOnError extends boolean = false>(
     LogoutApiAuthLogoutPostError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zLogoutApiAuthLogoutPostResponse.parseAsync(data);
     },
     url: "/api/auth/logout",
@@ -373,9 +348,7 @@ export const logoutApiAuthLogoutPost = <ThrowOnError extends boolean = false>(
  * Get profile
  * Get current user's profile
  */
-export const getProfileApiAuthProfileGet = <
-  ThrowOnError extends boolean = false,
->(
+export const getProfileApiAuthProfileGet = <ThrowOnError extends boolean = false>(
   options?: Options<GetProfileApiAuthProfileGetData, ThrowOnError>
 ) => {
   return (options?.client ?? _heyApiClient).get<
@@ -383,7 +356,7 @@ export const getProfileApiAuthProfileGet = <
     GetProfileApiAuthProfileGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zGetProfileApiAuthProfileGetResponse.parseAsync(data);
     },
     url: "/api/auth/profile",
@@ -395,9 +368,7 @@ export const getProfileApiAuthProfileGet = <
  * Update profile (Form Data)
  * Update current user's profile using form data (supports file uploads)
  */
-export const updateProfileApiAuthProfilePut = <
-  ThrowOnError extends boolean = false,
->(
+export const updateProfileApiAuthProfilePut = <ThrowOnError extends boolean = false>(
   options?: Options<UpdateProfileApiAuthProfilePutData, ThrowOnError>
 ) => {
   return (options?.client ?? _heyApiClient).put<
@@ -406,7 +377,7 @@ export const updateProfileApiAuthProfilePut = <
     ThrowOnError
   >({
     ...formDataBodySerializer,
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zUpdateProfileApiAuthProfilePutResponse.parseAsync(data);
     },
     url: "/api/auth/profile",
@@ -422,9 +393,7 @@ export const updateProfileApiAuthProfilePut = <
  * Upload document
  * Upload a document file using form data with key 'file'. Example: curl -X POST -F 'file=@document.pdf' /api/documents/upload
  */
-export const uploadDocumentApiDocumentsUploadPost = <
-  ThrowOnError extends boolean = false,
->(
+export const uploadDocumentApiDocumentsUploadPost = <ThrowOnError extends boolean = false>(
   options: Options<UploadDocumentApiDocumentsUploadPostData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).post<
@@ -433,10 +402,8 @@ export const uploadDocumentApiDocumentsUploadPost = <
     ThrowOnError
   >({
     ...formDataBodySerializer,
-    responseValidator: async (data) => {
-      return await zUploadDocumentApiDocumentsUploadPostResponse.parseAsync(
-        data
-      );
+    responseValidator: async data => {
+      return await zUploadDocumentApiDocumentsUploadPostResponse.parseAsync(data);
     },
     url: "/api/documents/upload",
     ...options,
@@ -450,9 +417,7 @@ export const uploadDocumentApiDocumentsUploadPost = <
 /**
  * List my documents
  */
-export const listDocumentsApiDocumentsGet = <
-  ThrowOnError extends boolean = false,
->(
+export const listDocumentsApiDocumentsGet = <ThrowOnError extends boolean = false>(
   options?: Options<ListDocumentsApiDocumentsGetData, ThrowOnError>
 ) => {
   return (options?.client ?? _heyApiClient).get<
@@ -460,7 +425,7 @@ export const listDocumentsApiDocumentsGet = <
     ListDocumentsApiDocumentsGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zListDocumentsApiDocumentsGetResponse.parseAsync(data);
     },
     url: "/api/documents/",
@@ -472,9 +437,7 @@ export const listDocumentsApiDocumentsGet = <
  * Upload document (alternative endpoint)
  * Upload a document file using form data with key 'file'. Example: curl -X POST -F 'file=@document.pdf' /api/documents/
  */
-export const uploadDocumentAltApiDocumentsPost = <
-  ThrowOnError extends boolean = false,
->(
+export const uploadDocumentAltApiDocumentsPost = <ThrowOnError extends boolean = false>(
   options: Options<UploadDocumentAltApiDocumentsPostData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).post<
@@ -483,7 +446,7 @@ export const uploadDocumentAltApiDocumentsPost = <
     ThrowOnError
   >({
     ...formDataBodySerializer,
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zUploadDocumentAltApiDocumentsPostResponse.parseAsync(data);
     },
     url: "/api/documents/",
@@ -498,9 +461,7 @@ export const uploadDocumentAltApiDocumentsPost = <
 /**
  * Delete document
  */
-export const deleteDocumentApiDocumentsDocumentIdDelete = <
-  ThrowOnError extends boolean = false,
->(
+export const deleteDocumentApiDocumentsDocumentIdDelete = <ThrowOnError extends boolean = false>(
   options: Options<DeleteDocumentApiDocumentsDocumentIdDeleteData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).delete<
@@ -508,10 +469,8 @@ export const deleteDocumentApiDocumentsDocumentIdDelete = <
     DeleteDocumentApiDocumentsDocumentIdDeleteError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
-      return await zDeleteDocumentApiDocumentsDocumentIdDeleteResponse.parseAsync(
-        data
-      );
+    responseValidator: async data => {
+      return await zDeleteDocumentApiDocumentsDocumentIdDeleteResponse.parseAsync(data);
     },
     url: "/api/documents/{document_id}",
     ...options,
@@ -521,9 +480,7 @@ export const deleteDocumentApiDocumentsDocumentIdDelete = <
 /**
  * Get document
  */
-export const getDocumentApiDocumentsDocumentIdGet = <
-  ThrowOnError extends boolean = false,
->(
+export const getDocumentApiDocumentsDocumentIdGet = <ThrowOnError extends boolean = false>(
   options: Options<GetDocumentApiDocumentsDocumentIdGetData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).get<
@@ -531,10 +488,8 @@ export const getDocumentApiDocumentsDocumentIdGet = <
     GetDocumentApiDocumentsDocumentIdGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
-      return await zGetDocumentApiDocumentsDocumentIdGetResponse.parseAsync(
-        data
-      );
+    responseValidator: async data => {
+      return await zGetDocumentApiDocumentsDocumentIdGetResponse.parseAsync(data);
     },
     url: "/api/documents/{document_id}",
     ...options,
@@ -548,10 +503,7 @@ export const getDocumentApiDocumentsDocumentIdGet = <
 export const downloadDocumentPublicApiDocumentsDocumentIdDownloadGet = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<
-    DownloadDocumentPublicApiDocumentsDocumentIdDownloadGetData,
-    ThrowOnError
-  >
+  options: Options<DownloadDocumentPublicApiDocumentsDocumentIdDownloadGetData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).get<
     unknown,
@@ -570,10 +522,7 @@ export const downloadDocumentPublicApiDocumentsDocumentIdDownloadGet = <
 export const downloadDocumentSecureApiDocumentsDocumentIdDownloadSecureGet = <
   ThrowOnError extends boolean = false,
 >(
-  options: Options<
-    DownloadDocumentSecureApiDocumentsDocumentIdDownloadSecureGetData,
-    ThrowOnError
-  >
+  options: Options<DownloadDocumentSecureApiDocumentsDocumentIdDownloadSecureGetData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).get<
     unknown,
@@ -589,23 +538,16 @@ export const downloadDocumentSecureApiDocumentsDocumentIdDownloadSecureGet = <
  * Get user storage information
  * Get current storage usage and limits for the authenticated user
  */
-export const getUserStorageInfoApiDocumentsStorageInfoGet = <
-  ThrowOnError extends boolean = false,
->(
-  options?: Options<
-    GetUserStorageInfoApiDocumentsStorageInfoGetData,
-    ThrowOnError
-  >
+export const getUserStorageInfoApiDocumentsStorageInfoGet = <ThrowOnError extends boolean = false>(
+  options?: Options<GetUserStorageInfoApiDocumentsStorageInfoGetData, ThrowOnError>
 ) => {
   return (options?.client ?? _heyApiClient).get<
     GetUserStorageInfoApiDocumentsStorageInfoGetResponse,
     GetUserStorageInfoApiDocumentsStorageInfoGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
-      return await zGetUserStorageInfoApiDocumentsStorageInfoGetResponse.parseAsync(
-        data
-      );
+    responseValidator: async data => {
+      return await zGetUserStorageInfoApiDocumentsStorageInfoGetResponse.parseAsync(data);
     },
     url: "/api/documents/storage/info",
     ...options,
@@ -624,7 +566,7 @@ export const healthCheckApiHealthGet = <ThrowOnError extends boolean = false>(
     HealthCheckApiHealthGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zHealthCheckApiHealthGetResponse.parseAsync(data);
     },
     url: "/api/health/",
@@ -636,9 +578,7 @@ export const healthCheckApiHealthGet = <ThrowOnError extends boolean = false>(
  * Get location info
  * Get detailed location information by city ID
  */
-export const getLocationInfoApiLocationsInfoCityIdGet = <
-  ThrowOnError extends boolean = false,
->(
+export const getLocationInfoApiLocationsInfoCityIdGet = <ThrowOnError extends boolean = false>(
   options: Options<GetLocationInfoApiLocationsInfoCityIdGetData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).get<
@@ -646,10 +586,8 @@ export const getLocationInfoApiLocationsInfoCityIdGet = <
     GetLocationInfoApiLocationsInfoCityIdGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
-      return await zGetLocationInfoApiLocationsInfoCityIdGetResponse.parseAsync(
-        data
-      );
+    responseValidator: async data => {
+      return await zGetLocationInfoApiLocationsInfoCityIdGetResponse.parseAsync(data);
     },
     url: "/api/locations/info/{city_id}",
     ...options,
@@ -660,9 +598,7 @@ export const getLocationInfoApiLocationsInfoCityIdGet = <
  * Get all regions
  * Get all regions with optional search and pagination
  */
-export const getAllRegionsApiLocationsRegionsGet = <
-  ThrowOnError extends boolean = false,
->(
+export const getAllRegionsApiLocationsRegionsGet = <ThrowOnError extends boolean = false>(
   options?: Options<GetAllRegionsApiLocationsRegionsGetData, ThrowOnError>
 ) => {
   return (options?.client ?? _heyApiClient).get<
@@ -670,10 +606,8 @@ export const getAllRegionsApiLocationsRegionsGet = <
     GetAllRegionsApiLocationsRegionsGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
-      return await zGetAllRegionsApiLocationsRegionsGetResponse.parseAsync(
-        data
-      );
+    responseValidator: async data => {
+      return await zGetAllRegionsApiLocationsRegionsGetResponse.parseAsync(data);
     },
     url: "/api/locations/regions",
     ...options,
@@ -684,9 +618,7 @@ export const getAllRegionsApiLocationsRegionsGet = <
  * Get all subregions
  * Get all subregions with optional region filter, search and pagination
  */
-export const getAllSubregionsApiLocationsSubregionsGet = <
-  ThrowOnError extends boolean = false,
->(
+export const getAllSubregionsApiLocationsSubregionsGet = <ThrowOnError extends boolean = false>(
   options?: Options<GetAllSubregionsApiLocationsSubregionsGetData, ThrowOnError>
 ) => {
   return (options?.client ?? _heyApiClient).get<
@@ -694,10 +626,8 @@ export const getAllSubregionsApiLocationsSubregionsGet = <
     GetAllSubregionsApiLocationsSubregionsGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
-      return await zGetAllSubregionsApiLocationsSubregionsGetResponse.parseAsync(
-        data
-      );
+    responseValidator: async data => {
+      return await zGetAllSubregionsApiLocationsSubregionsGetResponse.parseAsync(data);
     },
     url: "/api/locations/subregions",
     ...options,
@@ -708,9 +638,7 @@ export const getAllSubregionsApiLocationsSubregionsGet = <
  * Get all countries
  * Get all countries with optional region/subregion filter, search and pagination
  */
-export const getAllCountriesApiLocationsCountriesGet = <
-  ThrowOnError extends boolean = false,
->(
+export const getAllCountriesApiLocationsCountriesGet = <ThrowOnError extends boolean = false>(
   options?: Options<GetAllCountriesApiLocationsCountriesGetData, ThrowOnError>
 ) => {
   return (options?.client ?? _heyApiClient).get<
@@ -718,10 +646,8 @@ export const getAllCountriesApiLocationsCountriesGet = <
     GetAllCountriesApiLocationsCountriesGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
-      return await zGetAllCountriesApiLocationsCountriesGetResponse.parseAsync(
-        data
-      );
+    responseValidator: async data => {
+      return await zGetAllCountriesApiLocationsCountriesGetResponse.parseAsync(data);
     },
     url: "/api/locations/countries",
     ...options,
@@ -732,9 +658,7 @@ export const getAllCountriesApiLocationsCountriesGet = <
  * Get all states
  * Get all states with optional country filter, search and pagination
  */
-export const getAllStatesApiLocationsStatesGet = <
-  ThrowOnError extends boolean = false,
->(
+export const getAllStatesApiLocationsStatesGet = <ThrowOnError extends boolean = false>(
   options?: Options<GetAllStatesApiLocationsStatesGetData, ThrowOnError>
 ) => {
   return (options?.client ?? _heyApiClient).get<
@@ -742,7 +666,7 @@ export const getAllStatesApiLocationsStatesGet = <
     GetAllStatesApiLocationsStatesGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zGetAllStatesApiLocationsStatesGetResponse.parseAsync(data);
     },
     url: "/api/locations/states",
@@ -754,9 +678,7 @@ export const getAllStatesApiLocationsStatesGet = <
  * Get all cities
  * Get all cities with optional state/country filter, search and pagination
  */
-export const getAllCitiesApiLocationsCitiesGet = <
-  ThrowOnError extends boolean = false,
->(
+export const getAllCitiesApiLocationsCitiesGet = <ThrowOnError extends boolean = false>(
   options?: Options<GetAllCitiesApiLocationsCitiesGetData, ThrowOnError>
 ) => {
   return (options?.client ?? _heyApiClient).get<
@@ -764,7 +686,7 @@ export const getAllCitiesApiLocationsCitiesGet = <
     GetAllCitiesApiLocationsCitiesGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zGetAllCitiesApiLocationsCitiesGetResponse.parseAsync(data);
     },
     url: "/api/locations/cities",
@@ -776,9 +698,7 @@ export const getAllCitiesApiLocationsCitiesGet = <
  * Get all pricing plans
  * Get all pricing plans with optional active filter (Public endpoint)
  */
-export const getAllPlansApiPricingPlansGet = <
-  ThrowOnError extends boolean = false,
->(
+export const getAllPlansApiPricingPlansGet = <ThrowOnError extends boolean = false>(
   options?: Options<GetAllPlansApiPricingPlansGetData, ThrowOnError>
 ) => {
   return (options?.client ?? _heyApiClient).get<
@@ -786,7 +706,7 @@ export const getAllPlansApiPricingPlansGet = <
     GetAllPlansApiPricingPlansGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zGetAllPlansApiPricingPlansGetResponse.parseAsync(data);
     },
     url: "/api/pricing/plans",
@@ -798,9 +718,7 @@ export const getAllPlansApiPricingPlansGet = <
  * Create pricing plan
  * Create a new pricing plan (Admin only)
  */
-export const createPlanApiPricingPlansPost = <
-  ThrowOnError extends boolean = false,
->(
+export const createPlanApiPricingPlansPost = <ThrowOnError extends boolean = false>(
   options: Options<CreatePlanApiPricingPlansPostData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).post<
@@ -808,7 +726,7 @@ export const createPlanApiPricingPlansPost = <
     CreatePlanApiPricingPlansPostError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zCreatePlanApiPricingPlansPostResponse.parseAsync(data);
     },
     url: "/api/pricing/plans",
@@ -824,9 +742,7 @@ export const createPlanApiPricingPlansPost = <
  * Delete pricing plan
  * Delete a pricing plan (Admin only)
  */
-export const deletePlanApiPricingPlansPlanIdDelete = <
-  ThrowOnError extends boolean = false,
->(
+export const deletePlanApiPricingPlansPlanIdDelete = <ThrowOnError extends boolean = false>(
   options: Options<DeletePlanApiPricingPlansPlanIdDeleteData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).delete<
@@ -834,10 +750,8 @@ export const deletePlanApiPricingPlansPlanIdDelete = <
     DeletePlanApiPricingPlansPlanIdDeleteError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
-      return await zDeletePlanApiPricingPlansPlanIdDeleteResponse.parseAsync(
-        data
-      );
+    responseValidator: async data => {
+      return await zDeletePlanApiPricingPlansPlanIdDeleteResponse.parseAsync(data);
     },
     url: "/api/pricing/plans/{plan_id}",
     ...options,
@@ -848,9 +762,7 @@ export const deletePlanApiPricingPlansPlanIdDelete = <
  * Get pricing plan by ID
  * Get a specific pricing plan by ID (Public endpoint)
  */
-export const getPlanApiPricingPlansPlanIdGet = <
-  ThrowOnError extends boolean = false,
->(
+export const getPlanApiPricingPlansPlanIdGet = <ThrowOnError extends boolean = false>(
   options: Options<GetPlanApiPricingPlansPlanIdGetData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).get<
@@ -858,7 +770,7 @@ export const getPlanApiPricingPlansPlanIdGet = <
     GetPlanApiPricingPlansPlanIdGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zGetPlanApiPricingPlansPlanIdGetResponse.parseAsync(data);
     },
     url: "/api/pricing/plans/{plan_id}",
@@ -870,9 +782,7 @@ export const getPlanApiPricingPlansPlanIdGet = <
  * Update pricing plan
  * Update a pricing plan (Admin only)
  */
-export const updatePlanApiPricingPlansPlanIdPut = <
-  ThrowOnError extends boolean = false,
->(
+export const updatePlanApiPricingPlansPlanIdPut = <ThrowOnError extends boolean = false>(
   options: Options<UpdatePlanApiPricingPlansPlanIdPutData, ThrowOnError>
 ) => {
   return (options.client ?? _heyApiClient).put<
@@ -880,7 +790,7 @@ export const updatePlanApiPricingPlansPlanIdPut = <
     UpdatePlanApiPricingPlansPlanIdPutError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
+    responseValidator: async data => {
       return await zUpdatePlanApiPricingPlansPlanIdPutResponse.parseAsync(data);
     },
     url: "/api/pricing/plans/{plan_id}",
@@ -896,23 +806,16 @@ export const updatePlanApiPricingPlansPlanIdPut = <
  * Get user storage information
  * Get storage information for all users (Admin only)
  */
-export const getUserStorageInfoApiPricingUsersStorageGet = <
-  ThrowOnError extends boolean = false,
->(
-  options?: Options<
-    GetUserStorageInfoApiPricingUsersStorageGetData,
-    ThrowOnError
-  >
+export const getUserStorageInfoApiPricingUsersStorageGet = <ThrowOnError extends boolean = false>(
+  options?: Options<GetUserStorageInfoApiPricingUsersStorageGetData, ThrowOnError>
 ) => {
   return (options?.client ?? _heyApiClient).get<
     GetUserStorageInfoApiPricingUsersStorageGetResponse,
     GetUserStorageInfoApiPricingUsersStorageGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
-      return await zGetUserStorageInfoApiPricingUsersStorageGetResponse.parseAsync(
-        data
-      );
+    responseValidator: async data => {
+      return await zGetUserStorageInfoApiPricingUsersStorageGetResponse.parseAsync(data);
     },
     url: "/api/pricing/users/storage",
     ...options,
@@ -923,23 +826,16 @@ export const getUserStorageInfoApiPricingUsersStorageGet = <
  * Get storage summary
  * Get storage usage summary for all users (Admin only)
  */
-export const getStorageSummaryApiPricingStorageSummaryGet = <
-  ThrowOnError extends boolean = false,
->(
-  options?: Options<
-    GetStorageSummaryApiPricingStorageSummaryGetData,
-    ThrowOnError
-  >
+export const getStorageSummaryApiPricingStorageSummaryGet = <ThrowOnError extends boolean = false>(
+  options?: Options<GetStorageSummaryApiPricingStorageSummaryGetData, ThrowOnError>
 ) => {
   return (options?.client ?? _heyApiClient).get<
     GetStorageSummaryApiPricingStorageSummaryGetResponse,
     GetStorageSummaryApiPricingStorageSummaryGetError,
     ThrowOnError
   >({
-    responseValidator: async (data) => {
-      return await zGetStorageSummaryApiPricingStorageSummaryGetResponse.parseAsync(
-        data
-      );
+    responseValidator: async data => {
+      return await zGetStorageSummaryApiPricingStorageSummaryGetResponse.parseAsync(data);
     },
     url: "/api/pricing/storage/summary",
     ...options,

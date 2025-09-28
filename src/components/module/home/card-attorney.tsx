@@ -23,17 +23,12 @@ export function CardAttorney({ attorney, index, collapse }: CardAttorneyProps) {
           index === 1 && "relative z-10 sm:mt-5",
           index !== 0 && index !== 1 && "sm:-ml-10",
         ]
-      )}
-    >
+      )}>
       <div className="aspect-square h-[230px] w-full bg-slate-500" />
       <div className="relative z-[2px] -mt-10 h-8 w-full bg-white blur-3xl" />
 
       <div className="flex flex-col gap-2 p-5">
-        <H4
-          weight={"semibold"}
-          className="text-sky-blue-900"
-          level={collapse ? "title" : "h5"}
-        >
+        <H4 weight={"semibold"} className="text-sky-blue-900" level={collapse ? "title" : "h5"}>
           {attorney.name}
         </H4>
         <P level={collapse ? "label" : "body"} className="text-brand-slate">
@@ -42,10 +37,7 @@ export function CardAttorney({ attorney, index, collapse }: CardAttorneyProps) {
         {attorney.linkedinUrl && (
           <div className="flex items-center gap-2">
             <Linkedin size={16} />
-            <P
-              level={collapse ? "label" : "body"}
-              className="text-sky-blue-900"
-            >
+            <P level={collapse ? "label" : "body"} className="text-sky-blue-900">
               <Link href={attorney.linkedinUrl}>{attorney.linkedinUrl}</Link>
             </P>
           </div>
@@ -53,19 +45,11 @@ export function CardAttorney({ attorney, index, collapse }: CardAttorneyProps) {
         <Badge variant={"sky-blue"} level={collapse ? "label" : "body"}>
           {attorney.specialization}
         </Badge>
-        <Badge
-          variant={"outline-warm-orange"}
-          level={collapse ? "label" : "body"}
-          weight={"semibold"}
-        >
+        <Badge variant={"outline-warm-orange"} level={collapse ? "label" : "body"} weight={"semibold"}>
           {attorney.hourlyRate}
         </Badge>
         {!collapse && (
-          <Button
-            className="ml-auto w-fit rounded-full"
-            variant={"orange"}
-            size={"lg"}
-          >
+          <Button className="ml-auto w-fit rounded-full" variant={"orange"} size={"lg"}>
             Connect
           </Button>
         )}

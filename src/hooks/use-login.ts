@@ -18,7 +18,7 @@ export function useLogin() {
       setError("");
 
       // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 500));
 
       // Authenticate user with hardcoded data
       const user = authenticateUser(email, password);

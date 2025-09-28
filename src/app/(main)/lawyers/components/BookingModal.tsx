@@ -4,21 +4,10 @@ import { Calendar, Clock } from "lucide-react";
 import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
 interface BookingModalProps {
@@ -47,21 +36,14 @@ interface FormErrors {
   caseDescription?: string;
 }
 
-export function BookingModal({
-  isOpen,
-  onClose,
-  lawyerName,
-  selectedPackage,
-}: BookingModalProps) {
+export function BookingModal({ isOpen, onClose, lawyerName, selectedPackage }: BookingModalProps) {
   const dateId = useId();
   const fullNameId = useId();
   const emailId = useId();
   const phoneId = useId();
   const caseDescriptionId = useId();
 
-  const [currentStep, setCurrentStep] = useState<
-    "datetime" | "details" | "confirmation"
-  >("datetime");
+  const [currentStep, setCurrentStep] = useState<"datetime" | "details" | "confirmation">("datetime");
   const [bookingForm, setBookingForm] = useState<BookingForm>({
     date: "",
     timeSlot: "",
@@ -88,15 +70,7 @@ export function BookingModal({
     }
 
     // TODO: In future, fetch lawyer's custom operational hours
-    const operationalHours = [
-      "09:00 AM",
-      "10:00 AM",
-      "11:00 AM",
-      "01:00 PM",
-      "02:00 PM",
-      "03:00 PM",
-      "04:00 PM",
-    ];
+    const operationalHours = ["09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM"];
 
     return operationalHours;
   };
@@ -141,8 +115,7 @@ export function BookingModal({
     if (!bookingForm.caseDescription.trim()) {
       errors.caseDescription = "Case description is required";
     } else if (bookingForm.caseDescription.trim().length < 10) {
-      errors.caseDescription =
-        "Please provide at least 10 characters describing your case";
+      errors.caseDescription = "Please provide at least 10 characters describing your case";
     }
 
     setFormErrors(errors);
@@ -153,10 +126,10 @@ export function BookingModal({
   const availableTimeSlots = generateAvailableTimeSlots(bookingForm.date);
 
   const handleDateChange = (date: string) => {
-    setBookingForm((prev) => ({ ...prev, date, timeSlot: "" })); // Reset time slot when date changes
+    setBookingForm(prev => ({ ...prev, date, timeSlot: "" })); // Reset time slot when date changes
     // Clear date-related errors
     if (formErrors.date) {
-      setFormErrors((prev) => {
+      setFormErrors(prev => {
         // biome-ignore lint/correctness/noUnusedVariables: needed for object destructuring
         const { date, ...rest } = prev;
         return rest;
@@ -165,14 +138,14 @@ export function BookingModal({
   };
 
   const handleTimeSlotSelect = (_timeSlot: string) => {
-    setFormErrors((prev) => {
+    setFormErrors(prev => {
       // biome-ignore lint/correctness/noUnusedVariables: needed for object destructuring
       const { timeSlot, ...rest } = prev;
       return rest;
     });
     // Clear time slot errors
     if (formErrors.timeSlot) {
-      setFormErrors((prev) => {
+      setFormErrors(prev => {
         // biome-ignore lint/correctness/noUnusedVariables: needed for object destructuring
         const { timeSlot, ...rest } = prev;
         return rest;
@@ -181,10 +154,10 @@ export function BookingModal({
   };
 
   const handleInputChange = (field: keyof BookingForm, value: string) => {
-    setBookingForm((prev) => ({ ...prev, [field]: value }));
+    setBookingForm(prev => ({ ...prev, [field]: value }));
     // Clear field-specific errors
     if (formErrors[field as keyof FormErrors]) {
-      setFormErrors((prev) => ({ ...prev, [field]: undefined }));
+      setFormErrors(prev => ({ ...prev, [field]: undefined }));
     }
   };
 
@@ -194,8 +167,7 @@ export function BookingModal({
       if (hasDateTimeErrors) {
         const errors: FormErrors = {};
         if (!bookingForm.date) errors.date = "Please select a date";
-        if (!bookingForm.timeSlot)
-          errors.timeSlot = "Please select a time slot";
+        if (!bookingForm.timeSlot) errors.timeSlot = "Please select a time slot";
         setFormErrors(errors);
         return;
       }
@@ -222,7 +194,7 @@ export function BookingModal({
       console.log("Booking submission:", bookingForm);
 
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
 
       // Show success message or redirect
       alert("Consultation booked successfully!");
@@ -236,8 +208,7 @@ export function BookingModal({
   };
 
   const isDateTimeComplete = bookingForm.date && bookingForm.timeSlot;
-  const isDetailsComplete =
-    bookingForm.fullName && bookingForm.email && bookingForm.caseDescription;
+  const isDetailsComplete = bookingForm.fullName && bookingForm.email && bookingForm.caseDescription;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -254,54 +225,36 @@ export function BookingModal({
           <div className="flex items-center justify-between rounded-lg bg-gray-50 p-3 text-sm">
             <div
               className={`flex items-center gap-2 ${
-                currentStep === "datetime"
-                  ? "font-medium text-blue-600"
-                  : "text-gray-500"
-              }`}
-            >
+                currentStep === "datetime" ? "font-medium text-blue-600" : "text-gray-500"
+              }`}>
               <div
                 className={`flex h-6 w-6 items-center justify-center rounded-full text-xs ${
-                  currentStep === "datetime"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-600"
-                }`}
-              >
+                  currentStep === "datetime" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-600"
+                }`}>
                 1
               </div>
               Date & Time
             </div>
             <div
               className={`flex items-center gap-2 ${
-                currentStep === "details"
-                  ? "font-medium text-blue-600"
-                  : "text-gray-500"
-              }`}
-            >
+                currentStep === "details" ? "font-medium text-blue-600" : "text-gray-500"
+              }`}>
               <div
                 className={`flex h-6 w-6 items-center justify-center rounded-full text-xs ${
-                  currentStep === "details"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-600"
-                }`}
-              >
+                  currentStep === "details" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-600"
+                }`}>
                 2
               </div>
               Details
             </div>
             <div
               className={`flex items-center gap-2 ${
-                currentStep === "confirmation"
-                  ? "font-medium text-blue-600"
-                  : "text-gray-500"
-              }`}
-            >
+                currentStep === "confirmation" ? "font-medium text-blue-600" : "text-gray-500"
+              }`}>
               <div
                 className={`flex h-6 w-6 items-center justify-center rounded-full text-xs ${
-                  currentStep === "confirmation"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-600"
-                }`}
-              >
+                  currentStep === "confirmation" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-600"
+                }`}>
                 3
               </div>
               Confirm
@@ -314,12 +267,9 @@ export function BookingModal({
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-blue-900">
-                      Selected Package: {selectedPackage}
-                    </p>
+                    <p className="text-sm font-medium text-blue-900">Selected Package: {selectedPackage}</p>
                     <p className="mt-1 text-xs text-blue-700">
-                      This consultation will be billed according to your
-                      selected package
+                      This consultation will be billed according to your selected package
                     </p>
                   </div>
                   <div className="rounded-full border border-blue-300 bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
@@ -333,16 +283,12 @@ export function BookingModal({
           {/* Booking Information */}
           <Card className="border-gray-200 bg-gray-50 shadow-sm">
             <CardContent className="bg-gray-50 p-4">
-              <h3 className="mb-2 text-sm font-medium text-gray-900">
-                Booking Information
-              </h3>
+              <h3 className="mb-2 text-sm font-medium text-gray-900">Booking Information</h3>
               <div className="space-y-1 text-xs text-gray-600">
                 <p>• Available hours: Monday - Friday, 9:00 AM - 5:00 PM</p>
                 <p>• Time zone: Your local time zone</p>
                 <p>• Booking confirmation will be sent to your email</p>
-                <p>
-                  • You can reschedule up to 24 hours before the consultation
-                </p>
+                <p>• You can reschedule up to 24 hours before the consultation</p>
               </div>
             </CardContent>
           </Card>
@@ -358,45 +304,31 @@ export function BookingModal({
                   id={dateId}
                   type="date"
                   value={bookingForm.date}
-                  onChange={(e) => handleDateChange(e.target.value)}
+                  onChange={e => handleDateChange(e.target.value)}
                   min={new Date().toISOString().split("T")[0]}
                   className={`mt-1 border-gray-300 bg-white text-gray-900 ${
                     formErrors.date ? "border-red-500" : "focus:border-blue-500"
                   }`}
                 />
-                {formErrors.date && (
-                  <p className="mt-1 text-sm text-red-600">{formErrors.date}</p>
-                )}
+                {formErrors.date && <p className="mt-1 text-sm text-red-600">{formErrors.date}</p>}
               </div>
 
               <div>
                 <Label className="font-medium text-gray-700">Duration</Label>
                 <Select
                   value={bookingForm.duration}
-                  onValueChange={(value: string) =>
-                    handleInputChange("duration", value)
-                  }
-                >
+                  onValueChange={(value: string) => handleInputChange("duration", value)}>
                   <SelectTrigger className="mt-1 border-gray-300 bg-white text-gray-900">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="border border-gray-200 bg-white">
-                    <SelectItem
-                      value="30"
-                      className="text-gray-900 hover:bg-gray-50"
-                    >
+                    <SelectItem value="30" className="text-gray-900 hover:bg-gray-50">
                       30 minutes
                     </SelectItem>
-                    <SelectItem
-                      value="60"
-                      className="text-gray-900 hover:bg-gray-50"
-                    >
+                    <SelectItem value="60" className="text-gray-900 hover:bg-gray-50">
                       1 hour
                     </SelectItem>
-                    <SelectItem
-                      value="90"
-                      className="text-gray-900 hover:bg-gray-50"
-                    >
+                    <SelectItem value="90" className="text-gray-900 hover:bg-gray-50">
                       1.5 hours
                     </SelectItem>
                   </SelectContent>
@@ -405,26 +337,19 @@ export function BookingModal({
 
               {bookingForm.date && (
                 <div>
-                  <Label className="font-medium text-gray-700">
-                    Available Time Slots
-                  </Label>
+                  <Label className="font-medium text-gray-700">Available Time Slots</Label>
                   <p className="mb-2 text-xs text-gray-500">
-                    Select your preferred consultation time. All times are in
-                    your local timezone.
+                    Select your preferred consultation time. All times are in your local timezone.
                   </p>
                   {availableTimeSlots.length === 0 ? (
                     <div className="rounded-lg border border-gray-200 bg-gray-50 py-6 text-center">
                       <Clock className="mx-auto mb-2 h-8 w-8 text-gray-400" />
-                      <p className="text-sm text-gray-500">
-                        No available time slots for this date.
-                      </p>
-                      <p className="mt-1 text-xs text-gray-400">
-                        Please select a weekday (Monday - Friday)
-                      </p>
+                      <p className="text-sm text-gray-500">No available time slots for this date.</p>
+                      <p className="mt-1 text-xs text-gray-400">Please select a weekday (Monday - Friday)</p>
                     </div>
                   ) : (
                     <div className="mt-2 grid grid-cols-2 gap-2">
-                      {availableTimeSlots.map((slot) => (
+                      {availableTimeSlots.map(slot => (
                         <Button
                           key={slot}
                           variant="outline"
@@ -433,19 +358,14 @@ export function BookingModal({
                             bookingForm.timeSlot === slot
                               ? "border-blue-600 bg-blue-600 text-white shadow-md hover:border-blue-700 hover:bg-blue-700"
                               : "border-gray-300 bg-white text-gray-700 hover:border-blue-300 hover:bg-blue-50"
-                          }`}
-                        >
+                          }`}>
                           <Clock className="mr-2 h-4 w-4" />
                           <span className="font-medium">{slot}</span>
                         </Button>
                       ))}
                     </div>
                   )}
-                  {formErrors.timeSlot && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {formErrors.timeSlot}
-                    </p>
-                  )}
+                  {formErrors.timeSlot && <p className="mt-1 text-sm text-red-600">{formErrors.timeSlot}</p>}
                 </div>
               )}
             </div>
@@ -455,117 +375,79 @@ export function BookingModal({
           {currentStep === "details" && (
             <div className="space-y-4 rounded-lg border border-gray-100 bg-white p-4">
               <div className="mb-4 rounded-lg border border-blue-200 bg-blue-50 p-3">
-                <h3 className="mb-1 text-sm font-medium text-blue-900">
-                  Contact Information
-                </h3>
+                <h3 className="mb-1 text-sm font-medium text-blue-900">Contact Information</h3>
                 <p className="text-xs text-blue-700">
-                  Please provide accurate contact details. We&apos;ll use this
-                  information to send booking confirmations and consultation
-                  links.
+                  Please provide accurate contact details. We&apos;ll use this information to send booking confirmations
+                  and consultation links.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 gap-4">
                 <div>
-                  <Label
-                    htmlFor={fullNameId}
-                    className="font-medium text-gray-700"
-                  >
+                  <Label htmlFor={fullNameId} className="font-medium text-gray-700">
                     Full Name *
                   </Label>
                   <Input
                     id={fullNameId}
                     value={bookingForm.fullName}
-                    onChange={(e) =>
-                      handleInputChange("fullName", e.target.value)
-                    }
+                    onChange={e => handleInputChange("fullName", e.target.value)}
                     placeholder="Enter your full name"
                     className={`mt-1 border-gray-300 bg-white text-gray-900 ${
-                      formErrors.fullName
-                        ? "border-red-500"
-                        : "focus:border-blue-500"
+                      formErrors.fullName ? "border-red-500" : "focus:border-blue-500"
                     }`}
                   />
-                  {formErrors.fullName && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {formErrors.fullName}
-                    </p>
-                  )}
+                  {formErrors.fullName && <p className="mt-1 text-sm text-red-600">{formErrors.fullName}</p>}
                 </div>
 
                 <div>
-                  <Label
-                    htmlFor={emailId}
-                    className="font-medium text-gray-700"
-                  >
+                  <Label htmlFor={emailId} className="font-medium text-gray-700">
                     Email Address *
                   </Label>
                   <Input
                     id={emailId}
                     type="email"
                     value={bookingForm.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    onChange={e => handleInputChange("email", e.target.value)}
                     placeholder="Enter your email"
                     className={`mt-1 border-gray-300 bg-white text-gray-900 ${
-                      formErrors.email
-                        ? "border-red-500"
-                        : "focus:border-blue-500"
+                      formErrors.email ? "border-red-500" : "focus:border-blue-500"
                     }`}
                   />
-                  {formErrors.email && (
-                    <p className="mt-1 text-sm text-red-600">
-                      {formErrors.email}
-                    </p>
-                  )}
+                  {formErrors.email && <p className="mt-1 text-sm text-red-600">{formErrors.email}</p>}
                 </div>
 
                 <div>
-                  <Label
-                    htmlFor={phoneId}
-                    className="font-medium text-gray-700"
-                  >
+                  <Label htmlFor={phoneId} className="font-medium text-gray-700">
                     Phone Number
                   </Label>
                   <Input
                     id={phoneId}
                     type="tel"
                     value={bookingForm.phone}
-                    onChange={(e) => handleInputChange("phone", e.target.value)}
+                    onChange={e => handleInputChange("phone", e.target.value)}
                     placeholder="Enter your phone number"
                     className="mt-1 border-gray-300 bg-white text-gray-900 focus:border-blue-500"
                   />
                 </div>
 
                 <div>
-                  <Label className="font-medium text-gray-700">
-                    Consultation Type
-                  </Label>
+                  <Label className="font-medium text-gray-700">Consultation Type</Label>
                   <Select
                     value={bookingForm.consultationType}
                     onValueChange={(value: "phone" | "video" | "in-person") =>
                       handleInputChange("consultationType", value)
-                    }
-                  >
+                    }>
                     <SelectTrigger className="mt-1 border-gray-300 bg-white text-gray-900">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="border border-gray-200 bg-white">
-                      <SelectItem
-                        value="video"
-                        className="text-gray-900 hover:bg-gray-50"
-                      >
+                      <SelectItem value="video" className="text-gray-900 hover:bg-gray-50">
                         Video Call
                       </SelectItem>
-                      <SelectItem
-                        value="phone"
-                        className="text-gray-900 hover:bg-gray-50"
-                      >
+                      <SelectItem value="phone" className="text-gray-900 hover:bg-gray-50">
                         Phone Call
                       </SelectItem>
-                      <SelectItem
-                        value="in-person"
-                        className="text-gray-900 hover:bg-gray-50"
-                      >
+                      <SelectItem value="in-person" className="text-gray-900 hover:bg-gray-50">
                         In-Person
                       </SelectItem>
                     </SelectContent>
@@ -573,16 +455,12 @@ export function BookingModal({
                 </div>
 
                 <div>
-                  <Label
-                    htmlFor="caseDescription"
-                    className="font-medium text-gray-700"
-                  >
+                  <Label htmlFor="caseDescription" className="font-medium text-gray-700">
                     Case Description *
                   </Label>
                   <p className="mt-1 mb-2 text-xs text-gray-500">
-                    Provide a brief overview of your legal matter. This helps
-                    the lawyer prepare for your consultation. (Minimum 10
-                    characters)
+                    Provide a brief overview of your legal matter. This helps the lawyer prepare for your consultation.
+                    (Minimum 10 characters)
                   </p>
                   <Textarea
                     id={caseDescriptionId}
@@ -593,20 +471,12 @@ export function BookingModal({
                     placeholder="Example: I need help with a contract review for a business partnership agreement. The contract involves profit sharing and liability terms that I want to ensure are fair and legally sound."
                     rows={4}
                     className={`mt-1 border-gray-300 bg-white text-gray-900 ${
-                      formErrors.caseDescription
-                        ? "border-red-500"
-                        : "focus:border-blue-500"
+                      formErrors.caseDescription ? "border-red-500" : "focus:border-blue-500"
                     }`}
                   />
                   <div className="mt-1 flex items-center justify-between">
-                    {formErrors.caseDescription && (
-                      <p className="text-sm text-red-600">
-                        {formErrors.caseDescription}
-                      </p>
-                    )}
-                    <p className="ml-auto text-xs text-gray-400">
-                      {bookingForm.caseDescription.length}/500 characters
-                    </p>
+                    {formErrors.caseDescription && <p className="text-sm text-red-600">{formErrors.caseDescription}</p>}
+                    <p className="ml-auto text-xs text-gray-400">{bookingForm.caseDescription.length}/500 characters</p>
                   </div>
                 </div>
               </div>
@@ -618,28 +488,20 @@ export function BookingModal({
             <div className="space-y-4">
               <Card className="border border-gray-200 bg-white shadow-sm">
                 <CardHeader className="border-b border-gray-100">
-                  <CardTitle className="text-lg text-gray-900">
-                    Booking Summary
-                  </CardTitle>
+                  <CardTitle className="text-lg text-gray-900">Booking Summary</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3 bg-white p-6">
                   <div className="flex justify-between border-b border-gray-50 py-2">
                     <span className="text-gray-600">Date:</span>
-                    <span className="font-medium text-gray-900">
-                      {new Date(bookingForm.date).toLocaleDateString()}
-                    </span>
+                    <span className="font-medium text-gray-900">{new Date(bookingForm.date).toLocaleDateString()}</span>
                   </div>
                   <div className="flex justify-between border-b border-gray-50 py-2">
                     <span className="text-gray-600">Time:</span>
-                    <span className="font-medium text-gray-900">
-                      {bookingForm.timeSlot}
-                    </span>
+                    <span className="font-medium text-gray-900">{bookingForm.timeSlot}</span>
                   </div>
                   <div className="flex justify-between border-b border-gray-50 py-2">
                     <span className="text-gray-600">Duration:</span>
-                    <span className="font-medium text-gray-900">
-                      {bookingForm.duration} minutes
-                    </span>
+                    <span className="font-medium text-gray-900">{bookingForm.duration} minutes</span>
                   </div>
                   <div className="flex justify-between border-b border-gray-50 py-2">
                     <span className="text-gray-600">Type:</span>
@@ -649,22 +511,16 @@ export function BookingModal({
                   </div>
                   <div className="flex justify-between border-b border-gray-50 py-2">
                     <span className="text-gray-600">Client:</span>
-                    <span className="font-medium text-gray-900">
-                      {bookingForm.fullName}
-                    </span>
+                    <span className="font-medium text-gray-900">{bookingForm.fullName}</span>
                   </div>
                   <div className="flex justify-between border-b border-gray-50 py-2">
                     <span className="text-gray-600">Email:</span>
-                    <span className="font-medium text-gray-900">
-                      {bookingForm.email}
-                    </span>
+                    <span className="font-medium text-gray-900">{bookingForm.email}</span>
                   </div>
                   {selectedPackage && (
                     <div className="flex justify-between py-2">
                       <span className="text-gray-600">Package:</span>
-                      <span className="font-medium text-gray-900">
-                        {selectedPackage}
-                      </span>
+                      <span className="font-medium text-gray-900">{selectedPackage}</span>
                     </div>
                   )}
                 </CardContent>
@@ -678,8 +534,7 @@ export function BookingModal({
               <Button
                 variant="outline"
                 onClick={handleBack}
-                className="flex-1 border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
-              >
+                className="flex-1 border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
                 Back
               </Button>
             )}
@@ -688,8 +543,7 @@ export function BookingModal({
               <Button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="flex-1 bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-400"
-              >
+                className="flex-1 bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-400">
                 {isSubmitting ? "Booking..." : "Confirm Booking"}
               </Button>
             ) : (
@@ -699,8 +553,7 @@ export function BookingModal({
                   (currentStep === "datetime" && !isDateTimeComplete) ||
                   (currentStep === "details" && !isDetailsComplete)
                 }
-                className="flex-1 bg-blue-600 text-white hover:bg-blue-700 disabled:bg-gray-400"
-              >
+                className="flex-1 bg-blue-600 text-white hover:bg-blue-700 disabled:bg-gray-400">
                 Next
               </Button>
             )}

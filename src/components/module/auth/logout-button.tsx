@@ -9,20 +9,10 @@ import { Button } from "../../ui/button";
 interface LogoutButtonProps {
   className?: string;
   children?: React.ReactNode;
-  variant?:
-    | "default"
-    | "destructive"
-    | "outline"
-    | "secondary"
-    | "ghost"
-    | "link";
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
 }
 
-export function LogoutButton({
-  className,
-  children,
-  variant,
-}: LogoutButtonProps) {
+export function LogoutButton({ className, children, variant }: LogoutButtonProps) {
   const router = useRouter();
   const { logout } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
@@ -44,8 +34,7 @@ export function LogoutButton({
       variant={variant || "outline"}
       className={`flex items-center gap-2 ${className}`}
       onClick={handleLogout}
-      disabled={isLoading}
-    >
+      disabled={isLoading}>
       <LogOut className="h-4 w-4" />
       {isLoading ? "Logging out..." : children || "Logout"}
     </Button>

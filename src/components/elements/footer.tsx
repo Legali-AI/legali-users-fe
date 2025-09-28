@@ -83,22 +83,13 @@ export function Footer() {
       <div className="flex flex-col items-start justify-center gap-8 sm:flex-row sm:gap-16 lg:gap-32">
         {/* Logo */}
         <div className="flex-none">
-          <Image
-            src="/logo.png"
-            alt="Legali Logo"
-            width={60}
-            height={25}
-            className="h-[25px] w-[60px]"
-          />
+          <Image src="/logo.png" alt="Legali Logo" width={60} height={25} className="h-[25px] w-[60px]" />
         </div>
 
         {/* Footer Sections */}
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
-          {FOOTER_SECTIONS.map((section) => (
-            <div
-              key={section.title}
-              className="flex flex-col items-start gap-2.5"
-            >
+          {FOOTER_SECTIONS.map(section => (
+            <div key={section.title} className="flex flex-col items-start gap-2.5">
               {/* Section Title */}
               <H4 level="label" weight="semibold">
                 {section.title}
@@ -106,12 +97,9 @@ export function Footer() {
 
               {/* Section Links */}
               <div className="flex flex-col items-start gap-2.5">
-                {section.links.map((link) => (
+                {section.links.map(link => (
                   <Link key={link.label} href={link.href} className="w-full">
-                    <P
-                      level="label"
-                      className="text-slate-gray-400 transition-colors hover:text-deep-navy-400"
-                    >
+                    <P level="label" className="text-slate-gray-400 transition-colors hover:text-deep-navy-400">
                       {link.label}
                     </P>
                   </Link>

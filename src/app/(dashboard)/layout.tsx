@@ -24,10 +24,8 @@ export default function DashboardLayout({
             <SidebarInset
               className="flex flex-1 flex-col gap-4 overflow-hidden overflow-y-auto rounded-lg border border-white-400 p-6"
               style={{
-                background:
-                  "linear-gradient(180deg, #FFF 47.69%, #EDFAFF 100%)",
-              }}
-            >
+                background: "linear-gradient(180deg, #FFF 47.69%, #EDFAFF 100%)",
+              }}>
               {children}
             </SidebarInset>
           </div>

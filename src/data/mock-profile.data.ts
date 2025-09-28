@@ -1,9 +1,5 @@
 import { getAccessToken, setAccessToken } from "@/lib/auth";
-import {
-  generateMockToken,
-  HARDCODED_USERS,
-  type HardcodedUser,
-} from "./auth.data";
+import { generateMockToken, HARDCODED_USERS, type HardcodedUser } from "./auth.data";
 
 // Mock profile API responses
 export interface MockProfileUpdateData {
@@ -35,7 +31,7 @@ function getUserFromToken(): HardcodedUser | null {
 
   try {
     const payload = JSON.parse(atob(token));
-    const baseUser = HARDCODED_USERS.find((user) => user.id === payload.userId);
+    const baseUser = HARDCODED_USERS.find(user => user.id === payload.userId);
     if (!baseUser) return null;
 
     // Apply any runtime updates
@@ -52,7 +48,7 @@ export async function mockUpdateProfile(
   updateData: MockProfileUpdateData
 ): Promise<MockProfileResponse> {
   // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 300));
+  await new Promise(resolve => setTimeout(resolve, 300));
 
   const currentUser = getUserFromToken();
   if (!currentUser) {
@@ -103,10 +99,7 @@ export function isMockAuthentication(): boolean {
 
   try {
     const payload = JSON.parse(atob(token));
-    return (
-      payload.userId &&
-      HARDCODED_USERS.some((user) => user.id === payload.userId)
-    );
+    return payload.userId && HARDCODED_USERS.some(user => user.id === payload.userId);
   } catch (error) {
     return false;
   }

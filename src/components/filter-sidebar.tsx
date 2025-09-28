@@ -75,8 +75,7 @@ export function FilterSidebar({
               <button
                 type="button"
                 onClick={onClearAll}
-                className="text-sm font-medium text-blue-600 transition-colors hover:text-blue-700"
-              >
+                className="text-sm font-medium text-blue-600 transition-colors hover:text-blue-700">
                 Clear All
               </button>
             )}
@@ -99,29 +98,22 @@ export function FilterSidebar({
           <div>
             <h3 className="mb-3 font-medium text-gray-900">Minimum Rating</h3>
             <div className="space-y-2">
-              {[5, 4, 3].map((rating) => (
+              {[5, 4, 3].map(rating => (
                 <label
                   key={rating}
-                  className="flex cursor-pointer items-center space-x-2 rounded p-2 transition-colors hover:bg-gray-50"
-                >
+                  className="flex cursor-pointer items-center space-x-2 rounded p-2 transition-colors hover:bg-gray-50">
                   <input
                     type="checkbox"
                     checked={selectedRating === rating}
-                    onChange={(e) =>
-                      onRatingChange(e.target.checked ? rating : undefined)
-                    }
+                    onChange={e => onRatingChange(e.target.checked ? rating : undefined)}
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                   <div className="flex flex-1 items-center justify-between">
                     <div className="flex items-center">
                       <Star className="mr-1 h-4 w-4 text-yellow-400" />
-                      <span className="text-sm text-gray-700">
-                        {rating}+ stars
-                      </span>
+                      <span className="text-sm text-gray-700">{rating}+ stars</span>
                     </div>
-                    <span className="text-xs text-gray-500">
-                      ({rating === 5 ? "45" : rating === 4 ? "128" : "89"})
-                    </span>
+                    <span className="text-xs text-gray-500">({rating === 5 ? "45" : rating === 4 ? "128" : "89"})</span>
                   </div>
                 </label>
               ))}
@@ -129,20 +121,14 @@ export function FilterSidebar({
           </div>
 
           {/* Price Range Filter */}
-          <PriceRangeFilter
-            title="Hourly Rate"
-            value={priceRange}
-            onChange={onPriceRangeChange}
-          />
+          <PriceRangeFilter title="Hourly Rate" value={priceRange} onChange={onPriceRangeChange} />
 
           {/* Experience Filter */}
           <CheckboxFilter
             title="Experience"
             options={experienceOptions}
             selectedValues={selectedExperience ? [selectedExperience] : []}
-            onChange={(values) =>
-              onExperienceChange(values[0] as number | undefined)
-            }
+            onChange={values => onExperienceChange(values[0] as number | undefined)}
           />
 
           {/* Languages Filter */}

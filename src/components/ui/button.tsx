@@ -15,13 +15,10 @@ const buttonVariants = cva(
           "bg-brand-rose text-white shadow-xs hover:bg-brand-rose/90 focus-visible:ring-brand-rose/20 dark:bg-brand-rose/60 dark:focus-visible:ring-brand-rose/40",
         outline:
           "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
-        secondary:
-          "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
+        secondary: "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         orange: "bg-warm-orange-400 text-white",
-        "sky-blue":
-          "bg-sky-blue-600 text-white shadow-xs hover:bg-sky-blue-700 focus-visible:ring-sky-blue-500/20",
-        ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        "sky-blue": "bg-sky-blue-600 text-white shadow-xs hover:bg-sky-blue-700 focus-visible:ring-sky-blue-500/20",
+        ghost: "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
@@ -50,13 +47,7 @@ function Button({
   }) {
   const Comp = asChild ? Slot : "button";
 
-  return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  );
+  return <Comp data-slot="button" className={cn(buttonVariants({ variant, size, className }))} {...props} />;
 }
 
 export { Button, buttonVariants };

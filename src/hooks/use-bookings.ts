@@ -14,18 +14,15 @@ export const useCreateBooking = () => {
 
   return useMutation({
     mutationFn: (bookingData: Partial<Booking>) => createBooking(bookingData),
-    onSuccess: (newBooking) => {
+    onSuccess: newBooking => {
       // Invalidate and refetch user bookings
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.USER_BOOKINGS, newBooking.clientId],
       });
       // Add the new booking to the cache
-      queryClient.setQueryData(
-        [QUERY_KEYS.BOOKING_DETAILS, newBooking.id],
-        newBooking
-      );
+      queryClient.setQueryData([QUERY_KEYS.BOOKING_DETAILS, newBooking.id], newBooking);
     },
-    onError: (error) => {
+    onError: error => {
       console.error("Error creating booking:", error);
     },
   });
@@ -56,25 +53,17 @@ export const useCancelBooking = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      bookingId,
-      reason,
-    }: {
-      bookingId: string;
-      reason?: string;
-    }) => cancelBooking(bookingId, reason),
-    onSuccess: (cancelledBooking) => {
+    mutationFn: ({ bookingId, reason }: { bookingId: string; reason?: string }) =>
+      cancelBooking(bookingId, reason),
+    onSuccess: cancelledBooking => {
       // Update the booking in cache
-      queryClient.setQueryData(
-        [QUERY_KEYS.BOOKING_DETAILS, cancelledBooking.id],
-        cancelledBooking
-      );
+      queryClient.setQueryData([QUERY_KEYS.BOOKING_DETAILS, cancelledBooking.id], cancelledBooking);
       // Invalidate user bookings to refresh the list
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.USER_BOOKINGS, cancelledBooking.clientId],
       });
     },
-    onError: (error) => {
+    onError: error => {
       console.error("Error canceling booking:", error);
     },
   });
@@ -85,13 +74,7 @@ export const useUpdateBookingStatus = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      bookingId,
-      status,
-    }: {
-      bookingId: string;
-      status: Booking["status"];
-    }) => {
+    mutationFn: async ({ bookingId, status }: { bookingId: string; status: Booking["status"] }) => {
       // This would be an API call in real implementation
       // For now, just return the updated booking
       const currentBooking = queryClient.getQueryData<Booking>([
@@ -135,10 +118,7 @@ export const useUpdateBookingStatus = () => {
     onError: (_err, { bookingId }, context) => {
       // Rollback on error
       if (context?.previousBooking) {
-        queryClient.setQueryData(
-          [QUERY_KEYS.BOOKING_DETAILS, bookingId],
-          context.previousBooking
-        );
+        queryClient.setQueryData([QUERY_KEYS.BOOKING_DETAILS, bookingId], context.previousBooking);
       }
     },
     onSettled: (_data, _error, { bookingId }) => {

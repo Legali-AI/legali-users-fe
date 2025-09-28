@@ -16,7 +16,7 @@ export const welcomeFormSchema = z.object({
     .any()
     .optional()
     .refine(
-      (file) => {
+      file => {
         if (!file) return true; // Optional field
         if (file instanceof File) {
           return file.size <= 5 * 1024 * 1024; // 5MB limit
@@ -28,7 +28,7 @@ export const welcomeFormSchema = z.object({
       }
     )
     .refine(
-      (file) => {
+      file => {
         if (!file) return true; // Optional field
         if (file instanceof File) {
           const allowedTypes = ["image/jpeg", "image/png", "image/webp"];

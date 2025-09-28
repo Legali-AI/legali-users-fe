@@ -21,29 +21,16 @@ interface GlobalLayoutProps {
  *   - "no-padding": No default padding (for custom layouts)
  * @param hasNavbar - Whether the page has a navbar (default: true)
  */
-export function GlobalLayout({
-  children,
-  className,
-  variant = "default",
-  hasNavbar = true,
-}: GlobalLayoutProps) {
+export function GlobalLayout({ children, className, variant = "default", hasNavbar = true }: GlobalLayoutProps) {
   const getVariantStyles = () => {
     const baseNavbarSpacing = hasNavbar ? "pt-24" : "pt-0"; // Account for fixed navbar height + top margin
 
     switch (variant) {
       case "full-height":
-        return cn(
-          "min-h-screen",
-          baseNavbarSpacing,
-          "px-4 pb-8 sm:px-6 lg:px-8"
-        );
+        return cn("min-h-screen", baseNavbarSpacing, "px-4 pb-8 sm:px-6 lg:px-8");
 
       case "center":
-        return cn(
-          "flex min-h-screen items-center justify-center",
-          baseNavbarSpacing,
-          "px-4 py-8 sm:px-6 lg:px-8"
-        );
+        return cn("flex min-h-screen items-center justify-center", baseNavbarSpacing, "px-4 py-8 sm:px-6 lg:px-8");
 
       case "no-padding":
         return cn(baseNavbarSpacing);
