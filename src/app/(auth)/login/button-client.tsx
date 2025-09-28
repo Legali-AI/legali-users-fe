@@ -16,7 +16,10 @@ export default function ButtonClient() {
     }
   };
   return (
-    <Button className="w-fit gap-3 rounded-md px-20 text-lg" onClick={onClick}>
+    <Button
+      className="w-full cursor-pointer gap-3 rounded-md px-8 py-2 text-base"
+      onClick={onClick}
+    >
       <Image
         src={"/google.svg"}
         width={16}
