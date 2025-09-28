@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { Bot, Scale, TrendingUp } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface PurposeOption {
   id: string;
@@ -62,12 +62,12 @@ export function PurposeSelectionForm() {
 
     // Find the selected option
     const selectedOption = purposeOptions.find(
-      option => option.id === selectedPurpose
+      (option) => option.id === selectedPurpose
     );
 
     if (selectedOption) {
       // Add a small delay for better UX
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await new Promise((resolve) => setTimeout(resolve, 300));
       router.push(selectedOption.route);
     }
 
@@ -101,7 +101,7 @@ export function PurposeSelectionForm() {
 
       {/* Purpose Options */}
       <div className="grid gap-6 lg:grid-cols-3">
-        {purposeOptions.map(option => (
+        {purposeOptions.map((option) => (
           <button
             key={option.id}
             type="button"

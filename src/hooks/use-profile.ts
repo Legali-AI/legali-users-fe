@@ -1,10 +1,10 @@
 "use client";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { HARDCODED_USERS } from "@/data/auth.data";
 import type { User } from "@/lib/auth";
 import { getAccessToken } from "@/lib/auth";
 import { getProfileApiAuthProfileGet } from "@/sdk/sdk.gen";
-import { HARDCODED_USERS } from "@/data/auth.data";
 
 // Query key for profile
 export const PROFILE_QUERY_KEY = ["profile"] as const;
@@ -17,8 +17,8 @@ async function fetchProfile(): Promise<User | null> {
   // Check if this is a mock token
   try {
     const payload = JSON.parse(atob(token));
-    const mockUser = HARDCODED_USERS.find(user => user.id === payload.userId);
-    
+    const mockUser = HARDCODED_USERS.find((user) => user.id === payload.userId);
+
     if (mockUser) {
       // Return mock user data directly
       return {

@@ -1,5 +1,15 @@
 "use client";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import type { LitigationCase } from "@/types/litigation";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -14,17 +24,8 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
-import type { LitigationCase } from "@/types/litigation";
 import { riskLevels } from "../mock-data";
 
 interface CaseDetailProps {
@@ -86,63 +87,76 @@ export default function CaseDetail({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-transparent">
       {/* Header */}
-      <div className="sticky top-16 z-40 border-b bg-white">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
+      <div className="sticky top-16 z-40 border-b bg-white/95 shadow-sm backdrop-blur-sm sm:top-0">
+        <div className="container mx-auto px-4 py-3 sm:py-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Button
               variant="ghost"
               onClick={onBack}
-              className="flex items-center gap-2"
+              className="flex h-8 items-center gap-2 px-2 sm:h-10 sm:px-3"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to Cases
+              <span className="hidden sm:inline">Back to Cases</span>
+              <span className="sm:hidden">Back</span>
             </Button>
-            <div className="flex-1">
-              <h1 className="truncate text-2xl font-bold text-gray-900">
+            <div className="min-w-0 flex-1">
+              <h1 className="truncate text-lg font-bold text-gray-900 sm:text-xl lg:text-2xl">
                 {caseData.title}
               </h1>
             </div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm">
-                <Share2 className="mr-2 h-4 w-4" />
-                Share
+            <div className="flex gap-1 sm:gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 px-2 sm:h-9 sm:px-3"
+              >
+                <Share2 className="h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Share</span>
               </Button>
-              <Button variant="outline" size="sm">
-                <Download className="mr-2 h-4 w-4" />
-                Download Info
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 px-2 sm:h-9 sm:px-3"
+              >
+                <Download className="h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Download Info</span>
               </Button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+      <div className="container mx-auto px-4 py-4 sm:py-6 lg:py-8">
+        <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-3 lg:gap-8">
           {/* Main Content */}
-          <div className="space-y-6 lg:col-span-2">
+          <div className="space-y-4 sm:space-y-6 lg:col-span-2">
             {/* Hero Image and Basic Info */}
-            <Card>
+            <Card className="bg-white/80 backdrop-blur-sm">
               <div className="relative">
-                <img
+                <Image
                   src={caseData.image}
                   alt={caseData.title}
-                  className="h-64 w-full rounded-t-lg object-cover"
+                  width={800}
+                  height={256}
+                  className="h-48 w-full rounded-t-lg object-cover sm:h-56 lg:h-64"
                 />
-                <div className="absolute top-4 right-4 flex gap-2">
-                  <Badge variant="outline" className="bg-white/90">
+                <div className="absolute top-3 right-3 flex gap-1.5 sm:top-4 sm:right-4 sm:gap-2">
+                  <Badge variant="outline" className="bg-white/90 text-xs">
                     {caseData.category}
                   </Badge>
-                  <Badge className={riskLevels[caseData.riskLevel].color}>
+                  <Badge
+                    className={`${riskLevels[caseData.riskLevel].color} text-xs`}
+                  >
                     {caseData.riskLevel} Risk
                   </Badge>
                 </div>
               </div>
 
-              <CardContent className="p-6">
-                <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
-                  <div className="rounded-lg bg-gray-50 p-4 text-center">
+              <CardContent className="p-4 sm:p-6">
+                <div className="mb-4 grid grid-cols-2 gap-3 sm:mb-6 sm:gap-4 md:grid-cols-4">
+                  <div className="rounded-lg bg-gray-50 p-3 text-center sm:p-4">
                     <TrendingUp className="mx-auto mb-2 h-6 w-6 text-green-600" />
                     <div className="font-semibold text-gray-900">
                       {caseData.expectedReturn}
@@ -497,7 +511,7 @@ export default function CaseDetail({
                         type="number"
                         placeholder={`Min. ${formatCurrency(caseData.minimumInvestment)}`}
                         value={investmentAmount}
-                        onChange={(e) => setInvestmentAmount(e.target.value)}
+                        onChange={e => setInvestmentAmount(e.target.value)}
                       />
                     </div>
                     <div>
@@ -511,7 +525,7 @@ export default function CaseDetail({
                         id="note"
                         placeholder="Any comments or questions..."
                         value={investorNote}
-                        onChange={(e) => setInvestorNote(e.target.value)}
+                        onChange={e => setInvestorNote(e.target.value)}
                       />
                     </div>
                     <div className="flex gap-2">

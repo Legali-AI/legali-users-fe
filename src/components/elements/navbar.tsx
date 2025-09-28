@@ -1,9 +1,5 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
 import { LogoutButton } from "@/components/module/auth/logout-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +11,10 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { useAuth } from "@/hooks/use-auth";
+import { Menu, X } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { cn } from "../../lib/utils";
 import { Typography } from "./typography";
 
@@ -207,7 +207,7 @@ export function Navbar() {
         viewport={false}
         className={cn(
           "fixed top-[20px] left-1/2 z-50 hidden w-[90vw] -translate-x-1/2 transform rounded-full px-4 py-2 transition-all duration-300 lg:block",
-          isScrolled && "shadow-lg backdrop-blur-md"
+          isScrolled && "bg-white/70 shadow-lg backdrop-blur-md"
         )}
       >
         <NavigationMenuList className="flex w-full items-center justify-between gap-4 px-6">
@@ -220,7 +220,7 @@ export function Navbar() {
 
           {/* Navigation Items */}
           <div className="flex items-center gap-6">
-            {NAV_ITEMS.map((item) => (
+            {NAV_ITEMS.map(item => (
               <NavigationMenuItem key={item.title} className="relative">
                 {item.subItems && item.subItems.length > 0 ? (
                   <>
@@ -235,7 +235,7 @@ export function Navbar() {
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
                       <ul className="grid w-[300px] gap-2">
-                        {item.subItems.map((subItem) => (
+                        {item.subItems.map(subItem => (
                           <ListItem
                             key={subItem.title}
                             href={subItem.href}
@@ -273,7 +273,7 @@ export function Navbar() {
       <nav
         className={cn(
           "fixed top-[20px] left-1/2 z-50 w-[95vw] -translate-x-1/2 transform rounded-2xl px-4 py-3 transition-all duration-300 lg:hidden",
-          isScrolled && "shadow-lg backdrop-blur-md bg-white/90"
+          isScrolled && "bg-white/70 shadow-lg backdrop-blur-md"
         )}
       >
         <div className="flex items-center justify-between">
@@ -298,10 +298,10 @@ export function Navbar() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="absolute top-full right-0 left-0 mt-2 rounded-2xl border border-white/20 bg-white/90 shadow-lg backdrop-blur-md">
+          <div className="absolute top-full right-0 left-0 mt-2 rounded-2xl border border-white/20 bg-white/70 shadow-lg backdrop-blur-md">
             <div className="space-y-2 px-4 py-4">
               {/* Navigation Items */}
-              {NAV_ITEMS.map((item) => (
+              {NAV_ITEMS.map(item => (
                 <div key={item.title}>
                   {item.subItems && item.subItems.length > 0 ? (
                     <div className="space-y-1">
@@ -312,7 +312,7 @@ export function Navbar() {
                       >
                         {item.title}
                       </Typography>
-                      {item.subItems.map((subItem) => (
+                      {item.subItems.map(subItem => (
                         <Link
                           key={subItem.title}
                           href={subItem.href}

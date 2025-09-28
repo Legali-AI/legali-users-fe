@@ -1,5 +1,9 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Edit } from "lucide-react";
+import { useEffect, useId, useState } from "react";
+import { useForm } from "react-hook-form";
 import { ProfileUpload } from "@/components/elements/profile-upload";
 import { Typography } from "@/components/elements/typography";
 import { GlobalLayout } from "@/components/layout/global-layout";
@@ -34,10 +38,6 @@ import {
   subscriptionTypeOptions,
 } from "@/schema/profile";
 import { updateProfileApiAuthProfilePut } from "@/sdk/sdk.gen";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Edit } from "lucide-react";
-import { useEffect, useId, useState } from "react";
-import { useForm } from "react-hook-form";
 import { getAccessToken } from "../../../lib/auth";
 
 export default function ProfilePage() {
@@ -345,7 +345,7 @@ export default function ProfilePage() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {subscriptionTypeOptions.map(option => (
+                            {subscriptionTypeOptions.map((option) => (
                               <SelectItem
                                 key={option.value}
                                 value={option.value}
@@ -388,7 +388,7 @@ export default function ProfilePage() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {regionOptions.map(option => (
+                            {regionOptions.map((option) => (
                               <SelectItem
                                 key={option.value}
                                 value={option.value}
