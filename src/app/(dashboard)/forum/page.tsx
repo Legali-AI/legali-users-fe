@@ -56,43 +56,59 @@ export default function ForumPage() {
   ];
 
   return (
-    <main className="flex w-full flex-1 flex-col gap-5 ">
-      {/* Tab Navigation */}
-      <div className="flex w-full flex-col justify-between gap-4">
+    <div className="flex h-full flex-col">
+      {/* Fixed Header Section */}
+      <div className="flex-shrink-0">
         <Tabs
           value={activeTab}
           onValueChange={handleTabChange}
-          className="w-full flex-1"
+          className="w-full"
         >
-          <TabsList className="h-[43px] w-full bg-slate-gray-100 p-1.5">
-            <TabsTrigger value="your-issues">
-              <H5 level="body" weight="semibold" className="text-sky-blue-600">
-                Your Issue
-              </H5>
-            </TabsTrigger>
-            <TabsTrigger value="explore-issues">
-              <H5
-                level="body"
-                weight="semibold"
-                className="text-slate-gray-300"
-              >
-                Explore Issue
-              </H5>
-            </TabsTrigger>
-          </TabsList>
-          {/* Create Issue Button */}
-          <Link href="/forum/create">
-            <Button className="my-2 flex w-fit items-center rounded-md">
-              <Plus size={12} />
-              Create Issue
-            </Button>
-          </Link>
+          <div className="flex flex-col gap-3 sm:gap-4">
+            <TabsList className="h-[43px] w-full bg-slate-gray-100 p-1.5 sm:w-auto sm:min-w-[300px]">
+              <TabsTrigger value="your-issues">
+                <H5
+                  level="body"
+                  weight="semibold"
+                  className="text-sky-blue-600"
+                >
+                  Your Issue
+                </H5>
+              </TabsTrigger>
+              <TabsTrigger value="explore-issues">
+                <H5
+                  level="body"
+                  weight="semibold"
+                  className="text-slate-gray-300"
+                >
+                  Explore Issue
+                </H5>
+              </TabsTrigger>
+            </TabsList>
+            {/* Create Issue Button */}
+            <Link href="/forum/create">
+              <Button className="flex w-full items-center justify-center rounded-md sm:w-fit">
+                <Plus size={12} />
+                Create Issue
+              </Button>
+            </Link>
+          </div>
+        </Tabs>
+      </div>
+
+      {/* Scrollable Content Area */}
+      <div className="mt-4 flex-1 overflow-y-auto">
+        <Tabs
+          value={activeTab}
+          onValueChange={handleTabChange}
+          className="w-full"
+        >
           {contentMaps.length > 0 &&
             contentMaps.map((map) => (
               <TabsContent
                 key={map.value}
                 value={map.value}
-                className="mt-0 flex flex-col gap-4"
+                className="mt-0 flex flex-col gap-3 p-0 lg:gap-4"
               >
                 {map.content.length > 0 ? (
                   map.content.map((issue) => (
@@ -126,6 +142,6 @@ export default function ForumPage() {
         confirmText="Confirm"
         cancelText="Cancel"
       />
-    </main>
+    </div>
   );
 }

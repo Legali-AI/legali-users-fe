@@ -109,14 +109,18 @@ export function IssueCard({
     <Link href={`/forum/${id}`} className="block">
       <div
         className={cn(
-          "hover:bg-sky-blue-50 flex cursor-pointer flex-col gap-2 rounded-[10px] border border-white-400 bg-white p-5 transition-colors",
+          "hover:bg-sky-blue-50 flex cursor-pointer flex-col gap-2 rounded-[10px] border border-white-400 bg-white p-4 transition-colors lg:p-5",
           className
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <H5 level="title" weight="semibold" className="text-deep-navy">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+            <H5
+              level="title"
+              weight="semibold"
+              className="break-words text-deep-navy"
+            >
               {title}
             </H5>
             <Small level="label" className="text-deep-navy-300">
@@ -133,6 +137,7 @@ export function IssueCard({
                 e.stopPropagation();
                 onDelete?.(id);
               }}
+              className="self-start sm:self-auto"
             >
               <P level="body" className="text-brand-rose">
                 Delete
@@ -142,7 +147,9 @@ export function IssueCard({
         </div>
 
         {/* Description */}
-        <P level="body">{description}</P>
+        <P level="body" className="break-words">
+          {description}
+        </P>
 
         {/* Attachments */}
         {attachments.length > 0 && (
@@ -154,7 +161,7 @@ export function IssueCard({
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-1">
             <MessageCircle size={16} className="text-slate-gray-300" />
             <Small level="label" className="text-slate-gray-400">

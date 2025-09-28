@@ -27,23 +27,28 @@ export function CommentCard({
   className = "",
 }: CommentCardProps) {
   return (
-    <div className={`flex gap-4 border-b border-white-400 p-5 ${className}`}>
+    <div
+      className={`flex gap-3 border-b border-white-400 p-4 lg:gap-4 lg:p-5 ${className}`}
+    >
       {/* Avatar */}
-      <Avatar className="h-12 w-12">
+      <Avatar className="h-10 w-10 lg:h-12 lg:w-12">
         <AvatarImage src={authorAvatar} alt={author} />
         <AvatarFallback className="bg-slate-gray-300">
-          <User size={22} className="text-light-gray-100" />
+          <User
+            size={18}
+            className="text-light-gray-100 lg:h-[22px] lg:w-[22px]"
+          />
         </AvatarFallback>
       </Avatar>
 
       {/* Comment Content */}
-      <div className="flex flex-1 flex-col gap-4">
+      <div className="flex flex-1 flex-col gap-3 lg:gap-4">
         {/* Comment Header */}
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-1 lg:gap-1.5">
           <H5 level="body" weight="semibold" className="text-deep-navy">
             {author}
           </H5>
-          <P level="label" className="text-deep-navy">
+          <P level="label" className="break-words text-deep-navy">
             {message}
           </P>
         </div>

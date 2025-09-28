@@ -50,7 +50,7 @@ export default function CreateForumPage() {
   };
 
   return (
-    <main className="flex w-full flex-1 flex-col gap-5">
+    <main className="flex w-full flex-1 flex-col gap-4 lg:gap-5">
       {/* Header */}
       <H5 weight="semibold" level="h5">
         Create your issue
@@ -59,7 +59,7 @@ export default function CreateForumPage() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full space-y-5"
+          className="w-full space-y-4 lg:space-y-5"
         >
           {/* Issue Field */}
           <FormField
@@ -93,7 +93,7 @@ export default function CreateForumPage() {
                 </FormLabel>
                 <FormControl>
                   <Textarea
-                    className="min-h-[236px]"
+                    className="min-h-[180px] lg:min-h-[236px]"
                     placeholder="Write your description..."
                     {...field}
                   />

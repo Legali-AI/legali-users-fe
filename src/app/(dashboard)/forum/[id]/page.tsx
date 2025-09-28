@@ -54,15 +54,24 @@ export default function ForumDetailPage({
 
   return (
     <div className="flex h-full flex-col bg-gradient-to-b from-white to-sky-blue-100">
-      <main className="flex w-full flex-1 flex-col gap-5 overflow-hidden ">
+      <main className="flex w-full flex-1 flex-col gap-4 overflow-hidden lg:gap-5">
         {/* Main Issue Card */}
         {/* Header */}
-        <div className="flex w-full items-center justify-between">
-          <H3 level="h5" weight="semibold" className="text-deep-navy">
+        <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <H3
+            level="h5"
+            weight="semibold"
+            className="break-words text-deep-navy"
+          >
             {issue.title}
           </H3>
           {issue.category === "your-issues" && (
-            <Button variant="ghost" size="sm" onClick={handleDeleteIssue}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleDeleteIssue}
+              className="self-start sm:self-auto"
+            >
               <P level="body" className="text-brand-rose">
                 Delete
               </P>
@@ -71,7 +80,7 @@ export default function ForumDetailPage({
         </div>
 
         {/* Description */}
-        <P level="body" className="text-deep-navy">
+        <P level="body" className="break-words text-deep-navy">
           {issue.description}
         </P>
 
@@ -102,7 +111,7 @@ export default function ForumDetailPage({
         </P>
 
         {/* Footer */}
-        <div className="flex w-full items-center justify-between">
+        <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-1">
             <MessageCircle size={16} className="text-slate-gray-300" />
             <Small level="label" className="text-slate-gray-400">
@@ -124,7 +133,7 @@ export default function ForumDetailPage({
         </div>
 
         {/* Comments Section */}
-        <div className="flex w-full flex-1 flex-col gap-4 overflow-hidden">
+        <div className="flex w-full flex-1 flex-col gap-3 overflow-hidden lg:gap-4">
           <H3 level="h5" weight="medium" className="text-deep-navy">
             Comments
           </H3>
@@ -153,7 +162,7 @@ export default function ForumDetailPage({
       </main>
 
       {/* Comment Input*/}
-      <div className="sticky bottom-0 mx-auto flex w-[90%] items-center gap-2.5 rounded-[10px] border border-t border-white-500 bg-white p-5">
+      <div className="sticky bottom-0 mx-auto flex w-[95%] items-center gap-2.5 rounded-[10px] border border-t border-white-500 bg-white p-3 sm:w-[90%] sm:p-5">
         <Textarea
           placeholder="Write your response here..."
           className="flex-1 border-none shadow-none placeholder:text-slate-gray-300 focus-visible:ring-0"
