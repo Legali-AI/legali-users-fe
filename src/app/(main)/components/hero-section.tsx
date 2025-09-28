@@ -39,34 +39,50 @@ export default function HeroSection() {
       {/* Hero content */}
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-5">
         {/* Main headline */}
-        <H1 weight={"semibold"} align={"center"}>
-          Meet your first AI-law firm
-        </H1>
+        <div data-aos="zoom-in-down" data-aos-duration="600">
+          <H1 weight={"semibold"} align={"center"}>
+            Meet your first AI-law firm
+          </H1>
+        </div>
 
         {/* Subtitle */}
-        <H2 level={"title"} className="text-brand-slate" align={"center"}>
-          Legali lets you build cases, manage evidence, and fund litigation—all
-          on one secure AI platform.
-        </H2>
+        <div data-aos="slide-up" data-aos-duration="600" data-aos-delay="100">
+          <H2 level={"title"} className="text-brand-slate" align={"center"}>
+            Legali lets you build cases, manage evidence, and fund
+            litigation—all on one secure AI platform.
+          </H2>
+        </div>
 
         {/* Search input */}
-        <div className="mt-4 w-full">
+        <div
+          className="mt-4 w-full"
+          data-aos="zoom-in"
+          data-aos-duration="600"
+          data-aos-delay="200"
+        >
           <RichInput />
         </div>
 
         {/* Feature badges */}
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-          {NAVIGATION_FEATURES.map((feature) => (
-            <Badge
+        <div
+          className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:gap-4"
+          data-aos="fade-up"
+          data-aos-duration="600"
+          data-aos-delay="300"
+        >
+          {NAVIGATION_FEATURES.map((feature, index) => (
+            <div
               key={feature.label}
-              level={"body"}
-              variant={"gradient-blue"}
-              size={"lg"}
+              data-aos="flip-up"
+              data-aos-duration="600"
+              data-aos-delay={400 + index * 50}
             >
-              <feature.icon size={30} aria-hidden="true" />
-              <span className="sr-only">Feature: </span>
-              {feature.label}
-            </Badge>
+              <Badge level={"body"} variant={"gradient-blue"} size={"lg"}>
+                <feature.icon size={30} aria-hidden="true" />
+                <span className="sr-only">Feature: </span>
+                {feature.label}
+              </Badge>
+            </div>
           ))}
         </div>
       </div>

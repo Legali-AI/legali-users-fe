@@ -30,14 +30,16 @@ export default function FAQSection() {
       </div>
 
       {/* Main text */}
-      <H3
-        level={"h2"}
-        className="mx-auto mb-10 max-w-5xl"
-        weight={"semibold"}
-        align={"center"}
-      >
-        Frequently Asked Questions
-      </H3>
+      <div data-aos="zoom-in-down" data-aos-duration="600">
+        <H3
+          level={"h2"}
+          className="mx-auto mb-10 max-w-5xl"
+          weight={"semibold"}
+          align={"center"}
+        >
+          Frequently Asked Questions
+        </H3>
+      </div>
 
       {/* Background */}
       <div aria-hidden="true">
@@ -62,9 +64,18 @@ export default function FAQSection() {
         className="flex w-full flex-col gap-3 "
         defaultValue={FAQ_ITEMS[0].question}
         aria-label="Frequently asked questions"
+        data-aos="slide-up"
+        data-aos-duration="600"
+        data-aos-delay="100"
       >
         {FAQ_ITEMS.map((faq, index) => (
-          <AccordionItem key={faq.question} value={faq.question}>
+          <AccordionItem
+            key={faq.question}
+            value={faq.question}
+            data-aos="flip-left"
+            data-aos-duration="600"
+            data-aos-delay={200 + index * 50}
+          >
             <AccordionTrigger aria-describedby={`faq-answer-${index}`}>
               <Span level={"h4"} weight={"semibold"} className="text-black">
                 {faq.question}

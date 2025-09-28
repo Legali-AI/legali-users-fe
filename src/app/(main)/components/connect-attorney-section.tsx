@@ -9,9 +9,16 @@ export default function ConnectAttorneySection() {
     <section
       className="flex flex-col-reverse items-center justify-center gap-6 overflow-hidden rounded-md bg-white p-4 shadow-sm md:p-6 lg:p-10 xl:flex-row xl:gap-10"
       aria-labelledby="connect-heading"
+      data-aos="zoom-in"
+      data-aos-duration="600"
     >
       {/* Content */}
-      <div className="flex max-w-3xl flex-col gap-4">
+      <div
+        className="flex max-w-3xl flex-col gap-4"
+        data-aos="slide-right"
+        data-aos-duration="600"
+        data-aos-delay="100"
+      >
         <H4 weight={"semibold"}>Connect with Attorneys</H4>
         <P level={"title"} className="text-brand-slate">
           Finding the right lawyer shouldn't be complicated. Our platform
@@ -30,14 +37,21 @@ export default function ConnectAttorneySection() {
       </div>
 
       {/* Attorney cards */}
-      <div className="flex gap-4">
+      <div
+        className="flex gap-4"
+        data-aos="slide-left"
+        data-aos-duration="600"
+        data-aos-delay="200"
+      >
         {ATTORNEYS.slice(0, 3).map((attorney, index) => (
-          <CardAttorney
-            collapse
+          <div
             key={attorney.name}
-            attorney={attorney}
-            index={index}
-          />
+            data-aos="fade-up"
+            data-aos-duration="600"
+            data-aos-delay={300 + index * 100}
+          >
+            <CardAttorney collapse attorney={attorney} index={index} />
+          </div>
         ))}
       </div>
     </section>

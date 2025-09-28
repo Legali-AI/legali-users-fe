@@ -48,17 +48,31 @@ export default function AttorneyPage() {
       />
 
       {/* Page header */}
-      <H1 weight={"semibold"} align={"center"}>
-        Connect with Attorneys
-      </H1>
-      <H2 level={"title"} className="text-brand-slate" align={"center"}>
-        Get instantly matched with trusted lawyers who understand your needs.
-      </H2>
+      <div data-aos="zoom-in-down" data-aos-duration="600">
+        <H1 weight={"semibold"} align={"center"}>
+          Connect with Attorneys
+        </H1>
+        <H2 level={"title"} className="text-brand-slate" align={"center"}>
+          Get instantly matched with trusted lawyers who understand your needs.
+        </H2>
+      </div>
 
       {/* Attorney cards grid */}
-      <div className="mt-6 grid max-w-7xl grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-6 md:mt-8 md:gap-8 lg:grid-cols-3 xl:mt-10 xl:gap-10">
+      <div
+        className="mt-6 grid max-w-7xl grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-6 md:mt-8 md:gap-8 lg:grid-cols-3 xl:mt-10 xl:gap-10"
+        data-aos="fade-up"
+        data-aos-duration="600"
+        data-aos-delay="100"
+      >
         {ATTORNEYS.map((attorney, index) => (
-          <CardAttorney key={attorney.name} attorney={attorney} index={index} />
+          <div
+            key={attorney.name}
+            data-aos="flip-left"
+            data-aos-duration="600"
+            data-aos-delay={200 + index * 100}
+          >
+            <CardAttorney attorney={attorney} index={index} />
+          </div>
         ))}
       </div>
     </main>

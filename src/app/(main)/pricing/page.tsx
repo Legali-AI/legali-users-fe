@@ -48,12 +48,26 @@ export default function PricingPage() {
       />
 
       {/* Page header */}
-      <H1 weight={"semibold"}>Pricing</H1>
+      <div data-aos="zoom-in" data-aos-duration="600">
+        <H1 weight={"semibold"}>Pricing</H1>
+      </div>
 
-      {/* Attorney cards grid */}
-      <div className="mt-6 grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:mt-8 md:gap-8 xl:mt-10 xl:gap-10">
-        {PRICING_DATA.map((pricing) => (
-          <PricingCard key={pricing.name} {...pricing} />
+      {/* Pricing cards grid */}
+      <div
+        className="mt-6 grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:mt-8 md:gap-8 xl:mt-10 xl:gap-10"
+        data-aos="slide-up"
+        data-aos-duration="600"
+        data-aos-delay="100"
+      >
+        {PRICING_DATA.map((pricing, index) => (
+          <div
+            key={pricing.name}
+            data-aos="zoom-in-up"
+            data-aos-duration="600"
+            data-aos-delay={200 + index * 100}
+          >
+            <PricingCard {...pricing} />
+          </div>
         ))}
       </div>
     </main>

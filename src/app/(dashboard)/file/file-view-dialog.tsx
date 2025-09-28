@@ -27,11 +27,14 @@ export function FileViewDialog({
 }: FileViewDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent showCloseButton={true}>
-        <DialogHeader className="space-y-5">
+      <DialogContent
+        showCloseButton={true}
+        className="max-w-[90vw] sm:max-w-[600px] lg:max-w-[700px]"
+      >
+        <DialogHeader className="space-y-3 lg:space-y-5">
           {/* File Name */}
           <DialogTitle>
-            <Span level="h5" weight="semibold">
+            <Span level="h5" weight="semibold" className="break-words">
               {fileName}
             </Span>
           </DialogTitle>
@@ -40,7 +43,7 @@ export function FileViewDialog({
           <Button
             variant="outline"
             onClick={onViewPDF}
-            className="h-[39px] w-[113px] rounded-[100px] border border-white-400 bg-white px-5"
+            className="h-[39px] w-full rounded-[100px] border border-white-400 bg-white px-5 sm:w-[113px]"
           >
             <P level="body" className="text-slate-gray">
               View PDF
@@ -49,18 +52,22 @@ export function FileViewDialog({
         </DialogHeader>
 
         {/* AI Summary Section */}
-        <div className="space-y-[10px]">
+        <div className="space-y-2 lg:space-y-[10px]">
           {/* AI Summary Header */}
-          <div className="flex items-center gap-[10px]">
-            <Sparkles size={20} className="text-deep-navy" />
+          <div className="flex items-center gap-2 lg:gap-[10px]">
+            <Sparkles size={18} className="text-deep-navy lg:h-5 lg:w-5" />
             <P level="body" weight="semibold">
               AI Summary
             </P>
           </div>
 
           {/* AI Summary Content */}
-          <div className="rounded-[10px] border border-white-400 bg-white p-6">
-            <P level="body" weight="semibold" className="text-slate-gray">
+          <div className="rounded-[10px] border border-white-400 bg-white p-4 lg:p-6">
+            <P
+              level="body"
+              weight="semibold"
+              className="text-slate-gray break-words"
+            >
               {aiSummary}
             </P>
           </div>

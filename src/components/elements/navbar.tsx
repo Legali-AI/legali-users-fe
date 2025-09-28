@@ -108,7 +108,7 @@ export function Navbar() {
               alt="Logo"
               width={60}
               height={40}
-              className="h-8 w-auto sm:h-9 md:h-10"
+              className="h-7 w-auto"
               priority
             />
           </NavigationMenuLink>
