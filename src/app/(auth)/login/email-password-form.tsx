@@ -68,11 +68,11 @@ export default function EmailPasswordForm() {
         </form>
       </Form>
 
-      <div className="space-y-2 text-xs text-muted-foreground">
+      {/* <div className="space-y-2 text-xs text-muted-foreground">
         <p className="font-medium">Test accounts:</p>
         <p>Lawyer: lawyers@legali.io / lawyer321</p>
         <p>User: user@legali.io / user321</p>
-      </div>
+      </div> */}
     </div>
   );
 }

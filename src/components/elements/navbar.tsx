@@ -37,7 +37,7 @@ const AuthSection = () => {
 
   if (isAuthenticated && user) {
     return (
-      <NavigationMenuItem className="flex items-center gap-3">
+      <div className="flex items-center gap-3">
         {/* User Info */}
         <Link href="/profile" className="flex items-center gap-2 transition-opacity hover:opacity-80">
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sky-blue-100">
@@ -54,12 +54,12 @@ const AuthSection = () => {
         <LogoutButton variant="ghost" className="p-2 text-gray-600 hover:text-gray-900">
           <Typography level="caption">Logout</Typography>
         </LogoutButton>
-      </NavigationMenuItem>
+      </div>
     );
   }
 
   return (
-    <NavigationMenuItem>
+    <div>
       <Button className="rounded-xl bg-deep-navy-400 hover:bg-deep-navy-500">
         <Link href="/login">
           <Typography weight="medium" level="body" className="text-white">
@@ -67,7 +67,7 @@ const AuthSection = () => {
           </Typography>
         </Link>
       </Button>
-    </NavigationMenuItem>
+    </div>
   );
 };
 
@@ -186,60 +186,66 @@ export function Navbar() {
   return (
     <>
       {/* Desktop Navbar */}
-      <NavigationMenu
-        viewport={false}
+      <nav
         className={cn(
-          "fixed top-[20px] left-1/2 z-50 hidden w-[90vw] -translate-x-1/2 transform rounded-full px-4 py-2 transition-all duration-300 lg:block",
+          "fixed top-0 right-0 left-0 z-50 hidden w-full py-4 transition-all duration-300 lg:block",
           isScrolled && "bg-white/70 shadow-lg backdrop-blur-md"
         )}>
-        <NavigationMenuList className="flex w-full items-center justify-between gap-4 px-6">
+        <div className="flex w-full items-center justify-between gap-4 rounded-full px-4 sm:px-8 lg:px-12">
           {/* Logo */}
-          <NavigationMenuItem>
-            <NavigationMenuLink href="/">
+          <div>
+            <Link href="/">
               <Image src={"/logo.png"} alt="Logo" width={60} height={40} />
-            </NavigationMenuLink>
-          </NavigationMenuItem>
+            </Link>
+          </div>
 
           {/* Navigation Items */}
           <div className="flex items-center gap-6">
             {NAV_ITEMS.map(item => (
-              <NavigationMenuItem key={item.title} className="relative">
+              <div key={item.title} className="relative">
                 {item.subItems && item.subItems.length > 0 ? (
-                  <>
-                    <NavigationMenuTrigger className="peer bg-transparent hover:bg-transparent">
-                      <Typography weight="medium" level="body" className="text-slate-gray-400 peer-hover:text-black">
-                        {item.title}
-                      </Typography>
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <ul className="grid w-[300px] gap-2">
-                        {item.subItems.map(subItem => (
-                          <ListItem key={subItem.title} href={subItem.href} title={subItem.title} />
-                        ))}
-                      </ul>
-                    </NavigationMenuContent>
-                  </>
+                  <NavigationMenu>
+                    <NavigationMenuList>
+                      <NavigationMenuItem>
+                        <NavigationMenuTrigger className="peer bg-transparent hover:bg-transparent">
+                          <Typography
+                            weight="medium"
+                            level="body"
+                            className="text-slate-gray-400 peer-hover:text-black">
+                            {item.title}
+                          </Typography>
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                          <ul className="grid w-[300px] gap-2">
+                            {item.subItems.map(subItem => (
+                              <ListItem key={subItem.title} href={subItem.href} title={subItem.title} />
+                            ))}
+                          </ul>
+                        </NavigationMenuContent>
+                      </NavigationMenuItem>
+                    </NavigationMenuList>
+                  </NavigationMenu>
                 ) : (
-                  <NavigationMenuLink href={item.href} className="peer hover:bg-transparent">
+                  <Link href={item.href} className="peer hover:bg-transparent">
                     <Typography weight="medium" level="body" className="text-slate-gray-400">
                       {item.title}
                     </Typography>
-                  </NavigationMenuLink>
+                  </Link>
                 )}
                 <span className="pointer-events-none absolute top-[31px] left-1/2 h-[6px] w-[6px] -translate-x-1/2 rounded-full bg-deep-navy-400 opacity-0 transition-all duration-200 ease-out peer-hover:opacity-100 peer-focus-visible:opacity-100" />
-              </NavigationMenuItem>
+              </div>
             ))}
           </div>
 
           {/* Auth Section */}
           <AuthSection />
-        </NavigationMenuList>
-      </NavigationMenu>
+        </div>
+      </nav>
 
       {/* Mobile Navbar */}
       <nav
         className={cn(
-          "fixed top-[20px] left-1/2 z-50 w-[95vw] -translate-x-1/2 transform rounded-2xl px-4 py-3 transition-all duration-300 lg:hidden",
+          "fixed top-[20px] left-1/2 z-50 w-[95vw] w-full -translate-x-1/2 transform rounded-2xl px-4 py-3 transition-all duration-300 lg:hidden",
           isScrolled && "bg-white/70 shadow-lg backdrop-blur-md"
         )}>
         <div className="flex items-center justify-between">
