@@ -177,71 +177,74 @@ export default function FilePage() {
       </div>
 
       {/* Files Table */}
-      <div className="flex w-full flex-1 flex-col overflow-hidden bg-gradient-to-b from-white to-sky-blue-100">
-        <div className="overflow-x-auto overflow-y-hidden rounded-[20px]">
-          <Table className="min-w-full">
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id} className="border-white-400">
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead
-                        key={header.id}
-                        className="h-[56px] border-white-400  bg-white px-3 text-center whitespace-nowrap md:h-[60px] lg:px-5 xl:h-[64px]"
-                      >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row, index) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    className={cn(
-                      "h-[60px] border-white-400 md:h-[64px] xl:h-[67px]",
-                      index % 2 === 0 ? "bg-white" : "bg-sky-blue-100"
-                    )}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className="px-3 text-center whitespace-nowrap lg:px-5"
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
+      {/* Files Table */}
+      <div className="flex w-full min-w-0 flex-1 flex-col overflow-hidden bg-gradient-to-b from-white to-sky-blue-100">
+        <div className="min-w-0 flex-1 overflow-hidden">
+          <div className="h-full overflow-x-auto overflow-y-auto rounded-[20px]">
+            <Table className="min-w-full">
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id} className="border-white-400">
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead
+                          key={header.id}
+                          className="h-[56px] border-white-400 bg-white px-3 text-center whitespace-nowrap md:h-[60px] lg:px-5 xl:h-[64px]"
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      );
+                    })}
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No files found.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row, index) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                      className={cn(
+                        "h-[60px] border-white-400 md:h-[64px] xl:h-[67px]",
+                        index % 2 === 0 ? "bg-white" : "bg-sky-blue-100"
+                      )}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          key={cell.id}
+                          className="px-3 text-center whitespace-nowrap lg:px-5"
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No files found.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </div>
 
         {/* Pagination - Only show if there's content */}
         {table.getRowModel().rows?.length > 0 && table.getPageCount() > 1 && (
-          <div className="flex items-center justify-center p-4">
+          <div className="flex flex-shrink-0 items-center justify-center p-4">
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
