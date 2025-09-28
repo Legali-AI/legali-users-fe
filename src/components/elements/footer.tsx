@@ -87,34 +87,19 @@ const backgroundMap = {
 
 export default function Footer() {
   const pathname = usePathname();
-  const background =
-    backgroundMap[pathname as keyof typeof backgroundMap] || "bg-sky-blue-200";
+  const background = backgroundMap[pathname as keyof typeof backgroundMap] || "bg-sky-blue-200";
   return (
-    <footer
-      className={cn(
-        "relative w-full overflow-hidden p-4 sm:p-6 lg:p-10",
-        background
-      )}
-    >
+    <footer className={cn("relative w-full overflow-hidden p-4 sm:p-6 lg:p-10", background)}>
       <div className="flex flex-col items-center justify-center gap-8 lg:flex-row lg:items-start lg:gap-32">
         {/* Logo */}
         <div className="flex-none">
-          <Image
-            src="/logo.png"
-            alt="Legali Logo"
-            width={60}
-            height={25}
-            className="h-[25px] w-[60px]"
-          />
+          <Image src="/logo.png" alt="Legali Logo" width={60} height={25} className="h-[25px] w-[60px]" />
         </div>
 
         {/* Footer Sections */}
         <div className="grid grid-cols-2 justify-center gap-8 lg:grid-cols-5">
-          {FOOTER_SECTIONS.map((section) => (
-            <div
-              key={section.title}
-              className="flex flex-col items-start gap-2.5"
-            >
+          {FOOTER_SECTIONS.map(section => (
+            <div key={section.title} className="flex flex-col items-start gap-2.5">
               {/* Section Title */}
               <H4 level="label" weight="semibold">
                 {section.title}
@@ -122,12 +107,9 @@ export default function Footer() {
 
               {/* Section Links */}
               <div className="flex flex-col items-start gap-2.5">
-                {section.links.map((link) => (
+                {section.links.map(link => (
                   <Link key={link.label} href={link.href} className="w-full">
-                    <P
-                      level="label"
-                      className="text-slate-gray-400 transition-colors hover:text-deep-navy-400"
-                    >
+                    <P level="label" className="text-slate-gray-400 transition-colors hover:text-deep-navy-400">
                       {link.label}
                     </P>
                   </Link>

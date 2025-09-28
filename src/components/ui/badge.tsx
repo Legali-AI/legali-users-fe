@@ -10,19 +10,15 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          "border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90",
-        secondary:
-          "border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
+        default: "border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90",
+        secondary: "border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
         destructive:
           "border-transparent bg-destructive text-white focus-visible:ring-destructive/20 [a&]:hover:bg-destructive/90",
         outline:
           "rounded-full text-sky-blue-900 ring-1 ring-sky-blue-900 [a&]:hover:bg-sky-blue-900 [a&]:hover:text-sky-blue-900 ",
         ghost: "rounded-full border-none text-brand-slate ring-0",
-        "gradient-blue":
-          "rounded-full bg-gradient-to-b from-white to-[#A4D1E8] text-black",
-        emerald:
-          "rounded-full border-transparent bg-emerald-green-300 text-emerald-green-700",
+        "gradient-blue": "rounded-full bg-gradient-to-b from-white to-[#A4D1E8] text-black",
+        emerald: "rounded-full border-transparent bg-emerald-green-300 text-emerald-green-700",
         gray: "rounded-full border-transparent bg-slate-gray-100 text-brand-slate",
       },
       size: {
@@ -59,10 +55,7 @@ function Badge({
   return (
     <Comp
       data-slot="badge"
-      className={cn(
-        badgeVariants({ variant, level, weight, align, size }),
-        className
-      )}
+      className={cn(badgeVariants({ variant, level, weight, align, size }), className)}
       {...props}
     />
   );

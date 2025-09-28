@@ -9,15 +9,8 @@ import {
   setRefreshToken,
   type User,
 } from "@/lib/auth";
-import {
-  logoutApiAuthLogoutPost,
-  refreshTokenApiAuthRefreshPost,
-} from "@/sdk/sdk.gen";
-import {
-  useClearProfile,
-  useProfile,
-  useUpdateProfileCache,
-} from "./use-profile";
+import { logoutApiAuthLogoutPost, refreshTokenApiAuthRefreshPost } from "@/sdk/sdk.gen";
+import { useClearProfile, useProfile, useUpdateProfileCache } from "./use-profile";
 
 export function useAuth() {
   const authenticated = isAuthenticated();
@@ -53,11 +46,7 @@ export function useAuth() {
   }, [clearProfile]);
 
   const login = useCallback(
-    (authData: {
-      access_token: string;
-      refresh_token?: string;
-      user: User;
-    }) => {
+    (authData: { access_token: string; refresh_token?: string; user: User }) => {
       setAccessToken(authData.access_token);
       if (authData.refresh_token) {
         setRefreshToken(authData.refresh_token);

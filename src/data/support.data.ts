@@ -245,21 +245,19 @@ export const SUPPORT_TEAM = [
 
 // Helper functions
 export const getTicketById = (id: string): SupportTicket | undefined => {
-  return SUPPORT_TICKETS.find((ticket) => ticket.id === id);
+  return SUPPORT_TICKETS.find(ticket => ticket.id === id);
 };
 
 export const getTicketsByStatus = (status: string): SupportTicket[] => {
   if (status === "all") return SUPPORT_TICKETS;
-  return SUPPORT_TICKETS.filter((ticket) => ticket.status === status);
+  return SUPPORT_TICKETS.filter(ticket => ticket.status === status);
 };
 
 export const getTicketsByUrgency = (urgency: string): SupportTicket[] => {
-  return SUPPORT_TICKETS.filter((ticket) => ticket.urgency === urgency);
+  return SUPPORT_TICKETS.filter(ticket => ticket.urgency === urgency);
 };
 
-export const sortTicketsByPriority = (
-  tickets: SupportTicket[]
-): SupportTicket[] => {
+export const sortTicketsByPriority = (tickets: SupportTicket[]): SupportTicket[] => {
   return [...tickets].sort((a, b) => a.priority - b.priority);
 };
 
@@ -277,21 +275,15 @@ export const sortTicketsByDate = (
 // Statistics
 export const getSupportStats = () => {
   const total = SUPPORT_TICKETS.length;
-  const pending = SUPPORT_TICKETS.filter((t) => t.status === "pending").length;
-  const inProgress = SUPPORT_TICKETS.filter(
-    (t) => t.status === "in-progress"
-  ).length;
-  const completed = SUPPORT_TICKETS.filter(
-    (t) => t.status === "completed"
-  ).length;
-  const closed = SUPPORT_TICKETS.filter((t) => t.status === "closed").length;
+  const pending = SUPPORT_TICKETS.filter(t => t.status === "pending").length;
+  const inProgress = SUPPORT_TICKETS.filter(t => t.status === "in-progress").length;
+  const completed = SUPPORT_TICKETS.filter(t => t.status === "completed").length;
+  const closed = SUPPORT_TICKETS.filter(t => t.status === "closed").length;
 
-  const critical = SUPPORT_TICKETS.filter(
-    (t) => t.urgency === "critical"
-  ).length;
-  const high = SUPPORT_TICKETS.filter((t) => t.urgency === "high").length;
-  const medium = SUPPORT_TICKETS.filter((t) => t.urgency === "medium").length;
-  const low = SUPPORT_TICKETS.filter((t) => t.urgency === "low").length;
+  const critical = SUPPORT_TICKETS.filter(t => t.urgency === "critical").length;
+  const high = SUPPORT_TICKETS.filter(t => t.urgency === "high").length;
+  const medium = SUPPORT_TICKETS.filter(t => t.urgency === "medium").length;
+  const low = SUPPORT_TICKETS.filter(t => t.urgency === "low").length;
 
   return {
     total,

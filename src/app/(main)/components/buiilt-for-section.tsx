@@ -4,31 +4,18 @@ import { CardBenefit } from "./card/card-benefit";
 
 export default function BuiltForSection() {
   return (
-    <section
-      className="flex flex-col gap-3"
-      aria-labelledby="built-for-heading"
-    >
+    <section className="flex flex-col gap-3" aria-labelledby="built-for-heading">
       {/* Main text */}
       <div data-aos="zoom-in-down" data-aos-duration="600">
-        <H3
-          level={"h2"}
-          className="mx-auto max-w-5xl"
-          weight={"semibold"}
-          align={"center"}
-        >
+        <H3 level={"h2"} className="mx-auto max-w-5xl" weight={"semibold"} align={"center"}>
           Built For You.
         </H3>
       </div>
 
       {/* Subtitle */}
       <div data-aos="slide-up" data-aos-duration="600" data-aos-delay="100">
-        <H4
-          level={"body"}
-          className="mx-auto max-w-6xl text-brand-slate"
-          align={"center"}
-        >
-          Helping the 'stuck in the middle' crowd and the lawyers who serve
-          them.
+        <H4 level={"body"} className="mx-auto max-w-6xl text-brand-slate" align={"center"}>
+          Helping the 'stuck in the middle' crowd and the lawyers who serve them.
         </H4>
       </div>
 
@@ -57,14 +44,12 @@ export default function BuiltForSection() {
             className="my-6 flex flex-col gap-7 md:my-8 xl:my-10"
             data-aos="flip-up"
             data-aos-duration="600"
-            data-aos-delay={200 + benefitIndex * 100}
-          >
+            data-aos-delay={200 + benefitIndex * 100}>
             <H4
               id={`benefit-${b.title.toLowerCase().replace(/\s+/g, "-")}`}
               level={"h5"}
               weight={"semibold"}
-              className="mx-auto w-fit rounded-full border border-white-400 bg-white px-6 py-2"
-            >
+              className="mx-auto w-fit rounded-full border border-white-400 bg-white px-6 py-2">
               {b.title}
             </H4>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
@@ -73,8 +58,7 @@ export default function BuiltForSection() {
                   key={benefit.title}
                   data-aos="zoom-in"
                   data-aos-duration="600"
-                  data-aos-delay={300 + benefitIndex * 100 + index * 50}
-                >
+                  data-aos-delay={300 + benefitIndex * 100 + index * 50}>
                   <CardBenefit benefit={benefit} />
                 </div>
               ))}

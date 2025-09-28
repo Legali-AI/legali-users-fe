@@ -25,8 +25,7 @@ export default function PricingPage() {
   return (
     <main
       className="relative z-10 flex w-full flex-col items-center justify-center overflow-hidden bg-sky-blue-200 px-8 py-40 sm:px-10 md:px-16 lg:px-32"
-      aria-label="Attorney connection page"
-    >
+      aria-label="Attorney connection page">
       {/* Background decorations */}
       {/* Bottom Left */}
       <div
@@ -57,15 +56,9 @@ export default function PricingPage() {
         className="mt-6 grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:mt-8 md:gap-8 xl:mt-10 xl:gap-10"
         data-aos="slide-up"
         data-aos-duration="600"
-        data-aos-delay="100"
-      >
+        data-aos-delay="100">
         {PRICING_DATA.map((pricing, index) => (
-          <div
-            key={pricing.name}
-            data-aos="zoom-in-up"
-            data-aos-duration="600"
-            data-aos-delay={200 + index * 100}
-          >
+          <div key={pricing.name} data-aos="zoom-in-up" data-aos-duration="600" data-aos-delay={200 + index * 100}>
             <PricingCard {...pricing} />
           </div>
         ))}

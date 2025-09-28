@@ -47,7 +47,7 @@ export function getRefreshToken(): string | undefined {
 
 export function clearAuth(): void {
   // Clear tokens
-  Object.values(COOKIE_KEYS).forEach((key) => {
+  Object.values(COOKIE_KEYS).forEach(key => {
     Cookies.remove(key, { path: "/" });
   });
 

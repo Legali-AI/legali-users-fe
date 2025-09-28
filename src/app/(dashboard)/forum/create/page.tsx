@@ -7,22 +7,12 @@ import { z } from "zod";
 import { FileAttachment } from "../../../../components/elements/attachments/file-attachment";
 import { H3, H5 } from "../../../../components/elements/typography";
 import { Button } from "../../../../components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../../../components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../../../components/ui/form";
 import { Input } from "../../../../components/ui/input";
 import { Textarea } from "../../../../components/ui/textarea";
 
 const supportIssueSchema = z.object({
-  issue: z
-    .string()
-    .min(1, "Please describe your issue")
-    .max(200, "Issue description must be less than 200 characters"),
+  issue: z.string().min(1, "Please describe your issue").max(200, "Issue description must be less than 200 characters"),
   description: z
     .string()
     .min(10, "Please provide a detailed description")
@@ -57,10 +47,7 @@ export default function CreateForumPage() {
       </H5>
 
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full space-y-4 lg:space-y-5"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4 lg:space-y-5">
           {/* Issue Field */}
           <FormField
             control={form.control}
@@ -126,9 +113,7 @@ export default function CreateForumPage() {
                   />
                 </FormControl>
                 <FormMessage />
-                {attachmentError && (
-                  <p className="text-sm text-destructive">{attachmentError}</p>
-                )}
+                {attachmentError && <p className="text-sm text-destructive">{attachmentError}</p>}
               </FormItem>
             )}
           />
@@ -139,8 +124,7 @@ export default function CreateForumPage() {
             className="h-[39px] w-full rounded-[10px] bg-deep-navy px-5"
             level="title"
             weight="semibold"
-            disabled={form.formState.isSubmitting}
-          >
+            disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         </form>

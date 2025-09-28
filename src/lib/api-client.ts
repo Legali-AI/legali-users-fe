@@ -1,8 +1,4 @@
-import axios, {
-  type AxiosInstance,
-  type AxiosRequestConfig,
-  type AxiosResponse,
-} from "axios";
+import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from "axios";
 import { API_CONFIG } from "./config";
 
 // Create axios instance
@@ -17,18 +13,15 @@ const createApiClient = (): AxiosInstance => {
 
   // Request interceptor
   client.interceptors.request.use(
-    (config) => {
+    config => {
       // Add auth token if available
-      const token =
-        typeof window !== "undefined"
-          ? localStorage.getItem("authToken")
-          : null;
+      const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
       return config;
     },
-    (error) => {
+    error => {
       return Promise.reject(error);
     }
   );
@@ -38,7 +31,7 @@ const createApiClient = (): AxiosInstance => {
     (response: AxiosResponse) => {
       return response;
     },
-    (error) => {
+    error => {
       // Handle common errors
       if (error.response?.status === 401) {
         // Handle unauthorized access
@@ -59,26 +52,17 @@ export const apiClient = createApiClient();
 // Generic API methods
 export const api = {
   get: <T>(url: string, config?: AxiosRequestConfig): Promise<T> =>
-    apiClient.get(url, config).then((res) => res.data),
+    apiClient.get(url, config).then(res => res.data),
 
-  post: <T>(
-    url: string,
-    data?: unknown,
-    config?: AxiosRequestConfig
-  ): Promise<T> => apiClient.post(url, data, config).then((res) => res.data),
+  post: <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> =>
+    apiClient.post(url, data, config).then(res => res.data),
 
-  put: <T>(
-    url: string,
-    data?: unknown,
-    config?: AxiosRequestConfig
-  ): Promise<T> => apiClient.put(url, data, config).then((res) => res.data),
+  put: <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> =>
+    apiClient.put(url, data, config).then(res => res.data),
 
-  patch: <T>(
-    url: string,
-    data?: unknown,
-    config?: AxiosRequestConfig
-  ): Promise<T> => apiClient.patch(url, data, config).then((res) => res.data),
+  patch: <T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> =>
+    apiClient.patch(url, data, config).then(res => res.data),
 
   delete: <T>(url: string, config?: AxiosRequestConfig): Promise<T> =>
-    apiClient.delete(url, config).then((res) => res.data),
+    apiClient.delete(url, config).then(res => res.data),
 };

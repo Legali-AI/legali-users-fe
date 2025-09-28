@@ -7,21 +7,14 @@ import { Suspense, useState } from "react";
 import { DeleteConfirmationDialog } from "../../../components/elements/delete-confirmation-dialog";
 import { H5, P } from "../../../components/elements/typography";
 import { Button } from "../../../components/ui/button";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../../components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs";
 import { getIssuesByCategory } from "../../../data/issue.data";
 import { IssueCard } from "./components/issue-card";
 
 function ForumContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const activeTab =
-    (searchParams.get("tab") as "your-issues" | "explore-issues") ||
-    "your-issues";
+  const activeTab = (searchParams.get("tab") as "your-issues" | "explore-issues") || "your-issues";
 
   const handleTabChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -59,28 +52,16 @@ function ForumContent() {
     <div className="flex h-full flex-col">
       {/* Fixed Header Section */}
       <div className="flex-shrink-0">
-        <Tabs
-          value={activeTab}
-          onValueChange={handleTabChange}
-          className="w-full"
-        >
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
           <div className="flex flex-col gap-3 sm:gap-4">
             <TabsList className="h-[43px] w-full bg-slate-gray-100 p-1.5 sm:w-auto sm:min-w-[300px]">
               <TabsTrigger value="your-issues">
-                <H5
-                  level="body"
-                  weight="semibold"
-                  className="text-sky-blue-600"
-                >
+                <H5 level="body" weight="semibold" className="text-sky-blue-600">
                   Your Issue
                 </H5>
               </TabsTrigger>
               <TabsTrigger value="explore-issues">
-                <H5
-                  level="body"
-                  weight="semibold"
-                  className="text-slate-gray-300"
-                >
+                <H5 level="body" weight="semibold" className="text-slate-gray-300">
                   Explore Issue
                 </H5>
               </TabsTrigger>
@@ -98,20 +79,12 @@ function ForumContent() {
 
       {/* Scrollable Content Area */}
       <div className="mt-4 flex-1 overflow-y-auto">
-        <Tabs
-          value={activeTab}
-          onValueChange={handleTabChange}
-          className="w-full"
-        >
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
           {contentMaps.length > 0 &&
-            contentMaps.map((map) => (
-              <TabsContent
-                key={map.value}
-                value={map.value}
-                className="mt-0 flex flex-col gap-3 p-0 lg:gap-4"
-              >
+            contentMaps.map(map => (
+              <TabsContent key={map.value} value={map.value} className="mt-0 flex flex-col gap-3 p-0 lg:gap-4">
                 {map.content.length > 0 ? (
-                  map.content.map((issue) => (
+                  map.content.map(issue => (
                     <IssueCard
                       key={issue.id}
                       {...issue}

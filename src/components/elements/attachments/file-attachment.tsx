@@ -40,9 +40,7 @@ export function FileAttachment({
 
     onError?.("");
 
-    const oversizedFiles = files.filter(
-      (file) => file.size > maxSizePerFile * 1024 * 1024
-    );
+    const oversizedFiles = files.filter(file => file.size > maxSizePerFile * 1024 * 1024);
 
     if (oversizedFiles.length > 0) {
       onError?.(`Some files exceed the maximum size of ${maxSizePerFile}MB`);
@@ -86,8 +84,7 @@ export function FileAttachment({
         )}
         onClick={handleClick}
         disabled={disabled}
-        aria-label="Upload files"
-      >
+        aria-label="Upload files">
         <Plus size={16} />
         <P level="body" className="text-slate-gray-400">
           {placeholder}
@@ -109,16 +106,12 @@ export function FileAttachment({
           {value.map((file, index) => (
             <div
               key={`${file.name}-${index}`}
-              className="flex h-[39px] items-center gap-2 rounded-md border border-white-500 bg-white px-6"
-            >
-              <FileAttachmentItem
-                filename={file.name}
-                className="h-auto border-none bg-transparent px-0 py-0"
-              />
+              className="flex h-[39px] items-center gap-2 rounded-md border border-white-500 bg-white px-6">
+              <FileAttachmentItem filename={file.name} className="h-auto border-none bg-transparent px-0 py-0" />
               <button
                 type="button"
                 onClick={() => removeFile(index)}
-                onKeyDown={(e) => {
+                onKeyDown={e => {
                   if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
                     removeFile(index);
@@ -126,8 +119,7 @@ export function FileAttachment({
                 }}
                 className="flex aspect-square h-5 w-auto items-center justify-center rounded transition-colors hover:bg-gray-100"
                 disabled={disabled}
-                aria-label={`Remove ${file.name}`}
-              >
+                aria-label={`Remove ${file.name}`}>
                 <X size={14} className="text-slate-gray-400" />
               </button>
             </div>

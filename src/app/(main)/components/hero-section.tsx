@@ -5,10 +5,7 @@ import { NAVIGATION_FEATURES } from "../../../data/home.data";
 
 export default function HeroSection() {
   return (
-    <section
-      className="flex min-h-[90vh] items-center justify-center"
-      aria-labelledby="hero-heading"
-    >
+    <section className="flex min-h-[90vh] items-center justify-center" aria-labelledby="hero-heading">
       {/* Background decorations */}
       <div aria-hidden="true">
         <div
@@ -48,18 +45,12 @@ export default function HeroSection() {
         {/* Subtitle */}
         <div data-aos="slide-up" data-aos-duration="600" data-aos-delay="100">
           <H2 level={"title"} className="text-brand-slate" align={"center"}>
-            Legali lets you build cases, manage evidence, and fund
-            litigation—all on one secure AI platform.
+            Legali lets you build cases, manage evidence, and fund litigation—all on one secure AI platform.
           </H2>
         </div>
 
         {/* Search input */}
-        <div
-          className="mt-4 w-full"
-          data-aos="zoom-in"
-          data-aos-duration="600"
-          data-aos-delay="200"
-        >
+        <div className="mt-4 w-full" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="200">
           <RichInput />
         </div>
 
@@ -68,15 +59,9 @@ export default function HeroSection() {
           className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:gap-4"
           data-aos="fade-up"
           data-aos-duration="600"
-          data-aos-delay="300"
-        >
+          data-aos-delay="300">
           {NAVIGATION_FEATURES.map((feature, index) => (
-            <div
-              key={feature.label}
-              data-aos="flip-up"
-              data-aos-duration="600"
-              data-aos-delay={400 + index * 50}
-            >
+            <div key={feature.label} data-aos="flip-up" data-aos-duration="600" data-aos-delay={400 + index * 50}>
               <Badge level={"body"} variant={"gradient-blue"} size={"lg"}>
                 <feature.icon size={30} aria-hidden="true" />
                 <span className="sr-only">Feature: </span>

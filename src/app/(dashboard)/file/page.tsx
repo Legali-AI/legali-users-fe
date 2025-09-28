@@ -21,27 +21,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "../../../components/ui/pagination";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../../components/ui/table";
-import {
-  CASE_TYPE_OPTIONS,
-  type FileItem,
-  getFilesByCaseType,
-  SHOW_COUNT_OPTIONS,
-} from "../../../data/file.data";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../components/ui/table";
+import { CASE_TYPE_OPTIONS, type FileItem, getFilesByCaseType, SHOW_COUNT_OPTIONS } from "../../../data/file.data";
 import { cn } from "../../../lib/utils";
 import { createFileTableColumns } from "./file-table-columns";
 import { FileViewDialog } from "./file-view-dialog";
@@ -133,7 +115,7 @@ export default function FilePage() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {CASE_TYPE_OPTIONS.map((option) => (
+              {CASE_TYPE_OPTIONS.map(option => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
@@ -144,12 +126,8 @@ export default function FilePage() {
           {/* Search Filter */}
           <Input
             placeholder="Search files..."
-            value={
-              (table.getColumn("fileName")?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table.getColumn("fileName")?.setFilterValue(event.target.value)
-            }
+            value={(table.getColumn("fileName")?.getFilterValue() as string) ?? ""}
+            onChange={event => table.getColumn("fileName")?.setFilterValue(event.target.value)}
             className="w-full border-white-400 bg-white sm:w-auto"
           />
         </div>
@@ -159,13 +137,12 @@ export default function FilePage() {
           <Small className="text-slate-gray">Show</Small>
           <Select
             value={table.getState().pagination.pageSize.toString()}
-            onValueChange={(value) => table.setPageSize(Number(value))}
-          >
+            onValueChange={value => table.setPageSize(Number(value))}>
             <SelectTrigger className="w-20 border-white-400 bg-white">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {SHOW_COUNT_OPTIONS.map((option) => (
+              {SHOW_COUNT_OPTIONS.map(option => (
                 <SelectItem key={option.value} value={option.value.toString()}>
                   {option.label}
                 </SelectItem>
@@ -183,20 +160,16 @@ export default function FilePage() {
           <div className="h-full overflow-x-auto overflow-y-auto rounded-[20px]">
             <Table className="min-w-full">
               <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
+                {table.getHeaderGroups().map(headerGroup => (
                   <TableRow key={headerGroup.id} className="border-white-400">
-                    {headerGroup.headers.map((header) => {
+                    {headerGroup.headers.map(header => {
                       return (
                         <TableHead
                           key={header.id}
-                          className="h-[56px] border-white-400 bg-white px-3 text-center whitespace-nowrap md:h-[60px] lg:px-5 xl:h-[64px]"
-                        >
+                          className="h-[56px] border-white-400 bg-white px-3 text-center whitespace-nowrap md:h-[60px] lg:px-5 xl:h-[64px]">
                           {header.isPlaceholder
                             ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                            : flexRender(header.column.columnDef.header, header.getContext())}
                         </TableHead>
                       );
                     })}
@@ -212,27 +185,17 @@ export default function FilePage() {
                       className={cn(
                         "h-[60px] border-white-400 md:h-[64px] xl:h-[67px]",
                         index % 2 === 0 ? "bg-white" : "bg-sky-blue-100"
-                      )}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell
-                          key={cell.id}
-                          className="px-3 text-center whitespace-nowrap lg:px-5"
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
+                      )}>
+                      {row.getVisibleCells().map(cell => (
+                        <TableCell key={cell.id} className="px-3 text-center whitespace-nowrap lg:px-5">
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </TableCell>
                       ))}
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
+                    <TableCell colSpan={columns.length} className="h-24 text-center">
                       No files found.
                     </TableCell>
                   </TableRow>
@@ -252,29 +215,24 @@ export default function FilePage() {
                 </PaginationItem>
 
                 {/* Page Numbers */}
-                {Array.from(
-                  { length: Math.min(3, table.getPageCount()) },
-                  (_, i) => {
-                    const pageNum = i + 1;
-                    const isActive =
-                      pageNum === table.getState().pagination.pageIndex + 1;
+                {Array.from({ length: Math.min(3, table.getPageCount()) }, (_, i) => {
+                  const pageNum = i + 1;
+                  const isActive = pageNum === table.getState().pagination.pageIndex + 1;
 
-                    return (
-                      <PaginationItem key={pageNum}>
-                        <PaginationLink
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            table.setPageIndex(pageNum - 1);
-                          }}
-                          isActive={isActive}
-                        >
-                          {pageNum}
-                        </PaginationLink>
-                      </PaginationItem>
-                    );
-                  }
-                )}
+                  return (
+                    <PaginationItem key={pageNum}>
+                      <PaginationLink
+                        href="#"
+                        onClick={e => {
+                          e.preventDefault();
+                          table.setPageIndex(pageNum - 1);
+                        }}
+                        isActive={isActive}>
+                        {pageNum}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                })}
 
                 <PaginationItem>
                   <PaginationNext />

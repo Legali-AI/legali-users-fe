@@ -49,12 +49,7 @@ export const zApiResponseAuthUrlDao = z.object({
   message: z.union([z.string(), z.null()]).optional(),
 });
 
-export const zProcessingStatus = z.enum([
-  "pending",
-  "processing",
-  "completed",
-  "failed",
-]);
+export const zProcessingStatus = z.enum(["pending", "processing", "completed", "failed"]);
 
 export const zDocumentDao = z.object({
   document_id: z.string().uuid(),
@@ -189,28 +184,22 @@ export const zApiResponseUserProfileDao = z.object({
   message: z.union([z.string(), z.null()]).optional(),
 });
 
-export const zBackendModuleDocumentEntityDocumentDaoUserStorageInfoDao =
-  z.object({
-    user_id: z.string().uuid(),
-    current_storage_bytes: z.number().int(),
-    current_storage_mb: z.number(),
-    current_storage_gb: z.number(),
-    storage_limit_bytes: z.number().int(),
-    storage_limit_mb: z.number(),
-    storage_limit_gb: z.number(),
-    file_count: z.number().int(),
-    user_role: z.string(),
-    bypass_plan: z.union([z.string(), z.null()]).optional(),
-  });
+export const zBackendModuleDocumentEntityDocumentDaoUserStorageInfoDao = z.object({
+  user_id: z.string().uuid(),
+  current_storage_bytes: z.number().int(),
+  current_storage_mb: z.number(),
+  current_storage_gb: z.number(),
+  storage_limit_bytes: z.number().int(),
+  storage_limit_mb: z.number(),
+  storage_limit_gb: z.number(),
+  file_count: z.number().int(),
+  user_role: z.string(),
+  bypass_plan: z.union([z.string(), z.null()]).optional(),
+});
 
 export const zApiResponseUserStorageInfoDao = z.object({
   success: z.boolean(),
-  data: z
-    .union([
-      zBackendModuleDocumentEntityDocumentDaoUserStorageInfoDao,
-      z.null(),
-    ])
-    .optional(),
+  data: z.union([zBackendModuleDocumentEntityDocumentDaoUserStorageInfoDao, z.null()]).optional(),
   message: z.union([z.string(), z.null()]).optional(),
 });
 
@@ -365,28 +354,23 @@ export const zPaginatedApiResponseListSubregionDao = z.object({
   meta: z.union([zPaginationMetaModel, z.object({})]),
 });
 
-export const zBackendModulePricingEntityPricingDaoUserStorageInfoDao = z.object(
-  {
-    user_id: z.string().uuid(),
-    email: z.string(),
-    full_name: z.union([z.string(), z.null()]).optional(),
-    account_status: z.string(),
-    current_plan: z.union([z.string(), z.null()]).optional(),
-    bypass_plan: z.union([z.string(), z.null()]).optional(),
-    storage_used_gb: z.number(),
-    storage_limit_gb: z.number().int(),
-    file_count: z.number().int(),
-    last_activity: z.union([z.string().datetime(), z.null()]).optional(),
-  }
-);
+export const zBackendModulePricingEntityPricingDaoUserStorageInfoDao = z.object({
+  user_id: z.string().uuid(),
+  email: z.string(),
+  full_name: z.union([z.string(), z.null()]).optional(),
+  account_status: z.string(),
+  current_plan: z.union([z.string(), z.null()]).optional(),
+  bypass_plan: z.union([z.string(), z.null()]).optional(),
+  storage_used_gb: z.number(),
+  storage_limit_gb: z.number().int(),
+  file_count: z.number().int(),
+  last_activity: z.union([z.string().datetime(), z.null()]).optional(),
+});
 
 export const zPaginatedApiResponseListUserStorageInfoDao = z.object({
   success: z.boolean(),
   data: z
-    .union([
-      z.array(zBackendModulePricingEntityPricingDaoUserStorageInfoDao),
-      z.null(),
-    ])
+    .union([z.array(zBackendModulePricingEntityPricingDaoUserStorageInfoDao), z.null()])
     .optional(),
   message: z.union([z.string(), z.null()]).optional(),
   meta: z.union([zPaginationMetaModel, z.object({})]),
@@ -447,11 +431,9 @@ export const zUpdateUserApiAdminUsersUserIdPutResponse = zApiResponse;
 
 export const zGetStorageSummaryApiAdminStorageSummaryGetResponse = zApiResponse;
 
-export const zGoogleAuthUrlApiAuthGoogleUrlPostResponse =
-  zApiResponseAuthUrlDao;
+export const zGoogleAuthUrlApiAuthGoogleUrlPostResponse = zApiResponseAuthUrlDao;
 
-export const zGoogleLoginApiAuthGoogleCallbackPostResponse =
-  zApiResponseAuthTokenDao;
+export const zGoogleLoginApiAuthGoogleCallbackPostResponse = zApiResponseAuthTokenDao;
 
 export const zRefreshTokenApiAuthRefreshPostResponse = zApiResponseAuthTokenDao;
 
@@ -459,63 +441,46 @@ export const zLogoutApiAuthLogoutPostResponse = zApiResponseBool;
 
 export const zGetProfileApiAuthProfileGetResponse = zApiResponseUserProfileDao;
 
-export const zUpdateProfileApiAuthProfilePutResponse =
-  zApiResponseUserProfileDao;
+export const zUpdateProfileApiAuthProfilePutResponse = zApiResponseUserProfileDao;
 
-export const zUploadDocumentApiDocumentsUploadPostResponse =
-  zApiResponseDocumentDao;
+export const zUploadDocumentApiDocumentsUploadPostResponse = zApiResponseDocumentDao;
 
-export const zListDocumentsApiDocumentsGetResponse =
-  zPaginatedApiResponseListDocumentDao;
+export const zListDocumentsApiDocumentsGetResponse = zPaginatedApiResponseListDocumentDao;
 
-export const zUploadDocumentAltApiDocumentsPostResponse =
-  zApiResponseDocumentDao;
+export const zUploadDocumentAltApiDocumentsPostResponse = zApiResponseDocumentDao;
 
-export const zDeleteDocumentApiDocumentsDocumentIdDeleteResponse =
-  zApiResponseBool;
+export const zDeleteDocumentApiDocumentsDocumentIdDeleteResponse = zApiResponseBool;
 
-export const zGetDocumentApiDocumentsDocumentIdGetResponse =
-  zApiResponseDocumentDao;
+export const zGetDocumentApiDocumentsDocumentIdGetResponse = zApiResponseDocumentDao;
 
-export const zGetUserStorageInfoApiDocumentsStorageInfoGetResponse =
-  zApiResponseUserStorageInfoDao;
+export const zGetUserStorageInfoApiDocumentsStorageInfoGetResponse = zApiResponseUserStorageInfoDao;
 
 export const zHealthCheckApiHealthGetResponse = zApiResponseDictStrAny;
 
-export const zGetLocationInfoApiLocationsInfoCityIdGetResponse =
-  zApiResponseLocationDao;
+export const zGetLocationInfoApiLocationsInfoCityIdGetResponse = zApiResponseLocationDao;
 
-export const zGetAllRegionsApiLocationsRegionsGetResponse =
-  zPaginatedApiResponseListRegionDao;
+export const zGetAllRegionsApiLocationsRegionsGetResponse = zPaginatedApiResponseListRegionDao;
 
 export const zGetAllSubregionsApiLocationsSubregionsGetResponse =
   zPaginatedApiResponseListSubregionDao;
 
-export const zGetAllCountriesApiLocationsCountriesGetResponse =
-  zPaginatedApiResponseListCountryDao;
+export const zGetAllCountriesApiLocationsCountriesGetResponse = zPaginatedApiResponseListCountryDao;
 
-export const zGetAllStatesApiLocationsStatesGetResponse =
-  zPaginatedApiResponseListStateDao;
+export const zGetAllStatesApiLocationsStatesGetResponse = zPaginatedApiResponseListStateDao;
 
-export const zGetAllCitiesApiLocationsCitiesGetResponse =
-  zPaginatedApiResponseListCityDao;
+export const zGetAllCitiesApiLocationsCitiesGetResponse = zPaginatedApiResponseListCityDao;
 
-export const zGetAllPlansApiPricingPlansGetResponse =
-  zPaginatedApiResponseListPricingPlanDao;
+export const zGetAllPlansApiPricingPlansGetResponse = zPaginatedApiResponseListPricingPlanDao;
 
-export const zCreatePlanApiPricingPlansPostResponse =
-  zApiResponsePricingPlanDao;
+export const zCreatePlanApiPricingPlansPostResponse = zApiResponsePricingPlanDao;
 
 export const zDeletePlanApiPricingPlansPlanIdDeleteResponse = zApiResponseDict;
 
-export const zGetPlanApiPricingPlansPlanIdGetResponse =
-  zApiResponsePricingPlanDao;
+export const zGetPlanApiPricingPlansPlanIdGetResponse = zApiResponsePricingPlanDao;
 
-export const zUpdatePlanApiPricingPlansPlanIdPutResponse =
-  zApiResponsePricingPlanDao;
+export const zUpdatePlanApiPricingPlansPlanIdPutResponse = zApiResponsePricingPlanDao;
 
 export const zGetUserStorageInfoApiPricingUsersStorageGetResponse =
   zPaginatedApiResponseListUserStorageInfoDao;
 
-export const zGetStorageSummaryApiPricingStorageSummaryGetResponse =
-  zApiResponseStorageSummaryDao;
+export const zGetStorageSummaryApiPricingStorageSummaryGetResponse = zApiResponseStorageSummaryDao;

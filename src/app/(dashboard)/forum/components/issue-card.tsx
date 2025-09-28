@@ -5,11 +5,7 @@ import Link from "next/link";
 import { FileAttachmentContainer } from "../../../../components/elements/attachments/file-attachment-container";
 import { ImageAttachmentPreview } from "../../../../components/elements/attachments/image-attachment-preview";
 import { H5, P, Small } from "../../../../components/elements/typography";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "../../../../components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../../../../components/ui/avatar";
 import { Button } from "../../../../components/ui/button";
 import { cn } from "../../../../lib/utils";
 
@@ -39,35 +35,25 @@ const AttachmentsPreview = ({
 }) => {
   return (
     <div className="flex flex-col gap-2">
-      <ImageAttachmentPreview
-        images={attachments}
-        maxVisible={3}
-        imageSize={78}
-      />
+      <ImageAttachmentPreview images={attachments} maxVisible={3} imageSize={78} />
       {isPaperClip ? (
-        <FileAttachmentContainer
-          attachments={attachments}
-          maxVisible={3}
-          showRemaining={true}
-          className="my-2"
-        />
+        <FileAttachmentContainer attachments={attachments} maxVisible={3} showRemaining={true} className="my-2" />
       ) : (
         <button
           type="button"
           className="cursor-pointer text-left text-slate-gray-400 underline"
-          onClick={(e) => {
+          onClick={e => {
             e.preventDefault();
             e.stopPropagation();
             onSeeAttachments?.();
           }}
-          onKeyDown={(e) => {
+          onKeyDown={e => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
               e.stopPropagation();
               onSeeAttachments?.();
             }
-          }}
-        >
+          }}>
           <P level="caption" className="text-slate-gray-400 underline">
             See Attachments
           </P>
@@ -94,9 +80,7 @@ export function IssueCard({
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
     const now = new Date();
-    const diffInHours = Math.floor(
-      (now.getTime() - date.getTime()) / (1000 * 60 * 60)
-    );
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
 
     if (diffInHours < 24) {
       return `${diffInHours}h ago`;
@@ -111,16 +95,11 @@ export function IssueCard({
         className={cn(
           "hover:bg-sky-blue-50 flex cursor-pointer flex-col gap-2 rounded-[10px] border border-white-400 bg-white p-4 transition-colors lg:p-5",
           className
-        )}
-      >
+        )}>
         {/* Header */}
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
-            <H5
-              level="title"
-              weight="semibold"
-              className="break-words text-deep-navy"
-            >
+            <H5 level="title" weight="semibold" className="break-words text-deep-navy">
               {title}
             </H5>
             <Small level="label" className="text-deep-navy-300">
@@ -132,13 +111,12 @@ export function IssueCard({
             <Button
               variant="ghost"
               size="sm"
-              onClick={(e) => {
+              onClick={e => {
                 e.preventDefault();
                 e.stopPropagation();
                 onDelete?.(id);
               }}
-              className="self-start sm:self-auto"
-            >
+              className="self-start sm:self-auto">
               <P level="body" className="text-brand-rose">
                 Delete
               </P>
@@ -153,11 +131,7 @@ export function IssueCard({
 
         {/* Attachments */}
         {attachments.length > 0 && (
-          <AttachmentsPreview
-            attachments={attachments}
-            onSeeAttachments={onSeeAttachments}
-            isPaperClip={isPaperClip}
-          />
+          <AttachmentsPreview attachments={attachments} onSeeAttachments={onSeeAttachments} isPaperClip={isPaperClip} />
         )}
 
         {/* Footer */}

@@ -8,12 +8,7 @@ export const metadata: Metadata = {
   title: "Support Ticket Details",
   description:
     "View detailed information about your support ticket including status, description, attachments, and responses from our support team.",
-  keywords: [
-    "support ticket details",
-    "ticket status",
-    "support response",
-    "ticket information",
-  ],
+  keywords: ["support ticket details", "ticket status", "support response", "ticket information"],
   openGraph: {
     title: "Support Ticket Details",
     description:
@@ -29,11 +24,7 @@ const formatUrgency = (urgency: string) => {
 const cardStyle =
   "flex items-center justify-center rounded-[10px] border border-white-500 bg-white px-3 py-2 lg:px-5 lg:py-2.5";
 
-export default async function TicketDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function TicketDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const ticket = getTicketById(id);
 
@@ -59,10 +50,7 @@ export default async function TicketDetailPage({
 
         {/* Urgency Badge */}
         <div className={cn(cardStyle, "flex w-fit items-center gap-2")}>
-          <H5
-            level="title"
-            className="flex w-fit items-center gap-2 text-slate-gray-400"
-          >
+          <H5 level="title" className="flex w-fit items-center gap-2 text-slate-gray-400">
             Urgency
           </H5>
           <Span level={"title"} weight={"semibold"} className="text-black">
@@ -75,10 +63,7 @@ export default async function TicketDetailPage({
       <div className="flex w-full flex-col gap-3 md:flex-row md:items-start md:gap-5">
         {/* Sender */}
         <div className={cn(cardStyle, "flex w-fit items-center gap-2")}>
-          <H5
-            level="title"
-            className="flex w-fit items-center gap-2 text-slate-gray-400"
-          >
+          <H5 level="title" className="flex w-fit items-center gap-2 text-slate-gray-400">
             Sender
             <Span level={"title"} weight={"semibold"} className="text-black">
               {ticket.sender}
@@ -88,10 +73,7 @@ export default async function TicketDetailPage({
 
         {/* Issue */}
         <div className={cn(cardStyle, "flex w-fit items-center gap-2")}>
-          <H5
-            level="title"
-            className="flex items-center gap-2 text-slate-gray-400"
-          >
+          <H5 level="title" className="flex items-center gap-2 text-slate-gray-400">
             Issue
             <Span level={"title"} weight={"semibold"} className="text-black">
               {ticket.issue}
@@ -105,11 +87,7 @@ export default async function TicketDetailPage({
         <H5 level="title" className="text-slate-gray-400">
           Description
         </H5>
-        <Span
-          level={"title"}
-          weight={"medium"}
-          className="break-words text-black"
-        >
+        <Span level={"title"} weight={"medium"} className="break-words text-black">
           {ticket.description}
         </Span>
       </div>
@@ -121,29 +99,20 @@ export default async function TicketDetailPage({
         </H5>
 
         <FileAttachmentContainer
-          attachments={ticket.attachments.map((att) => att.name)}
+          attachments={ticket.attachments.map(att => att.name)}
           maxVisible={5}
           showRemaining={true}
         />
       </div>
 
       {/* Response Section */}
-      <div
-        className={cn(
-          cardStyle,
-          "flex flex-col items-start gap-1",
-          "border-dashed"
-        )}
-      >
+      <div className={cn(cardStyle, "flex flex-col items-start gap-1", "border-dashed")}>
         <H3 weight="semibold" level="h5" className="mb-2 text-deep-navy">
           Response
         </H3>
 
         {ticket.responses && (
-          <div
-            key={ticket.responses.id}
-            className={cn(cardStyle, "flex flex-col items-start gap-1")}
-          >
+          <div key={ticket.responses.id} className={cn(cardStyle, "flex flex-col items-start gap-1")}>
             <P level="body" className="break-words text-deep-navy">
               {ticket.responses.message}
             </P>

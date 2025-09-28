@@ -3,13 +3,11 @@ import { WelcomeForm } from "./welcome-form";
 
 export const metadata: Metadata = {
   title: "Welcome to Legali",
-  description:
-    "Complete your profile to get started with Legali's AI-powered legal platform.",
+  description: "Complete your profile to get started with Legali's AI-powered legal platform.",
   keywords: ["profile setup", "user registration", "legal platform access"],
   openGraph: {
     title: "Welcome to Legali",
-    description:
-      "Complete your profile to get started with Legali's AI-powered legal platform.",
+    description: "Complete your profile to get started with Legali's AI-powered legal platform.",
   },
 };
 
@@ -17,8 +15,7 @@ export default function WelcomePage() {
   return (
     <main
       className="relative z-10 flex h-screen justify-center overflow-hidden bg-sky-blue-100 px-4 py-72"
-      aria-label="Welcome page"
-    >
+      aria-label="Welcome page">
       {/* Decoration */}
       <div aria-hidden="true">
         {/* Bottom Left */}

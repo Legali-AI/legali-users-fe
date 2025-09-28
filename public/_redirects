@@ -1,0 +1,18 @@
+# API routes redirect to external API
+/api/* https://api.legali.io/:splat 200
+
+# Handle Next.js static assets
+/_next/* /_next/:splat 200
+
+# Handle authentication routes
+/login /login/index.html 200
+/profile /profile/index.html 200
+/welcome /welcome/index.html 200
+
+# Handle main routes
+/attorney /attorney/index.html 200
+/litigation-crowdfunding /litigation-crowdfunding/index.html 200
+/lawyers /lawyers/index.html 200
+
+# Catch-all for client-side routing (SPA)
+/* /index.html 200

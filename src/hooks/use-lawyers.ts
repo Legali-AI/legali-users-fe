@@ -13,8 +13,7 @@ import type { Booking, SearchParams } from "@/types";
 export const queryKeys = {
   lawyers: {
     all: ["lawyers"] as const,
-    search: (params: SearchParams) =>
-      [...queryKeys.lawyers.all, "search", params] as const,
+    search: (params: SearchParams) => [...queryKeys.lawyers.all, "search", params] as const,
     byId: (id: string) => [...queryKeys.lawyers.all, "detail", id] as const,
     reviews: (id: string) => [...queryKeys.lawyers.all, "reviews", id] as const,
     featured: () => [...queryKeys.lawyers.all, "featured"] as const,

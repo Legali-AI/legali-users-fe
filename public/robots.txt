@@ -1,0 +1,29 @@
+User-agent: *
+Allow: /
+
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /attorneys/
+Disallow: /documents/
+Disallow: /appointments/
+Disallow: /messages/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+Disallow: /private/
+
+User-agent: Googlebot
+Allow: /
+
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /attorneys/
+Disallow: /documents/
+Disallow: /appointments/
+Disallow: /messages/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+Disallow: /private/
+
+Sitemap: https://legali.com/sitemap.xml

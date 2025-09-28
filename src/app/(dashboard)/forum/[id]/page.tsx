@@ -6,21 +6,13 @@ import { FileAttachmentContainer } from "../../../../components/elements/attachm
 import { ImageAttachmentPreview } from "../../../../components/elements/attachments/image-attachment-preview";
 import { DeleteConfirmationDialog } from "../../../../components/elements/delete-confirmation-dialog";
 import { H3, P, Small } from "../../../../components/elements/typography";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "../../../../components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../../../../components/ui/avatar";
 import { Button } from "../../../../components/ui/button";
 import { Textarea } from "../../../../components/ui/textarea";
 import { getIssueById } from "../../../../data/issue.data";
 import { CommentCard } from "../components/comment-card";
 
-export default function ForumDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function ForumDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const issue = getIssueById(id);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -58,20 +50,11 @@ export default function ForumDetailPage({
         {/* Main Issue Card */}
         {/* Header */}
         <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <H3
-            level="h5"
-            weight="semibold"
-            className="break-words text-deep-navy"
-          >
+          <H3 level="h5" weight="semibold" className="break-words text-deep-navy">
             {issue.title}
           </H3>
           {issue.category === "your-issues" && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleDeleteIssue}
-              className="self-start sm:self-auto"
-            >
+            <Button variant="ghost" size="sm" onClick={handleDeleteIssue} className="self-start sm:self-auto">
               <P level="body" className="text-brand-rose">
                 Delete
               </P>
@@ -88,20 +71,12 @@ export default function ForumDetailPage({
         <div className="flex flex-col gap-2">
           {/* Images */}
           {issue.attachments.length > 0 && (
-            <ImageAttachmentPreview
-              images={issue.attachments}
-              maxVisible={4}
-              imageSize={78}
-            />
+            <ImageAttachmentPreview images={issue.attachments} maxVisible={4} imageSize={78} />
           )}
 
           {/* Files */}
           {issue.files && issue.files.length > 0 && (
-            <FileAttachmentContainer
-              attachments={issue.files}
-              maxVisible={3}
-              showRemaining={true}
-            />
+            <FileAttachmentContainer attachments={issue.files} maxVisible={3} showRemaining={true} />
           )}
         </div>
 
@@ -141,7 +116,7 @@ export default function ForumDetailPage({
           {/* Comments List  */}
           <div className="flex-1 overflow-y-auto">
             <div className="flex flex-col gap-0">
-              {issue.comments?.map((comment) => (
+              {issue.comments?.map(comment => (
                 <CommentCard
                   key={comment.id}
                   author={comment.author}

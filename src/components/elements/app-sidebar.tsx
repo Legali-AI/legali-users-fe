@@ -120,29 +120,24 @@ export default function AppSidebar() {
         </SidebarMenu>
         <div
           style={{
-            background:
-              "radial-gradient(43.99% 42.22% at 90.18% 46.5%, #FFF 0%, #E5F8FF 100%)",
+            background: "radial-gradient(43.99% 42.22% at 90.18% 46.5%, #FFF 0%, #E5F8FF 100%)",
           }}
           className="absolute -top-40 -right-40 -z-[9px] h-[600px] w-[400px] rotate-[130deg] rounded-full blur-2xl"
         />
         <div
           style={{
-            background:
-              "radial-gradient(43.99% 42.22% at 90.18% 46.5%, #FFF 0%, #E5F8FF 100%)",
+            background: "radial-gradient(43.99% 42.22% at 90.18% 46.5%, #FFF 0%, #E5F8FF 100%)",
           }}
           className="absolute -bottom-40 -left-40 -z-[9px] h-[600px] w-[400px] -rotate-[68deg] rounded-full blur-2xl"
         />
-        {MENU_GROUPS.map((group) => (
+        {MENU_GROUPS.map(group => (
           <SidebarGroup key={group.id}>
             {/* <SidebarGroupLabel>{group.label}</SidebarGroupLabel> */}
             <SidebarGroupContent>
               <SidebarMenu>
-                {group.items.map((item) => (
+                {group.items.map(item => (
                   <SidebarMenuItem key={item.id}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname === item.href}
-                    >
+                    <SidebarMenuButton asChild isActive={pathname === item.href}>
                       <Link href={item.href || "#"}>
                         {/* <item.icon /> */}
                         <Typography level={"title"}>{item.label}</Typography>

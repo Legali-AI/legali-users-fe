@@ -3,12 +3,7 @@
 import { Sparkles } from "lucide-react";
 import { P, Span } from "../../../components/elements/typography";
 import { Button } from "../../../components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "../../../components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../components/ui/dialog";
 
 interface FileViewDialogProps {
   isOpen: boolean;
@@ -18,19 +13,10 @@ interface FileViewDialogProps {
   onViewPDF?: () => void;
 }
 
-export function FileViewDialog({
-  isOpen,
-  onClose,
-  fileName,
-  aiSummary,
-  onViewPDF,
-}: FileViewDialogProps) {
+export function FileViewDialog({ isOpen, onClose, fileName, aiSummary, onViewPDF }: FileViewDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent
-        showCloseButton={true}
-        className="max-w-[90vw] sm:max-w-[600px] lg:max-w-[700px]"
-      >
+      <DialogContent showCloseButton={true} className="max-w-[90vw] sm:max-w-[600px] lg:max-w-[700px]">
         <DialogHeader className="space-y-3 lg:space-y-5">
           {/* File Name */}
           <DialogTitle>
@@ -43,8 +29,7 @@ export function FileViewDialog({
           <Button
             variant="outline"
             onClick={onViewPDF}
-            className="h-[39px] w-full rounded-[100px] border border-white-400 bg-white px-5 sm:w-[113px]"
-          >
+            className="h-[39px] w-full rounded-[100px] border border-white-400 bg-white px-5 sm:w-[113px]">
             <P level="body" className="text-slate-gray">
               View PDF
             </P>
@@ -63,11 +48,7 @@ export function FileViewDialog({
 
           {/* AI Summary Content */}
           <div className="rounded-[10px] border border-white-400 bg-white p-4 lg:p-6">
-            <P
-              level="body"
-              weight="semibold"
-              className="text-slate-gray break-words"
-            >
+            <P level="body" weight="semibold" className="text-slate-gray break-words">
               {aiSummary}
             </P>
           </div>

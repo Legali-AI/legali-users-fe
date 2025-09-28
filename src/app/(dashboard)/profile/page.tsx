@@ -1,38 +1,20 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Edit } from "lucide-react";
-import { useId, useState } from "react";
-import { useForm } from "react-hook-form";
 import { LogoutButton } from "@/components/elements/logout-button";
 import { ProfileUpload } from "@/components/elements/profile-upload";
 import { Typography } from "@/components/elements/typography";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/hooks/use-auth";
 import { useUpdateProfileCache } from "@/hooks/use-profile";
-import {
-  type ProfileFormData,
-  profileFormSchema,
-  regionOptions,
-  subscriptionTypeOptions,
-} from "@/schema/profile";
+import { type ProfileFormData, profileFormSchema, regionOptions, subscriptionTypeOptions } from "@/schema/profile";
 import { updateProfileApiAuthProfilePut } from "@/sdk/sdk.gen";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Edit } from "lucide-react";
+import { useId, useState } from "react";
+import { useForm } from "react-hook-form";
 import { getAccessToken } from "../../../lib/auth";
 
 export default function ProfilePage() {
@@ -88,8 +70,7 @@ export default function ProfilePage() {
       const updateData = {
         first_name: data.firstName,
         last_name: data.lastName,
-        profile_picture_url:
-          typeof data.profileImage === "string" ? data.profileImage : null,
+        profile_picture_url: typeof data.profileImage === "string" ? data.profileImage : null,
       };
 
       const response = await updateProfileApiAuthProfilePut({
@@ -117,9 +98,7 @@ export default function ProfilePage() {
       }
     } catch (error) {
       console.error("Profile update error:", error);
-      alert(
-        `Profile update failed: ${error instanceof Error ? error.message : "Unknown error"}`
-      );
+      alert(`Profile update failed: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -130,22 +109,13 @@ export default function ProfilePage() {
       {/* Header with Action Buttons */}
       <div className="flex items-center gap-3">
         {!isEditing ? (
-          <Button
-            onClick={handleEdit}
-            disabled={isSubmitting}
-            className="rounded-md"
-          >
+          <Button onClick={handleEdit} disabled={isSubmitting} className="rounded-md">
             <Edit className="h-4 w-4" />
             Edit
           </Button>
         ) : (
           <div className="flex items-center gap-3">
-            <Button
-              type="submit"
-              form={formId}
-              disabled={isSubmitting}
-              className="rounded-md"
-            >
+            <Button type="submit" form={formId} disabled={isSubmitting} className="rounded-md">
               {isSubmitting ? "Saving..." : "Save"}
             </Button>
             <Button
@@ -153,8 +123,7 @@ export default function ProfilePage() {
               onClick={handleCancel}
               variant="outline"
               disabled={isSubmitting}
-              className="rounded-md"
-            >
+              className="rounded-md">
               Cancel
             </Button>
           </div>
@@ -166,8 +135,7 @@ export default function ProfilePage() {
         <form
           id={formId}
           onSubmit={form.handleSubmit(onSubmit)}
-          className="mx-auto flex w-full flex-1 flex-col space-y-4 max-lg:max-w-2xl lg:space-y-5"
-        >
+          className="mx-auto flex w-full flex-1 flex-col space-y-4 max-lg:max-w-2xl lg:space-y-5">
           <div className="flex w-full flex-col gap-6 lg:flex-row lg:gap-10">
             {/* Left Column - Profile Avatar */}
             <div className="flex flex-col gap-5 px-4 lg:px-10">
@@ -202,11 +170,7 @@ export default function ProfilePage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        <Typography
-                          level="body"
-                          weight="semibold"
-                          className="text-deep-navy"
-                        >
+                        <Typography level="body" weight="semibold" className="text-deep-navy">
                           First Name
                         </Typography>
                       </FormLabel>
@@ -229,11 +193,7 @@ export default function ProfilePage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        <Typography
-                          level="body"
-                          weight="semibold"
-                          className="text-deep-navy"
-                        >
+                        <Typography level="body" weight="semibold" className="text-deep-navy">
                           Last Name
                         </Typography>
                       </FormLabel>
@@ -256,11 +216,7 @@ export default function ProfilePage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        <Typography
-                          level="body"
-                          weight="semibold"
-                          className="text-deep-navy"
-                        >
+                        <Typography level="body" weight="semibold" className="text-deep-navy">
                           DoB
                         </Typography>
                       </FormLabel>
@@ -284,26 +240,21 @@ export default function ProfilePage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        <Typography
-                          level="body"
-                          weight="semibold"
-                          className="text-deep-navy"
-                        >
+                        <Typography level="body" weight="semibold" className="text-deep-navy">
                           Subscription Type
                         </Typography>
                       </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        disabled={!isEditing || isSubmitting}
-                      >
+                        disabled={!isEditing || isSubmitting}>
                         <FormControl>
                           <SelectTrigger className="h-[39px] w-full rounded-[10px] border-light-gray-400 bg-white px-6 py-2 text-slate-gray-400">
                             <SelectValue placeholder="Select subscription type" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {subscriptionTypeOptions.map((option) => (
+                          {subscriptionTypeOptions.map(option => (
                             <SelectItem key={option.value} value={option.value}>
                               {option.label}
                             </SelectItem>
@@ -324,26 +275,21 @@ export default function ProfilePage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        <Typography
-                          level="body"
-                          weight="semibold"
-                          className="text-deep-navy"
-                        >
+                        <Typography level="body" weight="semibold" className="text-deep-navy">
                           Region
                         </Typography>
                       </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        disabled={!isEditing || isSubmitting}
-                      >
+                        disabled={!isEditing || isSubmitting}>
                         <FormControl>
                           <SelectTrigger className="h-[39px] w-full rounded-[10px] border-light-gray-400 bg-white px-6 py-2 text-slate-gray-400">
                             <SelectValue placeholder="Select region" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {regionOptions.map((option) => (
+                          {regionOptions.map(option => (
                             <SelectItem key={option.value} value={option.value}>
                               {option.label}
                             </SelectItem>
@@ -362,20 +308,12 @@ export default function ProfilePage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        <Typography
-                          level="body"
-                          weight="semibold"
-                          className="text-deep-navy"
-                        >
+                        <Typography level="body" weight="semibold" className="text-deep-navy">
                           Token Usage
                         </Typography>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          disabled={true}
-                          className="text-slate-gray-400"
-                        />
+                        <Input {...field} disabled={true} className="text-slate-gray-400" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -389,20 +327,12 @@ export default function ProfilePage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        <Typography
-                          level="body"
-                          weight="semibold"
-                          className="text-deep-navy"
-                        >
+                        <Typography level="body" weight="semibold" className="text-deep-navy">
                           Storage Usage
                         </Typography>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          disabled={true}
-                          className="text-slate-gray-400"
-                        />
+                        <Input {...field} disabled={true} className="text-slate-gray-400" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

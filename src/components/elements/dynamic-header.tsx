@@ -3,8 +3,8 @@
 import { Menu, User } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useAuth } from "@/hooks/use-auth";
-import { SidebarTrigger } from "../ui/sidebar";
 import { Span } from "./typography";
 
 const PAGE_CONFIGS: Record<string, string> = {
@@ -34,8 +34,7 @@ export default function DynamicHeader() {
         className="flex items-center justify-between gap-4 rounded-lg border border-white-400 p-3 lg:hidden lg:p-5"
         style={{
           background: "linear-gradient(90deg, #EDFAFF 0.01%, #FFF 30.33%)",
-        }}
-      >
+        }}>
         <SidebarTrigger className="h-8 w-8">
           <Menu className="size-6" size={24} />
           <span className="sr-only">Open sidebar</span>
@@ -45,8 +44,7 @@ export default function DynamicHeader() {
         className="flex flex-1 items-center justify-between gap-4 rounded-lg border border-white-400 p-3 lg:p-5"
         style={{
           background: "linear-gradient(90deg, #EDFAFF 0.01%, #FFF 30.33%)",
-        }}
-      >
+        }}>
         <div className="flex items-center gap-3 lg:gap-4">
           <Span level={"h5"} weight={"semibold"} className="text-brand-navy">
             {title}
@@ -72,11 +70,7 @@ export default function DynamicHeader() {
             <Span level={"body"} weight={"semibold"} className="truncate">
               {user ? `${user.first_name} ${user.last_name}` : "Loading..."}
             </Span>
-            <Span
-              level={"label"}
-              weight={"normal"}
-              className="truncate text-brand-slate"
-            >
+            <Span level={"label"} weight={"normal"} className="truncate text-brand-slate">
               {user?.email || "Loading..."}
             </Span>
           </div>

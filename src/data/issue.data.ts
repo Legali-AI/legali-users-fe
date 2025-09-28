@@ -76,10 +76,7 @@ export const MOCK_ISSUES: Issue[] = [
     description:
       "Tried calling the law firm's hotline three times this morning—kept getting put on hold for 20+ minutes and then disconnected. Anyone else having this issue? #CustomerService #LawFirmSupport",
     timestamp: "2025-03-22T14:15:00Z",
-    attachments: [
-      "/images/issue-attachment-5.jpg",
-      "/images/issue-attachment-6.jpg",
-    ],
+    attachments: ["/images/issue-attachment-5.jpg", "/images/issue-attachment-6.jpg"],
     commentsCount: 8,
     author: "Username",
     authorAvatar: "/avatars/user-2.jpg",
@@ -115,10 +112,7 @@ export const MOCK_ISSUES: Issue[] = [
     description:
       "Looking for advice on contract disputes. Has anyone dealt with breach of contract cases? What was your experience? #LegalAdvice #ContractDisputes",
     timestamp: "2024-01-18T11:30:00Z",
-    attachments: [
-      "/images/legal-attachment-1.jpg",
-      "/images/legal-attachment-2.jpg",
-    ],
+    attachments: ["/images/legal-attachment-1.jpg", "/images/legal-attachment-2.jpg"],
     commentsCount: 17,
     author: "LegalSeeker",
     authorAvatar: "/avatars/legal-1.jpg",
@@ -167,10 +161,8 @@ export const MOCK_ISSUES: Issue[] = [
 ];
 
 // Helper functions
-export const getIssuesByCategory = (
-  category: "your-issues" | "explore-issues"
-): Issue[] => {
-  return MOCK_ISSUES.filter((issue) => issue.category === category);
+export const getIssuesByCategory = (category: "your-issues" | "explore-issues"): Issue[] => {
+  return MOCK_ISSUES.filter(issue => issue.category === category);
 };
 
 export const getAllIssues = (): Issue[] => {
@@ -178,17 +170,14 @@ export const getAllIssues = (): Issue[] => {
 };
 
 export const getIssueById = (id: string): Issue | undefined => {
-  return MOCK_ISSUES.find((issue) => issue.id === id);
+  return MOCK_ISSUES.find(issue => issue.id === id);
 };
 
 export const getIssuesByAuthor = (author: string): Issue[] => {
-  return MOCK_ISSUES.filter((issue) => issue.author === author);
+  return MOCK_ISSUES.filter(issue => issue.author === author);
 };
 
-export const sortIssuesByDate = (
-  issues: Issue[],
-  ascending: boolean = false
-): Issue[] => {
+export const sortIssuesByDate = (issues: Issue[], ascending: boolean = false): Issue[] => {
   return [...issues].sort((a, b) => {
     const dateA = new Date(a.timestamp).getTime();
     const dateB = new Date(b.timestamp).getTime();
@@ -196,33 +185,19 @@ export const sortIssuesByDate = (
   });
 };
 
-export const sortIssuesByComments = (
-  issues: Issue[],
-  ascending: boolean = false
-): Issue[] => {
+export const sortIssuesByComments = (issues: Issue[], ascending: boolean = false): Issue[] => {
   return [...issues].sort((a, b) => {
-    return ascending
-      ? a.commentsCount - b.commentsCount
-      : b.commentsCount - a.commentsCount;
+    return ascending ? a.commentsCount - b.commentsCount : b.commentsCount - a.commentsCount;
   });
 };
 
 // Statistics
 export const getIssueStats = () => {
   const total = MOCK_ISSUES.length;
-  const yourIssues = MOCK_ISSUES.filter(
-    (issue) => issue.category === "your-issues"
-  ).length;
-  const exploreIssues = MOCK_ISSUES.filter(
-    (issue) => issue.category === "explore-issues"
-  ).length;
-  const totalComments = MOCK_ISSUES.reduce(
-    (sum, issue) => sum + issue.commentsCount,
-    0
-  );
-  const issuesWithAttachments = MOCK_ISSUES.filter(
-    (issue) => issue.attachments.length > 0
-  ).length;
+  const yourIssues = MOCK_ISSUES.filter(issue => issue.category === "your-issues").length;
+  const exploreIssues = MOCK_ISSUES.filter(issue => issue.category === "explore-issues").length;
+  const totalComments = MOCK_ISSUES.reduce((sum, issue) => sum + issue.commentsCount, 0);
+  const issuesWithAttachments = MOCK_ISSUES.filter(issue => issue.attachments.length > 0).length;
 
   return {
     total,

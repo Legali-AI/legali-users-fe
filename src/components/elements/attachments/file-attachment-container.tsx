@@ -34,11 +34,7 @@ export function FileAttachmentContainer({
           className={classNameItem || ""}
           key={`${attachment}-${index}`}
           filename={attachment}
-          onClick={
-            onAttachmentClick
-              ? () => onAttachmentClick(attachment, index)
-              : undefined
-          }
+          onClick={onAttachmentClick ? () => onAttachmentClick(attachment, index) : undefined}
           truncate={truncate}
         />
       ))}

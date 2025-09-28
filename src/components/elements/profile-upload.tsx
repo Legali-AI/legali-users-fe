@@ -90,13 +90,12 @@ export function ProfileUpload({
         aria-label="Upload profile image"
         role="button"
         tabIndex={disabled ? -1 : 0}
-        onKeyDown={(e) => {
+        onKeyDown={e => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             handleClick();
           }
-        }}
-      >
+        }}>
         {preview ? (
           <Image
             src={preview}
@@ -106,13 +105,7 @@ export function ProfileUpload({
             className="h-full w-full overflow-hidden rounded-full object-cover"
           />
         ) : (
-          <UserIcon
-            size={80}
-            className={cn(
-              "size-16 md:size-20",
-              profileUploadVariants({ textVariant: variant })
-            )}
-          />
+          <UserIcon size={80} className={cn("size-16 md:size-20", profileUploadVariants({ textVariant: variant }))} />
         )}
 
         {/* Edit Button */}
@@ -121,12 +114,11 @@ export function ProfileUpload({
           size="icon"
           variant="gradient-blue"
           className="absolute right-0 bottom-0 h-10 w-10 rounded-full p-0"
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation();
             handleClick();
           }}
-          disabled={disabled}
-        >
+          disabled={disabled}>
           <Pencil size={20} />
         </Button>
 
@@ -137,12 +129,11 @@ export function ProfileUpload({
             size="icon"
             variant="destructive"
             className="absolute top-0 left-0 h-6 w-6 rounded-full p-0"
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation();
               handleRemove();
             }}
-            disabled={disabled}
-          >
+            disabled={disabled}>
             <X size={12} />
           </Button>
         )}

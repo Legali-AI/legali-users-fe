@@ -1,33 +1,22 @@
 "use client";
 
+import { getAccessToken } from "@/lib/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { getAccessToken } from "@/lib/auth";
+
 import { ProfileUpload } from "../../components/elements/profile-upload";
 import { H1 } from "../../components/elements/typography";
 import { Button } from "../../components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form";
 import { Input } from "../../components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { useAuth } from "../../hooks/use-auth";
 import { useUpdateProfileCache } from "../../hooks/use-profile";
 import { type WelcomeFormData, welcomeFormSchema } from "../../schema/welcome";
+
 import {
   getAllCitiesApiLocationsCitiesGet,
   getAllCountriesApiLocationsCountriesGet,
@@ -42,17 +31,11 @@ export function WelcomeForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Location data states
-  const [regions, setRegions] = useState<Array<{ id: number; name: string }>>(
-    []
-  );
-  const [countries, setCountries] = useState<
-    Array<{ id: number; name: string }>
-  >([]);
+  const [regions, setRegions] = useState<Array<{ id: number; name: string }>>([]);
+  const [countries, setCountries] = useState<Array<{ id: number; name: string }>>([]);
   const [cities, setCities] = useState<Array<{ id: number; name: string }>>([]);
   const [selectedRegionId, setSelectedRegionId] = useState<number | null>(null);
-  const [selectedCountryId, setSelectedCountryId] = useState<number | null>(
-    null
-  );
+  const [selectedCountryId, setSelectedCountryId] = useState<number | null>(null);
   const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
   const [isLoadingLocations, setIsLoadingLocations] = useState(false);
 
@@ -176,9 +159,7 @@ export function WelcomeForm() {
       }
     } catch (error) {
       console.error("Profile update error:", error);
-      alert(
-        `Profile update failed: ${error instanceof Error ? error.message : "Unknown error"}`
-      );
+      alert(`Profile update failed: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -202,8 +183,7 @@ export function WelcomeForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="m-auto flex w-full flex-1 items-center gap-6 self-center max-md:flex-col md:items-start md:gap-8 lg:gap-10 xl:gap-12"
-        >
+          className="m-auto flex w-full flex-1 items-center gap-6 self-center max-md:flex-col md:items-start md:gap-8 lg:gap-10 xl:gap-12">
           {/* Profile Image Upload */}
           <FormField
             control={form.control}
@@ -211,11 +191,7 @@ export function WelcomeForm() {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <ProfileUpload
-                    value={field.value}
-                    onChange={field.onChange}
-                    disabled={isLoading}
-                  />
+                  <ProfileUpload value={field.value} onChange={field.onChange} disabled={isLoading} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -229,15 +205,9 @@ export function WelcomeForm() {
               name="firstName"
               render={({ field }) => (
                 <FormItem className="space-y-0.5 md:space-y-1">
-                  <FormLabel className="text-base font-semibold text-deep-navy">
-                    First Name
-                  </FormLabel>
+                  <FormLabel className="text-base font-semibold text-deep-navy">First Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter your first name..."
-                      disabled={isLoading}
-                      {...field}
-                    />
+                    <Input placeholder="Enter your first name..." disabled={isLoading} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -250,15 +220,9 @@ export function WelcomeForm() {
               name="lastName"
               render={({ field }) => (
                 <FormItem className="space-y-0.5 md:space-y-1">
-                  <FormLabel className="text-base font-semibold text-deep-navy">
-                    Last Name
-                  </FormLabel>
+                  <FormLabel className="text-base font-semibold text-deep-navy">Last Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter your last name..."
-                      disabled={isLoading}
-                      {...field}
-                    />
+                    <Input placeholder="Enter your last name..." disabled={isLoading} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -267,22 +231,17 @@ export function WelcomeForm() {
 
             {/* Region */}
             <FormItem className="space-y-0.5 md:space-y-1">
-              <FormLabel className="text-base font-semibold text-deep-navy">
-                Region
-              </FormLabel>
+              <FormLabel className="text-base font-semibold text-deep-navy">Region</FormLabel>
               <Select
-                onValueChange={(value) =>
-                  handleRegionChange(parseInt(value, 10))
-                }
-                disabled={isLoading || isLoadingLocations}
-              >
+                onValueChange={value => handleRegionChange(parseInt(value, 10))}
+                disabled={isLoading || isLoadingLocations}>
                 <FormControl>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select Region" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {regions.map((region) => (
+                  {regions.map(region => (
                     <SelectItem key={region.id} value={region.id.toString()}>
                       {region.name}
                     </SelectItem>
@@ -293,22 +252,17 @@ export function WelcomeForm() {
 
             {/* Country */}
             <FormItem className="space-y-0.5 md:space-y-1">
-              <FormLabel className="text-base font-semibold text-deep-navy">
-                Country
-              </FormLabel>
+              <FormLabel className="text-base font-semibold text-deep-navy">Country</FormLabel>
               <Select
-                onValueChange={(value) =>
-                  handleCountryChange(parseInt(value, 10))
-                }
-                disabled={isLoading || isLoadingLocations || !selectedRegionId}
-              >
+                onValueChange={value => handleCountryChange(parseInt(value, 10))}
+                disabled={isLoading || isLoadingLocations || !selectedRegionId}>
                 <FormControl>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select Country" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {countries.map((country) => (
+                  {countries.map(country => (
                     <SelectItem key={country.id} value={country.id.toString()}>
                       {country.name}
                     </SelectItem>
@@ -319,22 +273,17 @@ export function WelcomeForm() {
 
             {/* City */}
             <FormItem className="space-y-0.5 md:space-y-1">
-              <FormLabel className="text-base font-semibold text-deep-navy">
-                City
-              </FormLabel>
+              <FormLabel className="text-base font-semibold text-deep-navy">City</FormLabel>
               <Select
-                onValueChange={(value) =>
-                  setSelectedCityId(parseInt(value, 10))
-                }
-                disabled={isLoading || isLoadingLocations || !selectedCountryId}
-              >
+                onValueChange={value => setSelectedCityId(parseInt(value, 10))}
+                disabled={isLoading || isLoadingLocations || !selectedCountryId}>
                 <FormControl>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select City" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {cities.map((city) => (
+                  {cities.map(city => (
                     <SelectItem key={city.id} value={city.id.toString()}>
                       {city.name}
                     </SelectItem>
@@ -345,20 +294,11 @@ export function WelcomeForm() {
 
             {/* Action Buttons */}
             <div className="flex items-center justify-between gap-2.5">
-              <Button
-                type="button"
-                variant="outline"
-                disabled={isLoading}
-                onClick={() => form.reset()}
-              >
+              <Button type="button" variant="outline" disabled={isLoading} onClick={() => form.reset()}>
                 Cancel
               </Button>
 
-              <Button
-                type="submit"
-                variant="gradient-blue"
-                disabled={isLoading || isSubmitting}
-              >
+              <Button type="submit" variant="gradient-blue" disabled={isLoading || isSubmitting}>
                 {isSubmitting ? "Updating Profile..." : "Finish"}
               </Button>
             </div>

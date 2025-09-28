@@ -170,12 +170,7 @@ export const dashboardMetadata = createPrivateMetadata(
   "Dashboard",
   "Manage your legal cases, connect with attorneys, and access AI-powered legal tools through your Legali dashboard.",
   "/dashboard",
-  [
-    "legal dashboard",
-    "case management",
-    "attorney connection",
-    "legal AI tools",
-  ],
+  ["legal dashboard", "case management", "attorney connection", "legal AI tools"],
   "/og-dashboard.jpg"
 );
 
@@ -197,13 +192,7 @@ export const attorneysMetadata = createPrivateMetadata(
   "Attorneys",
   "Connect with qualified attorneys and legal professionals through Legali's network. Find the right lawyer for your case with our AI-powered matching system.",
   "/attorneys",
-  [
-    "attorney connection",
-    "find lawyer",
-    "legal professionals",
-    "lawyer matching",
-    "legal network",
-  ],
+  ["attorney connection", "find lawyer", "legal professionals", "lawyer matching", "legal network"],
   "/og-attorneys.jpg"
 );
 

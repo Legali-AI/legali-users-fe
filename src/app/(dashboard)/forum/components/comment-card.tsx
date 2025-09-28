@@ -3,11 +3,7 @@
 import { MessageCircle, User } from "lucide-react";
 import { ImageAttachmentPreview } from "../../../../components/elements/attachments/image-attachment-preview";
 import { H5, P, Small } from "../../../../components/elements/typography";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "../../../../components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../../../../components/ui/avatar";
 
 export interface CommentCardProps {
   author: string;
@@ -27,17 +23,12 @@ export function CommentCard({
   className = "",
 }: CommentCardProps) {
   return (
-    <div
-      className={`flex gap-3 border-b border-white-400 p-4 lg:gap-4 lg:p-5 ${className}`}
-    >
+    <div className={`flex gap-3 border-b border-white-400 p-4 lg:gap-4 lg:p-5 ${className}`}>
       {/* Avatar */}
       <Avatar className="h-10 w-10 lg:h-12 lg:w-12">
         <AvatarImage src={authorAvatar} alt={author} />
         <AvatarFallback className="bg-slate-gray-300">
-          <User
-            size={18}
-            className="text-light-gray-100 lg:h-[22px] lg:w-[22px]"
-          />
+          <User size={18} className="text-light-gray-100 lg:h-[22px] lg:w-[22px]" />
         </AvatarFallback>
       </Avatar>
 
@@ -55,11 +46,7 @@ export function CommentCard({
 
         {/* Comment Attachments */}
         {attachments && attachments.length > 0 && (
-          <ImageAttachmentPreview
-            images={attachments}
-            maxVisible={3}
-            imageSize={78}
-          />
+          <ImageAttachmentPreview images={attachments} maxVisible={3} imageSize={78} />
         )}
 
         {/* Comment Footer */}

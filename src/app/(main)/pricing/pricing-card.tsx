@@ -11,13 +11,7 @@ export interface PricingCardProps {
   creditLimit: number;
 }
 
-export default function PricingCard({
-  name,
-  price,
-  features,
-  isActive,
-  creditLimit,
-}: PricingCardProps) {
+export default function PricingCard({ name, price, features, isActive, creditLimit }: PricingCardProps) {
   return (
     <Card className="w-full">
       <CardContent className="flex flex-col gap-6">
@@ -26,11 +20,7 @@ export default function PricingCard({
           {/* Plan name */}
           <H3 weight={"semibold"}>{name}</H3>
           {/* Plan price */}
-          <H4
-            level={"h2"}
-            weight={"semibold"}
-            className={typeof price !== "number" ? "text-sky-blue-800" : ""}
-          >
+          <H4 level={"h2"} weight={"semibold"} className={typeof price !== "number" ? "text-sky-blue-800" : ""}>
             {typeof price === "number" ? `$${price}` : "Coming soon"}
           </H4>
           {/* Credit limit */}
@@ -43,26 +33,17 @@ export default function PricingCard({
           type="button"
           variant={!isActive ? "gradient-blue" : "outline"}
           className="w-full rounded-md"
-          size={"lg"}
-        >
-          <Span
-            level={"title"}
-            weight={"medium"}
-            className={isActive ? "text-brand-slate" : "text-black"}
-          >
+          size={"lg"}>
+          <Span level={"title"} weight={"medium"} className={isActive ? "text-brand-slate" : "text-black"}>
             {isActive ? "Your current plan" : `Get ${name}`}
           </Span>
         </Button>
         {/* Features */}
         <ul className="flex flex-col gap-3">
-          {features.map((feature) => (
+          {features.map(feature => (
             <li key={feature}>
               {/* Feature */}
-              <P
-                level={"body"}
-                weight={"semibold"}
-                className="flex items-center gap-2"
-              >
+              <P level={"body"} weight={"semibold"} className="flex items-center gap-2">
                 <CheckIcon width={16} height={16} />
                 {feature}
               </P>

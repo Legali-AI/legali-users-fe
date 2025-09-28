@@ -26,8 +26,7 @@ export const createFileTableColumns = ({
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="h-auto p-0 "
-        >
+          className="h-auto p-0 ">
           Date
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
@@ -46,8 +45,7 @@ export const createFileTableColumns = ({
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="h-auto p-0 font-semibold"
-        >
+          className="h-auto p-0 font-semibold">
           File Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
@@ -66,8 +64,7 @@ export const createFileTableColumns = ({
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="h-auto p-0 font-semibold"
-        >
+          className="h-auto p-0 font-semibold">
           Summary
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
@@ -87,8 +84,7 @@ export const createFileTableColumns = ({
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           weight="semibold"
-          className="h-auto p-0 "
-        >
+          className="h-auto p-0 ">
           Case
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
@@ -116,8 +112,7 @@ export const createFileTableColumns = ({
             variant="ghost"
             size="sm"
             className="bg-brand-gray-50 px-[10px] text-slate-gray-400 hover:bg-white-400"
-            onClick={() => onViewFile(file)}
-          >
+            onClick={() => onViewFile(file)}>
             <P level="body" className="text-slate-gray">
               View
             </P>
@@ -126,8 +121,7 @@ export const createFileTableColumns = ({
             variant="ghost"
             size="sm"
             className="bg-sky-blue-600 px-[10px] text-white"
-            onClick={() => onEditAccess(file)}
-          >
+            onClick={() => onEditAccess(file)}>
             <P level="body" className="text-white">
               Edit Access
             </P>
@@ -136,17 +130,12 @@ export const createFileTableColumns = ({
             variant="ghost"
             size="sm"
             className="bg-brand-rose px-[10px] text-white hover:bg-brand-rose"
-            onClick={() => onDeleteFile(file)}
-          >
+            onClick={() => onDeleteFile(file)}>
             <P level="body" className="text-white">
               Delete
             </P>
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onDownloadFile(file)}
-          >
+          <Button variant="ghost" size="sm" onClick={() => onDownloadFile(file)}>
             <Download size={16} className="text-sky-blue-800" />
           </Button>
         </div>

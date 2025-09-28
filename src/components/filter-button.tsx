@@ -43,7 +43,7 @@ export function FilterButton({
   const handleOptionClick = (value: string) => {
     if (multiple) {
       if (selectedValues.includes(value)) {
-        onChange(selectedValues.filter((v) => v !== value));
+        onChange(selectedValues.filter(v => v !== value));
       } else {
         onChange([...selectedValues, value]);
       }
@@ -64,7 +64,7 @@ export function FilterButton({
     }
 
     if (selectedValues.length === 1) {
-      const option = options.find((opt) => opt.value === selectedValues[0]);
+      const option = options.find(opt => opt.value === selectedValues[0]);
       return option?.label || selectedValues[0];
     }
 
@@ -84,25 +84,17 @@ export function FilterButton({
           relative flex w-full items-center justify-between rounded-lg border
           border-gray-200 bg-white px-4 py-2 text-left
           shadow-sm transition-all duration-200
-          ${
-            disabled
-              ? "cursor-not-allowed opacity-50"
-              : "hover:border-gray-300 hover:shadow-md"
-          }
+          ${disabled ? "cursor-not-allowed opacity-50" : "hover:border-gray-300 hover:shadow-md"}
           ${isOpen ? "border-blue-500 ring-2 ring-blue-100" : ""}
           ${hasSelection ? "border-blue-200 bg-blue-50" : ""}
-        `}
-      >
+        `}>
         <div className="flex min-w-0 flex-1 items-center">
-          <span className="mr-2 text-sm font-medium text-gray-700">
-            {title}:
-          </span>
+          <span className="mr-2 text-sm font-medium text-gray-700">{title}:</span>
           <span
             className={`
               truncate text-sm
               ${hasSelection ? "font-medium text-blue-700" : "text-gray-500"}
-            `}
-          >
+            `}>
             {getDisplayText()}
           </span>
         </div>
@@ -112,8 +104,7 @@ export function FilterButton({
             <button
               type="button"
               onClick={handleClear}
-              className="mr-1 rounded-full p-1 transition-colors hover:bg-gray-200"
-            >
+              className="mr-1 rounded-full p-1 transition-colors hover:bg-gray-200">
               <X className="h-4 w-4 text-gray-400" />
             </button>
           )}
@@ -131,11 +122,9 @@ export function FilterButton({
         <div className="absolute z-10 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg">
           <div className="max-h-60 overflow-y-auto py-1">
             {options.length === 0 ? (
-              <div className="px-4 py-2 text-sm text-gray-500">
-                No options available
-              </div>
+              <div className="px-4 py-2 text-sm text-gray-500">No options available</div>
             ) : (
-              options.map((option) => {
+              options.map(option => {
                 const isSelected = selectedValues.includes(option.value);
                 return (
                   <button
@@ -145,13 +134,8 @@ export function FilterButton({
                     className={`
                       flex w-full items-center justify-between px-4 py-2
                       text-left text-sm transition-colors hover:bg-gray-50
-                      ${
-                        isSelected
-                          ? "bg-blue-50 text-blue-700"
-                          : "text-gray-700"
-                      }
-                    `}
-                  >
+                      ${isSelected ? "bg-blue-50 text-blue-700" : "text-gray-700"}
+                    `}>
                     <span className="flex items-center">
                       {multiple && (
                         <input
@@ -163,11 +147,7 @@ export function FilterButton({
                       )}
                       {option.label}
                     </span>
-                    {option.count !== undefined && (
-                      <span className="text-xs text-gray-500">
-                        ({option.count})
-                      </span>
-                    )}
+                    {option.count !== undefined && <span className="text-xs text-gray-500">({option.count})</span>}
                   </button>
                 );
               })
@@ -182,7 +162,7 @@ export function FilterButton({
           type="button"
           className="fixed inset-0 z-5 cursor-default"
           onClick={() => setIsOpen(false)}
-          onKeyDown={(e) => {
+          onKeyDown={e => {
             if (e.key === "Escape") {
               setIsOpen(false);
             }

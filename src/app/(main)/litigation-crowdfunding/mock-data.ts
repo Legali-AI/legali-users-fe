@@ -1,9 +1,3 @@
-import type {
-  LitigationCase,
-  ReturnRange,
-  RiskLevel,
-} from "@/types/litigation";
-
 export const practiceAreas = [
   "All Practice Areas",
   "Employment Law",
@@ -78,14 +72,12 @@ export const mockCases: LitigationCase[] = [
       {
         date: "2024-06-20",
         title: "Discovery Phase Completed",
-        content:
-          "Successfully completed discovery phase. Evidence strongly supports our case.",
+        content: "Successfully completed discovery phase. Evidence strongly supports our case.",
       },
       {
         date: "2024-05-15",
         title: "Additional Plaintiffs Added",
-        content:
-          "Added 35 additional plaintiffs, strengthening our class action.",
+        content: "Added 35 additional plaintiffs, strengthening our class action.",
       },
     ],
     keyFactors: [
@@ -140,8 +132,7 @@ export const mockCases: LitigationCase[] = [
       {
         date: "2024-06-18",
         title: "Case Accepted by Court",
-        content:
-          "Federal court has accepted our case for trial. Preliminary motions scheduled.",
+        content: "Federal court has accepted our case for trial. Preliminary motions scheduled.",
       },
     ],
     keyFactors: [

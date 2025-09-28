@@ -424,8 +424,7 @@ export const AuthTokenDAOSchema = {
     is_new: {
       type: "boolean",
       title: "Is New",
-      description:
-        "Whether the user was newly registered during this auth flow",
+      description: "Whether the user was newly registered during this auth flow",
       default: false,
     },
   },
@@ -1561,14 +1560,7 @@ export const PricingPlanCreateDAOSchema = {
     },
   },
   type: "object",
-  required: [
-    "name",
-    "type",
-    "price",
-    "duration_days",
-    "storage_gb",
-    "token_count",
-  ],
+  required: ["name", "type", "price", "duration_days", "storage_gb", "token_count"],
   title: "PricingPlanCreateDAO",
   description: "Pricing plan creation data access object",
 } as const;
@@ -2262,8 +2254,7 @@ export const UserProfileDAOSchema = {
   type: "object",
   required: ["id", "email", "first_name", "last_name"],
   title: "UserProfileDAO",
-  description:
-    "Enriched user profile data access object with location information",
+  description: "Enriched user profile data access object with location information",
 } as const;
 
 export const UserRoleSchema = {
@@ -2273,177 +2264,175 @@ export const UserRoleSchema = {
   description: "User roles for system access control",
 } as const;
 
-export const backend__module__document__entity__document_dao__UserStorageInfoDAOSchema =
-  {
-    properties: {
-      user_id: {
-        type: "string",
-        format: "uuid",
-        title: "User Id",
-        description: "User ID",
-      },
-      current_storage_bytes: {
-        type: "integer",
-        title: "Current Storage Bytes",
-        description: "Current storage used in bytes",
-      },
-      current_storage_mb: {
-        type: "number",
-        title: "Current Storage Mb",
-        description: "Current storage used in MB",
-      },
-      current_storage_gb: {
-        type: "number",
-        title: "Current Storage Gb",
-        description: "Current storage used in GB",
-      },
-      storage_limit_bytes: {
-        type: "integer",
-        title: "Storage Limit Bytes",
-        description: "Storage limit in bytes",
-      },
-      storage_limit_mb: {
-        type: "number",
-        title: "Storage Limit Mb",
-        description: "Storage limit in MB",
-      },
-      storage_limit_gb: {
-        type: "number",
-        title: "Storage Limit Gb",
-        description: "Storage limit in GB",
-      },
-      file_count: {
-        type: "integer",
-        title: "File Count",
-        description: "Number of files",
-      },
-      user_role: {
-        type: "string",
-        title: "User Role",
-        description: "User role (user/premium/admin)",
-      },
-      bypass_plan: {
-        anyOf: [
-          {
-            type: "string",
-          },
-          {
-            type: "null",
-          },
-        ],
-        title: "Bypass Plan",
-        description: "Bypass plan name if any",
-      },
+export const backend__module__document__entity__document_dao__UserStorageInfoDAOSchema = {
+  properties: {
+    user_id: {
+      type: "string",
+      format: "uuid",
+      title: "User Id",
+      description: "User ID",
     },
-    type: "object",
-    required: [
-      "user_id",
-      "current_storage_bytes",
-      "current_storage_mb",
-      "current_storage_gb",
-      "storage_limit_bytes",
-      "storage_limit_mb",
-      "storage_limit_gb",
-      "file_count",
-      "user_role",
-    ],
-    title: "UserStorageInfoDAO",
-    description: "User storage information data access object",
-  } as const;
+    current_storage_bytes: {
+      type: "integer",
+      title: "Current Storage Bytes",
+      description: "Current storage used in bytes",
+    },
+    current_storage_mb: {
+      type: "number",
+      title: "Current Storage Mb",
+      description: "Current storage used in MB",
+    },
+    current_storage_gb: {
+      type: "number",
+      title: "Current Storage Gb",
+      description: "Current storage used in GB",
+    },
+    storage_limit_bytes: {
+      type: "integer",
+      title: "Storage Limit Bytes",
+      description: "Storage limit in bytes",
+    },
+    storage_limit_mb: {
+      type: "number",
+      title: "Storage Limit Mb",
+      description: "Storage limit in MB",
+    },
+    storage_limit_gb: {
+      type: "number",
+      title: "Storage Limit Gb",
+      description: "Storage limit in GB",
+    },
+    file_count: {
+      type: "integer",
+      title: "File Count",
+      description: "Number of files",
+    },
+    user_role: {
+      type: "string",
+      title: "User Role",
+      description: "User role (user/premium/admin)",
+    },
+    bypass_plan: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Bypass Plan",
+      description: "Bypass plan name if any",
+    },
+  },
+  type: "object",
+  required: [
+    "user_id",
+    "current_storage_bytes",
+    "current_storage_mb",
+    "current_storage_gb",
+    "storage_limit_bytes",
+    "storage_limit_mb",
+    "storage_limit_gb",
+    "file_count",
+    "user_role",
+  ],
+  title: "UserStorageInfoDAO",
+  description: "User storage information data access object",
+} as const;
 
-export const backend__module__pricing__entity__pricing_dao__UserStorageInfoDAOSchema =
-  {
-    properties: {
-      user_id: {
-        type: "string",
-        format: "uuid",
-        title: "User Id",
-        description: "User ID",
-      },
-      email: {
-        type: "string",
-        title: "Email",
-        description: "User email",
-      },
-      full_name: {
-        anyOf: [
-          {
-            type: "string",
-          },
-          {
-            type: "null",
-          },
-        ],
-        title: "Full Name",
-        description: "User full name",
-      },
-      account_status: {
-        type: "string",
-        title: "Account Status",
-        description: "Account status (premium/free)",
-      },
-      current_plan: {
-        anyOf: [
-          {
-            type: "string",
-          },
-          {
-            type: "null",
-          },
-        ],
-        title: "Current Plan",
-        description: "Current pricing plan name",
-      },
-      bypass_plan: {
-        anyOf: [
-          {
-            type: "string",
-          },
-          {
-            type: "null",
-          },
-        ],
-        title: "Bypass Plan",
-        description: "Bypass plan name if any",
-      },
-      storage_used_gb: {
-        type: "number",
-        title: "Storage Used Gb",
-        description: "Storage used in GB",
-      },
-      storage_limit_gb: {
-        type: "integer",
-        title: "Storage Limit Gb",
-        description: "Storage limit in GB",
-      },
-      file_count: {
-        type: "integer",
-        title: "File Count",
-        description: "Number of files",
-      },
-      last_activity: {
-        anyOf: [
-          {
-            type: "string",
-            format: "date-time",
-          },
-          {
-            type: "null",
-          },
-        ],
-        title: "Last Activity",
-        description: "Last activity date",
-      },
+export const backend__module__pricing__entity__pricing_dao__UserStorageInfoDAOSchema = {
+  properties: {
+    user_id: {
+      type: "string",
+      format: "uuid",
+      title: "User Id",
+      description: "User ID",
     },
-    type: "object",
-    required: [
-      "user_id",
-      "email",
-      "account_status",
-      "storage_used_gb",
-      "storage_limit_gb",
-      "file_count",
-    ],
-    title: "UserStorageInfoDAO",
-    description: "User storage information data access object",
-  } as const;
+    email: {
+      type: "string",
+      title: "Email",
+      description: "User email",
+    },
+    full_name: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Full Name",
+      description: "User full name",
+    },
+    account_status: {
+      type: "string",
+      title: "Account Status",
+      description: "Account status (premium/free)",
+    },
+    current_plan: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Current Plan",
+      description: "Current pricing plan name",
+    },
+    bypass_plan: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Bypass Plan",
+      description: "Bypass plan name if any",
+    },
+    storage_used_gb: {
+      type: "number",
+      title: "Storage Used Gb",
+      description: "Storage used in GB",
+    },
+    storage_limit_gb: {
+      type: "integer",
+      title: "Storage Limit Gb",
+      description: "Storage limit in GB",
+    },
+    file_count: {
+      type: "integer",
+      title: "File Count",
+      description: "Number of files",
+    },
+    last_activity: {
+      anyOf: [
+        {
+          type: "string",
+          format: "date-time",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Last Activity",
+      description: "Last activity date",
+    },
+  },
+  type: "object",
+  required: [
+    "user_id",
+    "email",
+    "account_status",
+    "storage_used_gb",
+    "storage_limit_gb",
+    "file_count",
+  ],
+  title: "UserStorageInfoDAO",
+  description: "User storage information data access object",
+} as const;

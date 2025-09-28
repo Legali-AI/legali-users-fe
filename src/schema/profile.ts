@@ -17,7 +17,7 @@ export const profileFormSchema = z.object({
     .any()
     .optional()
     .refine(
-      (file) => {
+      file => {
         if (!file) return true; // Optional field
         if (file instanceof File) {
           return file.size <= 5 * 1024 * 1024; // 5MB limit
@@ -29,7 +29,7 @@ export const profileFormSchema = z.object({
       }
     )
     .refine(
-      (file) => {
+      file => {
         if (!file) return true; // Optional field
         if (file instanceof File) {
           const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
@@ -45,7 +45,7 @@ export const profileFormSchema = z.object({
     .string()
     .min(1, "Date of birth is required")
     .refine(
-      (date) => {
+      date => {
         // Handle both YYYY-MM-DD (from date input) and MM/DD/YYYY formats
         let inputDate: Date;
 
@@ -63,11 +63,7 @@ export const profileFormSchema = z.object({
         const today = new Date();
         const minDate = new Date(1900, 0, 1);
 
-        return (
-          inputDate <= today &&
-          inputDate >= minDate &&
-          !Number.isNaN(inputDate.getTime())
-        );
+        return inputDate <= today && inputDate >= minDate && !Number.isNaN(inputDate.getTime());
       },
       {
         message: "Please enter a valid date between 01/01/1900 and today",
@@ -76,7 +72,7 @@ export const profileFormSchema = z.object({
   subscriptionType: z
     .string()
     .min(1, "Subscription type is required")
-    .refine((value) => ["Free", "Premium", "Enterprise"].includes(value), {
+    .refine(value => ["Free", "Premium", "Enterprise"].includes(value), {
       message: "Please select a valid subscription type",
     }),
   region: z.string().min(1, "Please select a region"),
@@ -87,12 +83,9 @@ export const profileFormSchema = z.object({
   storageUsage: z
     .string()
     .min(1, "Storage usage is required")
-    .regex(
-      /^\d+\s*(MB|GB|TB)$/i,
-      "Storage usage must be in format like '20000 MB' or '20 GB'"
-    )
+    .regex(/^\d+\s*(MB|GB|TB)$/i, "Storage usage must be in format like '20000 MB' or '20 GB'")
     .refine(
-      (value) => {
+      value => {
         const match = value.match(/^(\d+)\s*(MB|GB|TB)$/i);
         if (!match) return false;
 
@@ -172,8 +165,7 @@ export const parseDateFromString = (dateString: string): Date | null => {
   } else if (dateString.includes("/")) {
     // MM/DD/YYYY format
     const [month, day, year] = dateString.split("/").map(Number);
-    if (Number.isNaN(month) || Number.isNaN(day) || Number.isNaN(year))
-      return null;
+    if (Number.isNaN(month) || Number.isNaN(day) || Number.isNaN(year)) return null;
     date = new Date(year, month - 1, day);
   } else {
     return null;

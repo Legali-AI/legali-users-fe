@@ -153,9 +153,7 @@ export const SHOW_COUNT_OPTIONS = [
 
 export function getFilesByCaseType(caseType: string): FileItem[] {
   if (caseType === "all") return MOCK_FILES;
-  return MOCK_FILES.filter((file) =>
-    file.caseTitle.toLowerCase().includes(caseType.toLowerCase())
-  );
+  return MOCK_FILES.filter(file => file.caseTitle.toLowerCase().includes(caseType.toLowerCase()));
 }
 
 export function sortFiles(files: FileItem[], sortBy: string): FileItem[] {
@@ -163,9 +161,7 @@ export function sortFiles(files: FileItem[], sortBy: string): FileItem[] {
 
   switch (sortBy) {
     case "date":
-      return sorted.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
+      return sorted.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     case "name":
       return sorted.sort((a, b) => a.fileName.localeCompare(b.fileName));
     case "case":
@@ -178,11 +174,7 @@ export function sortFiles(files: FileItem[], sortBy: string): FileItem[] {
   }
 }
 
-export function paginateFiles(
-  files: FileItem[],
-  page: number,
-  pageSize: number
-): FileItem[] {
+export function paginateFiles(files: FileItem[], page: number, pageSize: number): FileItem[] {
   const startIndex = (page - 1) * pageSize;
   return files.slice(startIndex, startIndex + pageSize);
 }
