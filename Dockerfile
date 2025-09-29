@@ -1,5 +1,5 @@
 # syntax=docker.io/docker/dockerfile:1
-# OFFICIAL FROM NEXTJS DOCS https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile 
+# OFFICIAL FROM NEXTJS DOCS https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
 # (MODIFIED TO USE BUN by @satriadhikara)
 
 FROM oven/bun:alpine AS base
@@ -26,6 +26,10 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Disable Turbopack to avoid compatibility issues with Bun
+ENV NEXT_TURBOPACK=0
+# Enable standalone output for Docker builds
+ENV DOCKER_BUILD=true
 RUN bun run build
 
 # Production image, copy all the files and run next

@@ -15,7 +15,7 @@ import {
   Users,
 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,8 @@ export default function CaseDetail({ case: caseData, onBack, onInvestmentStart }
   const [investorNote, setInvestorNote] = useState("");
   const [showInvestmentForm, setShowInvestmentForm] = useState(false);
   const { toast } = useToast();
+  const amountId = useId();
+  const noteId = useId();
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -397,11 +399,11 @@ export default function CaseDetail({ case: caseData, onBack, onInvestmentStart }
                 ) : (
                   <div className="space-y-3">
                     <div>
-                      <label htmlFor="amount" className="mb-1 block text-sm font-medium text-gray-700">
+                      <label htmlFor={amountId} className="mb-1 block text-sm font-medium text-gray-700">
                         Investment Amount
                       </label>
                       <Input
-                        id="amount"
+                        id={amountId}
                         type="number"
                         placeholder={`Min. ${formatCurrency(caseData.minimumInvestment)}`}
                         value={investmentAmount}
@@ -409,11 +411,11 @@ export default function CaseDetail({ case: caseData, onBack, onInvestmentStart }
                       />
                     </div>
                     <div>
-                      <label htmlFor="note" className="mb-1 block text-sm font-medium text-gray-700">
+                      <label htmlFor={noteId} className="mb-1 block text-sm font-medium text-gray-700">
                         Investor Note (Optional)
                       </label>
                       <Textarea
-                        id="note"
+                        id={noteId}
                         placeholder="Any comments or questions..."
                         value={investorNote}
                         onChange={e => setInvestorNote(e.target.value)}

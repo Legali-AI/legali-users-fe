@@ -1,11 +1,14 @@
 import type { NextConfig } from "next";
 
-const isNetlifyBuild =
-  process.env.NETLIFY === "true" || process.env.NODE_ENV === "production";
+const isNetlifyBuild = process.env.NETLIFY === "true";
+const isDockerBuild = process.env.DOCKER_BUILD === "true";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  // Only use static export for production builds
+  ...(isDockerBuild && {
+    output: "standalone",
+    outputFileTracingRoot: "/app",
+  }),
   ...(isNetlifyBuild && {
     output: "export",
     trailingSlash: true,

@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowDownRight, ArrowUpRight, Clock, DollarSign, TrendingUp, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import type { LitigationCase } from "@/types/litigation";
+import { ArrowDownRight, ArrowUpRight, Clock, DollarSign, TrendingUp, Users } from "lucide-react";
 
 interface InvestorPortfolioProps {
   investments: Array<{

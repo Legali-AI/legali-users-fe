@@ -1,10 +1,9 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { LogoutButton } from "@/components/module/auth/logout-button";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -14,7 +13,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { useAuth } from "@/hooks/use-auth";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "../../lib/utils";
 import { Typography } from "./typography";
 
@@ -29,94 +28,6 @@ const ListItem = ({ href, title }: { href: string; title: string }) => {
         </Link>
       </NavigationMenuLink>
     </li>
-  );
-};
-
-const AuthSection = () => {
-  const { isAuthenticated, user } = useAuth();
-
-  if (isAuthenticated && user) {
-    return (
-      <div className="flex items-center gap-3">
-        {/* User Info */}
-        <Link href="/profile" className="flex items-center gap-2 transition-opacity hover:opacity-80">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sky-blue-100">
-            <Typography level="caption" className="font-medium text-sky-blue-600">
-              {user.email?.charAt(0).toUpperCase()}
-            </Typography>
-          </div>
-          <Typography level="body" className="hidden text-gray-700 sm:block">
-            {user.email}
-          </Typography>
-        </Link>
-
-        {/* Logout Button */}
-        <LogoutButton variant="ghost" className="p-2 text-gray-600 hover:text-gray-900">
-          <Typography level="caption">Logout</Typography>
-        </LogoutButton>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <Button className="rounded-xl bg-deep-navy-400 hover:bg-deep-navy-500">
-        <Link href="/login">
-          <Typography weight="medium" level="body" className="text-white">
-            Log In
-          </Typography>
-        </Link>
-      </Button>
-    </div>
-  );
-};
-
-const MobileAuthSection = ({ onClose }: { onClose: () => void }) => {
-  const { isAuthenticated, user } = useAuth();
-
-  if (isAuthenticated && user) {
-    return (
-      <div className="space-y-3">
-        {/* User Info */}
-        <Link
-          href="/profile"
-          onClick={onClose}
-          className="flex items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-gray-100">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-blue-100">
-            <Typography level="body" className="font-medium text-sky-blue-600">
-              {user.email?.charAt(0).toUpperCase()}
-            </Typography>
-          </div>
-          <div>
-            <Typography level="body" className="font-medium text-gray-700">
-              Profile
-            </Typography>
-            <Typography level="caption" className="text-gray-500">
-              {user.email}
-            </Typography>
-          </div>
-        </Link>
-
-        {/* Logout Button */}
-        <div className="px-3">
-          <LogoutButton variant="outline" className="w-full justify-center border-red-200 text-red-600 hover:bg-red-50">
-            <Typography level="body">Logout</Typography>
-          </LogoutButton>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="px-3">
-      <Button className="w-full rounded-xl bg-deep-navy-400 hover:bg-deep-navy-500" asChild>
-        <Link href="/login" onClick={onClose}>
-          <Typography weight="medium" level="body" className="text-white">
-            Log In
-          </Typography>
-        </Link>
-      </Button>
-    </div>
   );
 };
 
@@ -163,7 +74,6 @@ const NAV_ITEMS: NavItemType[] = [
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -175,138 +85,124 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
-
   return (
-    <>
-      {/* Desktop Navbar */}
-      <nav
-        className={cn(
-          "fixed top-0 right-0 left-0 z-50 hidden w-full py-4 transition-all duration-300 lg:block",
-          isScrolled && "bg-white/70 shadow-lg backdrop-blur-md"
-        )}>
-        <div className="flex w-full items-center justify-between gap-4 rounded-full px-4 sm:px-8 lg:px-12">
-          {/* Logo */}
-          <div>
-            <Link href="/">
-              <Image src={"/logo.png"} alt="Logo" width={60} height={40} />
-            </Link>
-          </div>
+    <NavigationMenu
+      viewport={false}
+      className={cn(
+        "fixed top-4 left-1/2 z-50 w-[90vw] -translate-x-1/2 transform rounded-full px-4 py-2 transition-all duration-300 sm:top-5 sm:px-8 md:px-12 lg:px-16 xl:px-20",
+        isScrolled && "bg-white/90 shadow-lg backdrop-blur-md"
+      )}>
+      <NavigationMenuList className="flex w-full items-center justify-between gap-2 sm:gap-4 md:gap-6 lg:gap-8">
+        {/* Logo */}
+        <NavigationMenuItem className="flex-shrink-0">
+          <NavigationMenuLink href="/">
+            <Image src={"/logo.png"} alt="Logo" width={60} height={40} className="h-7 w-auto" priority />
+          </NavigationMenuLink>
+        </NavigationMenuItem>
 
-          {/* Navigation Items */}
-          <div className="flex items-center gap-6">
-            {NAV_ITEMS.map(item => (
-              <div key={item.title} className="relative">
-                {item.subItems && item.subItems.length > 0 ? (
-                  <NavigationMenu>
-                    <NavigationMenuList>
-                      <NavigationMenuItem>
-                        <NavigationMenuTrigger className="peer bg-transparent hover:bg-transparent">
-                          <Typography
-                            weight="medium"
-                            level="body"
-                            className="text-slate-gray-400 peer-hover:text-black">
-                            {item.title}
-                          </Typography>
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                          <ul className="grid w-[300px] gap-2">
-                            {item.subItems.map(subItem => (
-                              <ListItem key={subItem.title} href={subItem.href} title={subItem.title} />
-                            ))}
-                          </ul>
-                        </NavigationMenuContent>
-                      </NavigationMenuItem>
-                    </NavigationMenuList>
-                  </NavigationMenu>
-                ) : (
-                  <Link href={item.href} className="peer hover:bg-transparent">
-                    <Typography weight="medium" level="body" className="text-slate-gray-400">
+        {/* Routing - Hidden on mobile, visible on tablet+ */}
+        <div className="hidden flex-1 items-center justify-center gap-2 sm:gap-4 md:gap-6 lg:flex lg:gap-8">
+          {NAV_ITEMS.map(item => (
+            <NavigationMenuItem key={item.title} className="relative">
+              {/* Sub menu dropdown routing */}
+              {item.subItems && item.subItems.length > 0 ? (
+                <>
+                  <NavigationMenuTrigger className="peer bg-transparent px-2 py-1 hover:bg-transparent">
+                    <Typography weight="medium" level="body" className="text-slate-gray-400 peer-hover:text-black">
                       {item.title}
                     </Typography>
-                  </Link>
-                )}
-                <span className="pointer-events-none absolute top-[31px] left-1/2 h-[6px] w-[6px] -translate-x-1/2 rounded-full bg-deep-navy-400 opacity-0 transition-all duration-200 ease-out peer-hover:opacity-100 peer-focus-visible:opacity-100" />
-              </div>
-            ))}
-          </div>
-
-          {/* Auth Section */}
-          <AuthSection />
-        </div>
-      </nav>
-
-      {/* Mobile Navbar */}
-      <nav
-        className={cn(
-          "fixed top-[20px] left-1/2 z-50 w-[95vw] w-full -translate-x-1/2 transform rounded-2xl px-4 py-3 transition-all duration-300 lg:hidden",
-          isScrolled && "bg-white/70 shadow-lg backdrop-blur-md"
-        )}>
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/">
-            <Image src={"/logo.png"} alt="Logo" width={50} height={35} />
-          </Link>
-
-          {/* Hamburger Button */}
-          <button
-            onClick={toggleMobileMenu}
-            className="rounded-lg p-2 transition-colors hover:bg-gray-100"
-            aria-label="Toggle menu">
-            {isMobileMenuOpen ? <X className="h-6 w-6 text-gray-600" /> : <Menu className="h-6 w-6 text-gray-600" />}
-          </button>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="absolute top-full right-0 left-0 mt-2 rounded-2xl border border-white/20 bg-white/70 shadow-lg backdrop-blur-md">
-            <div className="space-y-2 px-4 py-4">
-              {/* Navigation Items */}
-              {NAV_ITEMS.map(item => (
-                <div key={item.title}>
-                  {item.subItems && item.subItems.length > 0 ? (
-                    <div className="space-y-1">
-                      <Typography weight="medium" level="body" className="px-3 py-2 text-slate-gray-400">
-                        {item.title}
-                      </Typography>
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid w-[200px] gap-2 sm:w-[250px] md:w-[300px]">
                       {item.subItems.map(subItem => (
-                        <Link
-                          key={subItem.title}
-                          href={subItem.href}
-                          onClick={closeMobileMenu}
-                          className="block rounded-lg px-6 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-100">
-                          {subItem.title}
-                        </Link>
+                        <ListItem key={subItem.title} href={subItem.href} title={subItem.title}></ListItem>
                       ))}
-                    </div>
-                  ) : (
-                    <Link
-                      href={item.href}
-                      onClick={closeMobileMenu}
-                      className="block rounded-lg px-3 py-2 text-slate-gray-400 transition-colors hover:bg-gray-100">
-                      <Typography weight="medium" level="body">
+                    </ul>
+                  </NavigationMenuContent>
+                </>
+              ) : (
+                // Basic Routing
+                <NavigationMenuLink href={item.href} className="peer px-2 py-1 hover:bg-transparent">
+                  <Typography weight="medium" level="body" className="text-slate-gray-400">
+                    {item.title}
+                  </Typography>
+                </NavigationMenuLink>
+              )}
+              <span className="pointer-events-none absolute top-[31px] left-1/2 h-[6px] w-[6px] -translate-x-1/2 rounded-full bg-deep-navy-400 opacity-0 transition-all duration-200 ease-out peer-hover:opacity-100 peer-focus-visible:opacity-100" />
+            </NavigationMenuItem>
+          ))}
+        </div>
+
+        {/* Mobile Menu Button - Visible only on mobile */}
+        <NavigationMenuItem className="lg:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="sm" className="rounded-full p-2">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only hidden">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] rounded-xl px-5 sm:w-[400px]">
+              <SheetTitle className="sr-only hidden">Navigation Menu</SheetTitle>
+              <div className="mt-6 flex flex-col space-y-6">
+                {/* Logo in mobile menu */}
+                <div className="flex items-center space-x-2">
+                  <Image src={"/logo.png"} alt="Logo" width={40} height={30} className="h-8 w-auto" />
+                </div>
+
+                {/* Navigation Items */}
+                <nav className="flex flex-col space-y-4">
+                  {NAV_ITEMS.map(item => (
+                    <div key={item.title} className="space-y-2">
+                      <Link
+                        href={item.href}
+                        className="block py-2 font-medium text-slate-700 transition-colors hover:text-slate-900">
                         {item.title}
+                      </Link>
+                      {/* Sub items */}
+                      {item.subItems && item.subItems.length > 0 && (
+                        <div className="ml-4 space-y-1">
+                          {item.subItems.map(subItem => (
+                            <Link
+                              key={subItem.title}
+                              href={subItem.href}
+                              className="block py-1 text-slate-600 transition-colors hover:text-slate-800">
+                              {subItem.title}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </nav>
+
+                {/* Login Button */}
+                <div className="border-t pt-4">
+                  <Button className="w-full rounded-xl bg-deep-navy-400 hover:bg-deep-navy-500">
+                    <Link href="/login" className="w-full">
+                      <Typography weight="medium" level="body" className="text-white">
+                        Log In
                       </Typography>
                     </Link>
-                  )}
+                  </Button>
                 </div>
-              ))}
-
-              {/* Mobile Auth Section */}
-              <div className="border-t border-gray-200 pt-4">
-                <MobileAuthSection onClose={closeMobileMenu} />
               </div>
-            </div>
-          </div>
-        )}
-      </nav>
-    </>
+            </SheetContent>
+          </Sheet>
+        </NavigationMenuItem>
+
+        {/* Login */}
+        <NavigationMenuItem className="flex-shrink-0 max-lg:hidden">
+          <Button className="rounded-xl bg-deep-navy-400 px-3 py-1.5 hover:bg-deep-navy-500 sm:px-4 sm:py-2">
+            <Link href="/login">
+              <Typography weight="medium" level="body" className="text-white">
+                Log In
+              </Typography>
+            </Link>
+          </Button>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
   );
 }
 

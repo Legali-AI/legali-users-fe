@@ -1,5 +1,4 @@
-import type { LitigationCase, ReturnRange, RiskLevel } from "@/types/litigation";
-
+import type { LitigationCase, ReturnRange, RiskLevel } from "./../../../types/litigation";
 export const practiceAreas = [
   "All Practice Areas",
   "Employment Law",

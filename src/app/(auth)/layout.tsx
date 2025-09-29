@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AuthGuard } from "../../components/auth/auth-guard";
+import { AOSInit } from "../../aos";
 import Navbar from "../../components/elements/navbar";
 import { QueryProvider } from "../../lib/query-client";
 
@@ -15,10 +15,11 @@ export default function AuthLayout({
 }>) {
   return (
     <QueryProvider>
-      <AuthGuard requireAuth={false} redirectTo="/onboard">
-        <Navbar />
-        {children}
-      </AuthGuard>
+      <AOSInit />
+      {/* <AuthGuard requireAuth={false} redirectTo="/profile"> */}
+      <Navbar />
+      {children}
+      {/* </AuthGuard> */}
     </QueryProvider>
   );
 }

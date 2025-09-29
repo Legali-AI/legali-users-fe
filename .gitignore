@@ -48,3 +48,9 @@ build/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Google Cloud Platform deployment files
+cloudbuild.yaml
+cloud-run.yaml
+deploy-gcp.sh
+Dockerfile.nodejs

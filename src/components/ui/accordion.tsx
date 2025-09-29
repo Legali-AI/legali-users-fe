@@ -15,7 +15,7 @@ function AccordionItem({ className, ...props }: React.ComponentProps<typeof Acco
   return (
     <AccordionPrimitive.Item
       data-slot="accordion-item"
-      className={cn("rounded-md border-b bg-sky-blue-600 px-6 last:border-b-0", className)}
+      className={cn("rounded-md border-b bg-transparent px-6 last:border-b-0", className)}
       {...props}
     />
   );
@@ -27,11 +27,11 @@ function AccordionTrigger({ className, children, ...props }: React.ComponentProp
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "[&[data-state=open]>svg]:text-whit flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:brightness-[110%] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&[data-state=closed]>svg]:rotate-180 [&[data-state=closed]>svg]:text-white [&[data-state=open]>svg]:text-white",
+          "flex flex-1 items-start justify-between gap-4 rounded-md py-2 text-left text-sm font-medium transition-all outline-none hover:brightness-[110%] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 md:py-3 lg:py-4 [&[data-state=closed]>svg]:rotate-180 [&[data-state=closed]>svg]:text-black [&[data-state=open]>svg]:text-black",
           className
         )}
         {...props}>
-        <Span level={"title"} weight={"semibold"} className="text-white">
+        <Span level={"title"} weight={"semibold"} className="text-black">
           {children}
         </Span>
         <ChevronDownIcon className="pointer-events-none size-4 shrink-0 translate-y-0.5 text-muted-foreground transition-transform duration-200" />
@@ -47,7 +47,7 @@ function AccordionContent({ className, children, ...props }: React.ComponentProp
       className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
       {...props}>
       <div className={cn("pt-0 pb-4", className)}>
-        <Span level={"body"} className="text-white">
+        <Span level={"body"} className="text-black">
           {children}
         </Span>
       </div>

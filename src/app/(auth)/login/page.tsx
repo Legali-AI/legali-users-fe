@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { H1 } from "../../../components/elements/typography";
 import ButtonClient from "./button-client";
-import EmailPasswordForm from "./email-password-form";
 
 export const metadata: Metadata = {
   title: "Sign in to Legali",
@@ -17,46 +16,54 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <main className={cn("bg-gradient-sky-blue grid min-h-screen lg:grid-cols-2")} aria-label="Login page">
-      <section className="flex flex-col justify-center gap-8 px-12 py-40 lg:gap-10 lg:px-40">
-        <div>
-          <div className="space-y-2">
-            <p className="m-0 text-sm font-bold tracking-tight text-sky-blue-800">Welcome to,</p>
-          </div>
-
-          <Image src={"/logo.png"} width={150} height={64} alt="Legali Logo" priority sizes="80px" />
+    <main
+      className={cn("relative z-10 grid min-h-screen w-full grid-cols-1 overflow-hidden max-md:pt-20 lg:grid-cols-2")}
+      aria-label="Login page"
+      style={{
+        background: "linear-gradient(112deg, #7CC9E6 9.96%, #FFF 70.66%, #7CC9E6 103.48%)",
+      }}>
+      {/* Left side - Login form */}
+      <div
+        className="flex flex-col justify-center gap-4 px-6 py-8 max-md:items-center sm:px-8 sm:py-12 md:px-12 md:py-16 lg:px-16 xl:px-20 2xl:px-40"
+        data-aos="fade-right"
+        data-aos-duration="800"
+        data-aos-delay="100">
+        <div className="space-y-2" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+          <H1 level={"label"} className="text-sky-900 " weight={"semibold"}>
+            Welcome to,
+          </H1>
+          <Image
+            src={"/logo.png"}
+            width={140}
+            height={60}
+            alt="Legali Logo"
+            priority
+            className="h-12 w-auto md:h-14"
+            sizes="(max-width: 640px) 120px, (max-width: 768px) 140px, (max-width: 1024px) 160px, 180px"
+          />
         </div>
-
-        <div className="mx-auto w-full max-w-md space-y-6 lg:mx-0 lg:max-w-none">
-          {/* <div className="rounded-2xl border border-sky-blue-300/40 bg-white/90 p-8 shadow-lg backdrop-blur-sm"> */}
-          {/* Email/Password Login Form */}
-          <EmailPasswordForm />
-
-          {/* Divider */}
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <Separator className="w-full" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="px-2 text-muted-foreground">Or continue with</span>
-            </div>
-          </div>
-
-          {/* Google Login */}
-          <div className="flex justify-center">
-            <ButtonClient />
-          </div>
-          {/* </div> */}
+        <div className="mt-4" data-aos="fade-up" data-aos-duration="600" data-aos-delay="300">
+          <ButtonClient />
         </div>
-      </section>
-      <div className="relative hidden lg:block">
+      </div>
+
+      {/* Right side - Hero image */}
+      <div
+        className="-pt-40 relative flex h-full w-full items-start justify-end"
+        data-aos="fade-left"
+        data-aos-duration="800"
+        data-aos-delay="200">
         <Image
           src="/login.png"
-          fill
+          width={1920}
+          height={1080}
           alt="Legal professionals working with AI technology"
           priority
-          className="object-cover"
-          sizes="50vw"
+          className="absolute right-0 bottom-0 -z-10 h-auto w-[90%] object-contain object-center lg:h-full"
+          sizes="(max-width: 1024px) 100vw, 50vw"
+          data-aos="zoom-in"
+          data-aos-duration="1000"
+          data-aos-delay="400"
         />
       </div>
     </main>

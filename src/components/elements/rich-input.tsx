@@ -1,9 +1,10 @@
 "use client";
 
 // biome-ignore assist/source/organizeImports: Stupid resolve from biome
+import { FileAttachmentContainer } from "@/components/elements/attachments/file-attachment-container";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Mic, Paperclip, Send, StopCircle, Trash2 } from "lucide-react";
+import { Mic, Send, StopCircle } from "lucide-react";
 import * as React from "react";
 import { Typography } from "./typography";
 
@@ -70,10 +71,6 @@ export default function RichInput({
     });
     // reset input to allow re-selecting the same file
     e.currentTarget.value = "";
-  };
-
-  const removeFile = (index: number) => {
-    setFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const startRecording = async () => {
@@ -189,16 +186,15 @@ export default function RichInput({
         onChange={e => setText(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
-        className="focus-visible:outline-non min-h-20 resize-y border-none shadow-none placeholder:text-base placeholder:text-slate-gray-300 focus-visible:border-none focus-visible:ring-0"
+        className="focus-visible:outline-non min-h-20 resize-y border-none shadow-none placeholder:text-[14px] placeholder:text-slate-gray-300 focus-visible:border-none focus-visible:ring-0 lg:placeholder:text-base"
       />
 
       {/* Footer row */}
-      <div className="flex w-full items-start justify-between gap-16">
+      <div className="flex w-full items-start justify-between gap-4 md:gap-8 lg:gap-12 xl:gap-16">
         {/* Add files */}
         <div>
           <Button type="button" size={"lg"} variant="outline" onClick={handlePickFiles} disabled={disabled}>
             <span className="flex items-center gap-2">
-              <Paperclip className="h-[18px] w-[18px] -rotate-90 text-black" />
               <Typography level="body" className="text-black">
                 Add photos and files
               </Typography>
@@ -246,7 +242,6 @@ export default function RichInput({
             onClick={handleSubmit}
             disabled={disabled || (!text.trim() && files.length === 0 && !audioBlob)}
             className="h-10 w-10 rounded-full"
-            variant={"orange"}
             aria-label="Send">
             <Send className="h-4 w-4 text-white" />
           </Button>
@@ -257,22 +252,17 @@ export default function RichInput({
       {(files.length > 0 || isRecording || !!audioBlob) && (
         <div className="mt-2 flex w-full flex-col gap-2">
           {files.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2">
-              {files.map((f, idx) => (
-                <span
-                  key={`${f.name}-${idx}`}
-                  className="inline-flex items-center gap-2 rounded-full border border-input px-3 py-1 text-sm">
-                  <span className="max-w-[200px] truncate">{f.name}</span>
-                  <Button
-                    type="button"
-                    className="text-muted-foreground hover:text-foreground"
-                    onClick={() => removeFile(idx)}
-                    aria-label={`Remove ${f.name}`}>
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </span>
-              ))}
-            </div>
+            <FileAttachmentContainer
+              attachments={files.map(f => f.name)}
+              maxVisible={8}
+              showRemaining={true}
+              onAttachmentClick={() => {
+                // Optional: Add click handler for individual files
+              }}
+              onRemainingClick={() => {
+                // Optional: Add handler for "+remaining" click
+              }}
+            />
           )}
 
           {/* Recording status or playback */}

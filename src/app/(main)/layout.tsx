@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AOSInit } from "../../aos";
 import Footer from "../../components/elements/footer";
 import Navbar from "../../components/elements/navbar";
 
@@ -14,6 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <>
+      <AOSInit />
       <Navbar />
       {children}
       <Footer />

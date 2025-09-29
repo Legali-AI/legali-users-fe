@@ -1,6 +1,7 @@
 "use client";
 
-import { Pencil, User2Icon, X } from "lucide-react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { Pencil, UserIcon, X } from "lucide-react";
 import Image from "next/image";
 import * as React from "react";
 import { cn } from "@/lib/utils";
@@ -13,7 +14,18 @@ interface ProfileUploadProps {
   disabled?: boolean;
   accept?: string;
   maxSize?: number; // in MB
+  variant?: VariantProps<typeof profileUploadVariants>["variant"];
 }
+
+const profileUploadVariants = cva("", {
+  variants: {
+    variant: { blue: "bg-[#BADEEB]", gray: "bg-[#CACBD1]" },
+    textVariant: {
+      blue: "text-white",
+      gray: "text-brand-gray-50",
+    },
+  },
+});
 
 export function ProfileUpload({
   value,
@@ -21,6 +33,7 @@ export function ProfileUpload({
   className,
   disabled = false,
   accept = "image/*",
+  variant = "blue",
   maxSize = 5,
 }: ProfileUploadProps) {
   const [preview, setPreview] = React.useState<string | null>(null);
@@ -66,11 +79,11 @@ export function ProfileUpload({
 
   return (
     <div className={cn("relative", className)}>
-      {/* Using div with role="button" to avoid nested button elements */}
       {/* biome-ignore lint: Need div to avoid nested buttons */}
       <div
         className={cn(
-          "relative flex aspect-square h-[153px] w-[153px] cursor-pointer items-center justify-center rounded-full bg-slate-gray-300 transition-all hover:brightness-90",
+          "relative flex aspect-square h-[110px] w-auto cursor-pointer items-center justify-center rounded-full transition-all hover:brightness-90 md:h-[130px] lg:h-[153px]",
+          profileUploadVariants({ variant }),
           disabled && "cursor-not-allowed opacity-50"
         )}
         onClick={handleClick}
@@ -92,14 +105,14 @@ export function ProfileUpload({
             className="h-full w-full overflow-hidden rounded-full object-cover"
           />
         ) : (
-          <User2Icon size={72} className="text-slate-400" />
+          <UserIcon size={80} className={cn("size-16 md:size-20", profileUploadVariants({ textVariant: variant }))} />
         )}
 
         {/* Edit Button */}
         <Button
           type="button"
           size="icon"
-          variant="orange"
+          variant="gradient-blue"
           className="absolute right-0 bottom-0 h-10 w-10 rounded-full p-0"
           onClick={e => {
             e.stopPropagation();

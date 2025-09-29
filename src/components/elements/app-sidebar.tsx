@@ -1,5 +1,15 @@
 "use client";
-import { Calendar, FileText, Home, type LucideIcon, MessageSquare, Scale, TrendingUp, Users } from "lucide-react";
+import {
+  AlertTriangle,
+  BookOpen,
+  Clock,
+  FileEdit,
+  Flag,
+  FolderOpen,
+  Headphones,
+  type LucideIcon,
+  MessageSquare,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -36,46 +46,52 @@ export interface MenuGroup {
 
 export const MAIN_MENU_ITEMS: MenuItem[] = [
   {
-    id: "dashboard",
-    label: "Dashboard",
-    icon: Home,
-    href: "/dashboard",
+    id: "red-flag-alerts",
+    label: "Red Flag Alerts",
+    icon: Flag,
+    href: "/red-flag-alerts",
   },
   {
-    id: "lawyers",
-    label: "Lawyers",
-    icon: Scale,
-    href: "/lawyers",
+    id: "case-timeline",
+    label: "Case & Timeline",
+    icon: Clock,
+    href: "/case-timeline",
   },
   {
-    id: "litigation-crowdfunding",
-    label: "Litigation Crowdfunding",
-    icon: TrendingUp,
-    href: "/litigation-crowdfunding",
+    id: "document-builder",
+    label: "Document Builder",
+    icon: FileEdit,
+    href: "/document-builder",
   },
   {
-    id: "attorneys",
-    label: "Attorneys",
-    icon: Users,
-    href: "/attorneys",
+    id: "file-organization",
+    label: "File Organization",
+    icon: FolderOpen,
+    href: "/file",
   },
   {
-    id: "legal-documents",
-    label: "Legal Documents",
-    icon: FileText,
-    href: "/documents",
+    id: "legal-dossier",
+    label: "Legal Dossier",
+    icon: BookOpen,
+    href: "/legal-dossier",
   },
   {
-    id: "appointments",
-    label: "Appointments",
-    icon: Calendar,
-    href: "/appointments",
-  },
-  {
-    id: "messages",
-    label: "Messages",
+    id: "forum",
+    label: "Forum",
     icon: MessageSquare,
-    href: "/messages",
+    href: "/forum",
+  },
+  {
+    id: "support-ticket",
+    label: "Support - Ticket",
+    icon: AlertTriangle,
+    href: "/support",
+  },
+  {
+    id: "support-chat",
+    label: "Support - Chat & Call",
+    icon: Headphones,
+    href: "/support-chat",
   },
 ];
 

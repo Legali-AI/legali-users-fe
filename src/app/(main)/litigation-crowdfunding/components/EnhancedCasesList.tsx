@@ -26,34 +26,38 @@ export default function EnhancedCasesList({ onCaseSelect }: EnhancedCasesListPro
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const filteredAndSortedCases = useMemo(() => {
-    const filtered = mockCases.filter(caseItem => {
-      // Only show approved cases to public
-      if (caseItem.adminStatus !== "Approved") return false;
+    const filtered = mockCases
+      ? mockCases?.filter(caseItem => {
+          // Only show approved cases to public
+          if (caseItem.adminStatus !== "Approved") return false;
 
-      const matchesSearch =
-        caseItem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        caseItem.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        caseItem.lawFirm.toLowerCase().includes(searchTerm.toLowerCase());
+          const matchesSearch =
+            caseItem.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            caseItem.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            caseItem.lawFirm.toLowerCase().includes(searchTerm.toLowerCase());
 
-      const matchesPracticeArea =
-        selectedPracticeArea === "All Practice Areas" || caseItem.practiceArea === selectedPracticeArea;
+          const matchesPracticeArea =
+            selectedPracticeArea === "All Practice Areas" || caseItem.practiceArea === selectedPracticeArea;
 
-      const matchesFundingStage =
-        selectedFundingStage === "All Stages" || caseItem.fundingStage === selectedFundingStage;
+          const matchesFundingStage =
+            selectedFundingStage === "All Stages" || caseItem.fundingStage === selectedFundingStage;
 
-      const matchesRiskProfile =
-        selectedRiskProfile === "All Risk Levels" || caseItem.riskProfile === selectedRiskProfile;
+          const matchesRiskProfile =
+            selectedRiskProfile === "All Risk Levels" || caseItem.riskProfile === selectedRiskProfile;
 
-      // Return range filtering
-      const returnRange = returnRanges.find(range => range.label === selectedReturnRange);
-      const matchesReturnRange =
-        selectedReturnRange === "All Returns" ||
-        (returnRange &&
-          ((caseItem.expectedReturnMin >= returnRange.min && caseItem.expectedReturnMax <= returnRange.max) ||
-            (caseItem.expectedReturnMin <= returnRange.max && caseItem.expectedReturnMax >= returnRange.min)));
+          // Return range filtering
+          const returnRange = returnRanges.find(range => range.label === selectedReturnRange);
+          const matchesReturnRange =
+            selectedReturnRange === "All Returns" ||
+            (returnRange &&
+              ((caseItem.expectedReturnMin >= returnRange.min && caseItem.expectedReturnMax <= returnRange.max) ||
+                (caseItem.expectedReturnMin <= returnRange.max && caseItem.expectedReturnMax >= returnRange.min)));
 
-      return matchesSearch && matchesPracticeArea && matchesFundingStage && matchesRiskProfile && matchesReturnRange;
-    });
+          return (
+            matchesSearch && matchesPracticeArea && matchesFundingStage && matchesRiskProfile && matchesReturnRange
+          );
+        })
+      : [];
 
     // Sort cases
     filtered.sort((a, b) => {
