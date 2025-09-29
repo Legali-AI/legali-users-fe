@@ -40,7 +40,8 @@
         "noLabelWithoutControl": "warn",
         "useButtonType": "warn",
         "noStaticElementInteractions": "warn",
-        "useKeyWithClickEvents": "warn"
+        "useKeyWithClickEvents": "warn",
+        "useSemanticElements": "warn"
       },
       "performance": {
         "noDelete": "error"

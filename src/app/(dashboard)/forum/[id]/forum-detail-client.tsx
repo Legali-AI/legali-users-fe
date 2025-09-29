@@ -6,14 +6,10 @@ import { FileAttachmentContainer } from "../../../../components/elements/attachm
 import { ImageAttachmentPreview } from "../../../../components/elements/attachments/image-attachment-preview";
 import { DeleteConfirmationDialog } from "../../../../components/elements/delete-confirmation-dialog";
 import { H3, P, Small } from "../../../../components/elements/typography";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "../../../../components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../../../../components/ui/avatar";
 import { Button } from "../../../../components/ui/button";
 import { Textarea } from "../../../../components/ui/textarea";
-import { Issue } from "../../../../data/issue.data";
+import type { Issue } from "../../../../data/issue.data";
 import { CommentCard } from "../components/comment-card";
 
 interface ForumDetailClientProps {
@@ -46,11 +42,7 @@ export default function ForumDetailClient({ issue }: ForumDetailClientProps) {
           <div className="flex items-start justify-between">
             <div className="flex flex-1 items-start gap-3">
               <Avatar className="h-10 w-10 border-2 border-sky-blue-500">
-                <AvatarImage
-                  src={issue.authorAvatar}
-                  alt={issue.author}
-                  className="h-full w-full object-cover"
-                />
+                <AvatarImage src={issue.authorAvatar} alt={issue.author} className="h-full w-full object-cover" />
                 <AvatarFallback className="bg-sky-blue-100 text-deep-navy">
                   <User className="h-5 w-5" />
                 </AvatarFallback>
@@ -62,13 +54,9 @@ export default function ForumDetailClient({ issue }: ForumDetailClientProps) {
                     {issue.title}
                   </H3>
                   <div className="flex items-center gap-2">
-                    <Small className="text-slate-gray-400">
-                      {issue.author}
-                    </Small>
+                    <Small className="text-slate-gray-400">{issue.author}</Small>
                     <Small className="text-slate-gray-400">•</Small>
-                    <Small className="text-slate-gray-400">
-                      {formatTimestamp(issue.timestamp)}
-                    </Small>
+                    <Small className="text-slate-gray-400">{formatTimestamp(issue.timestamp)}</Small>
                   </div>
                 </div>
 
@@ -78,19 +66,12 @@ export default function ForumDetailClient({ issue }: ForumDetailClientProps) {
 
                 {/* Image Attachments */}
                 {issue.attachments && issue.attachments.length > 0 && (
-                  <ImageAttachmentPreview
-                    images={issue.attachments}
-                    maxVisible={4}
-                  />
+                  <ImageAttachmentPreview images={issue.attachments} maxVisible={4} />
                 )}
 
                 {/* File Attachments */}
                 {issue.files && issue.files.length > 0 && (
-                  <FileAttachmentContainer
-                    attachments={issue.files}
-                    maxVisible={3}
-                    showRemaining={true}
-                  />
+                  <FileAttachmentContainer attachments={issue.files} maxVisible={3} showRemaining={true} />
                 )}
 
                 {/* Action Buttons */}
@@ -107,8 +88,7 @@ export default function ForumDetailClient({ issue }: ForumDetailClientProps) {
               variant="ghost"
               size="sm"
               onClick={handleDeleteIssue}
-              className="ml-2 text-red-500 hover:bg-red-50 hover:text-red-600"
-            >
+              className="ml-2 text-red-500 hover:bg-red-50 hover:text-red-600">
               Delete
             </Button>
           </div>
@@ -143,16 +123,11 @@ export default function ForumDetailClient({ issue }: ForumDetailClientProps) {
           </H3>
 
           <div className="flex w-full flex-col gap-3">
-            <Textarea
-              placeholder="Share your thoughts or ask a question..."
-              className="min-h-[100px] resize-none"
-            />
+            <Textarea placeholder="Share your thoughts or ask a question..." className="min-h-[100px] resize-none" />
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Small className="text-slate-gray-400">
-                  You can attach files and images to your comment
-                </Small>
+                <Small className="text-slate-gray-400">You can attach files and images to your comment</Small>
               </div>
 
               <Button size="sm" className="flex items-center gap-2">

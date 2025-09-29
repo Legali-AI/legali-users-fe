@@ -1,11 +1,11 @@
 "use client";
 
-import { getAccessToken } from "@/lib/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { getAccessToken } from "@/lib/auth";
 
 import { ProfileUpload } from "../../components/elements/profile-upload";
 import { H1 } from "../../components/elements/typography";
