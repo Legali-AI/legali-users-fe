@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
 
+// Temporarily disable for static export (Netlify build)
+export const dynamic = "force-static";
+export const revalidate = false;
+
 export async function GET() {
   try {
     // Basic health check
