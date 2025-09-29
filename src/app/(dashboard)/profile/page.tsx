@@ -1,5 +1,9 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Edit } from "lucide-react";
+import { useId, useState } from "react";
+import { useForm } from "react-hook-form";
 import { LogoutButton } from "@/components/elements/logout-button";
 import { ProfileUpload } from "@/components/elements/profile-upload";
 import { Typography } from "@/components/elements/typography";
@@ -11,10 +15,6 @@ import { useAuth } from "@/hooks/use-auth";
 import { useUpdateProfileCache } from "@/hooks/use-profile";
 import { type ProfileFormData, profileFormSchema, regionOptions, subscriptionTypeOptions } from "@/schema/profile";
 import { updateProfileApiAuthProfilePut } from "@/sdk/sdk.gen";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Edit } from "lucide-react";
-import { useId, useState } from "react";
-import { useForm } from "react-hook-form";
 import { getAccessToken } from "../../../lib/auth";
 
 export default function ProfilePage() {

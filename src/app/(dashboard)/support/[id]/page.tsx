@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import { FileAttachmentContainer } from "../../../../components/elements/attachments/file-attachment-container";
 import { H3, H5, P, Span } from "../../../../components/elements/typography";
-import { getTicketById } from "../../../../data/support.data";
+import { getTicketById, SUPPORT_TICKETS } from "../../../../data/support.data";
 import { cn } from "../../../../lib/utils";
+
+// Generate static params for all available ticket IDs
+export async function generateStaticParams() {
+  return SUPPORT_TICKETS.map(ticket => ({
+    id: ticket.id,
+  }));
+}
 
 export const metadata: Metadata = {
   title: "Support Ticket Details",

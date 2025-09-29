@@ -1,13 +1,13 @@
 "use client";
 
+import { ArrowLeft, ArrowRight, CheckCircle, CreditCard, Download, FileText, Shield } from "lucide-react";
+import { useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, ArrowRight, CheckCircle, CreditCard, Download, FileText, Shield } from "lucide-react";
-import { useState } from "react";
 
 import { useToast } from "@/hooks/use-toast";
 import type { InvestmentData, InvestmentStep, LitigationCase } from "@/types/litigation";
