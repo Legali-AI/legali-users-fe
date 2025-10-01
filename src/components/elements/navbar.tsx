@@ -89,8 +89,8 @@ export function Navbar() {
     <NavigationMenu
       viewport={false}
       className={cn(
-        "fixed top-4 left-1/2 z-50 w-[90vw] -translate-x-1/2 transform rounded-full px-4 py-2 transition-all duration-300 sm:top-5 sm:px-8 md:px-12 lg:px-16 xl:px-20",
-        isScrolled && "bg-white/90 shadow-lg backdrop-blur-md"
+        "fixed top-4 left-1/2 z-50 w-[90vw] -translate-x-1/2 transform rounded-xl px-1 py-2 transition-all duration-300 sm:top-5 sm:px-2 md:px-3 lg:px-4 xl:px-5",
+        isScrolled && "bg-rgba(245, 245, 245, 0.5) shadow-lg backdrop-blur-md"
       )}>
       <NavigationMenuList className="flex w-full items-center justify-between gap-2 sm:gap-4 md:gap-6 lg:gap-8">
         {/* Logo */}

@@ -1,16 +1,26 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import TermsConditionsPopup from "@/components/auth/terms-condition-popup";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useLogin } from "@/hooks/use-login";
 import { type LoginFormData, loginSchema } from "@/schema/auth";
 
+// Mock user credentials
+const MOCK_USERS = [{ email: "user@legali.io", password: "user321", redirectTo: "/onboard" }];
+
 export default function EmailPasswordForm() {
-  const { login, isLoading, error } = useLogin();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [showTermsPopup, setShowTermsPopup] = useState(false);
+  const [pendingFormData, setPendingFormData] = useState<LoginFormData | null>(null);
+  const router = useRouter();
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -21,16 +31,70 @@ export default function EmailPasswordForm() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    await login(data.email, data.password);
+    if (!termsAccepted) {
+      // Store form data and show terms modal
+      setPendingFormData(data);
+      setShowTermsPopup(true);
+      return;
+    }
+
+    // Continue with actual submission
+    await performLogin(data);
+  };
+
+  const performLogin = async (data: LoginFormData) => {
+    setIsLoading(true);
+    setError(null);
+
+    // Mock authentication
+    const mockUser = MOCK_USERS.find(user => user.email === data.email && user.password === data.password);
+
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    if (mockUser) {
+      // Success - redirect to specified page
+      router.push(mockUser.redirectTo);
+    } else {
+      setError("Invalid email or password");
+    }
+
+    setIsLoading(false);
+  };
+
+  const handleTermsAccept = () => {
+    setTermsAccepted(true);
+    setShowTermsPopup(false);
+    // Continue with pending form submission
+    if (pendingFormData) {
+      performLogin(pendingFormData);
+      setPendingFormData(null);
+    }
+  };
+
+  const handleForgotPassword = () => {
+    console.log("Forgot password clicked - placeholder functionality");
+    alert("Forgot password functionality coming soon!");
   };
 
   return (
-    <div className="space-y-6">
+    <div className="w-full max-w-sm space-y-6">
       {error && (
         <Alert variant="destructive">
           <p className="text-sm">{error}</p>
         </Alert>
       )}
+
+      <TermsConditionsPopup
+        open={showTermsPopup}
+        onAccept={handleTermsAccept}
+        onOpenChange={open => {
+          setShowTermsPopup(open);
+          if (!open) {
+            setPendingFormData(null);
+          }
+        }}
+      />
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -39,9 +103,14 @@ export default function EmailPasswordForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="Enter your email" {...field} disabled={isLoading} />
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    {...field}
+                    disabled={isLoading}
+                    className="h-12 rounded-xl border-white/30 bg-white/70 placeholder:text-gray-500"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -53,26 +122,43 @@ export default function EmailPasswordForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Enter your password" {...field} disabled={isLoading} />
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    {...field}
+                    disabled={isLoading}
+                    className="h-12 rounded-xl border-white/30 bg-white/70 placeholder:text-gray-500"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <Button type="submit" className="w-full text-white" disabled={isLoading}>
-            {isLoading ? "Signing in..." : "Sign in"}
+          <div className="text-right">
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              className="cursor-pointer text-sm text-sky-900 hover:text-sky-800"
+              disabled={isLoading}>
+              Forgot your password?
+            </button>
+          </div>
+
+          <Button
+            variant="black"
+            type="submit"
+            className="h-12 w-full rounded-xl font-semibold text-white"
+            disabled={isLoading}>
+            {isLoading ? "Signing In..." : "Sign In"}
           </Button>
         </form>
       </Form>
 
-      {/* <div className="space-y-2 text-xs text-muted-foreground">
-        <p className="font-medium">Test accounts:</p>
-        <p>Lawyer: lawyers@legali.io / lawyer321</p>
-        <p>User: user@legali.io / user321</p>
-      </div> */}
+      <div className="text-center">
+        <span className="text-sm text-gray-600">Or continue with</span>
+      </div>
     </div>
   );
 }
