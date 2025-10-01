@@ -47,12 +47,12 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
   };
 
   // Stats for the search results
-  const searchStats = [
-    { label: "Total Results", value: searchResults?.total || 0 },
-    { label: "Average Rating", value: "4.8" },
-    { label: "Response Time", value: "< 2hrs" },
-    { label: "Success Rate", value: "94%" },
-  ];
+  // const searchStats = [
+  //   { label: "Total Results", value: searchResults?.total || 0 },
+  //   { label: "Average Rating", value: "4.8" },
+  //   { label: "Response Time", value: "< 2hrs" },
+  //   { label: "Success Rate", value: "94%" },
+  // ];
 
   const hasActiveFilters = Boolean(
     searchParams.query ||
