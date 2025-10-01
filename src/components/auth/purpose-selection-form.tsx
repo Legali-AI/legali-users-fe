@@ -75,7 +75,7 @@ export function PurposeSelectionForm() {
       <div className="space-y-4 text-center sm:space-y-6">
         <div className="mb-6 flex justify-center">
           <Image
-            src="/logo.png"
+            src="/legali.png"
             width={120}
             height={70}
             alt="Legali Logo"

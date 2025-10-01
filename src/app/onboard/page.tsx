@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import { PurposeSelectionForm } from "../../components/auth/purpose-selection-form";
 import { GlobalLayout } from "../../components/layout/global-layout";
-import { PurposeSelectionForm } from "../../components/module/auth/purpose-selection-form";
 
 export const metadata: Metadata = {
   title: "Get Started - Select Your Purpose",
