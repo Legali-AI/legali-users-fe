@@ -14,17 +14,13 @@ const buttonVariants = cva(
           "bg-deep-navy text-primary-foreground shadow-xs hover:bg-deep-navy/90 focus-visible:ring-deep-navy/20 active:bg-deep-navy/95",
         black:
           "bg-black text-white shadow-xs hover:bg-deep-navy/90 focus-visible:ring-deep-navy/20 active:bg-deep-navy/95",
-        destructive:
-          "bg-brand-rose text-white shadow-xs hover:bg-brand-rose/90 focus-visible:ring-brand-rose/20",
-        outline:
-          "border bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
-        secondary:
-          "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
+        destructive: "bg-brand-rose text-white shadow-xs hover:bg-brand-rose/90 focus-visible:ring-brand-rose/20",
+        outline: "border bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+        secondary: "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         orange: "bg-warm-orange-400 text-white",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        "gradient-blue":
-          "bg-gradient-to-b from-white to-[#A4D1E8] font-semibold text-black",
+        "gradient-blue": "bg-gradient-to-b from-white to-[#A4D1E8] font-semibold text-black",
       },
       size: {
         default: "px-4 py-2",
@@ -64,9 +60,7 @@ function Button({
   return (
     <Comp
       data-slot="button"
-      className={cn(
-        buttonVariants({ variant, size, level, weight, align, className })
-      )}
+      className={cn(buttonVariants({ variant, size, level, weight, align, className }))}
       {...props}
     />
   );

@@ -1,10 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useState } from "react";
 
 interface TermsConditionsPopupProps {
   // children: React.ReactNode;
@@ -41,19 +41,12 @@ export default function TermsConditionsPopup({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       {/* <DialogTrigger asChild>{children}</DialogTrigger> */}
-      <DialogContent
-        className="max-h-[90vh] max-w-4xl gap-0 overflow-hidden p-0"
-        showCloseButton={false}
-      >
+      <DialogContent className="max-h-[90vh] max-w-4xl gap-0 overflow-hidden p-0" showCloseButton={false}>
         <div className="flex h-[90vh] flex-col">
           {/* Header */}
           <div className="px-8 pt-8 pb-6">
-            <DialogTitle className="mb-3 text-3xl font-bold text-gray-900">
-              Legali Terms of Service
-            </DialogTitle>
-            <p className="text-base text-gray-600">
-              Effective Date: September 28, 2025
-            </p>
+            <DialogTitle className="mb-3 text-3xl font-bold text-gray-900">Legali Terms of Service</DialogTitle>
+            <p className="text-base text-gray-600">Effective Date: September 28, 2025</p>
           </div>
 
           {/* Content */}
@@ -64,79 +57,56 @@ export default function TermsConditionsPopup({
                 {/* Extra padding for scrollbar */}
                 <div className="space-y-6 text-gray-700">
                   <p className="text-base leading-relaxed">
-                    Welcome to Legali. Please read these Terms of Service
-                    carefully before using our platform.
+                    Welcome to Legali. Please read these Terms of Service carefully before using our platform.
                   </p>
 
                   <div className="space-y-8">
                     <div>
-                      <h2 className="mb-4 text-lg font-semibold text-gray-900">
-                        1. Agreement to Terms
-                      </h2>
+                      <h2 className="mb-4 text-lg font-semibold text-gray-900">1. Agreement to Terms</h2>
                       <div className="space-y-4 text-base leading-relaxed">
                         <p>
-                          By accessing or using our website, mobile application,
-                          or any related services (collectively, the
-                          "Services"), you agree to be bound by these Terms of
-                          Service ("Terms"). If you disagree with any part of
-                          these Terms, you may not access or use the Services.
+                          By accessing or using our website, mobile application, or any related services (collectively,
+                          the "Services"), you agree to be bound by these Terms of Service ("Terms"). If you disagree
+                          with any part of these Terms, you may not access or use the Services.
                         </p>
                         <p>
-                          <span className="font-semibold">Important:</span>{" "}
-                          These Terms contain a binding arbitration clause and
-                          class action waiver in Section 14, which affect your
-                          legal rights. Please review them carefully.
+                          <span className="font-semibold">Important:</span> These Terms contain a binding arbitration
+                          clause and class action waiver in Section 14, which affect your legal rights. Please review
+                          them carefully.
                         </p>
                       </div>
                     </div>
 
                     <div>
-                      <h2 className="mb-4 text-lg font-semibold text-gray-900">
-                        2. Description of Services
-                      </h2>
+                      <h2 className="mb-4 text-lg font-semibold text-gray-900">2. Description of Services</h2>
                       <div className="space-y-4 text-base leading-relaxed">
                         <p>Legali provides an online platform offering:</p>
                         <ul className="ml-6 space-y-3">
                           <li className="flex items-start">
                             <span className="mt-2.5 mr-3 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gray-600"></span>
-                            <span>
-                              Automated legal document generation and templates
-                            </span>
+                            <span>Automated legal document generation and templates</span>
                           </li>
                           <li className="flex items-start">
                             <span className="mt-2.5 mr-3 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gray-600"></span>
-                            <span>
-                              Legal information and educational resources
-                            </span>
+                            <span>Legal information and educational resources</span>
                           </li>
                           <li className="flex items-start">
                             <span className="mt-2.5 mr-3 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gray-600"></span>
-                            <span>
-                              Document analysis and red-flag identification
-                              tools
-                            </span>
+                            <span>Document analysis and red-flag identification tools</span>
                           </li>
                           <li className="flex items-start">
                             <span className="mt-2.5 mr-3 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gray-600"></span>
-                            <span>
-                              Legal research and analytic capabilities
-                            </span>
+                            <span>Legal research and analytic capabilities</span>
                           </li>
                           <li className="flex items-start">
                             <span className="mt-2.5 mr-3 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-gray-600"></span>
-                            <span>
-                              Access to a network of licensed attorneys (where
-                              applicable)
-                            </span>
+                            <span>Access to a network of licensed attorneys (where applicable)</span>
                           </li>
                         </ul>
                         <p>
-                          Legali is a technology platform, not a law firm. We do
-                          not provide legal advice, opinions, or
-                          recommendations. The information and documents
-                          provided through our Services are for informational
-                          purposes only and should not be considered legal
-                          advice.
+                          Legali is a technology platform, not a law firm. We do not provide legal advice, opinions, or
+                          recommendations. The information and documents provided through our Services are for
+                          informational purposes only and should not be considered legal advice.
                         </p>
                       </div>
                     </div>
@@ -154,17 +124,13 @@ export default function TermsConditionsPopup({
                 <Checkbox
                   id="terms-confirmation"
                   checked={isConfirmed}
-                  onCheckedChange={checked =>
-                    setIsConfirmed(checked as boolean)
-                  }
+                  onCheckedChange={checked => setIsConfirmed(checked as boolean)}
                   className="mt-0.5 data-[state=checked]:border-gray-600 data-[state=checked]:bg-gray-600"
                 />
                 <label
                   htmlFor="terms-confirmation"
-                  className="cursor-pointer text-sm leading-relaxed font-medium text-gray-900"
-                >
-                  I confirm that I have read and accept the terms and conditions
-                  and privacy policy.
+                  className="cursor-pointer text-sm leading-relaxed font-medium text-gray-900">
+                  I confirm that I have read and accept the terms and conditions and privacy policy.
                 </label>
               </div>
 
@@ -173,18 +139,14 @@ export default function TermsConditionsPopup({
                 <Button
                   variant="outline"
                   onClick={handleCancel}
-                  className="border-gray-300 px-8 py-2 text-gray-700 hover:bg-gray-50"
-                >
+                  className="border-gray-300 px-8 py-2 text-gray-700 hover:bg-gray-50">
                   Cancel
                 </Button>
                 <Button
                   variant="black"
                   onClick={handleAccept}
                   disabled={!isConfirmed}
-                  className={`px-8 py-2 font-medium text-white ${
-                    isConfirmed ? "" : "cursor-not-allowed"
-                  }`}
-                >
+                  className={`px-8 py-2 font-medium text-white ${isConfirmed ? "" : "cursor-not-allowed"}`}>
                   Accept
                 </Button>
               </div>
