@@ -12,7 +12,8 @@ const buttonVariants = cva(
       variant: {
         default:
           "bg-deep-navy text-primary-foreground shadow-xs hover:bg-deep-navy/90 focus-visible:ring-deep-navy/20 active:bg-deep-navy/95",
-        black: "bg-black text-white shadow-xs",
+        black:
+          "bg-black text-white shadow-xs hover:bg-deep-navy/90 focus-visible:ring-deep-navy/20 active:bg-deep-navy/95",
         destructive:
           "bg-brand-rose text-white shadow-xs hover:bg-brand-rose/90 focus-visible:ring-brand-rose/20",
         outline:
