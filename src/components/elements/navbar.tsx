@@ -96,7 +96,7 @@ export function Navbar() {
         {/* Logo */}
         <NavigationMenuItem className="flex-shrink-0">
           <NavigationMenuLink href="/">
-            <Image src={"/logo.png"} alt="Logo" width={60} height={40} className="h-7 w-auto" priority />
+            <Image src={"/legali.png"} alt="Logo" width={60} height={40} className="h-7 w-auto" priority />
           </NavigationMenuLink>
         </NavigationMenuItem>
 
@@ -147,7 +147,7 @@ export function Navbar() {
               <div className="mt-6 flex flex-col space-y-6">
                 {/* Logo in mobile menu */}
                 <div className="flex items-center space-x-2">
-                  <Image src={"/logo.png"} alt="Logo" width={40} height={30} className="h-8 w-auto" />
+                  <Image src={"/legali.png"} alt="Logo" width={40} height={30} className="h-8 w-auto" />
                 </div>
 
                 {/* Navigation Items */}
