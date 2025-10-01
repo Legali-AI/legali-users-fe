@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { useSearchLawyers } from "@/hooks/use-lawyers";
 import type { CaseType, SearchParams } from "@/types";
 import { LawyerCardGrid } from "./LawyerCardGrid";
-import { Stats } from "./Stats";
 
 interface LawyerSearchInterfaceProps {
   caseTypeOptions: Array<{ label: string; value: CaseType; count: number }>;
@@ -68,96 +67,127 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
   return (
     <>
       {/* Search Hero Section */}
-      <section className="animate-in bg-blue-600 py-12 text-white duration-700 fade-in">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <h1 className="mb-4 text-4xl font-bold">Find the Right Lawyer</h1>
-          <p className="mb-8 text-xl text-blue-100">Connect with qualified legal professionals in your area</p>
-          <div className="mx-auto flex max-w-2xl flex-col gap-4 md:flex-row">
-            <SearchBar
-              value={searchParams.query || ""}
-              onChange={value => updateSearchParams({ query: value })}
-              onSearch={handleSearch}
-              placeholder="What legal help do you need?"
-              size="lg"
-              isLoading={isLoading}
-              className="flex-1"
-            />
-            <Input
-              placeholder="Enter location"
-              value={searchParams.location || ""}
-              onChange={e => updateSearchParams({ location: e.target.value })}
-              className="h-14 bg-white text-lg text-gray-900 md:w-64"
-            />
-            <Button
-              size="lg"
-              onClick={() => handleSearch(searchParams.query || "")}
-              className="h-14 bg-white font-semibold !text-blue-700 hover:!text-white ">
-              Search
-            </Button>
+      <section className="relative animate-in bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 py-16 text-white duration-700 fade-in slide-in-from-top-4">
+        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="relative mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+          <div className="mb-8 space-y-4">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">Find the Right Lawyer</h1>
+            <p className="mx-auto max-w-2xl text-lg text-blue-100 sm:text-xl">
+              Connect with qualified legal professionals in your area. Get expert help for your case.
+            </p>
+          </div>
+
+          <div className="mx-auto max-w-4xl">
+            <div className="rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur-sm">
+              <div className="flex flex-col gap-4 md:flex-row">
+                <div className="flex-1">
+                  <SearchBar
+                    value={searchParams.query || ""}
+                    onChange={value => updateSearchParams({ query: value })}
+                    onSearch={handleSearch}
+                    placeholder="What legal help do you need?"
+                    size="lg"
+                    isLoading={isLoading}
+                    className="h-14 text-base"
+                  />
+                </div>
+                <div className="md:w-72">
+                  <Input
+                    placeholder="Enter location (City, State)"
+                    value={searchParams.location || ""}
+                    onChange={e => updateSearchParams({ location: e.target.value })}
+                    className="h-14 border-0 bg-white/90 text-base text-gray-900 transition-colors placeholder:text-gray-500 focus:bg-white"
+                  />
+                </div>
+                <Button
+                  size="lg"
+                  onClick={() => handleSearch(searchParams.query || "")}
+                  disabled={isLoading}
+                  className="h-14 bg-white px-8 font-semibold text-blue-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-800 disabled:opacity-50">
+                  {isLoading ? "Searching..." : "Search Lawyers"}
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         {/* Search Stats */}
-        <div className="mb-8">
-          <Stats stats={searchStats} variant="simple" size="sm" layout="horizontal" />
-        </div>
+        {/* <div className="mb-8 animate-in delay-200 duration-500 slide-in-from-bottom-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {searchStats.map(stat => (
+              <div
+                key={stat.label}
+                className="rounded-lg border bg-white p-4 text-center shadow-sm"
+              >
+                <div className="text-2xl font-bold text-blue-600">
+                  {stat.value}
+                </div>
+                <div className="mt-1 text-sm text-gray-600">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div> */}
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+        <div className="grid animate-in grid-cols-1 gap-8 delay-300 duration-500 slide-in-from-bottom-4 lg:grid-cols-4">
           {/* Filters Sidebar */}
-          <FilterSidebar
-            practiceAreaOptions={caseTypeOptions}
-            selectedPracticeAreas={searchParams.caseType ? [searchParams.caseType] : []}
-            onPracticeAreaChange={values => {
-              const updates: Partial<SearchParams> = {};
-              if (values[0]) {
-                updates.caseType = values[0];
-              }
-              updateSearchParams(updates);
-            }}
-            {...(searchParams.rating !== undefined && {
-              selectedRating: searchParams.rating,
-            })}
-            onRatingChange={rating => {
-              const updates: Partial<SearchParams> = {};
-              if (rating !== undefined) {
-                updates.rating = rating;
-              }
-              updateSearchParams(updates);
-            }}
-            priceRange={{
-              min: searchParams.budget?.min || 0,
-              max: searchParams.budget?.max || 0,
-            }}
-            onPriceRangeChange={range =>
-              updateSearchParams({
-                budget: { min: range.min, max: range.max },
-              })
-            }
-            {...(searchParams.experience !== undefined && {
-              selectedExperience: searchParams.experience,
-            })}
-            onExperienceChange={experience => {
-              const updates: Partial<SearchParams> = {};
-              if (experience !== undefined) {
-                updates.experience = experience;
-              }
-              updateSearchParams(updates);
-            }}
-            languageOptions={languageOptions}
-            selectedLanguages={searchParams.language ? [searchParams.language] : []}
-            onLanguageChange={values => {
-              const updates: Partial<SearchParams> = {};
-              if (values[0]) {
-                updates.language = values[0];
-              }
-              updateSearchParams(updates);
-            }}
-            hasActiveFilters={hasActiveFilters}
-            onClearAll={clearAllFilters}
-            className={`lg:col-span-1 ${showFilters ? "block" : "hidden lg:block"}`}
-          />
+          <div className={`lg:col-span-1 ${showFilters ? "block" : "hidden lg:block"}`}>
+            <div className="sticky top-6">
+              <FilterSidebar
+                practiceAreaOptions={caseTypeOptions}
+                selectedPracticeAreas={searchParams.caseType ? [searchParams.caseType] : []}
+                onPracticeAreaChange={values => {
+                  const updates: Partial<SearchParams> = {};
+                  if (values[0]) {
+                    updates.caseType = values[0];
+                  }
+                  updateSearchParams(updates);
+                }}
+                {...(searchParams.rating !== undefined && {
+                  selectedRating: searchParams.rating,
+                })}
+                onRatingChange={rating => {
+                  const updates: Partial<SearchParams> = {};
+                  if (rating !== undefined) {
+                    updates.rating = rating;
+                  }
+                  updateSearchParams(updates);
+                }}
+                priceRange={{
+                  min: searchParams.budget?.min || 0,
+                  max: searchParams.budget?.max || 0,
+                }}
+                onPriceRangeChange={range =>
+                  updateSearchParams({
+                    budget: { min: range.min, max: range.max },
+                  })
+                }
+                {...(searchParams.experience !== undefined && {
+                  selectedExperience: searchParams.experience,
+                })}
+                onExperienceChange={experience => {
+                  const updates: Partial<SearchParams> = {};
+                  if (experience !== undefined) {
+                    updates.experience = experience;
+                  }
+                  updateSearchParams(updates);
+                }}
+                languageOptions={languageOptions}
+                selectedLanguages={searchParams.language ? [searchParams.language] : []}
+                onLanguageChange={values => {
+                  const updates: Partial<SearchParams> = {};
+                  if (values[0]) {
+                    updates.language = values[0];
+                  }
+                  updateSearchParams(updates);
+                }}
+                hasActiveFilters={hasActiveFilters}
+                onClearAll={clearAllFilters}
+                className="rounded-lg border bg-white p-6 shadow-sm"
+              />
+            </div>
+          </div>
 
           {/* Results */}
           <div className="lg:col-span-3">
