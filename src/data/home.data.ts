@@ -203,53 +203,11 @@ export const PROCESS_STEPS: ProcessStep[] = [
   },
 ];
 
-export interface FAQItem {
-  question: string;
-  answer: string;
-}
-
 export interface ValueProposition {
   headline: string;
   description: string;
 }
 
-export const FAQ_ITEMS: FAQItem[] = [
-  {
-    question: "Can I use Legali with zero legal experience?",
-    answer:
-      "Absolutely. You can access bite-size templates, fixed-fee reviews, or plain-English advice.",
-  },
-  {
-    question: "I only need help with a specific document or strategy. Is that possible?",
-    answer:
-      "Absolutely. You can access bite-size templates, fixed-fee reviews, or plain-English advice.",
-  },
-  {
-    question: "How much does it cost?",
-    answer:
-      "Absolutely. You can access bite-size templates, fixed-fee reviews, or plain-English advice.",
-  },
-  {
-    question: "What if I get stuck, confused, or worried?",
-    answer:
-      "Absolutely. You can access bite-size templates, fixed-fee reviews, or plain-English advice.",
-  },
-  {
-    question: "Should I hire a lawyer or just build my case here?",
-    answer:
-      "Absolutely. You can access bite-size templates, fixed-fee reviews, or plain-English advice.",
-  },
-  {
-    question: "What if I make a mistake?",
-    answer:
-      "Absolutely. You can access bite-size templates, fixed-fee reviews, or plain-English advice.",
-  },
-  {
-    question: "Do I have to upgrade?",
-    answer:
-      "Absolutely. You can access bite-size templates, fixed-fee reviews, or plain-English advice.",
-  },
-];
 export interface Attorney {
   name: string;
   address: string;
@@ -292,5 +250,4 @@ export default {
   BENEFITS,
   PROCESS_STEPS,
   VALUE_PROPOSITIONS,
-  FAQ_ITEMS,
 };
