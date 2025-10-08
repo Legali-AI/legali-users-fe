@@ -1,5 +1,9 @@
 import { getAccessToken, setAccessToken } from "@/lib/auth";
-import { generateMockToken, HARDCODED_USERS, type HardcodedUser } from "./auth.data";
+import {
+  generateMockToken,
+  HARDCODED_USERS,
+  type HardcodedUser,
+} from "./auth.data";
 
 // Mock profile API responses
 export interface MockProfileUpdateData {
@@ -99,8 +103,10 @@ export function isMockAuthentication(): boolean {
 
   try {
     const payload = JSON.parse(atob(token));
-    return payload.userId && HARDCODED_USERS.some(user => user.id === payload.userId);
-  } catch (error) {
+    return (
+      payload.userId && HARDCODED_USERS.some(user => user.id === payload.userId)
+    );
+  } catch (_error) {
     return false;
   }
 }
