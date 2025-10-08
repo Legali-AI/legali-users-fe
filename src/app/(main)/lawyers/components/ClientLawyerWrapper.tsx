@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import type { CaseType } from "@/types";
 
 // Dynamic imports for client-side components
 const LawyerSearchInterface = dynamic(() => import("./LawyerSearchInterface"), {
@@ -21,7 +22,7 @@ const LawyerSearchInterface = dynamic(() => import("./LawyerSearchInterface"), {
 });
 
 interface ClientLawyerWrapperProps {
-  caseTypeOptions: Array<{ label: string; value: any; count: number }>;
+  caseTypeOptions: Array<{ label: string; value: CaseType; count: number }>;
   languageOptions: Array<{ label: string; value: string; count: number }>;
 }
 
