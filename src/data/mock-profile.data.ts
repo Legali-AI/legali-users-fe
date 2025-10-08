@@ -100,7 +100,7 @@ export function isMockAuthentication(): boolean {
   try {
     const payload = JSON.parse(atob(token));
     return payload.userId && HARDCODED_USERS.some(user => user.id === payload.userId);
-  } catch (error) {
+  } catch (_error) {
     return false;
   }
 }
