@@ -1,15 +1,16 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Pencil, UserIcon, X } from "lucide-react";
+import { Pencil, UserIcon } from "lucide-react";
 import Image from "next/image";
 import * as React from "react";
-import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 interface ProfileUploadProps {
   value?: File | string | null;
-  onChange: (file: File | null) => void;
+  defaultValue?: File | string | null;
+  onChange: (value: File | string | null) => void;
   className?: string;
   disabled?: boolean;
   accept?: string;
@@ -29,6 +30,7 @@ const profileUploadVariants = cva("", {
 
 export function ProfileUpload({
   value,
+  defaultValue,
   onChange,
   className,
   disabled = false,
@@ -44,13 +46,19 @@ export function ProfileUpload({
       const url = URL.createObjectURL(value);
       setPreview(url);
       return () => URL.revokeObjectURL(url);
+    } else if (defaultValue instanceof File) {
+      const url = URL.createObjectURL(defaultValue);
+      setPreview(url);
+      return () => URL.revokeObjectURL(url);
     } else if (typeof value === "string") {
       setPreview(value);
+    } else if (typeof defaultValue === "string") {
+      setPreview(defaultValue);
     } else {
       setPreview(null);
     }
     return undefined;
-  }, [value]);
+  }, [value, defaultValue]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -61,13 +69,6 @@ export function ProfileUpload({
         return;
       }
       onChange(file);
-    }
-  };
-
-  const handleRemove = () => {
-    onChange(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
     }
   };
 
@@ -95,7 +96,8 @@ export function ProfileUpload({
             e.preventDefault();
             handleClick();
           }
-        }}>
+        }}
+      >
         {preview ? (
           <Image
             src={preview}
@@ -105,7 +107,13 @@ export function ProfileUpload({
             className="h-full w-full overflow-hidden rounded-full object-cover"
           />
         ) : (
-          <UserIcon size={80} className={cn("size-16 md:size-20", profileUploadVariants({ textVariant: variant }))} />
+          <UserIcon
+            size={80}
+            className={cn(
+              "size-16 md:size-20",
+              profileUploadVariants({ textVariant: variant })
+            )}
+          />
         )}
 
         {/* Edit Button */}
@@ -118,12 +126,13 @@ export function ProfileUpload({
             e.stopPropagation();
             handleClick();
           }}
-          disabled={disabled}>
+          disabled={disabled}
+        >
           <Pencil size={20} />
         </Button>
 
         {/* Remove Button */}
-        {preview && (
+        {/* {preview && (
           <Button
             type="button"
             size="icon"
@@ -133,10 +142,11 @@ export function ProfileUpload({
               e.stopPropagation();
               handleRemove();
             }}
-            disabled={disabled}>
+            disabled={disabled}
+          >
             <X size={12} />
           </Button>
-        )}
+        )} */}
       </div>
 
       <input

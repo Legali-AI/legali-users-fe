@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import { profileMetadata } from "./metadata";
 
-export const metadata: Metadata = profileMetadata;
+export const metadata: Metadata = {
+  title: "Profile - Legali",
+  description: "Update your profile information",
+};
 
 export default function ProfileLayout({
   children,

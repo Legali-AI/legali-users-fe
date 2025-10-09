@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const inter = Inter({
@@ -40,7 +41,9 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://legali.com"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "https://legali.com"
+  ),
   alternates: {
     canonical: "/",
   },
@@ -90,8 +93,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${inter.className} overflow-x-hidden overflow-y-auto bg-sky-blue-100 antialiased`}
-        suppressHydrationWarning={true}>
+        className={`${inter.variable} overflow-x-hidden overflow-y-auto bg-sky-blue-100 font-inter antialiased`}
+        suppressHydrationWarning={true}
+      >
+        <Toaster richColors expand position="top-center" closeButton />
         {children}
       </body>
     </html>

@@ -8,7 +8,7 @@ export default defineConfig({
     format: "prettier",
     lint: "biome",
     clean: true,
-    path: "./src/sdk",
+    path: "./src/sdk/out",
   },
 
   plugins: [

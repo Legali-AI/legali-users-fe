@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback } from "react";
 import {
   clearAuth,
   getRefreshToken,
@@ -9,17 +8,26 @@ import {
   setRefreshToken,
   type User,
 } from "@/lib/auth";
-import { logoutApiAuthLogoutPost, refreshTokenApiAuthRefreshPost } from "@/sdk/sdk.gen";
-import { useClearProfile, useProfile, useUpdateProfileCache } from "./use-profile";
+import {
+  logoutApiAuthLogoutPost,
+  refreshTokenApiAuthRefreshPost,
+} from "@/sdk/out/sdk.gen";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
+import { PROFILE_QUERY_KEY, useProfileQuery } from "./use-profile";
 
 export function useAuth() {
   const authenticated = isAuthenticated();
-  const { data: user, isLoading: profileLoading } = useProfile();
-  const updateProfileCache = useUpdateProfileCache();
-  const clearProfile = useClearProfile();
+  const queryClient = useQueryClient();
+  const { data: profileResponse, isLoading: profileLoading } =
+    useProfileQuery();
+  const user = profileResponse?.data ?? null;
 
-  // Only show loading if we're authenticated and profile is loading
-  const isLoading = authenticated && profileLoading;
+  const clearProfile = useCallback(() => {
+    queryClient.removeQueries({ queryKey: PROFILE_QUERY_KEY });
+  }, [queryClient]);
+
+  const isLoading = profileLoading;
 
   const refreshToken = useCallback(async () => {
     const refreshTokenValue = getRefreshToken();
@@ -46,14 +54,18 @@ export function useAuth() {
   }, [clearProfile]);
 
   const login = useCallback(
-    (authData: { access_token: string; refresh_token?: string; user: User }) => {
+    (authData: {
+      access_token: string;
+      refresh_token?: string;
+      user: User;
+    }) => {
       setAccessToken(authData.access_token);
       if (authData.refresh_token) {
         setRefreshToken(authData.refresh_token);
       }
-      updateProfileCache(authData.user);
+      queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
     },
-    [updateProfileCache]
+    [queryClient]
   );
 
   const logout = useCallback(async () => {

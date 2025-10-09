@@ -1,36 +1,41 @@
+import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
 import { H1 } from "../../../components/elements/typography";
 
-// Dynamically import client components to enable SSR for the initial render
 const ButtonClient = dynamic(() => import("./button-client"), {
-  ssr: true, // Enable SSR for better initial render
+  ssr: true,
 });
 
 const EmailPasswordForm = dynamic(() => import("./email-password-form"), {
-  ssr: true, // Enable SSR for better initial render
+  ssr: true,
 });
 
 export const metadata: Metadata = {
   title: "Sign in to Legali",
-  description: "Access your Legali account to continue building your case and connecting with attorneys.",
+  description:
+    "Access your Legali account to continue building your case and connecting with attorneys.",
   keywords: ["login", "sign in", "account access", "legal platform"],
   openGraph: {
     title: "Sign in to Legali",
-    description: "Access your Legali account to continue building your case and connecting with attorneys.",
+    description:
+      "Access your Legali account to continue building your case and connecting with attorneys.",
   },
 };
 
 export default function LoginPage() {
   return (
     <main
-      className={cn("relative z-10 grid min-h-screen w-full grid-cols-1 overflow-hidden lg:grid-cols-2")}
+      className={cn(
+        "relative z-10 grid min-h-screen w-full grid-cols-1 overflow-hidden lg:grid-cols-2"
+      )}
       aria-label="Login page"
       style={{
-        background: "linear-gradient(112deg, #7CC9E6 9.96%, #FFF 70.66%, #7CC9E6 103.48%)",
-      }}>
+        background:
+          "linear-gradient(112deg, #7CC9E6 9.96%, #FFF 70.66%, #7CC9E6 103.48%)",
+      }}
+    >
       {/* Left side - Login form */}
       <div className="flex flex-col justify-center gap-4 px-6 py-8 max-md:items-center sm:px-8 sm:py-12 md:px-12 md:py-16 lg:px-22 xl:px-20 2xl:px-40">
         <div className="animate-in space-y-1 duration-600 fade-in">

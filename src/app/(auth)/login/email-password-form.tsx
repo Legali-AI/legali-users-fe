@@ -1,25 +1,35 @@
 "use client";
 
+import TermsConditionsPopup from "@/components/auth/terms-condition-popup";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { type LoginFormData, loginSchema } from "@/schema/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import TermsConditionsPopup from "@/components/auth/terms-condition-popup";
-import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { type LoginFormData, loginSchema } from "@/schema/auth";
 
 // Mock user credentials
-const MOCK_USERS = [{ email: "user@legali.io", password: "user321", redirectTo: "/onboard" }];
+const MOCK_USERS = [
+  { email: "user@legali.io", password: "user321", redirectTo: "/onboard" },
+];
 
 export default function EmailPasswordForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showTermsPopup, setShowTermsPopup] = useState(false);
-  const [pendingFormData, setPendingFormData] = useState<LoginFormData | null>(null);
+  const [pendingFormData, setPendingFormData] = useState<LoginFormData | null>(
+    null
+  );
   const router = useRouter();
 
   const form = useForm<LoginFormData>({
@@ -47,7 +57,9 @@ export default function EmailPasswordForm() {
     setError(null);
 
     // Mock authentication
-    const mockUser = MOCK_USERS.find(user => user.email === data.email && user.password === data.password);
+    const mockUser = MOCK_USERS.find(
+      user => user.email === data.email && user.password === data.password
+    );
 
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -73,7 +85,6 @@ export default function EmailPasswordForm() {
   };
 
   const handleForgotPassword = () => {
-    console.log("Forgot password clicked - placeholder functionality");
     alert("Forgot password functionality coming soon!");
   };
 
@@ -141,7 +152,8 @@ export default function EmailPasswordForm() {
               type="button"
               onClick={handleForgotPassword}
               className="cursor-pointer text-sm text-sky-900 hover:text-sky-800"
-              disabled={isLoading}>
+              disabled={isLoading}
+            >
               Forgot your password?
             </button>
           </div>
@@ -150,7 +162,8 @@ export default function EmailPasswordForm() {
             variant="black"
             type="submit"
             className="h-12 w-full rounded-xl font-semibold text-white"
-            disabled={isLoading}>
+            disabled={isLoading}
+          >
             {isLoading ? "Signing In..." : "Sign In"}
           </Button>
         </form>
