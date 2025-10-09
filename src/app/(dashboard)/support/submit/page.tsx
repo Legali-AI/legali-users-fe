@@ -1,52 +1,67 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { FileAttachment } from "../../../../components/elements/attachments/file-attachment";
 import { H3, H5 } from "../../../../components/elements/typography";
 import { Button } from "../../../../components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../../../components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../../../components/ui/form";
 import { Input } from "../../../../components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../../components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../../components/ui/select";
 import { Textarea } from "../../../../components/ui/textarea";
-
-const URGENCY_OPTIONS = [
-  { label: "Low", value: "low" },
-  { label: "Medium", value: "medium" },
-  { label: "High", value: "high" },
-  { label: "Critical", value: "critical" },
-];
-
-const supportTicketSchema = z.object({
-  urgency: z.string().min(1, "Please select an urgency level"),
-  issue: z.string().min(1, "Please describe your issue").max(200, "Issue description must be less than 200 characters"),
-  description: z
-    .string()
-    .min(10, "Please provide a detailed description")
-    .max(1000, "Description must be less than 1000 characters"),
-  attachments: z.array(z.instanceof(File)).optional(),
-});
+import { useSupportTicketMutation } from "../../../../hooks/use-support";
+import { QueryProvider } from "../../../../lib/query-client";
+import {
+  supportTicketSchema,
+  URGENCY_OPTIONS,
+} from "../../../../schema/support.schema";
+import type { TicketUrgency } from "../../../../sdk/out";
 
 type SupportTicketFormData = z.infer<typeof supportTicketSchema>;
 
-export default function SubmitSupportPage() {
+function SubmitSupportPageContent() {
   const [attachmentError, setAttachmentError] = React.useState<string>("");
+  const router = useRouter();
+  const { createWithToast, isCreating } = useSupportTicketMutation();
 
   const form = useForm<SupportTicketFormData>({
     resolver: zodResolver(supportTicketSchema),
     defaultValues: {
-      urgency: "",
-      issue: "",
+      urgency: "low" as const,
+      issue_title: "",
       description: "",
-      attachments: [],
+      files: [],
     },
   });
 
-  const onSubmit = (data: SupportTicketFormData) => {
-    console.log("Form submitted:", data);
+  const onSubmit = async (data: SupportTicketFormData) => {
     setAttachmentError("");
+
+    await createWithToast(
+      {
+        issue_title: data.issue_title,
+        description: data.description,
+        urgency: data.urgency as TicketUrgency,
+        files: data.files || [],
+      },
+      () => router.push("/support")
+    );
   };
 
   return (
@@ -57,7 +72,10 @@ export default function SubmitSupportPage() {
       </H5>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4 lg:space-y-5">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full space-y-4 lg:space-y-5"
+        >
           {/* Urgency Field */}
           <FormField
             control={form.control}
@@ -70,7 +88,10 @@ export default function SubmitSupportPage() {
                   </H3>
                 </FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value || undefined}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select your urgency" />
                     </SelectTrigger>
@@ -91,7 +112,7 @@ export default function SubmitSupportPage() {
           {/* Issue Field */}
           <FormField
             control={form.control}
-            name="issue"
+            name="issue_title"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
@@ -133,7 +154,7 @@ export default function SubmitSupportPage() {
           {/* Attachment Field */}
           <FormField
             control={form.control}
-            name="attachments"
+            name="files"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
@@ -153,7 +174,9 @@ export default function SubmitSupportPage() {
                   />
                 </FormControl>
                 <FormMessage />
-                {attachmentError && <p className="text-sm text-destructive">{attachmentError}</p>}
+                {attachmentError && (
+                  <p className="text-sm text-destructive">{attachmentError}</p>
+                )}
               </FormItem>
             )}
           />
@@ -164,11 +187,20 @@ export default function SubmitSupportPage() {
             className="h-[39px] w-full rounded-[10px] bg-deep-navy px-5"
             level="title"
             weight="semibold"
-            disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? "Submitting..." : "Submit"}
+            disabled={isCreating}
+          >
+            {isCreating ? "Submitting..." : "Submit"}
           </Button>
         </form>
       </Form>
     </main>
+  );
+}
+
+export default function SubmitSupportPage() {
+  return (
+    <QueryProvider>
+      <SubmitSupportPageContent />
+    </QueryProvider>
   );
 }

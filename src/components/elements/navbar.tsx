@@ -222,9 +222,9 @@ function NavbarContent() {
                 </nav>
 
                 {/* Login Button */}
-                {!isAuthenticated && !isLoadingAuth && (
-                  <div className="border-t pt-4">
-                    <Button className="w-full rounded-xl bg-deep-navy-400 hover:bg-deep-navy-500">
+                <div className="border-t pt-4">
+                  <Button className="w-full rounded-xl bg-deep-navy-400 hover:bg-deep-navy-500">
+                    {!isAuthenticated && !isLoadingAuth ? (
                       <Link href="/login" className="w-full">
                         <Typography
                           weight="medium"
@@ -234,9 +234,19 @@ function NavbarContent() {
                           Log In
                         </Typography>
                       </Link>
-                    </Button>
-                  </div>
-                )}
+                    ) : (
+                      <Link href="/profile">
+                        <Typography
+                          weight="medium"
+                          level="body"
+                          className="text-white"
+                        >
+                          Profile
+                        </Typography>
+                      </Link>
+                    )}
+                  </Button>
+                </div>
               </div>
             </SheetContent>
           </Sheet>
@@ -245,11 +255,19 @@ function NavbarContent() {
         {/* Login */}
         <NavigationMenuItem className="flex-shrink-0 max-lg:hidden">
           <Button className="rounded-xl bg-deep-navy-400 px-3 py-1.5 hover:bg-deep-navy-500 sm:px-4 sm:py-2">
-            <Link href="/login">
-              <Typography weight="medium" level="body" className="text-white">
-                Log In
-              </Typography>
-            </Link>
+            {!isAuthenticated && !isLoadingAuth ? (
+              <Link href="/login">
+                <Typography weight="medium" level="body" className="text-white">
+                  Log In
+                </Typography>
+              </Link>
+            ) : (
+              <Link href="/profile">
+                <Typography weight="medium" level="body" className="text-white">
+                  Profile
+                </Typography>
+              </Link>
+            )}
           </Button>
         </NavigationMenuItem>
       </NavigationMenuList>
