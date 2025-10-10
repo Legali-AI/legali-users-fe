@@ -3241,10 +3241,25 @@ export const StorageInfoDAOSchema = {
             format: 'date-time',
             title: 'Last Updated',
             description: 'Last updated timestamp'
+        },
+        current_limit_storage_bytes: {
+            type: 'integer',
+            title: 'Current Limit Storage Bytes',
+            description: 'Current storage limit in bytes (plan or system)'
+        },
+        current_limit_storage_mb: {
+            type: 'number',
+            title: 'Current Limit Storage Mb',
+            description: 'Current storage limit in MB (plan or system)'
+        },
+        current_limit_storage_gb: {
+            type: 'number',
+            title: 'Current Limit Storage Gb',
+            description: 'Current storage limit in GB (plan or system)'
         }
     },
     type: 'object',
-    required: ['user_id', 'total_files', 'total_size_bytes', 'total_size_mb', 'total_size_gb', 'last_updated'],
+    required: ['user_id', 'total_files', 'total_size_bytes', 'total_size_mb', 'total_size_gb', 'last_updated', 'current_limit_storage_bytes', 'current_limit_storage_mb', 'current_limit_storage_gb'],
     title: 'StorageInfoDAO',
     description: 'Storage information response DAO'
 } as const;

@@ -1,6 +1,6 @@
 "use client";
 
-import { Span } from "../../../../../components/elements/typography";
+import { Span } from "../../../../components/elements/typography";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,7 +10,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "../../../../../components/ui/alert-dialog";
+} from "../../../../components/ui/alert-dialog";
 
 export interface DeleteCommentDialogProps {
   isOpen: boolean;

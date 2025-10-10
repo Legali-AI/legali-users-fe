@@ -465,7 +465,10 @@ export const zStorageInfoDao = z.object({
     total_size_bytes: z.number().int(),
     total_size_mb: z.number(),
     total_size_gb: z.number(),
-    last_updated: z.string().datetime()
+    last_updated: z.string().datetime(),
+    current_limit_storage_bytes: z.number().int(),
+    current_limit_storage_mb: z.number(),
+    current_limit_storage_gb: z.number()
 });
 
 export const zApiResponseStorageInfoDao = z.object({

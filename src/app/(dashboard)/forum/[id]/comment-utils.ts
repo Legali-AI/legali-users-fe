@@ -1,4 +1,4 @@
-import type { ForumCommentDao } from "../../../../../sdk/out";
+import type { ForumCommentDao } from "../../../../sdk/out";
 import type { CommentCardProps } from "./comment-card";
 
 /**

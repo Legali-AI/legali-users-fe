@@ -1,4 +1,4 @@
-import type { ForumAttachmentDao, ForumIssueDao } from "../../../../sdk/out";
+import type { ForumAttachmentDao, ForumIssueDao } from "../../../sdk/out";
 import type { IssueCardProps } from "./issue-card";
 
 /**

@@ -27,8 +27,8 @@ import {
   useForumIssuesQuery,
   useMyForumIssuesQuery,
 } from "../../../hooks/use-forum";
-import { transformForumIssueToCardProps } from "./components/forum-utils";
-import { IssueCard } from "./components/issue-card";
+import { transformForumIssueToCardProps } from "./forum-utils";
+import { IssueCard } from "./issue-card";
 
 const ITEMS_PER_PAGE = 10;
 function ForumContent() {

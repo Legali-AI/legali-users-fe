@@ -3,13 +3,13 @@
 import { Paperclip, Send, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { ZodError } from "zod";
-import { H3, Small } from "../../../../../components/elements/typography";
-import { Button } from "../../../../../components/ui/button";
-import { Textarea } from "../../../../../components/ui/textarea";
+import { H3, Small } from "../../../../components/elements/typography";
+import { Button } from "../../../../components/ui/button";
+import { Textarea } from "../../../../components/ui/textarea";
 import {
   type ForumCommentFormData,
   forumCommentSchema,
-} from "../../../../../schema/forum.schema";
+} from "../../../../schema/forum.schema";
 
 export interface CommentInputProps {
   onSubmit: (content: string, files: File[]) => Promise<void>;

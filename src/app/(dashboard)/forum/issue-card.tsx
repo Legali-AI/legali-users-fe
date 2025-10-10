@@ -2,14 +2,14 @@
 
 import { Edit, MessageCircle, User } from "lucide-react";
 import Link from "next/link";
-import { H5, P, Small } from "../../../../components/elements/typography";
+import { H5, P, Small } from "../../../components/elements/typography";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "../../../../components/ui/avatar";
-import { Button } from "../../../../components/ui/button";
-import { cn, formatTimestampAgo } from "../../../../lib/utils";
+} from "../../../components/ui/avatar";
+import { Button } from "../../../components/ui/button";
+import { cn, formatTimestampAgo } from "../../../lib/utils";
 import { AttachmentsPreview } from "./attachment-preview";
 
 export interface IssueCardProps {

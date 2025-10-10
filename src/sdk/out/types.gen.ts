@@ -989,6 +989,18 @@ export type StorageInfoDao = {
      * Last updated timestamp
      */
     last_updated: string;
+    /**
+     * Current storage limit in bytes (plan or system)
+     */
+    current_limit_storage_bytes: number;
+    /**
+     * Current storage limit in MB (plan or system)
+     */
+    current_limit_storage_mb: number;
+    /**
+     * Current storage limit in GB (plan or system)
+     */
+    current_limit_storage_gb: number;
 };
 
 /**

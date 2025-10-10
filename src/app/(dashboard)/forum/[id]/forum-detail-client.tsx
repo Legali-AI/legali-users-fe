@@ -28,10 +28,10 @@ import type {
   ForumIssueDao,
   UpdateCommentApiUserForumCommentsCommentIdPutData,
 } from "../../../../sdk/out";
-import { separateAttachments } from "../components/forum-utils";
-import { CommentCard } from "./components/comment-card";
-import { CommentInput } from "./components/comment-input";
-import { organizeCommentsIntoNestedStructure } from "./components/comment-utils";
+import { separateAttachments } from "../forum-utils";
+import { CommentCard } from "./comment-card";
+import { CommentInput } from "./comment-input";
+import { organizeCommentsIntoNestedStructure } from "./comment-utils";
 
 interface ForumDetailClientProps {
   issueId: string;

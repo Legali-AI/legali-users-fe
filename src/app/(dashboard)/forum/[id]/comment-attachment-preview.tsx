@@ -1,6 +1,6 @@
-import { FileAttachmentContainer } from "../../../../../components/elements/attachments/file-attachment-container";
-import { ImageAttachmentPreview } from "../../../../../components/elements/attachments/image-attachment-preview";
-import { separateAttachments } from "../../components/forum-utils";
+import { FileAttachmentContainer } from "../../../../components/elements/attachments/file-attachment-container";
+import { ImageAttachmentPreview } from "../../../../components/elements/attachments/image-attachment-preview";
+import { separateAttachments } from "../forum-utils";
 
 interface FileAttachment {
   url: string;

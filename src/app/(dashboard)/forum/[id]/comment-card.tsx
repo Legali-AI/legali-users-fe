@@ -10,15 +10,15 @@ import {
   X,
 } from "lucide-react";
 import { useRef, useState } from "react";
-import { H5, P, Small } from "../../../../../components/elements/typography";
+import { H5, P, Small } from "../../../../components/elements/typography";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "../../../../../components/ui/avatar";
-import { Button } from "../../../../../components/ui/button";
-import { Textarea } from "../../../../../components/ui/textarea";
-import { cn } from "../../../../../lib/utils";
+} from "../../../../components/ui/avatar";
+import { Button } from "../../../../components/ui/button";
+import { Textarea } from "../../../../components/ui/textarea";
+import { cn } from "../../../../lib/utils";
 import { CommentAttachmentPreview } from "./comment-attachment-preview";
 import { DeleteCommentDialog } from "./delete-comment-dialog";
 

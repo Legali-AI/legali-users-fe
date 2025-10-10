@@ -1,6 +1,6 @@
-import { FileAttachmentContainer } from "../../../../components/elements/attachments/file-attachment-container";
-import { ImageAttachmentPreview } from "../../../../components/elements/attachments/image-attachment-preview";
-import { P } from "../../../../components/elements/typography";
+import { FileAttachmentContainer } from "../../../components/elements/attachments/file-attachment-container";
+import { ImageAttachmentPreview } from "../../../components/elements/attachments/image-attachment-preview";
+import { P } from "../../../components/elements/typography";
 
 interface FileAttachment {
   url: string;
