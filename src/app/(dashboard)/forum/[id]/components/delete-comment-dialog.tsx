@@ -1,5 +1,6 @@
 "use client";
 
+import { Span } from "../../../../../components/elements/typography";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,8 +29,10 @@ export function DeleteCommentDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Comment</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete this comment? This action cannot be
-            undone.
+            <Span level="body" className="text-slate-gray-400">
+              Are you sure you want to delete this comment? This action cannot
+              be undone.
+            </Span>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

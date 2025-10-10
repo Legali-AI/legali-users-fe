@@ -222,7 +222,6 @@ export function useForumCommentMutation() {
       });
       // Also invalidate forum issues to update comment counts
       queryClient.refetchQueries({ queryKey: FORUM_QUERY_KEY, exact: false });
-      toast.success("Comment posted successfully");
     },
     onError: error => {
       toast.error("Failed to post comment");
@@ -248,7 +247,6 @@ export function useForumCommentMutation() {
         queryKey: FORUM_COMMENT_QUERY_KEY,
         exact: false,
       });
-      toast.success("Comment updated successfully");
     },
     onError: error => {
       toast.error("Failed to update comment");

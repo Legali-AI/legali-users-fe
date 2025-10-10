@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageCircle, User } from "lucide-react";
+import { Edit, MessageCircle, User } from "lucide-react";
 import Link from "next/link";
 import { H5, P, Small } from "../../../../components/elements/typography";
 import {
@@ -23,6 +23,7 @@ export interface IssueCardProps {
   author: string;
   authorAvatar?: string | undefined;
   onDelete?: (id: string) => void;
+  onEdit?: (id: string) => void;
   className?: string;
   onSeeAttachments?: () => void;
   isPaperClip?: boolean;
@@ -40,6 +41,7 @@ export function IssueCard({
   author,
   authorAvatar,
   onDelete,
+  onEdit,
   className,
   onSeeAttachments = () => {},
   isPaperClip = false,
@@ -69,21 +71,38 @@ export function IssueCard({
           </div>
         </Link>
 
-        {onDelete && isMine && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={e => {
-              e.preventDefault();
-              e.stopPropagation();
-              onDelete?.(id);
-            }}
-            className="self-start sm:self-auto"
-          >
-            <P level="body" className="text-brand-rose">
-              Delete
-            </P>
-          </Button>
+        {(onDelete || onEdit) && isMine && (
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            {onEdit && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={e => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onEdit?.(id);
+                }}
+                className="text-blue-500 hover:bg-blue-50 hover:text-blue-600"
+              >
+                <Edit className="mr-1 h-4 w-4" />
+                <P level="body">Edit</P>
+              </Button>
+            )}
+            {onDelete && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={e => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onDelete?.(id);
+                }}
+                className="text-brand-rose hover:bg-red-50 hover:text-red-600"
+              >
+                <P level="body">Delete</P>
+              </Button>
+            )}
+          </div>
         )}
       </div>
 

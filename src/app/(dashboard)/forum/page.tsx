@@ -81,6 +81,10 @@ function ForumContent() {
     setShowDeleteDialog(true);
   };
 
+  const handleEditIssue = (issueId: string) => {
+    router.push(`/forum/${issueId}/edit`);
+  };
+
   const confirmDeleteIssue = async () => {
     if (issueToDelete) {
       await deleteWithToast(issueToDelete);
@@ -190,6 +194,7 @@ function ForumContent() {
                       {...issue}
                       {...(issue.isMine && {
                         onDelete: () => handleDeleteIssue(issue.id),
+                        onEdit: () => handleEditIssue(issue.id),
                       })}
                       onSeeAttachments={() => {
                         router.push(`/forum/${issue.id}`);

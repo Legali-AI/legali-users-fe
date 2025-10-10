@@ -63,7 +63,6 @@ export function CommentInput({
       setAttachedFiles([]);
     } catch (error) {
       if (error instanceof ZodError) {
-        // Zod validation error
         const firstError = error.issues[0];
         if (firstError) {
           setValidationError(firstError.message);

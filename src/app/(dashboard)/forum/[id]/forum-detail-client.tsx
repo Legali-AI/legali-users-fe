@@ -1,6 +1,7 @@
 "use client";
 
-import { MessageCircle, User } from "lucide-react";
+import { Edit, MessageCircle, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { FileAttachmentContainer } from "../../../../components/elements/attachments/file-attachment-container";
@@ -25,6 +26,7 @@ import type {
   CreateCommentApiUserForumIssuesIssueIdCommentsPostData,
   DeleteCommentApiUserForumCommentsCommentIdDeleteData,
   ForumIssueDao,
+  UpdateCommentApiUserForumCommentsCommentIdPutData,
 } from "../../../../sdk/out";
 import { separateAttachments } from "../components/forum-utils";
 import { CommentCard } from "./components/comment-card";
@@ -36,6 +38,7 @@ interface ForumDetailClientProps {
 }
 
 export default function ForumDetailClient({ issueId }: ForumDetailClientProps) {
+  const router = useRouter();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyingToAuthor, setReplyingToAuthor] = useState<string>("");
@@ -48,8 +51,11 @@ export default function ForumDetailClient({ issueId }: ForumDetailClientProps) {
   const { data: commentsData, isLoading: isLoadingComments } =
     useForumCommentsQuery(issueId);
   const { deleteWithToast } = useForumIssueMutation();
-  const { createWithToast, deleteWithToast: deleteCommentWithToast } =
-    useForumCommentMutation();
+  const {
+    createWithToast,
+    updateWithToast: updateCommentWithToast,
+    deleteWithToast: deleteCommentWithToast,
+  } = useForumCommentMutation();
 
   const issue = exploreIssuesData?.data?.find(
     (i: ForumIssueDao) => i.issue_id === issueId
@@ -126,6 +132,26 @@ export default function ForumDetailClient({ issueId }: ForumDetailClientProps) {
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Failed to delete comment"
+      );
+    }
+  };
+
+  const handleEditComment = async (
+    commentId: string,
+    content: string,
+    files?: File[]
+  ) => {
+    try {
+      await updateCommentWithToast({
+        body: {
+          content: content,
+          files: files || null,
+        },
+        path: { comment_id: commentId },
+      } as UpdateCommentApiUserForumCommentsCommentIdPutData);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to update comment"
       );
     }
   };
@@ -255,14 +281,25 @@ export default function ForumDetailClient({ issueId }: ForumDetailClientProps) {
               </div>
             </div>
 
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleDeleteIssue}
-              className="ml-2 text-red-500 hover:bg-red-50 hover:text-red-600"
-            >
-              Delete
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => router.push(`/forum/${issueId}/edit`)}
+                className="text-blue-500 hover:bg-blue-50 hover:text-blue-600"
+              >
+                <Edit className="mr-1 h-4 w-4" />
+                Edit
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleDeleteIssue}
+                className="text-red-500 hover:bg-red-50 hover:text-red-600"
+              >
+                Delete
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -280,6 +317,7 @@ export default function ForumDetailClient({ issueId }: ForumDetailClientProps) {
                   {...comment}
                   currentUserId={user?.id}
                   onReply={handleReplyToComment}
+                  onEdit={handleEditComment}
                   onDelete={handleDeleteComment}
                 />
               ))}

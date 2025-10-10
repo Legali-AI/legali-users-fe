@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { FileAttachment } from "../../../../components/elements/attachments/file-attachment";
-import { H3, H5 } from "../../../../components/elements/typography";
-import { Button } from "../../../../components/ui/button";
+import { FileAttachment } from "../../../../../components/elements/attachments/file-attachment";
+import { H3, H5 } from "../../../../../components/elements/typography";
+import { Button } from "../../../../../components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,43 +15,75 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../../components/ui/form";
-import { Input } from "../../../../components/ui/input";
-import { Textarea } from "../../../../components/ui/textarea";
-import { useForumIssueMutation } from "../../../../hooks/use-forum";
+} from "../../../../../components/ui/form";
+import { Input } from "../../../../../components/ui/input";
+import { Textarea } from "../../../../../components/ui/textarea";
+import {
+  useForumIssueMutation,
+  useForumIssuesQuery,
+} from "../../../../../hooks/use-forum";
 import {
   type ForumIssueFormData,
   forumIssueSchema,
-} from "../../../../schema/forum.schema";
+} from "../../../../../schema/forum.schema";
+import type { UpdateIssueApiUserForumIssuesIssueIdPutData } from "../../../../../sdk/out/types.gen";
 
-export default function CreateForumPage() {
+interface EditForumPageProps {
+  params: Promise<{
+    id: string;
+  }>;
+}
+
+export default function EditForumPage({ params }: EditForumPageProps) {
   const router = useRouter();
-  const { createWithToast, isCreating } = useForumIssueMutation();
+  const { updateWithToast, isUpdating } = useForumIssueMutation();
+  const { data: issuesData, isLoading: isLoadingIssues } =
+    useForumIssuesQuery();
   const [attachmentError, setAttachmentError] = React.useState<string>("");
+
+  // Unwrap params Promise
+  const resolvedParams = React.use(params);
+
+  // Find the issue to edit
+  const issue = issuesData?.data?.find(i => i.issue_id === resolvedParams.id);
 
   const form = useForm<ForumIssueFormData>({
     resolver: zodResolver(forumIssueSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      title: issue?.title || "",
+      description: issue?.description || "",
       files: [],
     },
   });
+
+  // Update form when issue data is loaded
+  React.useEffect(() => {
+    if (issue) {
+      form.reset({
+        title: issue.title,
+        description: issue.description || "",
+        files: [],
+      });
+    }
+  }, [issue, form]);
 
   const onSubmit = async (data: ForumIssueFormData) => {
     try {
       setAttachmentError("");
 
-      await createWithToast({
-        title: data.title,
-        description: data.description || null,
-        files: data.files || null,
-      });
+      await updateWithToast({
+        path: { issue_id: resolvedParams.id },
+        body: {
+          title: data.title,
+          description: data.description || null,
+          files: data.files || null,
+        },
+      } as UpdateIssueApiUserForumIssuesIssueIdPutData);
 
-      router.push("/forum");
+      router.push(`/forum/${resolvedParams.id}`);
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to create forum issue"
+        error instanceof Error ? error.message : "Failed to update forum issue"
       );
     }
   };
@@ -59,13 +91,38 @@ export default function CreateForumPage() {
   const {
     formState: { isSubmitting, isDirty, isLoading: stateLoading },
   } = form;
-  const isLoading = isCreating || stateLoading || isSubmitting;
+  const isLoading =
+    isUpdating || stateLoading || isSubmitting || isLoadingIssues;
+
+  if (isLoadingIssues) {
+    return (
+      <main className="flex w-full flex-1 flex-col gap-4 lg:gap-5">
+        <div className="flex h-32 items-center justify-center">
+          <H5 weight="semibold" level="h5" className="text-deep-navy">
+            Loading...
+          </H5>
+        </div>
+      </main>
+    );
+  }
+
+  if (!issue) {
+    return (
+      <main className="flex w-full flex-1 flex-col gap-4 lg:gap-5">
+        <div className="flex h-32 items-center justify-center">
+          <H5 weight="semibold" level="h5" className="text-deep-navy">
+            Issue not found
+          </H5>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="flex w-full flex-1 flex-col gap-4 lg:gap-5">
       {/* Header */}
       <H5 weight="semibold" level="h5">
-        Create your issue
+        Edit your issue
       </H5>
 
       <Form {...form}>
@@ -153,7 +210,7 @@ export default function CreateForumPage() {
             weight="semibold"
             disabled={isLoading || !isDirty}
           >
-            {form.formState.isSubmitting ? "Submitting..." : "Submit"}
+            {form.formState.isSubmitting ? "Updating..." : "Update Issue"}
           </Button>
         </form>
       </Form>

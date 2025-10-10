@@ -21,7 +21,7 @@ export type ForumIssueFormData = z.infer<typeof forumIssueSchema>;
 export const forumCommentSchema = z.object({
   message: z
     .string()
-    .min(1, "Please enter a comment")
+    .min(3, "Comment must be at least 3 characters")
     .max(1000, "Comment must be less than 1000 characters"),
   files: z.array(z.instanceof(File)).optional(),
 });
