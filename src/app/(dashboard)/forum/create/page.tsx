@@ -1,42 +1,59 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { toast } from "sonner";
 import { FileAttachment } from "../../../../components/elements/attachments/file-attachment";
 import { H3, H5 } from "../../../../components/elements/typography";
 import { Button } from "../../../../components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../../../components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../../../components/ui/form";
 import { Input } from "../../../../components/ui/input";
 import { Textarea } from "../../../../components/ui/textarea";
-
-const supportIssueSchema = z.object({
-  issue: z.string().min(1, "Please describe your issue").max(200, "Issue description must be less than 200 characters"),
-  description: z
-    .string()
-    .min(10, "Please provide a detailed description")
-    .max(1000, "Description must be less than 1000 characters"),
-  attachments: z.array(z.instanceof(File)).optional(),
-});
-
-type SupportIssueFormData = z.infer<typeof supportIssueSchema>;
+import { useForumIssueMutation } from "../../../../hooks/use-forum";
+import {
+  type ForumIssueFormData,
+  forumIssueSchema,
+} from "../../../../schema/forum.schema";
 
 export default function CreateForumPage() {
+  const router = useRouter();
+  const { createWithToast } = useForumIssueMutation();
   const [attachmentError, setAttachmentError] = React.useState<string>("");
 
-  const form = useForm<SupportIssueFormData>({
-    resolver: zodResolver(supportIssueSchema),
+  const form = useForm<ForumIssueFormData>({
+    resolver: zodResolver(forumIssueSchema),
     defaultValues: {
-      issue: "",
+      title: "",
       description: "",
-      attachments: [],
+      files: [],
     },
   });
 
-  const onSubmit = (data: SupportIssueFormData) => {
-    console.log("Form submitted:", data);
-    setAttachmentError("");
+  const onSubmit = async (data: ForumIssueFormData) => {
+    try {
+      setAttachmentError("");
+
+      await createWithToast({
+        title: data.title,
+        description: data.description || null,
+        files: data.files || null,
+      });
+
+      router.push("/forum");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create forum issue"
+      );
+    }
   };
 
   return (
@@ -47,20 +64,23 @@ export default function CreateForumPage() {
       </H5>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4 lg:space-y-5">
-          {/* Issue Field */}
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full space-y-4 lg:space-y-5"
+        >
+          {/* Title Field */}
           <FormField
             control={form.control}
-            name="issue"
+            name="title"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
                   <H3 weight="semibold" level="title">
-                    Issue
+                    Title
                   </H3>
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="Write your issue..." {...field} />
+                  <Input placeholder="Write your issue title..." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -90,15 +110,15 @@ export default function CreateForumPage() {
             )}
           />
 
-          {/* Attachment Field */}
+          {/* Files Field */}
           <FormField
             control={form.control}
-            name="attachments"
+            name="files"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
                   <H3 weight="semibold" level="title">
-                    Attachment
+                    Attachments
                   </H3>
                 </FormLabel>
                 <FormControl>
@@ -109,11 +129,13 @@ export default function CreateForumPage() {
                     accept="image/*,.pdf,.doc,.docx,.xlsx,.xls"
                     maxFiles={10}
                     maxSizePerFile={10}
-                    placeholder="Attachment"
+                    placeholder="Attachments"
                   />
                 </FormControl>
                 <FormMessage />
-                {attachmentError && <p className="text-sm text-destructive">{attachmentError}</p>}
+                {attachmentError && (
+                  <p className="text-sm text-destructive">{attachmentError}</p>
+                )}
               </FormItem>
             )}
           />
@@ -124,7 +146,8 @@ export default function CreateForumPage() {
             className="h-[39px] w-full rounded-[10px] bg-deep-navy px-5"
             level="title"
             weight="semibold"
-            disabled={form.formState.isSubmitting}>
+            disabled={form.formState.isSubmitting}
+          >
             {form.formState.isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         </form>

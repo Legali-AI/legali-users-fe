@@ -90,7 +90,12 @@ export function FileAttachmentContainer({
 
   return (
     <>
-      <div className={cn(`flex items-center gap-2`, className || "")}>
+      <div
+        className={cn(
+          `flex min-w-0 items-center gap-2 overflow-hidden`,
+          className || ""
+        )}
+      >
         {visibleAttachments.map((attachment, index) => (
           <FileAttachmentItem
             className={classNameItem || ""}

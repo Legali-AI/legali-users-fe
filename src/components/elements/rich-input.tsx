@@ -87,7 +87,11 @@ export default function RichInput({
       chunksRef.current = [];
 
       // Choose a supported mime type for better playback compatibility
-      const candidates = ["audio/webm;codecs=opus", "audio/ogg;codecs=opus", "audio/webm"];
+      const candidates = [
+        "audio/webm;codecs=opus",
+        "audio/ogg;codecs=opus",
+        "audio/webm",
+      ];
       let chosen: string | undefined;
       for (const t of candidates) {
         if (window.MediaRecorder && MediaRecorder.isTypeSupported(t)) {
@@ -97,7 +101,10 @@ export default function RichInput({
       }
       preferredMimeTypeRef.current = chosen;
 
-      const mediaRecorder = new MediaRecorder(stream, chosen ? { mimeType: chosen } : undefined);
+      const mediaRecorder = new MediaRecorder(
+        stream,
+        chosen ? { mimeType: chosen } : undefined
+      );
       mediaRecorderRef.current = mediaRecorder;
 
       mediaRecorder.ondataavailable = event => {
@@ -138,7 +145,10 @@ export default function RichInput({
 
   const stopRecording = () => {
     if (!isRecording) return;
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== "inactive"
+    ) {
       mediaRecorderRef.current.stop();
     }
     if (timerRef.current) window.clearInterval(timerRef.current);
@@ -193,7 +203,13 @@ export default function RichInput({
       <div className="flex w-full items-start justify-between gap-4 md:gap-8 lg:gap-12 xl:gap-16">
         {/* Add files */}
         <div>
-          <Button type="button" size={"lg"} variant="outline" onClick={handlePickFiles} disabled={disabled}>
+          <Button
+            type="button"
+            size={"lg"}
+            variant="outline"
+            onClick={handlePickFiles}
+            disabled={disabled}
+          >
             <span className="flex items-center gap-2">
               <Typography level="body" className="text-black">
                 Add photos and files
@@ -221,7 +237,8 @@ export default function RichInput({
               variant={"ghost"}
               size={"icon"}
               className="h-10 w-10 rounded-full"
-              aria-label="Start recording">
+              aria-label="Start recording"
+            >
               <Mic className="h-10 w-10 text-deep-navy" size={52} />
             </Button>
           ) : (
@@ -231,7 +248,8 @@ export default function RichInput({
               aria-label="Stop recording"
               size={"icon"}
               className="h-10 w-10 rounded-full"
-              variant={"destructive"}>
+              variant={"destructive"}
+            >
               <StopCircle className="h-10 w-10 text-white" />
             </Button>
           )}
@@ -240,9 +258,12 @@ export default function RichInput({
           <Button
             type="button"
             onClick={handleSubmit}
-            disabled={disabled || (!text.trim() && files.length === 0 && !audioBlob)}
+            disabled={
+              disabled || (!text.trim() && files.length === 0 && !audioBlob)
+            }
             className="h-10 w-10 rounded-full"
-            aria-label="Send">
+            aria-label="Send"
+          >
             <Send className="h-4 w-4 text-white" />
           </Button>
         </div>
@@ -253,15 +274,12 @@ export default function RichInput({
         <div className="mt-2 flex w-full flex-col gap-2">
           {files.length > 0 && (
             <FileAttachmentContainer
-              attachments={files.map(f => f.name)}
+              attachments={files.map(f => ({
+                url: URL.createObjectURL(f),
+                name: f.name,
+              }))}
               maxVisible={8}
               showRemaining={true}
-              onAttachmentClick={() => {
-                // Optional: Add click handler for individual files
-              }}
-              onRemainingClick={() => {
-                // Optional: Add handler for "+remaining" click
-              }}
             />
           )}
 
@@ -278,7 +296,13 @@ export default function RichInput({
           {!!audioBlob && audioUrl && (
             <div className="flex w-full items-center gap-3 rounded-md border border-input px-3 py-2">
               {/* Visible audio element for playback */}
-              <audio ref={audioRef} src={audioUrl} controls className="max-w-full" aria-label="Recorded audio preview">
+              <audio
+                ref={audioRef}
+                src={audioUrl}
+                controls
+                className="max-w-full"
+                aria-label="Recorded audio preview"
+              >
                 <track kind="captions" />
               </audio>
             </div>

@@ -43,7 +43,9 @@ export function FileViewerModal({
     }
   }, [fileName]);
 
-  const handleOpenInNewTab = () => {
+  const handleOpenInNewTab = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (fileUrl) {
       window.open(fileUrl, "_blank", "noopener,noreferrer");
     }
@@ -78,19 +80,19 @@ export function FileViewerModal({
 
     if (isImage && fileUrl) {
       return (
-        <div className="flex flex-col items-center">
-          <div className="relative max-h-[70vh] max-w-full">
+        <div className="flex w-full min-w-0 flex-col items-center">
+          <div className="relative max-h-[70vh] w-full max-w-full overflow-hidden">
             <Image
               src={fileUrl}
               alt={fileName || "File preview"}
               width={800}
               height={600}
-              className="max-h-[70vh] max-w-full rounded-lg object-contain"
+              className="h-auto max-h-[70vh] w-full max-w-full rounded-lg object-contain"
               onError={() => setError(true)}
             />
           </div>
-          <div className="mt-4 flex gap-2">
-            <Button onClick={handleOpenInNewTab} variant="outline">
+          <div className="mt-4 flex w-full min-w-0 justify-center gap-2">
+            <Button onClick={e => handleOpenInNewTab(e)} variant="outline">
               <ExternalLink size={16} className="mr-2" />
               Open in New Tab
             </Button>
@@ -101,8 +103,8 @@ export function FileViewerModal({
 
     if (isPdf && fileUrl) {
       return (
-        <div className="flex flex-col items-center">
-          <div className="relative h-[70vh] w-full rounded-lg border">
+        <div className="flex w-full min-w-0 flex-col items-center">
+          <div className="relative h-[70vh] w-full overflow-hidden rounded-lg border">
             <iframe
               src={fileUrl}
               title={fileName || "PDF Preview"}
@@ -120,16 +122,22 @@ export function FileViewerModal({
               }}
             />
             {error && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center rounded-lg bg-gray-50">
+              <div className="absolute inset-0 flex min-w-0 flex-col items-center justify-center rounded-lg bg-gray-50">
                 <FileText size={48} className="mb-4 text-gray-400" />
-                <P level="body" className="mb-2 text-gray-600">
+                <P level="body" className="mb-2 px-4 text-center text-gray-600">
                   PDF preview not available
                 </P>
-                <P level="body" className="mb-4 text-sm text-gray-500">
+                <P
+                  level="body"
+                  className="mb-4 px-4 text-center text-sm break-words text-gray-500"
+                >
                   {fileName}
                 </P>
                 <div className="flex gap-2">
-                  <Button onClick={handleOpenInNewTab} variant="outline">
+                  <Button
+                    onClick={e => handleOpenInNewTab(e)}
+                    variant="outline"
+                  >
                     <ExternalLink size={16} className="mr-2" />
                     Open in New Tab
                   </Button>
@@ -137,8 +145,8 @@ export function FileViewerModal({
               </div>
             )}
           </div>
-          <div className="mt-4 flex gap-2">
-            <Button onClick={handleOpenInNewTab} variant="outline">
+          <div className="mt-4 flex w-full min-w-0 justify-center gap-2">
+            <Button onClick={e => handleOpenInNewTab(e)} variant="outline">
               <ExternalLink size={16} className="mr-2" />
               Open in New Tab
             </Button>
@@ -148,16 +156,16 @@ export function FileViewerModal({
     }
 
     return (
-      <div className="flex flex-col items-center justify-center p-8 text-center">
+      <div className="flex w-full min-w-0 flex-col items-center justify-center p-8 text-center">
         {getFileIcon()}
-        <P level="body" className="mt-4 mb-2 text-gray-600">
+        <P level="body" className="mt-4 mb-2 px-4 break-words text-gray-600">
           {fileName}
         </P>
         <P level="body" className="mb-4 text-sm text-gray-500">
           {fileType.toUpperCase()} File
         </P>
-        <div className="flex gap-2">
-          <Button onClick={handleOpenInNewTab} variant="outline">
+        <div className="flex w-full min-w-0 justify-center gap-2">
+          <Button onClick={e => handleOpenInNewTab(e)} variant="outline">
             <ExternalLink size={16} className="mr-2" />
             Open in New Tab
           </Button>
@@ -169,14 +177,14 @@ export function FileViewerModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-h-[90vh] max-w-4xl overflow-hidden">
-        <DialogHeader className="flex flex-row items-center justify-between">
-          <DialogTitle className="flex items-center gap-2">
+        <DialogHeader className="flex min-w-0 flex-row items-center justify-between">
+          <DialogTitle className="flex min-w-0 flex-1 items-center gap-2">
             {getFileIcon()}
-            <span className="truncate">{fileName}</span>
+            <span className="min-w-0 truncate">{fileName}</span>
           </DialogTitle>
         </DialogHeader>
 
-        <div className="max-h-[calc(90vh-80px)] overflow-auto">
+        <div className="max-h-[calc(90vh-80px)] min-w-0 overflow-auto">
           {renderFileContent()}
         </div>
       </DialogContent>

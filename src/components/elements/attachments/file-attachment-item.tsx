@@ -42,15 +42,20 @@ export function FileAttachmentItem({
         sizeClasses,
         onClick &&
           "cursor-pointer hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none",
+        "min-w-0 overflow-hidden",
         className
       )}
-      onClick={onClick}
+      onClick={e => {
+        e.preventDefault();
+        e.stopPropagation();
+        onClick?.();
+      }}
     >
-      <Paperclip size={15} className="text-black" />
+      <Paperclip size={15} className="flex-shrink-0 text-black" />
       <P
         level="body"
         className={cn(
-          "text-deep-navy",
+          "min-w-0 text-deep-navy",
           truncate ? textClasses : "w-fit",
           truncateClasses
         )}
