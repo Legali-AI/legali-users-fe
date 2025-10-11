@@ -184,6 +184,12 @@ export default function RichInput({
       <Textarea
         value={text}
         onChange={e => setText(e.target.value)}
+        onKeyDown={e => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            handleSubmit();
+          }
+        }}
         placeholder={placeholder}
         disabled={disabled}
         className="focus-visible:outline-non min-h-20 resize-y border-none shadow-none placeholder:text-[14px] placeholder:text-slate-gray-300 focus-visible:border-none focus-visible:ring-0 lg:placeholder:text-base"
