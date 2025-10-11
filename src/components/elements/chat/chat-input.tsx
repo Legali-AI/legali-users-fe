@@ -5,6 +5,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { ArrowUp, Mic, Paperclip, StopCircle } from "lucide-react";
 import { useRef, useState } from "react";
+import {
+  createUploadingFile,
+  FileUploadProgress,
+  simulateFileUpload,
+  type UploadingFile,
+} from "./file-upload-progress";
 
 interface ChatInputProps {
   onSendMessage: (content: string, files?: File[]) => void;
@@ -18,16 +24,18 @@ export function ChatInput({
   disabled = false,
 }: ChatInputProps) {
   const [message, setMessage] = useState("");
-  const [files, setFiles] = useState<File[]>([]);
+  const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
+  const [completedFiles, setCompletedFiles] = useState<File[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = () => {
-    if (message.trim() || files.length > 0) {
-      onSendMessage(message.trim(), files);
+    if (message.trim() || completedFiles.length > 0) {
+      onSendMessage(message.trim(), completedFiles);
       setMessage("");
-      setFiles([]);
+      setCompletedFiles([]);
+      setUploadingFiles([]);
 
       // Reset textarea height
       if (textareaRef.current) {
@@ -45,7 +53,40 @@ export function ChatInput({
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || []);
-    setFiles(prev => [...prev, ...selectedFiles]);
+
+    // Create uploading file objects and start upload simulation
+    const newUploadingFiles = selectedFiles.map(file => {
+      const uploadingFile = createUploadingFile(file);
+
+      // Start upload simulation
+      simulateFileUpload(
+        uploadingFile,
+        updatedFile => {
+          setUploadingFiles(prev =>
+            prev.map(f => (f.id === updatedFile.id ? updatedFile : f))
+          );
+        },
+        fileId => {
+          // Move to completed files when upload is done
+          setUploadingFiles(prev => {
+            const file = prev.find(f => f.id === fileId)?.file;
+            if (file) {
+              setCompletedFiles(completedPrev => [...completedPrev, file]);
+            }
+            return prev;
+          });
+
+          // Remove from uploading files after a delay to show completion
+          setTimeout(() => {
+            setUploadingFiles(prev => prev.filter(f => f.id !== fileId));
+          }, 2000);
+        }
+      );
+
+      return uploadingFile;
+    });
+
+    setUploadingFiles(prev => [...prev, ...newUploadingFiles]);
 
     // Reset file input
     if (fileInputRef.current) {
@@ -53,8 +94,12 @@ export function ChatInput({
     }
   };
 
-  const removeFile = (index: number) => {
-    setFiles(prev => prev.filter((_, i) => i !== index));
+  const removeUploadingFile = (fileId: string) => {
+    setUploadingFiles(prev => prev.filter(f => f.id !== fileId));
+  };
+
+  const removeCompletedFile = (index: number) => {
+    setCompletedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -73,10 +118,18 @@ export function ChatInput({
 
   return (
     <div className="space-y-3">
-      {/* File Attachments Preview */}
-      {files.length > 0 && (
+      {/* File Upload Progress */}
+      {uploadingFiles.length > 0 && (
+        <FileUploadProgress
+          files={uploadingFiles}
+          onRemoveFile={removeUploadingFile}
+        />
+      )}
+
+      {/* Completed File Attachments Preview - Only show when no uploading files */}
+      {completedFiles.length > 0 && uploadingFiles.length === 0 && (
         <div className="flex flex-wrap gap-2">
-          {files.map((file, index) => (
+          {completedFiles.map((file, index) => (
             <div
               key={index}
               className="bg-sky-blue-50 flex items-center gap-2 rounded-lg border border-sky-blue-200 px-3 py-2 text-sm"
@@ -86,7 +139,7 @@ export function ChatInput({
                 {file.name}
               </span>
               <button
-                onClick={() => removeFile(index)}
+                onClick={() => removeCompletedFile(index)}
                 className="text-slate-gray-400 transition-colors hover:text-slate-gray-600"
               >
                 ×
@@ -152,12 +205,14 @@ export function ChatInput({
               size="icon"
               className={cn(
                 "size-10 rounded-full shadow-sm transition-all",
-                message.trim() || files.length > 0
+                message.trim() || completedFiles.length > 0
                   ? "bg-deep-navy text-white hover:bg-deep-navy/90"
                   : "cursor-not-allowed bg-neutral-200 text-neutral-400 hover:bg-neutral-200"
               )}
               onClick={handleSubmit}
-              disabled={disabled || (!message.trim() && files.length === 0)}
+              disabled={
+                disabled || (!message.trim() && completedFiles.length === 0)
+              }
             >
               <ArrowUp className="size-5" />
             </Button>

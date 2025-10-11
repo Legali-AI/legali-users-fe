@@ -1,20 +1,16 @@
 "use client";
 
-import { AgentAvatar } from "@/components/elements/chat/agent-avatar";
-import { ChatInput } from "@/components/elements/chat/chat-input";
-import { ChatMessage } from "@/components/elements/chat/chat-message";
-import {
-  AVAILABLE_TOOLS,
-  type Tool,
-  ToolSuggestion,
-} from "@/components/elements/chat/tool-suggestion";
-import type { Message } from "@/components/elements/chat/types";
-import { H1 } from "@/components/elements/typography";
-import { Button } from "@/components/ui/button";
 import { ArrowLeft, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { AgentAvatar } from "@/components/elements/chat/agent-avatar";
+import { ChatInput } from "@/components/elements/chat/chat-input";
+import { ChatMessage } from "@/components/elements/chat/chat-message";
+import { AVAILABLE_TOOLS, type Tool, ToolSuggestion } from "@/components/elements/chat/tool-suggestion";
+import type { Message } from "@/components/elements/chat/types";
+import { H1 } from "@/components/elements/typography";
+import { Button } from "@/components/ui/button";
 
 export default function AgentChatPage() {
   const searchParams = useSearchParams();
@@ -31,22 +27,19 @@ export default function AgentChatPage() {
     },
     {
       id: "1",
-      content:
-        "I have an employment agreement that I need reviewed before signing",
+      content: "I have an employment agreement that I need reviewed before signing",
       isUser: true,
       timestamp: new Date(Date.now() - 5 * 60000), // 5 minutes ago
     },
     {
       id: "2",
-      content:
-        "I'll help you analyze that! What are your main concerns about this employment agreement?",
+      content: "I'll help you analyze that! What are your main concerns about this employment agreement?",
       isUser: false,
       timestamp: new Date(Date.now() - 4 * 60000), // 4 minutes ago
     },
     {
       id: "3",
-      content:
-        "The non-compete clause seems too broad, and I'm not sure about the overtime pay terms",
+      content: "The non-compete clause seems too broad, and I'm not sure about the overtime pay terms",
       isUser: true,
       timestamp: new Date(Date.now() - 3 * 60000), // 3 minutes ago
     },
@@ -82,9 +75,7 @@ export default function AgentChatPage() {
     }
   };
 
-  const [currentMode, setCurrentMode] = useState<string>(
-    getToolIdFromParam(toolParam)
-  ); // "general" or tool id
+  const [currentMode, setCurrentMode] = useState<string>(getToolIdFromParam(toolParam)); // "general" or tool id
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -125,9 +116,7 @@ export default function AgentChatPage() {
         contentLower.includes("case"));
 
     // Check if user wants to see results in Red Flag Analysis mode
-    const shouldShowResults =
-      content.toLowerCase().includes("result") &&
-      currentMode === "red-flag-analysis";
+    const shouldShowResults = content.toLowerCase().includes("result") && currentMode === "red-flag-analysis";
 
     // Simulate agent response
     setTimeout(() => {
@@ -153,18 +142,10 @@ export default function AgentChatPage() {
         const suggestTools = () => {
           const tools: Tool[] = [];
 
-          if (
-            contentLower.includes("analyze") ||
-            contentLower.includes("red flag")
-          ) {
-            tools.push(
-              AVAILABLE_TOOLS.find(t => t.id === "red-flag-analysis")!
-            );
+          if (contentLower.includes("analyze") || contentLower.includes("red flag")) {
+            tools.push(AVAILABLE_TOOLS.find(t => t.id === "red-flag-analysis")!);
           }
-          if (
-            contentLower.includes("template") ||
-            contentLower.includes("document")
-          ) {
+          if (contentLower.includes("template") || contentLower.includes("document")) {
             tools.push(AVAILABLE_TOOLS.find(t => t.id === "legal-template")!);
           }
           if (
@@ -172,56 +153,30 @@ export default function AgentChatPage() {
             contentLower.includes("attorney") ||
             contentLower.includes("marketplace")
           ) {
-            tools.push(
-              AVAILABLE_TOOLS.find(t => t.id === "lawyers-marketplace")!
-            );
+            tools.push(AVAILABLE_TOOLS.find(t => t.id === "lawyers-marketplace")!);
           }
           if (
             contentLower.includes("funding") &&
-            (contentLower.includes("investor") ||
-              contentLower.includes("invest"))
+            (contentLower.includes("investor") || contentLower.includes("invest"))
           ) {
-            tools.push(
-              AVAILABLE_TOOLS.find(
-                t => t.id === "litigation-funding-investors"
-              )!
-            );
+            tools.push(AVAILABLE_TOOLS.find(t => t.id === "litigation-funding-investors")!);
           }
           if (
             contentLower.includes("funding") &&
-            (contentLower.includes("litigant") ||
-              contentLower.includes("plaintiff") ||
-              contentLower.includes("help"))
+            (contentLower.includes("litigant") || contentLower.includes("plaintiff") || contentLower.includes("help"))
           ) {
-            tools.push(
-              AVAILABLE_TOOLS.find(
-                t => t.id === "litigation-funding-litigants"
-              )!
-            );
+            tools.push(AVAILABLE_TOOLS.find(t => t.id === "litigation-funding-litigants")!);
           }
-          if (
-            contentLower.includes("dossier") ||
-            contentLower.includes("organize")
-          ) {
-            tools.push(
-              AVAILABLE_TOOLS.find(t => t.id === "legal-dossier-builder")!
-            );
+          if (contentLower.includes("dossier") || contentLower.includes("organize")) {
+            tools.push(AVAILABLE_TOOLS.find(t => t.id === "legal-dossier-builder")!);
           }
-          if (
-            contentLower.includes("timeline") ||
-            contentLower.includes("case") ||
-            contentLower.includes("track")
-          ) {
-            tools.push(
-              AVAILABLE_TOOLS.find(t => t.id === "case-timeline-builder")!
-            );
+          if (contentLower.includes("timeline") || contentLower.includes("case") || contentLower.includes("track")) {
+            tools.push(AVAILABLE_TOOLS.find(t => t.id === "case-timeline-builder")!);
           }
 
           // If no specific matches, default to Red Flag Analysis
           if (tools.length === 0) {
-            tools.push(
-              AVAILABLE_TOOLS.find(t => t.id === "red-flag-analysis")!
-            );
+            tools.push(AVAILABLE_TOOLS.find(t => t.id === "red-flag-analysis")!);
           }
 
           return tools.filter(Boolean); // Remove any undefined results
@@ -364,11 +319,7 @@ export default function AgentChatPage() {
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <Link href="/">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="hover:bg-sky-blue-100"
-              >
+              <Button variant="ghost" size="icon" className="hover:bg-sky-blue-100">
                 <ArrowLeft className="size-5" />
               </Button>
             </Link>
@@ -378,8 +329,7 @@ export default function AgentChatPage() {
                 <H1 level="h3" weight="semibold" className="text-deep-navy">
                   {currentMode === "general"
                     ? "AI Legal Assistant"
-                    : AVAILABLE_TOOLS.find(t => t.id === currentMode)?.name ||
-                      "AI Legal Assistant"}
+                    : AVAILABLE_TOOLS.find(t => t.id === currentMode)?.name || "AI Legal Assistant"}
                 </H1>
                 {currentMode !== "general" && (
                   <button
@@ -388,8 +338,7 @@ export default function AgentChatPage() {
                       setSuggestedTools([]);
                       router.push("/agent");
                     }}
-                    className="text-left text-xs text-sky-blue-600 hover:text-sky-blue-800"
-                  >
+                    className="text-left text-xs text-sky-blue-600 hover:text-sky-blue-800">
                     ← Back to general chat
                   </button>
                 )}
@@ -397,11 +346,7 @@ export default function AgentChatPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="hover:bg-sky-blue-100"
-            >
+            <Button variant="ghost" size="icon" className="hover:bg-sky-blue-100">
               <User className="size-5" />
             </Button>
           </div>
@@ -411,10 +356,7 @@ export default function AgentChatPage() {
       {/* Main Chat Container */}
       <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col pt-20">
         {/* Messages Container */}
-        <div
-          ref={chatContainerRef}
-          className="flex-1 space-y-4 overflow-y-auto px-4 py-6"
-        >
+        <div ref={chatContainerRef} className="flex-1 space-y-4 overflow-y-auto px-4 py-6">
           {messages.map(message => (
             <ChatMessage key={message.id} message={message} />
           ))}
@@ -424,10 +366,7 @@ export default function AgentChatPage() {
             <div className="flex items-start gap-3">
               <AgentAvatar size="sm" />
               <div className="flex-1">
-                <ToolSuggestion
-                  tools={suggestedTools}
-                  onToolSelect={handleToolSelect}
-                />
+                <ToolSuggestion tools={suggestedTools} onToolSelect={handleToolSelect} />
               </div>
             </div>
           )}

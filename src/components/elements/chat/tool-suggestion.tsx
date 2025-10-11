@@ -1,16 +1,8 @@
 "use client";
 
+import { AlertTriangle, Clock, FileText, Folder, Gavel, TrendingUp, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {
-  AlertTriangle,
-  Clock,
-  FileText,
-  Folder,
-  Gavel,
-  TrendingUp,
-  Users,
-} from "lucide-react";
 import { Typography } from "../typography";
 
 export interface Tool {
@@ -71,11 +63,7 @@ interface ToolSuggestionProps {
   className?: string;
 }
 
-export function ToolSuggestion({
-  tools,
-  onToolSelect,
-  className,
-}: ToolSuggestionProps) {
+export function ToolSuggestion({ tools, onToolSelect, className }: ToolSuggestionProps) {
   if (tools.length === 0) return null;
 
   return (
@@ -148,8 +136,7 @@ export function ToolSuggestion({
                     { label: "Build", sublabel: "Timeline" },
                     { label: "Compile", sublabel: "Dossier" },
                   ],
-                  description:
-                    "Create comprehensive legal dossiers with organized documents, timelines, and evidence",
+                  description: "Create comprehensive legal dossiers with organized documents, timelines, and evidence",
                 };
               case "case-timeline-builder":
                 return {
@@ -160,8 +147,7 @@ export function ToolSuggestion({
                     { label: "Track", sublabel: "Progress" },
                     { label: "Export", sublabel: "Timeline" },
                   ],
-                  description:
-                    "Build detailed case timelines to track events, deadlines, and case progression",
+                  description: "Build detailed case timelines to track events, deadlines, and case progression",
                 };
               case "litigation-funding-litigants":
                 return {
@@ -192,21 +178,14 @@ export function ToolSuggestion({
               <Button
                 variant="outline"
                 onClick={() => onToolSelect(tool)}
-                className="hover:bg-sky-blue-50 h-auto w-full rounded-2xl border-sky-blue-200 bg-white p-0 transition-all hover:border-sky-blue-400"
-              >
+                className="hover:bg-sky-blue-50 h-auto w-full rounded-2xl border-sky-blue-200 bg-white p-0 transition-all hover:border-sky-blue-400">
                 <div className="w-full p-4 text-left">
                   {/* Header */}
                   <div className="flex items-center gap-3">
-                    <div
-                      className={`inline-flex h-10 w-10 items-center justify-center rounded-lg ${config.bgColor}`}
-                    >
+                    <div className={`inline-flex h-10 w-10 items-center justify-center rounded-lg ${config.bgColor}`}>
                       <IconComponent className={`size-5 ${config.iconColor}`} />
                     </div>
-                    <Typography
-                      level="body"
-                      weight="semibold"
-                      className="text-slate-gray-900"
-                    >
+                    <Typography level="body" weight="semibold" className="text-slate-gray-900">
                       {tool.name}
                     </Typography>
                   </div>
