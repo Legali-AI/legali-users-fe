@@ -99,7 +99,7 @@ export function ToolSuggestion({
                 >
                   <div className="w-full p-4 text-left">
                     {/* Header */}
-                    <div className="mb-3 flex items-center gap-3">
+                    <div className="flex items-center gap-3">
                       <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-red-100">
                         <IconComponent className="size-5 text-red-600" />
                       </div>
