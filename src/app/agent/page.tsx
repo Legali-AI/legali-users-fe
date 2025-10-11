@@ -1,17 +1,26 @@
 "use client";
 
-import { ArrowLeft, User } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 import { AgentAvatar } from "@/components/elements/chat/agent-avatar";
 import { ChatInput } from "@/components/elements/chat/chat-input";
 import { ChatMessage } from "@/components/elements/chat/chat-message";
-import { AVAILABLE_TOOLS, type Tool, ToolSuggestion } from "@/components/elements/chat/tool-suggestion";
+import {
+  AVAILABLE_TOOLS,
+  type Tool,
+  ToolSuggestion,
+} from "@/components/elements/chat/tool-suggestion";
 import type { Message } from "@/components/elements/chat/types";
 import { H1 } from "@/components/elements/typography";
 import { Button } from "@/components/ui/button";
+import { ArrowLeft, User } from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 export default function AgentChatPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const toolParam = searchParams.get("tools");
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
@@ -22,19 +31,22 @@ export default function AgentChatPage() {
     },
     {
       id: "1",
-      content: "I have an employment agreement that I need reviewed before signing",
+      content:
+        "I have an employment agreement that I need reviewed before signing",
       isUser: true,
       timestamp: new Date(Date.now() - 5 * 60000), // 5 minutes ago
     },
     {
       id: "2",
-      content: "I'll help you analyze that! What are your main concerns about this employment agreement?",
+      content:
+        "I'll help you analyze that! What are your main concerns about this employment agreement?",
       isUser: false,
       timestamp: new Date(Date.now() - 4 * 60000), // 4 minutes ago
     },
     {
       id: "3",
-      content: "The non-compete clause seems too broad, and I'm not sure about the overtime pay terms",
+      content:
+        "The non-compete clause seems too broad, and I'm not sure about the overtime pay terms",
       isUser: true,
       timestamp: new Date(Date.now() - 3 * 60000), // 3 minutes ago
     },
@@ -49,7 +61,9 @@ export default function AgentChatPage() {
 
   const [isTyping, setIsTyping] = useState(false);
   const [suggestedTools, setSuggestedTools] = useState<Tool[]>([]);
-  const [currentMode, setCurrentMode] = useState<string>("general"); // "general" or tool id
+  const [currentMode, setCurrentMode] = useState<string>(
+    toolParam === "redflag" ? "red-flag-analysis" : "general"
+  ); // "general" or tool id
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -77,18 +91,40 @@ export default function AgentChatPage() {
     setIsTyping(true);
 
     // Check if user mentioned analyzing - suggest tools
-    const shouldSuggestTools = content.toLowerCase().includes("analyze") && currentMode === "general";
+    const shouldSuggestTools =
+      content.toLowerCase().includes("analyze") && currentMode === "general";
+
+    // Check if user wants to see results in Red Flag Analysis mode
+    const shouldShowResults =
+      content.toLowerCase().includes("result") &&
+      currentMode === "red-flag-analysis";
 
     // Simulate agent response
     setTimeout(() => {
       let agentResponse = "";
       let toolsToSuggest: Tool[] = [];
 
-      if (shouldSuggestTools) {
+      if (shouldShowResults) {
+        agentResponse =
+          "Analysis complete! I found 4 red flags in your employment agreement, including concerns about the non-compete clause, termination terms, overtime pay, and intellectual property rights. The overall risk level is HIGH.";
+
+        // Show analysis report button after response
+        setTimeout(() => {
+          const reportMessage: Message = {
+            id: (Date.now() + 2).toString(),
+            content: "VIEW_FULL_ANALYSIS_REPORT", // Special content for report button
+            isUser: false,
+            timestamp: new Date(),
+          };
+          setMessages(prev => [...prev, reportMessage]);
+        }, 1000);
+      } else if (shouldSuggestTools) {
         agentResponse =
           "I can help you analyze that! I have several specialized tools that might be perfect for your needs. Let me suggest some options:";
         // Suggest Red Flag Analysis for document analysis
-        toolsToSuggest = [AVAILABLE_TOOLS.find(t => t.id === "red-flag-analysis")!];
+        toolsToSuggest = [
+          AVAILABLE_TOOLS.find(t => t.id === "red-flag-analysis")!,
+        ];
       } else {
         const responses = [
           "I've received your message. Let me analyze this for you...",
@@ -115,6 +151,10 @@ export default function AgentChatPage() {
   };
 
   const handleToolSelect = (tool: Tool) => {
+    // Update URL with tool parameter
+    const toolParam = tool.id === "red-flag-analysis" ? "redflag" : tool.id;
+    router.push(`/agent?tools=${toolParam}`);
+
     // Start specialized conversation for the selected tool
     setCurrentMode(tool.id);
     setSuggestedTools([]);
@@ -157,7 +197,11 @@ export default function AgentChatPage() {
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <Link href="/">
-              <Button variant="ghost" size="icon" className="hover:bg-sky-blue-100">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-sky-blue-100"
+              >
                 <ArrowLeft className="size-5" />
               </Button>
             </Link>
@@ -167,15 +211,18 @@ export default function AgentChatPage() {
                 <H1 level="h3" weight="semibold" className="text-deep-navy">
                   {currentMode === "general"
                     ? "AI Legal Assistant"
-                    : AVAILABLE_TOOLS.find(t => t.id === currentMode)?.name || "AI Legal Assistant"}
+                    : AVAILABLE_TOOLS.find(t => t.id === currentMode)?.name ||
+                      "AI Legal Assistant"}
                 </H1>
                 {currentMode !== "general" && (
                   <button
                     onClick={() => {
                       setCurrentMode("general");
                       setSuggestedTools([]);
+                      router.push("/agent");
                     }}
-                    className="text-left text-xs text-sky-blue-600 hover:text-sky-blue-800">
+                    className="text-left text-xs text-sky-blue-600 hover:text-sky-blue-800"
+                  >
                     ← Back to general chat
                   </button>
                 )}
@@ -183,7 +230,11 @@ export default function AgentChatPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="hover:bg-sky-blue-100">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="hover:bg-sky-blue-100"
+            >
               <User className="size-5" />
             </Button>
           </div>
@@ -193,7 +244,10 @@ export default function AgentChatPage() {
       {/* Main Chat Container */}
       <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col pt-20">
         {/* Messages Container */}
-        <div ref={chatContainerRef} className="flex-1 space-y-4 overflow-y-auto px-4 py-6">
+        <div
+          ref={chatContainerRef}
+          className="flex-1 space-y-4 overflow-y-auto px-4 py-6"
+        >
           {messages.map(message => (
             <ChatMessage key={message.id} message={message} />
           ))}
@@ -203,7 +257,10 @@ export default function AgentChatPage() {
             <div className="flex items-start gap-3">
               <AgentAvatar size="sm" />
               <div className="flex-1">
-                <ToolSuggestion tools={suggestedTools} onToolSelect={handleToolSelect} />
+                <ToolSuggestion
+                  tools={suggestedTools}
+                  onToolSelect={handleToolSelect}
+                />
               </div>
             </div>
           )}
