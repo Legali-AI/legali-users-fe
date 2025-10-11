@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 import { Span } from "./typography";
 
 const PAGE_CONFIGS: Record<string, string> = {
-  "/dashboard": "Dashboard",
+  "/profile": "Dashboard",
   "/profile": "Your Profile",
   "/red-flag-alerts": "Red Flag Alerts",
   "/case-timeline": "Case & Timeline",

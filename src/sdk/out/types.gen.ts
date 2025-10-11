@@ -81,6 +81,18 @@ export type ApiResponseAuthUrlDao = {
     message?: string | null;
 };
 
+export type ApiResponseCheckoutSessionDao = {
+    success: boolean;
+    data?: CheckoutSessionDao | null;
+    message?: string | null;
+};
+
+export type ApiResponseCheckoutSessionStatusDao = {
+    success: boolean;
+    data?: CheckoutSessionStatusDao | null;
+    message?: string | null;
+};
+
 export type ApiResponseDocumentDao = {
     success: boolean;
     data?: DocumentDao | null;
@@ -132,12 +144,6 @@ export type ApiResponseSubscriptionWithPlanDao = {
 export type ApiResponseSupportTicketDetailDao = {
     success: boolean;
     data?: SupportTicketDetailDao | null;
-    message?: string | null;
-};
-
-export type ApiResponseUnionSubscriptionWithPlanDaoCheckoutSessionDao = {
-    success: boolean;
-    data?: SubscriptionWithPlanDao | CheckoutSessionDao | null;
     message?: string | null;
 };
 
@@ -309,6 +315,32 @@ export type CheckoutSessionDao = {
      * Stripe Checkout session ID
      */
     session_id: string;
+};
+
+/**
+ * Checkout session status response
+ */
+export type CheckoutSessionStatusDao = {
+    /**
+     * Session status: success, cancelled, not_found, error
+     */
+    status: SubscriptionStatus;
+    /**
+     * Whether the checkout was successful
+     */
+    success: boolean;
+    /**
+     * Stripe checkout session ID
+     */
+    session_id: string;
+    /**
+     * Price amount in USD
+     */
+    price?: number | null;
+    /**
+     * Plan name
+     */
+    plan_name?: string | null;
 };
 
 export type CityDao = {
@@ -1050,6 +1082,7 @@ export enum SubscriptionStatus {
     ACTIVE = 'active',
     GRACE_PERIOD = 'grace_period',
     EXPIRED = 'expired',
+    CANCELLED = 'cancelled',
     EXPIRED_UNPAID = 'expired_unpaid',
     FAILED = 'failed'
 }
@@ -3756,7 +3789,7 @@ export type CreateSubscriptionApiUserSubscriptionsPostResponses = {
     /**
      * Successful Response
      */
-    200: ApiResponseUnionSubscriptionWithPlanDaoCheckoutSessionDao;
+    200: ApiResponseCheckoutSessionDao;
 };
 
 export type CreateSubscriptionApiUserSubscriptionsPostResponse = CreateSubscriptionApiUserSubscriptionsPostResponses[keyof CreateSubscriptionApiUserSubscriptionsPostResponses];
@@ -3860,6 +3893,108 @@ export type UpgradeSubscriptionApiUserSubscriptionsSubscriptionIdUpgradePutRespo
 };
 
 export type UpgradeSubscriptionApiUserSubscriptionsSubscriptionIdUpgradePutResponse = UpgradeSubscriptionApiUserSubscriptionsSubscriptionIdUpgradePutResponses[keyof UpgradeSubscriptionApiUserSubscriptionsSubscriptionIdUpgradePutResponses];
+
+export type CancelSubscriptionApiUserSubscriptionsSessionIdDeleteData = {
+    body?: never;
+    path: {
+        session_id: string;
+    };
+    query?: never;
+    url: '/api/user/subscriptions/{session_id}';
+};
+
+export type CancelSubscriptionApiUserSubscriptionsSessionIdDeleteErrors = {
+    /**
+     * Bad Request
+     */
+    400: BadRequestResponse;
+    /**
+     * Unauthorized
+     */
+    401: UnauthorizedResponse;
+    /**
+     * Forbidden
+     */
+    403: ForbiddenResponse;
+    /**
+     * Not Found
+     */
+    404: NotFoundResponse;
+    /**
+     * Conflict
+     */
+    409: ErrorResponse;
+    /**
+     * Validation Error
+     */
+    422: ErrorResponse;
+    /**
+     * Internal Server Error
+     */
+    500: ErrorResponse;
+};
+
+export type CancelSubscriptionApiUserSubscriptionsSessionIdDeleteError = CancelSubscriptionApiUserSubscriptionsSessionIdDeleteErrors[keyof CancelSubscriptionApiUserSubscriptionsSessionIdDeleteErrors];
+
+export type CancelSubscriptionApiUserSubscriptionsSessionIdDeleteResponses = {
+    /**
+     * Successful Response
+     */
+    200: ApiResponseSubscriptionWithPlanDao;
+};
+
+export type CancelSubscriptionApiUserSubscriptionsSessionIdDeleteResponse = CancelSubscriptionApiUserSubscriptionsSessionIdDeleteResponses[keyof CancelSubscriptionApiUserSubscriptionsSessionIdDeleteResponses];
+
+export type GetCheckoutSessionStatusApiUserSubscriptionsCheckoutSessionIdStatusGetData = {
+    body?: never;
+    path: {
+        session_id: string;
+    };
+    query?: never;
+    url: '/api/user/subscriptions/checkout/{session_id}/status';
+};
+
+export type GetCheckoutSessionStatusApiUserSubscriptionsCheckoutSessionIdStatusGetErrors = {
+    /**
+     * Bad Request
+     */
+    400: BadRequestResponse;
+    /**
+     * Unauthorized
+     */
+    401: UnauthorizedResponse;
+    /**
+     * Forbidden
+     */
+    403: ForbiddenResponse;
+    /**
+     * Not Found
+     */
+    404: NotFoundResponse;
+    /**
+     * Conflict
+     */
+    409: ErrorResponse;
+    /**
+     * Validation Error
+     */
+    422: ErrorResponse;
+    /**
+     * Internal Server Error
+     */
+    500: ErrorResponse;
+};
+
+export type GetCheckoutSessionStatusApiUserSubscriptionsCheckoutSessionIdStatusGetError = GetCheckoutSessionStatusApiUserSubscriptionsCheckoutSessionIdStatusGetErrors[keyof GetCheckoutSessionStatusApiUserSubscriptionsCheckoutSessionIdStatusGetErrors];
+
+export type GetCheckoutSessionStatusApiUserSubscriptionsCheckoutSessionIdStatusGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: ApiResponseCheckoutSessionStatusDao;
+};
+
+export type GetCheckoutSessionStatusApiUserSubscriptionsCheckoutSessionIdStatusGetResponse = GetCheckoutSessionStatusApiUserSubscriptionsCheckoutSessionIdStatusGetResponses[keyof GetCheckoutSessionStatusApiUserSubscriptionsCheckoutSessionIdStatusGetResponses];
 
 export type PreviewSubscriptionUpgradeApiUserSubscriptionsSubscriptionIdUpgradePreviewNewPlanIdGetData = {
     body?: never;

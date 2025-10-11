@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-Disallow: /dashboard/
+Disallow: /profile/
 Disallow: /profile/
 Disallow: /attorneys/
 Disallow: /documents/
@@ -15,7 +15,7 @@ Disallow: /private/
 User-agent: Googlebot
 Allow: /
 
-Disallow: /dashboard/
+Disallow: /profile/
 Disallow: /profile/
 Disallow: /attorneys/
 Disallow: /documents/

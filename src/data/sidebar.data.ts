@@ -38,7 +38,7 @@ export const MAIN_MENU_ITEMS: MenuItem[] = [
     id: "dashboard",
     label: "Dashboard",
     icon: Home,
-    href: "/dashboard",
+    href: "/profile",
   },
   {
     id: "attorneys",

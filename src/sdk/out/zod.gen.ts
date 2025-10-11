@@ -179,6 +179,59 @@ export const zApiResponseAuthUrlDao = z.object({
     ]).optional()
 });
 
+export const zCheckoutSessionDao = z.object({
+    checkout_url: z.string(),
+    session_id: z.string()
+});
+
+export const zApiResponseCheckoutSessionDao = z.object({
+    success: z.boolean(),
+    data: z.union([
+        zCheckoutSessionDao,
+        z.null()
+    ]).optional(),
+    message: z.union([
+        z.string(),
+        z.null()
+    ]).optional()
+});
+
+export const zSubscriptionStatus = z.enum([
+    'pending',
+    'active',
+    'grace_period',
+    'expired',
+    'cancelled',
+    'expired_unpaid',
+    'failed'
+]);
+
+export const zCheckoutSessionStatusDao = z.object({
+    status: zSubscriptionStatus,
+    success: z.boolean(),
+    session_id: z.string(),
+    price: z.union([
+        z.number(),
+        z.null()
+    ]).optional(),
+    plan_name: z.union([
+        z.string(),
+        z.null()
+    ]).optional()
+});
+
+export const zApiResponseCheckoutSessionStatusDao = z.object({
+    success: z.boolean(),
+    data: z.union([
+        zCheckoutSessionStatusDao,
+        z.null()
+    ]).optional(),
+    message: z.union([
+        z.string(),
+        z.null()
+    ]).optional()
+});
+
 export const zProcessingStatus = z.enum([
     'pending',
     'processing',
@@ -483,15 +536,6 @@ export const zApiResponseStorageInfoDao = z.object({
     ]).optional()
 });
 
-export const zSubscriptionStatus = z.enum([
-    'pending',
-    'active',
-    'grace_period',
-    'expired',
-    'expired_unpaid',
-    'failed'
-]);
-
 export const zPaymentMethodType = z.enum([
     'card',
     'bank_account',
@@ -614,24 +658,6 @@ export const zApiResponseSupportTicketDetailDao = z.object({
     success: z.boolean(),
     data: z.union([
         zSupportTicketDetailDao,
-        z.null()
-    ]).optional(),
-    message: z.union([
-        z.string(),
-        z.null()
-    ]).optional()
-});
-
-export const zCheckoutSessionDao = z.object({
-    checkout_url: z.string(),
-    session_id: z.string()
-});
-
-export const zApiResponseUnionSubscriptionWithPlanDaoCheckoutSessionDao = z.object({
-    success: z.boolean(),
-    data: z.union([
-        zSubscriptionWithPlanDao,
-        zCheckoutSessionDao,
         z.null()
     ]).optional(),
     message: z.union([
@@ -1451,11 +1477,15 @@ export const zGetStorageInfoApiUserDocumentsStorageInfoGetResponse = zApiRespons
 
 export const zGetUserSubscriptionApiUserSubscriptionsGetResponse = zApiResponseUnionSubscriptionWithPlanDaoNoneType;
 
-export const zCreateSubscriptionApiUserSubscriptionsPostResponse = zApiResponseUnionSubscriptionWithPlanDaoCheckoutSessionDao;
+export const zCreateSubscriptionApiUserSubscriptionsPostResponse = zApiResponseCheckoutSessionDao;
 
 export const zGetUserSubscriptionsHistoryApiUserSubscriptionsHistoryGetResponse = zPaginatedApiResponseListSubscriptionWithPlanDao;
 
 export const zUpgradeSubscriptionApiUserSubscriptionsSubscriptionIdUpgradePutResponse = zApiResponseSubscriptionWithPlanDao;
+
+export const zCancelSubscriptionApiUserSubscriptionsSessionIdDeleteResponse = zApiResponseSubscriptionWithPlanDao;
+
+export const zGetCheckoutSessionStatusApiUserSubscriptionsCheckoutSessionIdStatusGetResponse = zApiResponseCheckoutSessionStatusDao;
 
 export const zPreviewSubscriptionUpgradeApiUserSubscriptionsSubscriptionIdUpgradePreviewNewPlanIdGetResponse = zApiResponseUpgradePreviewDao;
 

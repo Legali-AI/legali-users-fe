@@ -307,6 +307,72 @@ export const ApiResponse_AuthUrlDAO_Schema = {
     title: 'ApiResponse[AuthUrlDAO]'
 } as const;
 
+export const ApiResponse_CheckoutSessionDAO_Schema = {
+    properties: {
+        success: {
+            type: 'boolean',
+            title: 'Success'
+        },
+        data: {
+            anyOf: [
+                {
+                    '$ref': '#/components/schemas/CheckoutSessionDAO'
+                },
+                {
+                    type: 'null'
+                }
+            ]
+        },
+        message: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Message'
+        }
+    },
+    type: 'object',
+    required: ['success'],
+    title: 'ApiResponse[CheckoutSessionDAO]'
+} as const;
+
+export const ApiResponse_CheckoutSessionStatusDAO_Schema = {
+    properties: {
+        success: {
+            type: 'boolean',
+            title: 'Success'
+        },
+        data: {
+            anyOf: [
+                {
+                    '$ref': '#/components/schemas/CheckoutSessionStatusDAO'
+                },
+                {
+                    type: 'null'
+                }
+            ]
+        },
+        message: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Message'
+        }
+    },
+    type: 'object',
+    required: ['success'],
+    title: 'ApiResponse[CheckoutSessionStatusDAO]'
+} as const;
+
 export const ApiResponse_DocumentDAO_Schema = {
     properties: {
         success: {
@@ -602,43 +668,6 @@ export const ApiResponse_SupportTicketDetailDAO_Schema = {
     type: 'object',
     required: ['success'],
     title: 'ApiResponse[SupportTicketDetailDAO]'
-} as const;
-
-export const ApiResponse_Union_SubscriptionWithPlanDAO__CheckoutSessionDAO__Schema = {
-    properties: {
-        success: {
-            type: 'boolean',
-            title: 'Success'
-        },
-        data: {
-            anyOf: [
-                {
-                    '$ref': '#/components/schemas/SubscriptionWithPlanDAO'
-                },
-                {
-                    '$ref': '#/components/schemas/CheckoutSessionDAO'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Data'
-        },
-        message: {
-            anyOf: [
-                {
-                    type: 'string'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Message'
-        }
-    },
-    type: 'object',
-    required: ['success'],
-    title: 'ApiResponse[Union[SubscriptionWithPlanDAO, CheckoutSessionDAO]]'
 } as const;
 
 export const ApiResponse_Union_SubscriptionWithPlanDAO__NoneType__Schema = {
@@ -1365,6 +1394,54 @@ export const CheckoutSessionDAOSchema = {
     required: ['checkout_url', 'session_id'],
     title: 'CheckoutSessionDAO',
     description: 'Checkout session response for Stripe Checkout'
+} as const;
+
+export const CheckoutSessionStatusDAOSchema = {
+    properties: {
+        status: {
+            '$ref': '#/components/schemas/SubscriptionStatus',
+            description: 'Session status: success, cancelled, not_found, error'
+        },
+        success: {
+            type: 'boolean',
+            title: 'Success',
+            description: 'Whether the checkout was successful'
+        },
+        session_id: {
+            type: 'string',
+            title: 'Session Id',
+            description: 'Stripe checkout session ID'
+        },
+        price: {
+            anyOf: [
+                {
+                    type: 'number'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Price',
+            description: 'Price amount in USD'
+        },
+        plan_name: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Plan Name',
+            description: 'Plan name'
+        }
+    },
+    additionalProperties: false,
+    type: 'object',
+    required: ['status', 'success', 'session_id'],
+    title: 'CheckoutSessionStatusDAO',
+    description: 'Checkout session status response'
 } as const;
 
 export const CityDAOSchema = {
@@ -3335,7 +3412,7 @@ export const SubscriptionHistoryFilterDTOSchema = {
 
 export const SubscriptionStatusSchema = {
     type: 'string',
-    enum: ['pending', 'active', 'grace_period', 'expired', 'expired_unpaid', 'failed'],
+    enum: ['pending', 'active', 'grace_period', 'expired', 'cancelled', 'expired_unpaid', 'failed'],
     title: 'SubscriptionStatus',
     description: 'Subscription status enum'
 } as const;
