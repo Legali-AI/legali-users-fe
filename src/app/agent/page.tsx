@@ -61,8 +61,29 @@ export default function AgentChatPage() {
 
   const [isTyping, setIsTyping] = useState(false);
   const [suggestedTools, setSuggestedTools] = useState<Tool[]>([]);
+  const getToolIdFromParam = (param: string | null) => {
+    switch (param) {
+      case "redflag":
+        return "red-flag-analysis";
+      case "template":
+        return "legal-template";
+      case "lawyers":
+        return "lawyers-marketplace";
+      case "funding-investors":
+        return "litigation-funding-investors";
+      case "funding-litigants":
+        return "litigation-funding-litigants";
+      case "dossier":
+        return "legal-dossier-builder";
+      case "timeline":
+        return "case-timeline-builder";
+      default:
+        return "general";
+    }
+  };
+
   const [currentMode, setCurrentMode] = useState<string>(
-    toolParam === "redflag" ? "red-flag-analysis" : "general"
+    getToolIdFromParam(toolParam)
   ); // "general" or tool id
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -90,9 +111,18 @@ export default function AgentChatPage() {
     setMessages(prev => [...prev, userMessage]);
     setIsTyping(true);
 
-    // Check if user mentioned analyzing - suggest tools
+    // Check for tool triggers
+    const contentLower = content.toLowerCase();
     const shouldSuggestTools =
-      content.toLowerCase().includes("analyze") && currentMode === "general";
+      currentMode === "general" &&
+      (contentLower.includes("analyze") ||
+        contentLower.includes("template") ||
+        contentLower.includes("lawyer") ||
+        contentLower.includes("marketplace") ||
+        contentLower.includes("funding") ||
+        contentLower.includes("dossier") ||
+        contentLower.includes("timeline") ||
+        contentLower.includes("case"));
 
     // Check if user wants to see results in Red Flag Analysis mode
     const shouldShowResults =
@@ -119,12 +149,91 @@ export default function AgentChatPage() {
           setMessages(prev => [...prev, reportMessage]);
         }, 1000);
       } else if (shouldSuggestTools) {
-        agentResponse =
-          "I can help you analyze that! I have several specialized tools that might be perfect for your needs. Let me suggest some options:";
-        // Suggest Red Flag Analysis for document analysis
-        toolsToSuggest = [
-          AVAILABLE_TOOLS.find(t => t.id === "red-flag-analysis")!,
-        ];
+        // Determine which tools to suggest based on keywords
+        const suggestTools = () => {
+          const tools: Tool[] = [];
+
+          if (
+            contentLower.includes("analyze") ||
+            contentLower.includes("red flag")
+          ) {
+            tools.push(
+              AVAILABLE_TOOLS.find(t => t.id === "red-flag-analysis")!
+            );
+          }
+          if (
+            contentLower.includes("template") ||
+            contentLower.includes("document")
+          ) {
+            tools.push(AVAILABLE_TOOLS.find(t => t.id === "legal-template")!);
+          }
+          if (
+            contentLower.includes("lawyer") ||
+            contentLower.includes("attorney") ||
+            contentLower.includes("marketplace")
+          ) {
+            tools.push(
+              AVAILABLE_TOOLS.find(t => t.id === "lawyers-marketplace")!
+            );
+          }
+          if (
+            contentLower.includes("funding") &&
+            (contentLower.includes("investor") ||
+              contentLower.includes("invest"))
+          ) {
+            tools.push(
+              AVAILABLE_TOOLS.find(
+                t => t.id === "litigation-funding-investors"
+              )!
+            );
+          }
+          if (
+            contentLower.includes("funding") &&
+            (contentLower.includes("litigant") ||
+              contentLower.includes("plaintiff") ||
+              contentLower.includes("help"))
+          ) {
+            tools.push(
+              AVAILABLE_TOOLS.find(
+                t => t.id === "litigation-funding-litigants"
+              )!
+            );
+          }
+          if (
+            contentLower.includes("dossier") ||
+            contentLower.includes("organize")
+          ) {
+            tools.push(
+              AVAILABLE_TOOLS.find(t => t.id === "legal-dossier-builder")!
+            );
+          }
+          if (
+            contentLower.includes("timeline") ||
+            contentLower.includes("case") ||
+            contentLower.includes("track")
+          ) {
+            tools.push(
+              AVAILABLE_TOOLS.find(t => t.id === "case-timeline-builder")!
+            );
+          }
+
+          // If no specific matches, default to Red Flag Analysis
+          if (tools.length === 0) {
+            tools.push(
+              AVAILABLE_TOOLS.find(t => t.id === "red-flag-analysis")!
+            );
+          }
+
+          return tools.filter(Boolean); // Remove any undefined results
+        };
+
+        toolsToSuggest = suggestTools();
+
+        if (toolsToSuggest.length === 1) {
+          agentResponse = `I can help you with that! I have a specialized tool that's perfect for your needs:`;
+        } else {
+          agentResponse = `I can help you with that! I have several specialized tools that might be perfect for your needs:`;
+        }
       } else {
         const responses = [
           "I've received your message. Let me analyze this for you...",
@@ -151,8 +260,40 @@ export default function AgentChatPage() {
   };
 
   const handleToolSelect = (tool: Tool) => {
-    // Update URL with tool parameter
-    const toolParam = tool.id === "red-flag-analysis" ? "redflag" : tool.id;
+    // Handle special redirects for specific tools
+    if (tool.id === "lawyers-marketplace") {
+      router.push("/lawyers");
+      return;
+    }
+
+    if (tool.id === "litigation-funding-litigants") {
+      router.push("/litigation-crowdfunding");
+      return;
+    }
+
+    // Update URL with tool parameter - create shorter URLs
+    const getToolParam = (toolId: string) => {
+      switch (toolId) {
+        case "red-flag-analysis":
+          return "redflag";
+        case "legal-template":
+          return "template";
+        case "lawyers-marketplace":
+          return "lawyers";
+        case "litigation-funding-investors":
+          return "funding-investors";
+        case "litigation-funding-litigants":
+          return "funding-litigants";
+        case "legal-dossier-builder":
+          return "dossier";
+        case "case-timeline-builder":
+          return "timeline";
+        default:
+          return toolId;
+      }
+    };
+
+    const toolParam = getToolParam(tool.id);
     router.push(`/agent?tools=${toolParam}`);
 
     // Start specialized conversation for the selected tool
@@ -173,11 +314,37 @@ export default function AgentChatPage() {
     setTimeout(() => {
       let welcomeMessage = "";
 
-      if (tool.id === "red-flag-analysis") {
-        welcomeMessage =
-          "I'll help you with Red Flag Analysis! This tool is designed to identify potential issues, problematic clauses, and legal concerns in your documents. Please upload your document or describe the specific areas you'd like me to analyze.";
-      } else {
-        welcomeMessage = `Welcome to ${tool.name}! I'm now focused on helping you with this specific tool. How can I assist you?`;
+      switch (tool.id) {
+        case "red-flag-analysis":
+          welcomeMessage =
+            "I'll help you with Red Flag Analysis! This tool is designed to identify potential issues, problematic clauses, and legal concerns in your documents. Please upload your document or describe the specific areas you'd like me to analyze.";
+          break;
+        case "legal-template":
+          welcomeMessage =
+            "Welcome to Legal Template Generator! I can help you create professional legal documents from our extensive template library. What type of document do you need to create?";
+          break;
+        case "lawyers-marketplace":
+          welcomeMessage =
+            "Welcome to the Lawyers Marketplace! I'll help you find qualified legal professionals who specialize in your area of need. What type of legal expertise are you looking for?";
+          break;
+        case "litigation-funding-investors":
+          welcomeMessage =
+            "Welcome to Litigation Funding for Investors! I'll help you discover investment opportunities in legal cases. Are you looking to diversify your portfolio with litigation funding?";
+          break;
+        case "litigation-funding-litigants":
+          welcomeMessage =
+            "Welcome to Litigation Funding for Litigants! I'll help you get financial support for your legal case. Tell me about your case and funding needs.";
+          break;
+        case "legal-dossier-builder":
+          welcomeMessage =
+            "Welcome to Legal Dossier Builder! I'll help you organize your documents, build timelines, and create comprehensive legal dossiers. What case or matter are you working on?";
+          break;
+        case "case-timeline-builder":
+          welcomeMessage =
+            "Welcome to Case Timeline Builder! I'll help you map events, track progress, and create detailed timelines for your legal case. What case would you like to build a timeline for?";
+          break;
+        default:
+          welcomeMessage = `Welcome to ${tool.name}! I'm now focused on helping you with this specific tool. How can I assist you?`;
       }
 
       const welcomeMsg: Message = {

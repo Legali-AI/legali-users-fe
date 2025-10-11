@@ -88,49 +88,131 @@ export function ToolSuggestion({
         {tools.map(tool => {
           const IconComponent = tool.icon;
 
-          // Enhanced card for Red Flag Analysis
-          if (tool.id === "red-flag-analysis") {
-            return (
-              <div key={tool.id} className="max-w-md">
-                <Button
-                  variant="outline"
-                  onClick={() => onToolSelect(tool)}
-                  className="hover:bg-sky-blue-50 h-auto w-full rounded-2xl border-sky-blue-200 bg-white p-0 transition-all hover:border-sky-blue-400"
-                >
-                  <div className="w-full p-4 text-left">
-                    {/* Header */}
-                    <div className="flex items-center gap-3">
-                      <div className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-red-100">
-                        <IconComponent className="size-5 text-red-600" />
-                      </div>
-                      <Typography
-                        level="body"
-                        weight="semibold"
-                        className="text-slate-gray-900"
-                      >
-                        {tool.name}
-                      </Typography>
-                    </div>
-                  </div>
-                </Button>
-              </div>
-            );
-          }
+          // Enhanced cards for all tools
+          const getToolCardConfig = (toolId: string) => {
+            switch (toolId) {
+              case "red-flag-analysis":
+                return {
+                  bgColor: "bg-red-100",
+                  iconColor: "text-red-600",
+                  stats: [
+                    { label: "Scan", sublabel: "Red Flags" },
+                    { label: "Assess", sublabel: "Risk Level" },
+                    { label: "Report", sublabel: "Analysis" },
+                  ],
+                  description:
+                    "Get comprehensive analysis of your documents with detailed red flag identification and risk assessment",
+                };
+              case "legal-template":
+                return {
+                  bgColor: "bg-blue-100",
+                  iconColor: "text-blue-600",
+                  stats: [
+                    { label: "Browse", sublabel: "Templates" },
+                    { label: "Customize", sublabel: "Content" },
+                    { label: "Generate", sublabel: "Document" },
+                  ],
+                  description:
+                    "Access professional legal document templates and customize them for your specific needs",
+                };
+              case "lawyers-marketplace":
+                return {
+                  bgColor: "bg-purple-100",
+                  iconColor: "text-purple-600",
+                  stats: [
+                    { label: "Search", sublabel: "Lawyers" },
+                    { label: "Compare", sublabel: "Profiles" },
+                    { label: "Connect", sublabel: "Directly" },
+                  ],
+                  description:
+                    "Find and connect with qualified legal professionals who specialize in your area of need",
+                };
+              case "litigation-funding-investors":
+                return {
+                  bgColor: "bg-green-100",
+                  iconColor: "text-green-600",
+                  stats: [
+                    { label: "Evaluate", sublabel: "Cases" },
+                    { label: "Fund", sublabel: "Litigation" },
+                    { label: "Track", sublabel: "Returns" },
+                  ],
+                  description:
+                    "Discover investment opportunities in legal cases and diversify your portfolio with litigation funding",
+                };
+              case "legal-dossier-builder":
+                return {
+                  bgColor: "bg-orange-100",
+                  iconColor: "text-orange-600",
+                  stats: [
+                    { label: "Organize", sublabel: "Documents" },
+                    { label: "Build", sublabel: "Timeline" },
+                    { label: "Compile", sublabel: "Dossier" },
+                  ],
+                  description:
+                    "Create comprehensive legal dossiers with organized documents, timelines, and evidence",
+                };
+              case "case-timeline-builder":
+                return {
+                  bgColor: "bg-indigo-100",
+                  iconColor: "text-indigo-600",
+                  stats: [
+                    { label: "Map", sublabel: "Events" },
+                    { label: "Track", sublabel: "Progress" },
+                    { label: "Export", sublabel: "Timeline" },
+                  ],
+                  description:
+                    "Build detailed case timelines to track events, deadlines, and case progression",
+                };
+              case "litigation-funding-litigants":
+                return {
+                  bgColor: "bg-teal-100",
+                  iconColor: "text-teal-600",
+                  stats: [
+                    { label: "Apply", sublabel: "For Funding" },
+                    { label: "Get", sublabel: "Approved" },
+                    { label: "Pursue", sublabel: "Justice" },
+                  ],
+                  description:
+                    "Get financial support for your legal case with litigation funding designed for plaintiffs",
+                };
+              default:
+                return {
+                  bgColor: "bg-gray-100",
+                  iconColor: "text-gray-600",
+                  stats: [],
+                  description: tool.description || "",
+                };
+            }
+          };
 
-          // Standard button for other tools
+          const config = getToolCardConfig(tool.id);
+
           return (
-            <Button
-              key={tool.id}
-              variant="outline"
-              size="lg"
-              onClick={() => onToolSelect(tool)}
-              className="bg-sky-blue-50 flex items-center gap-2 rounded-full border-sky-blue-300 transition-all hover:border-sky-blue-400 hover:bg-sky-blue-100"
-            >
-              <IconComponent className="size-4 text-sky-blue-600" />
-              <Typography level="body" className="text-slate-gray-700">
-                {tool.name}
-              </Typography>
-            </Button>
+            <div key={tool.id} className="max-w-md">
+              <Button
+                variant="outline"
+                onClick={() => onToolSelect(tool)}
+                className="hover:bg-sky-blue-50 h-auto w-full rounded-2xl border-sky-blue-200 bg-white p-0 transition-all hover:border-sky-blue-400"
+              >
+                <div className="w-full p-4 text-left">
+                  {/* Header */}
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`inline-flex h-10 w-10 items-center justify-center rounded-lg ${config.bgColor}`}
+                    >
+                      <IconComponent className={`size-5 ${config.iconColor}`} />
+                    </div>
+                    <Typography
+                      level="body"
+                      weight="semibold"
+                      className="text-slate-gray-900"
+                    >
+                      {tool.name}
+                    </Typography>
+                  </div>
+                </div>
+              </Button>
+            </div>
           );
         })}
       </div>
