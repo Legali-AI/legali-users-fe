@@ -119,13 +119,25 @@ function SupportPageContent() {
                 }}
               >
                 <Link href={`/support/${ticket.ticket_id}`} className="flex-1">
-                  <H3
-                    level="title"
-                    weight={"semibold"}
-                    className="text-sky-blue-900"
-                  >
-                    {ticket.issue_title}
-                  </H3>
+                  <div className="flex items-center gap-2">
+                    <H3
+                      level="title"
+                      weight={"semibold"}
+                      className="text-sky-blue-900"
+                    >
+                      {ticket.issue_title}
+                    </H3>
+                    {ticket.response && (
+                      <Badge
+                        size={"sm"}
+                        variant="emerald"
+                        level="caption"
+                        className="bg-green-100 text-green-700"
+                      >
+                        Responded
+                      </Badge>
+                    )}
+                  </div>
                 </Link>
                 <div className="flex justify-end gap-2 sm:items-center sm:gap-2">
                   <Badge

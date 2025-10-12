@@ -71,7 +71,10 @@ export default function ForumDetailClient({ issueId }: ForumDetailClientProps) {
 
   const confirmDeleteIssue = async () => {
     if (issue) {
-      await deleteWithToast(issue.issue_id);
+      await deleteWithToast(issue.issue_id, () => {
+        // Redirect to forum page after successful deletion and query invalidation
+        router.push("/forum");
+      });
     }
     setShowDeleteDialog(false);
   };
@@ -201,14 +204,14 @@ export default function ForumDetailClient({ issueId }: ForumDetailClientProps) {
           <div className="flex items-start justify-between">
             <div className="flex flex-1 items-start gap-3">
               {/* Avatar */}
-              <Avatar className="h-10 w-10 border-2 border-sky-blue-500">
+              <Avatar className="h-10 w-10 flex-shrink-0 border-2 border-sky-blue-500">
                 <AvatarImage
                   src={issue.user?.profile_picture_url || undefined}
                   alt={
                     `${issue.user?.first_name || ""} ${issue.user?.last_name || ""}`.trim() ||
                     issue.user?.email
                   }
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover object-center"
                 />
                 <AvatarFallback className="bg-sky-blue-100 text-deep-navy">
                   <User className="h-5 w-5" />
@@ -264,10 +267,13 @@ export default function ForumDetailClient({ issueId }: ForumDetailClientProps) {
 
                         {/* File Attachments */}
                         {files.length > 0 && (
-                          <FileAttachmentContainer
-                            attachments={files}
-                            isFileViewer={true}
-                          />
+                          <div className="overflow-x-auto">
+                            <FileAttachmentContainer
+                              attachments={files}
+                              isFileViewer={true}
+                              className="min-w-0"
+                            />
+                          </div>
                         )}
                       </div>
                     );
@@ -281,25 +287,28 @@ export default function ForumDetailClient({ issueId }: ForumDetailClientProps) {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => router.push(`/forum/${issueId}/edit`)}
-                className="text-blue-500 hover:bg-blue-50 hover:text-blue-600"
-              >
-                <Edit className="mr-1 h-4 w-4" />
-                Edit
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleDeleteIssue}
-                className="text-red-500 hover:bg-red-50 hover:text-red-600"
-              >
-                Delete
-              </Button>
-            </div>
+            {/* Only show edit/delete buttons if the issue belongs to the current user */}
+            {user?.id === issue.user?.id && (
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => router.push(`/forum/${issueId}/edit`)}
+                  className="text-blue-500 hover:bg-blue-50 hover:text-blue-600"
+                >
+                  <Edit className="mr-1 h-4 w-4" />
+                  Edit
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleDeleteIssue}
+                  className="text-red-500 hover:bg-red-50 hover:text-red-600"
+                >
+                  Delete
+                </Button>
+              </div>
+            )}
           </div>
         </div>
 

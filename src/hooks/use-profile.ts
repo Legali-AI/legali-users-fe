@@ -22,8 +22,8 @@ export const useProfileQuery = () => {
       } catch (e) {
         const message =
           e instanceof Error ? e.message : "Failed to load profile";
-        toast.error(message);
-        throw e;
+        console.log(message);
+        return null;
       }
     },
     staleTime: 5 * 60 * 1000,

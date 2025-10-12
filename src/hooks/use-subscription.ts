@@ -145,6 +145,9 @@ export function useSubscriptionMutation(options?: {
               "Failed to create subscription"
           );
         }
+        if (res.data.data?.checkout_url && res.data.data.session_id) {
+          window.location.href = `${res.data.data.checkout_url}`;
+        }
         return res.data;
       })
       .catch(error => {

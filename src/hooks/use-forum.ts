@@ -21,7 +21,6 @@ import {
 
 // Query keys
 export const FORUM_QUERY_KEY = ["forum"] as const;
-export const FORUM_ISSUE_QUERY_KEY = ["forum", "issue"] as const;
 export const FORUM_COMMENT_QUERY_KEY = ["forum", "comment"] as const;
 
 // List all forum issues
@@ -31,7 +30,7 @@ export function useForumIssuesQuery(params?: {
   current_page?: number | null;
 }) {
   return useQuery({
-    queryKey: [...FORUM_QUERY_KEY, "issues", params],
+    queryKey: [...FORUM_QUERY_KEY, params],
     queryFn: async () => {
       const res = await listIssuesApiUserForumIssuesGet(
         params ? { query: params } : {}
@@ -117,11 +116,10 @@ export function useForumIssueMutation() {
     },
     onSuccess: () => {
       // Invalidate and refetch forum queries
-      queryClient.refetchQueries({ queryKey: FORUM_QUERY_KEY, exact: false });
-    },
-    onError: error => {
-      toast.error("Failed to create forum issue");
-      console.error("Create forum issue error:", error);
+      queryClient.invalidateQueries({
+        queryKey: FORUM_QUERY_KEY,
+        exact: false,
+      });
     },
   });
 
@@ -137,11 +135,10 @@ export function useForumIssueMutation() {
     },
     onSuccess: () => {
       // Invalidate and refetch forum queries
-      queryClient.refetchQueries({ queryKey: FORUM_QUERY_KEY, exact: false });
-    },
-    onError: error => {
-      toast.error("Failed to update forum issue");
-      console.error("Update forum issue error:", error);
+      queryClient.invalidateQueries({
+        queryKey: FORUM_QUERY_KEY,
+        exact: false,
+      });
     },
   });
 
@@ -159,11 +156,10 @@ export function useForumIssueMutation() {
     },
     onSuccess: () => {
       // Invalidate and refetch forum queries
-      queryClient.refetchQueries({ queryKey: FORUM_QUERY_KEY, exact: false });
-    },
-    onError: error => {
-      toast.error("Failed to delete forum issue");
-      console.error("Delete forum issue error:", error);
+      queryClient.invalidateQueries({
+        queryKey: FORUM_QUERY_KEY,
+        exact: false,
+      });
     },
   });
 
@@ -171,8 +167,15 @@ export function useForumIssueMutation() {
     createWithToast: async (data: BodyCreateIssueApiUserForumIssuesPost) => {
       return toast.promise(createMutation.mutateAsync(data), {
         loading: "Creating forum issue...",
-        success: "Forum issue created successfully",
-        error: "Failed to create forum issue",
+        success: () => ({
+          message: "Forum issue created successfully",
+          description: "Your forum issue has been created successfully",
+        }),
+        error: (error: unknown) => ({
+          message: "Failed to create forum issue",
+          description:
+            error instanceof Error ? error.message : "Please try again",
+        }),
       });
     },
     updateWithToast: async (
@@ -180,16 +183,38 @@ export function useForumIssueMutation() {
     ) => {
       return toast.promise(updateMutation.mutateAsync(data), {
         loading: "Updating forum issue...",
-        success: "Forum issue updated successfully",
-        error: "Failed to update forum issue",
+        success: () => ({
+          message: "Forum issue updated successfully",
+          description: "Your forum issue has been updated successfully",
+        }),
+        error: (error: unknown) => ({
+          message: "Failed to update forum issue",
+          description:
+            error instanceof Error ? error.message : "Please try again",
+        }),
       });
     },
-    deleteWithToast: async (issueId: string) => {
-      return toast.promise(deleteMutation.mutateAsync(issueId), {
-        loading: "Deleting forum issue...",
-        success: "Forum issue deleted successfully",
-        error: "Failed to delete forum issue",
-      });
+    deleteWithToast: async (
+      issueId: string,
+      onSuccessCallback?: () => void
+    ) => {
+      return toast.promise(
+        deleteMutation.mutateAsync(issueId).then(() => {
+          onSuccessCallback?.();
+        }),
+        {
+          loading: "Deleting forum issue...",
+          success: () => ({
+            message: "Forum issue deleted successfully",
+            description: "Your forum issue has been deleted successfully",
+          }),
+          error: (error: unknown) => ({
+            message: "Failed to delete forum issue",
+            description:
+              error instanceof Error ? error.message : "Please try again",
+          }),
+        }
+      );
     },
     isCreating: createMutation.isPending,
     isUpdating: updateMutation.isPending,
@@ -216,16 +241,15 @@ export function useForumCommentMutation() {
     },
     onSuccess: (_, variables) => {
       // Invalidate forum comments for the specific issue
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: [...FORUM_COMMENT_QUERY_KEY, variables.path.issue_id],
         exact: false,
       });
       // Also invalidate forum issues to update comment counts
-      queryClient.refetchQueries({ queryKey: FORUM_QUERY_KEY, exact: false });
-    },
-    onError: error => {
-      toast.error("Failed to post comment");
-      console.error("Create forum comment error:", error);
+      queryClient.invalidateQueries({
+        queryKey: FORUM_QUERY_KEY,
+        exact: false,
+      });
     },
   });
 
@@ -243,14 +267,10 @@ export function useForumCommentMutation() {
     },
     onSuccess: () => {
       // Invalidate forum comments
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: FORUM_COMMENT_QUERY_KEY,
         exact: false,
       });
-    },
-    onError: error => {
-      toast.error("Failed to update comment");
-      console.error("Update forum comment error:", error);
     },
   });
 
@@ -268,15 +288,14 @@ export function useForumCommentMutation() {
     },
     onSuccess: () => {
       // Invalidate forum comments and issues
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: FORUM_COMMENT_QUERY_KEY,
         exact: false,
       });
-      queryClient.refetchQueries({ queryKey: FORUM_QUERY_KEY, exact: false });
-    },
-    onError: error => {
-      toast.error("Failed to delete comment");
-      console.error("Delete forum comment error:", error);
+      queryClient.invalidateQueries({
+        queryKey: FORUM_QUERY_KEY,
+        exact: false,
+      });
     },
   });
 
@@ -286,8 +305,15 @@ export function useForumCommentMutation() {
     ) => {
       return toast.promise(createMutation.mutateAsync(data), {
         loading: "Posting comment...",
-        success: "Comment posted successfully",
-        error: "Failed to post comment",
+        success: () => ({
+          message: "Comment posted successfully",
+          description: "Your comment has been posted successfully",
+        }),
+        error: (error: unknown) => ({
+          message: "Failed to post comment",
+          description:
+            error instanceof Error ? error.message : "Please try again",
+        }),
       });
     },
     updateWithToast: async (
@@ -295,8 +321,15 @@ export function useForumCommentMutation() {
     ) => {
       return toast.promise(updateMutation.mutateAsync(data), {
         loading: "Updating comment...",
-        success: "Comment updated successfully",
-        error: "Failed to update comment",
+        success: () => ({
+          message: "Comment updated successfully",
+          description: "Your comment has been updated successfully",
+        }),
+        error: (error: unknown) => ({
+          message: "Failed to update comment",
+          description:
+            error instanceof Error ? error.message : "Please try again",
+        }),
       });
     },
     deleteWithToast: async (
@@ -304,8 +337,15 @@ export function useForumCommentMutation() {
     ) => {
       return toast.promise(deleteMutation.mutateAsync(data), {
         loading: "Deleting comment...",
-        success: "Comment deleted successfully",
-        error: "Failed to delete comment",
+        success: () => ({
+          message: "Comment deleted successfully",
+          description: "Your comment has been deleted successfully",
+        }),
+        error: (error: unknown) => ({
+          message: "Failed to delete comment",
+          description:
+            error instanceof Error ? error.message : "Please try again",
+        }),
       });
     },
     isCreating: createMutation.isPending,

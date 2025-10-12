@@ -51,6 +51,14 @@ export function WelcomeForm() {
     }
   }, [user, form]);
 
+  useEffect(() => {
+    if (!isLoadingAuth && !isAuthenticated) {
+      redirect("/login");
+    } else if (!isLoadingAuth && isAuthenticated && user?.state_id) {
+      redirect("/profile");
+    }
+  }, [isLoadingAuth, isAuthenticated, user?.state_id]);
+
   const handleSubmit = async (data: WelcomeFormData) => {
     await mutateWithToast(
       {
@@ -71,12 +79,6 @@ export function WelcomeForm() {
   } = form;
 
   const isLoading = isLoadingState || isSubmitting;
-
-  if (!isLoadingAuth && !isAuthenticated) {
-    redirect("/login");
-  } else if (!isLoadingAuth && isAuthenticated && user?.state_id) {
-    redirect("/profile");
-  }
 
   return (
     <div className="flex w-full max-w-3xl flex-col items-center justify-center gap-8 px-8">

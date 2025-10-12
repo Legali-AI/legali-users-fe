@@ -8,7 +8,7 @@ export const supportTicketSchema = z.object({
     .max(200, "Issue description must be less than 200 characters"),
   description: z
     .string()
-    .min(10, "Please provide a detailed description")
+    .min(10, "Please provide a detailed description with minimum 10 characters")
     .max(1000, "Description must be less than 1000 characters"),
   urgency: z.enum(["low", "medium", "high"]).refine(val => val !== undefined, {
     message: "Please select an urgency level",

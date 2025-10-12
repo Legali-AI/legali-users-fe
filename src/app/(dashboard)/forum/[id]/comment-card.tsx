@@ -154,7 +154,11 @@ export function CommentCard({
       >
         {/* Avatar */}
         <Avatar className="h-10 w-10 lg:h-12 lg:w-12">
-          <AvatarImage src={authorAvatar} alt={author} />
+          <AvatarImage
+            src={authorAvatar}
+            alt={author}
+            className="object-cover object-center"
+          />
           <AvatarFallback className="bg-slate-gray-300">
             <User
               size={18}

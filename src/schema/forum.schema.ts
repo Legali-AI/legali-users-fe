@@ -9,7 +9,7 @@ export const forumIssueSchema = z.object({
     .max(500, "Title must be less than 500 characters"),
   description: z
     .string()
-    .min(10, "Please provide a detailed description")
+    .min(10, "Please provide a detailed description min 10 characters")
     .max(2000, "Description must be less than 2000 characters")
     .optional(),
   files: z.array(z.instanceof(File)).optional(),

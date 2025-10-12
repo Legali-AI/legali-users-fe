@@ -5,13 +5,13 @@ import { toast } from "sonner";
 import {
   type DeleteDocumentApiUserDocumentsDocumentIdDeleteData,
   type ListDocumentsApiUserDocumentsGetData,
-  type UploadDocumentsApiUserDocumentsUploadsPostData,
+  type UploadDocumentApiUserDocumentsUploadPostData,
   deleteDocumentApiUserDocumentsDocumentIdDelete,
   downloadDocumentSecureApiUserDocumentsDocumentIdDownloadGet,
   getStorageInfoApiUserDocumentsStorageInfoGet,
   getUserSubscriptionApiUserSubscriptionsGet,
   listDocumentsApiUserDocumentsGet,
-  uploadDocumentsApiUserDocumentsUploadsPost,
+  uploadDocumentApiUserDocumentsUploadPost,
 } from "../sdk/out";
 
 export const FILE_QUERY_KEY = ["files"] as const;
@@ -54,23 +54,40 @@ export function useFileMutation() {
   const queryClient = useQueryClient();
 
   const uploadMutation = useMutation({
-    mutationFn: async (
-      data: UploadDocumentsApiUserDocumentsUploadsPostData
-    ) => {
-      const res = await uploadDocumentsApiUserDocumentsUploadsPost(data);
+    mutationFn: async (files: File[]) => {
+      // Upload each file individually using Promise.all
+      const uploadPromises = files.map(file =>
+        uploadDocumentApiUserDocumentsUploadPost({
+          body: { file },
+        } as UploadDocumentApiUserDocumentsUploadPostData)
+      );
 
-      if (!res.data?.success) {
-        throw new Error(res.error?.message || "Failed to upload documents");
+      const results = await Promise.all(uploadPromises);
+
+      // Check if any upload failed
+      const failedUploads = results.filter(res => !res.data?.success);
+      if (failedUploads.length > 0) {
+        // Group all error messages
+        const errorMessages = failedUploads
+          .map((res, index) => {
+            const fileName = files[index]?.name || `File ${index + 1}`;
+            const errorMsg = res.error?.message || "Upload failed";
+            return `${fileName}: ${errorMsg}`;
+          })
+          .join("; ");
+
+        const errorMessage =
+          failedUploads.length === 1
+            ? errorMessages
+            : `Failed to upload ${failedUploads.length} files: ${errorMessages}`;
+
+        throw new Error(errorMessage);
       }
 
-      return res.data;
+      return results;
     },
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: FILE_QUERY_KEY, exact: false });
-    },
-    onError: error => {
-      toast.error("Failed to upload documents");
-      console.error("Upload documents error:", error);
     },
   });
 
@@ -89,25 +106,24 @@ export function useFileMutation() {
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: FILE_QUERY_KEY, exact: false });
     },
-    onError: error => {
-      toast.error("Failed to delete document");
-      console.error("Delete document error:", error);
-    },
   });
 
   return {
-    uploadWithToast: async (
-      data: UploadDocumentsApiUserDocumentsUploadsPostData,
-      onSuccessCallback?: () => void
-    ) => {
+    uploadWithToast: async (files: File[], onSuccessCallback?: () => void) => {
       return toast.promise(
-        uploadMutation.mutateAsync(data).then(() => {
+        uploadMutation.mutateAsync(files).then(() => {
           onSuccessCallback?.();
         }),
         {
           loading: "Uploading documents...",
-          success: "Documents uploaded successfully",
-          error: "Failed to upload documents",
+          success: () => ({
+            message: "Documents uploaded successfully",
+            description: "Your documents have been uploaded successfully",
+          }),
+          error: (error: unknown) => ({
+            message: "Failed to upload documents",
+            description: error instanceof Error ? error.message : "Please try again",
+          }),
         }
       );
     },
@@ -121,8 +137,14 @@ export function useFileMutation() {
         }),
         {
           loading: "Deleting document...",
-          success: "Document deleted successfully",
-          error: "Failed to delete document",
+          success: () => ({
+            message: "Document deleted successfully",
+            description: "Your document has been deleted successfully",
+          }),
+          error: (error: unknown) => ({
+            message: "Failed to delete document",
+            description: error instanceof Error ? error.message : "Please try again",
+          }),
         }
       );
     },
@@ -178,8 +200,85 @@ export function useFileMutation() {
         }),
         {
           loading: "Downloading document...",
-          success: "Download started",
-          error: "Failed to download document",
+          success: () => ({
+            message: "Download started",
+            description: "Your document has been downloaded successfully",
+          }),
+          error: (error: unknown) => ({
+            message: "Failed to download document",
+            description: error instanceof Error ? error.message : "Please try again",
+          }),
+        }
+      );
+    },
+    viewWithToast: async (
+      params: { documentId: string; fileName: string },
+      onSuccessCallback?: () => void
+    ) => {
+      return toast.promise(
+        downloadDocumentSecureApiUserDocumentsDocumentIdDownloadGet({
+          path: { document_id: params.documentId },
+          ...({
+            responseType: "blob",
+            headers: { Accept: "application/pdf,application/octet-stream" },
+          } as unknown as Record<string, unknown>),
+        }).then((res: unknown) => {
+          // Normalize to Blob regardless of client shape
+          let blob: Blob;
+          const maybeAny = res as unknown;
+          if (maybeAny instanceof Blob) {
+            blob = maybeAny as Blob;
+          } else if (
+            typeof maybeAny === "object" &&
+            maybeAny !== null &&
+            (maybeAny as { data?: unknown }).data instanceof Blob
+          ) {
+            blob = (maybeAny as { data: Blob }).data;
+          } else if (typeof maybeAny === "string") {
+            blob = new Blob([maybeAny], { type: "application/pdf" });
+          } else if (
+            typeof maybeAny === "object" &&
+            maybeAny !== null &&
+            (maybeAny as { byteLength?: number }).byteLength
+          ) {
+            blob = new Blob([maybeAny as ArrayBuffer], {
+              type: "application/pdf",
+            });
+          } else {
+            // Fallback: stringify
+            blob = new Blob([JSON.stringify(maybeAny)], {
+              type: "application/pdf",
+            });
+          }
+
+          // Create object URL and open in new tab
+          const objectUrl = window.URL.createObjectURL(blob);
+          const newWindow = window.open(objectUrl, "_blank");
+
+          // Clean up the URL after a delay
+          setTimeout(() => {
+            window.URL.revokeObjectURL(objectUrl);
+          }, 1000);
+
+          // Check if popup was blocked
+          if (!newWindow) {
+            throw new Error(
+              "Popup blocked. Please allow popups for this site to view PDFs."
+            );
+          }
+
+          onSuccessCallback?.();
+        }),
+        {
+          loading: "Opening PDF...",
+            success: () => ({
+            message: "PDF opened in new tab",
+            description: "Your PDF has been opened in a new tab",
+          }),
+          error: (error: unknown) => ({
+            message: "Failed to open PDF",
+            description: error instanceof Error ? error.message : "Please try again",
+          }),
         }
       );
     },

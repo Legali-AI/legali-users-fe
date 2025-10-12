@@ -30,14 +30,14 @@ function SubscribeButtonInner({
   // Parse prices for comparison
   const currentPrice = subscriptionData?.data?.current_price
     ? parseFloat(subscriptionData.data.current_price)
-    : 0;
+    : null;
   const targetPrice = parseFloat(planPrice);
 
   // Determine button state
   const isCurrentPlan = subscriptionData?.data?.plan_id === planId;
   const isActive = subscriptionData?.data?.status === "active";
-  const isUpgrade = targetPrice > currentPrice;
-  const isDowngrade = targetPrice < currentPrice;
+  const isUpgrade = currentPrice ? targetPrice > currentPrice : false;
+  const isDowngrade = currentPrice ? targetPrice < currentPrice : false;
 
   const onSubscribe = async () => {
     if (!user) {
@@ -65,7 +65,7 @@ function SubscribeButtonInner({
         newPlanId: planId,
       });
     } else {
-      await createWithToast(planId);
+      const res = await createWithToast(planId);
     }
   };
 

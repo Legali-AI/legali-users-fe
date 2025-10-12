@@ -48,10 +48,7 @@ import {
   useStorageInfoQuery,
 } from "../../../hooks/use-file";
 import { cn } from "../../../lib/utils";
-import type {
-  DeleteDocumentApiUserDocumentsDocumentIdDeleteData,
-  UploadDocumentsApiUserDocumentsUploadsPostData,
-} from "../../../sdk/out";
+import type { DeleteDocumentApiUserDocumentsDocumentIdDeleteData } from "../../../sdk/out";
 import { createFileTableColumns } from "./file-table-columns";
 import { FileViewDialog } from "./file-view-dialog";
 import { UploadDocuments } from "./UploadDocuments";
@@ -124,12 +121,7 @@ export default function FilePage() {
 
   const handleUploadDocuments = async () => {
     if (uploadFiles.length === 0) return;
-    await uploadWithToast(
-      {
-        body: { files: uploadFiles, metadata: null },
-      } as UploadDocumentsApiUserDocumentsUploadsPostData,
-      () => setUploadFiles([])
-    );
+    await uploadWithToast(uploadFiles, () => setUploadFiles([]));
   };
 
   // Dialog handlers
@@ -142,7 +134,8 @@ export default function FilePage() {
     console.log("Edit access for file:", file.id);
   }, []);
 
-  const { deleteWithToast, downloadWithToast } = useFileMutation();
+  const { deleteWithToast, downloadWithToast, viewWithToast } =
+    useFileMutation();
 
   const handleDeleteFile = React.useCallback((file: FileItem) => {
     setSelectedFile(file);
@@ -164,6 +157,13 @@ export default function FilePage() {
       void downloadWithToast({ documentId: file.id, fileName: file.fileName });
     },
     [downloadWithToast]
+  );
+
+  const handleViewPDF = React.useCallback(
+    (file: FileItem) => {
+      void viewWithToast({ documentId: file.id, fileName: file.fileName });
+    },
+    [viewWithToast]
   );
 
   // Create table columns with handlers
@@ -441,6 +441,7 @@ export default function FilePage() {
         onClose={() => setShowViewDialog(false)}
         fileName={selectedFile?.fileName || ""}
         aiSummary={selectedFile?.aiSummary || null}
+        onViewPDF={() => selectedFile && handleViewPDF(selectedFile)}
       />
     </main>
   );

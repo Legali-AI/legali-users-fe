@@ -92,7 +92,7 @@ export function FileAttachmentContainer({
     <>
       <div
         className={cn(
-          `flex min-w-0 items-center gap-2 overflow-hidden`,
+          `flex min-w-0 flex-wrap items-center gap-2`,
           className || ""
         )}
       >

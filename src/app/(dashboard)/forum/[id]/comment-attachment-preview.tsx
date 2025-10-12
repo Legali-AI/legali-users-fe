@@ -44,7 +44,7 @@ export function CommentAttachmentPreview({
   }));
 
   return (
-    <div className={`flex min-w-0 flex-col gap-2 overflow-hidden ${className}`}>
+    <div className={`flex min-w-0 flex-col gap-2 ${className}`}>
       {/* Image Attachments */}
       {images.length > 0 && (
         <ImageAttachmentPreview images={images} maxVisible={3} imageSize={60} />
@@ -52,14 +52,16 @@ export function CommentAttachmentPreview({
 
       {/* File Attachments */}
       {fileAttachments.length > 0 && (
-        <FileAttachmentContainer
-          attachments={fileAttachments}
-          maxVisible={3}
-          showRemaining={true}
-          className="text-xs"
-          truncate={true}
-          isFileViewer={true}
-        />
+        <div className="overflow-x-auto">
+          <FileAttachmentContainer
+            attachments={fileAttachments}
+            maxVisible={3}
+            showRemaining={true}
+            className="min-w-0 text-xs"
+            truncate={true}
+            isFileViewer={true}
+          />
+        </div>
       )}
     </div>
   );

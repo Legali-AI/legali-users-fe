@@ -161,6 +161,26 @@ export function TicketDetailPageContent({ ticketId }: { ticketId: string }) {
         </div>
       )}
 
+      {/* Support Response */}
+      {ticket.response && (
+        <div className={cn(cardStyle, "flex flex-col items-start gap-1")}>
+          <H5 level="title" className="text-slate-gray-400">
+            Support Response
+          </H5>
+          <Span
+            level={"title"}
+            weight={"medium"}
+            className="break-words text-black"
+          >
+            {ticket.response.response_text}
+          </Span>
+          <P level="caption" className="text-slate-gray-400">
+            Responded on{" "}
+            {new Date(ticket.response.created_at).toLocaleDateString("en-CA")}
+          </P>
+        </div>
+      )}
+
       {/* Delete Confirmation Dialog */}
       <DeleteConfirmationDialog
         open={showDeleteDialog}

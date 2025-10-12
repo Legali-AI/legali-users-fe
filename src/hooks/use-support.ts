@@ -4,13 +4,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   type BodyCreateTicketApiUserSupportTicketsPost,
-  type Options,
-  type UpdateTicketApiUserSupportTicketsTicketIdPutData,
   createTicketApiUserSupportTicketsPost,
   deleteTicketApiUserSupportTicketsTicketIdDelete,
   getTicketApiUserSupportTicketsTicketIdGet,
   listMyTicketsApiUserSupportTicketsGet,
+  type Options,
   updateTicketApiUserSupportTicketsTicketIdPut,
+  type UpdateTicketApiUserSupportTicketsTicketIdPutData,
 } from "../sdk/out";
 
 export const SUPPORT_QUERY_KEY = ["support-tickets"] as const;
@@ -100,11 +100,6 @@ export const useSupportTicketMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: SUPPORT_QUERY_KEY });
     },
-    onError: (e: unknown) => {
-      const message =
-        e instanceof Error ? e.message : "Failed to create support ticket";
-      toast.error(message);
-    },
   });
 
   const updateMutation = useMutation({
@@ -141,11 +136,6 @@ export const useSupportTicketMutation = () => {
         queryKey: SUPPORT_TICKET_QUERY_KEY(ticketId),
       });
     },
-    onError: (e: unknown) => {
-      const message =
-        e instanceof Error ? e.message : "Failed to update support ticket";
-      toast.error(message);
-    },
   });
 
   const deleteMutation = useMutation({
@@ -164,11 +154,6 @@ export const useSupportTicketMutation = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: SUPPORT_QUERY_KEY });
-    },
-    onError: (e: unknown) => {
-      const message =
-        e instanceof Error ? e.message : "Failed to delete support ticket";
-      toast.error(message);
     },
   });
 

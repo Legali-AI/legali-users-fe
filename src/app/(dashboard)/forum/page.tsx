@@ -135,7 +135,11 @@ function ForumContent() {
                 <H5
                   level="body"
                   weight="semibold"
-                  className="text-sky-blue-600"
+                  className={
+                    activeTab === "your-issues"
+                      ? "text-sky-blue-600"
+                      : "text-slate-gray-300"
+                  }
                 >
                   Your Issue
                 </H5>
@@ -144,7 +148,11 @@ function ForumContent() {
                 <H5
                   level="body"
                   weight="semibold"
-                  className="text-slate-gray-300"
+                  className={
+                    activeTab === "explore-issues"
+                      ? "text-sky-blue-600"
+                      : "text-slate-gray-300"
+                  }
                 >
                   Explore Issue
                 </H5>
