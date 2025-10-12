@@ -13,7 +13,7 @@ import { Button } from "../../components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form";
 import { Input } from "../../components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
-import { useAuth } from "../../hooks/use-auth";
+import { useAuthWithProfile } from "../../hooks/use-auth";
 import { useUpdateProfileCache } from "../../hooks/use-profile";
 import { type WelcomeFormData, welcomeFormSchema } from "../../schema/welcome";
 
@@ -26,7 +26,7 @@ import {
 
 export function WelcomeForm() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user } = useAuthWithProfile();
   const updateProfileCache = useUpdateProfileCache();
   const [isSubmitting, setIsSubmitting] = useState(false);
 

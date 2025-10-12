@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import TermsConditionsPopup from "@/components/auth/terms-condition-popup";
@@ -9,18 +8,21 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useAuthErrorHandler, useSignIn } from "@/hooks/use-signin";
 import { type LoginFormData, loginSchema } from "@/schema/auth";
 
-// Mock user credentials
-const MOCK_USERS = [{ email: "user@legali.io", password: "user321", redirectTo: "/onboard" }];
-
 export default function EmailPasswordForm() {
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showTermsPopup, setShowTermsPopup] = useState(false);
   const [pendingFormData, setPendingFormData] = useState<LoginFormData | null>(null);
-  const router = useRouter();
+
+  const formatError = useAuthErrorHandler();
+  const signInMutation = useSignIn({
+    onError: authError => {
+      setError(formatError(authError));
+    },
+  });
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -43,23 +45,8 @@ export default function EmailPasswordForm() {
   };
 
   const performLogin = async (data: LoginFormData) => {
-    setIsLoading(true);
     setError(null);
-
-    // Mock authentication
-    const mockUser = MOCK_USERS.find(user => user.email === data.email && user.password === data.password);
-
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    if (mockUser) {
-      // Success - redirect to specified page
-      router.push(mockUser.redirectTo);
-    } else {
-      setError("Invalid email or password");
-    }
-
-    setIsLoading(false);
+    signInMutation.mutate(data);
   };
 
   const handleTermsAccept = () => {
@@ -76,6 +63,8 @@ export default function EmailPasswordForm() {
     console.log("Forgot password clicked - placeholder functionality");
     alert("Forgot password functionality coming soon!");
   };
+
+  const isLoading = signInMutation.isPending;
 
   return (
     <div className="w-full max-w-sm space-y-6">

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuthStatus } from "@/hooks/use-auth-status";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ interface AuthGuardProps {
 }
 
 export function AuthGuard({ children, requireAuth = true, redirectTo }: AuthGuardProps) {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuthStatus();
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
 

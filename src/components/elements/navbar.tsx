@@ -1,10 +1,18 @@
 "use client";
 
-import { Menu } from "lucide-react";
+import { LogOut, Menu, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -14,6 +22,8 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useAuth } from "@/hooks/use-auth";
+import { useAuthStatus } from "@/hooks/use-auth-status";
 import { cn } from "../../lib/utils";
 import { Typography } from "./typography";
 
@@ -74,6 +84,9 @@ const NAV_ITEMS: NavItemType[] = [
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { isAuthenticated } = useAuthStatus();
+  const { logout } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,6 +97,13 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleLogout = async () => {
+    await logout(() => {
+      // Redirect to login page after successful logout
+      router.push("/login");
+    });
+  };
 
   return (
     <NavigationMenu
@@ -176,30 +196,78 @@ export function Navbar() {
                   ))}
                 </nav>
 
-                {/* Login Button */}
-                <div className="border-t pt-4">
-                  <Button className="w-full rounded-xl bg-deep-navy-400 hover:bg-deep-navy-500">
-                    <Link href="/login" className="w-full">
-                      <Typography weight="medium" level="body" className="text-white">
-                        Log In
-                      </Typography>
-                    </Link>
-                  </Button>
+                {/* Auth Section */}
+                <div className="space-y-3 border-t pt-4">
+                  {isAuthenticated ? (
+                    <>
+                      <Link
+                        href="/profile"
+                        className="flex items-center space-x-2 py-2 text-slate-700 hover:text-slate-900">
+                        <User className="h-4 w-4" />
+                        <Typography weight="medium" level="body">
+                          Profile
+                        </Typography>
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="flex w-full items-center space-x-2 py-2 text-slate-700 hover:text-slate-900">
+                        <LogOut className="h-4 w-4" />
+                        <Typography weight="medium" level="body">
+                          Log Out
+                        </Typography>
+                      </button>
+                    </>
+                  ) : (
+                    <Button className="w-full rounded-xl bg-deep-navy-400 hover:bg-deep-navy-500">
+                      <Link href="/login" className="w-full">
+                        <Typography weight="medium" level="body" className="text-white">
+                          Log In
+                        </Typography>
+                      </Link>
+                    </Button>
+                  )}
                 </div>
               </div>
             </SheetContent>
           </Sheet>
         </NavigationMenuItem>
 
-        {/* Login */}
+        {/* Auth Section */}
         <NavigationMenuItem className="flex-shrink-0 max-lg:hidden">
-          <Button className="rounded-xl bg-deep-navy-400 px-3 py-1.5 hover:bg-deep-navy-500 sm:px-4 sm:py-2">
-            <Link href="/login">
-              <Typography weight="medium" level="body" className="text-white">
-                Log In
-              </Typography>
-            </Link>
-          </Button>
+          {isAuthenticated ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="rounded-xl px-3 py-1.5 sm:px-4 sm:py-2">
+                  <User className="mr-2 h-4 w-4" />
+                  <Typography weight="medium" level="body">
+                    Account
+                  </Typography>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem asChild>
+                  <Link href="/profile" className="flex items-center">
+                    <User className="mr-2 h-4 w-4" />
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Log Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button className="rounded-xl bg-deep-navy-400 px-3 py-1.5 hover:bg-deep-navy-500 sm:px-4 sm:py-2">
+              <Link href="/login">
+                <Typography weight="medium" level="body" className="text-white">
+                  Log In
+                </Typography>
+              </Link>
+            </Button>
+          )}
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { QueryProvider } from "@/lib/query-client";
 import "./globals.css";
 
 const inter = Inter({
@@ -92,7 +93,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${inter.className} overflow-x-hidden overflow-y-auto bg-sky-blue-100 antialiased`}
         suppressHydrationWarning={true}>
-        {children}
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );

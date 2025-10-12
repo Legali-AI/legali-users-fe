@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuthWithProfile } from "@/hooks/use-auth";
 import { useUpdateProfileCache } from "@/hooks/use-profile";
 import { type ProfileFormData, profileFormSchema, regionOptions, subscriptionTypeOptions } from "@/schema/profile";
 import { updateProfileApiAuthProfilePut } from "@/sdk/sdk.gen";
@@ -21,7 +21,7 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formId = useId();
-  const { user } = useAuth();
+  const { user } = useAuthWithProfile();
   const updateProfileCache = useUpdateProfileCache();
 
   const form = useForm<ProfileFormData>({

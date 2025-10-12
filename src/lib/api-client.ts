@@ -15,9 +15,13 @@ const createApiClient = (): AxiosInstance => {
   client.interceptors.request.use(
     config => {
       // Add auth token if available
-      const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+      if (typeof window !== "undefined") {
+        // Import here to avoid SSR issues
+        const { getAccessToken } = require("./auth");
+        const token = getAccessToken();
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
       }
       return config;
     },
@@ -36,7 +40,9 @@ const createApiClient = (): AxiosInstance => {
       if (error.response?.status === 401) {
         // Handle unauthorized access
         if (typeof window !== "undefined") {
-          localStorage.removeItem("authToken");
+          // Import here to avoid SSR issues
+          const { clearAuth } = require("./auth");
+          clearAuth();
           window.location.href = "/login";
         }
       }

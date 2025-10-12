@@ -20,10 +20,14 @@ export function LogoutButton({ className, children, variant }: LogoutButtonProps
   const handleLogout = async () => {
     try {
       setIsLoading(true);
-      await logout();
-      router.push("/");
+      await logout(() => {
+        // Redirect to login page after successful logout
+        router.push("/login");
+      });
     } catch (error) {
       console.error("Logout error:", error);
+      // Even if logout fails, redirect to login page
+      router.push("/login");
     } finally {
       setIsLoading(false);
     }

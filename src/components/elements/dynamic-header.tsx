@@ -4,7 +4,7 @@ import { Menu, User } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuthWithProfile } from "@/hooks/use-auth";
 import { Span } from "./typography";
 
 const PAGE_CONFIGS: Record<string, string> = {
@@ -24,7 +24,7 @@ const DEFAULT_CONFIG: string = "Dashboard";
 
 export default function DynamicHeader() {
   const pathname = usePathname();
-  const { user } = useAuth();
+  const { user } = useAuthWithProfile();
   const title = PAGE_CONFIGS[pathname] || DEFAULT_CONFIG;
 
   return (

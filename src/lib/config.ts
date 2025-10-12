@@ -1,8 +1,15 @@
 // API Configuration and Constants
 
 export const API_CONFIG = {
-  BASE_URL: process.env.NEXT_PUBLIC_API_URL || "https://api.legali.id",
+  BASE_URL: process.env.NEXT_PUBLIC_API_URL || "https://api.legali.io",
   ENDPOINTS: {
+    // Auth endpoints
+    AUTH: {
+      SIGNIN: "/api/auth/signin",
+      SIGNOUT: "/api/auth/signout",
+      REFRESH: "/api/auth/refresh",
+    },
+
     // Lawyer endpoints
     LAWYERS: "/lawyers",
     LAWYER_BY_ID: (id: string) => `/lawyers/${id}`,

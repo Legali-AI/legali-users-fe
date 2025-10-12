@@ -125,6 +125,7 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
               <Paperclip className="size-4 text-sky-blue-600" />
               <span className="max-w-32 truncate text-slate-gray-700">{file.name}</span>
               <button
+                type="button"
                 onClick={() => removeCompletedFile(index)}
                 className="text-slate-gray-400 transition-colors hover:text-slate-gray-600">
                 ×
