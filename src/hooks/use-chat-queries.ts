@@ -1,12 +1,11 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Message } from "@/components/elements/chat/types";
 import { chatService } from "@/services/chat.service";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Query keys
 export const chatQueryKeys = {
   all: ["chat"] as const,
-  messages: (chatId: string) =>
-    [...chatQueryKeys.all, "messages", chatId] as const,
+  messages: (chatId: string) => [...chatQueryKeys.all, "messages", chatId] as const,
   history: () => [...chatQueryKeys.all, "history"] as const,
 };
 
@@ -76,9 +75,7 @@ export function useSendMessage() {
       conversationId?: string;
       toolParam?: string | null;
     }) => {
-      const conversationType = chatService.getConversationTypeFromTool(
-        toolParam || null
-      );
+      const conversationType = chatService.getConversationTypeFromTool(toolParam || null);
 
       const requestPayload: any = {
         user_input: message,
@@ -113,8 +110,7 @@ export function useSendMessage() {
         await queryClient.cancelQueries({ queryKey });
 
         // Snapshot previous value
-        const previousMessages =
-          queryClient.getQueryData<Message[]>(queryKey) || [];
+        const previousMessages = queryClient.getQueryData<Message[]>(queryKey) || [];
 
         // Optimistically update with new user message
         const optimisticUserMessage: Message = {
@@ -125,10 +121,7 @@ export function useSendMessage() {
           attachments: files || undefined,
         };
 
-        queryClient.setQueryData<Message[]>(queryKey, [
-          ...previousMessages,
-          optimisticUserMessage,
-        ]);
+        queryClient.setQueryData<Message[]>(queryKey, [...previousMessages, optimisticUserMessage]);
 
         return { previousMessages, optimisticUserMessage };
       }
@@ -136,8 +129,7 @@ export function useSendMessage() {
       return { previousMessages: [], optimisticUserMessage: null };
     },
     onSuccess: (response, variables, context) => {
-      const finalConversationId =
-        response.data?.conversation_id || variables.conversationId;
+      const finalConversationId = response.data?.conversation_id || variables.conversationId;
 
       if (finalConversationId) {
         const queryKey = chatQueryKeys.messages(finalConversationId);
@@ -176,10 +168,7 @@ export function useSendMessage() {
             attachments: variables.files || undefined,
           };
 
-          queryClient.setQueryData<Message[]>(queryKey, [
-            userMessage,
-            aiMessage,
-          ]);
+          queryClient.setQueryData<Message[]>(queryKey, [userMessage, aiMessage]);
         }
 
         // Invalidate chat history to refresh the sidebar

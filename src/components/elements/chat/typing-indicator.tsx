@@ -7,10 +7,7 @@ interface TypingIndicatorProps {
   showTimer?: boolean;
 }
 
-export function TypingIndicator({
-  isTyping,
-  showTimer = true,
-}: TypingIndicatorProps) {
+export function TypingIndicator({ isTyping, showTimer = true }: TypingIndicatorProps) {
   const [elapsedTime, setElapsedTime] = useState(0);
 
   useEffect(() => {
@@ -50,34 +47,20 @@ export function TypingIndicator({
       <div className="max-w-xs rounded-2xl rounded-tl-md border border-sky-blue-200 bg-white px-4 py-3 shadow-sm">
         <div className="flex items-center gap-2">
           <div className="flex gap-1">
-            <div
-              className="h-2 w-2 animate-bounce rounded-full bg-sky-blue-400"
-              style={{ animationDelay: "0ms" }}
-            />
-            <div
-              className="h-2 w-2 animate-bounce rounded-full bg-sky-blue-400"
-              style={{ animationDelay: "150ms" }}
-            />
-            <div
-              className="h-2 w-2 animate-bounce rounded-full bg-sky-blue-400"
-              style={{ animationDelay: "300ms" }}
-            />
+            <div className="h-2 w-2 animate-bounce rounded-full bg-sky-blue-400" style={{ animationDelay: "0ms" }} />
+            <div className="h-2 w-2 animate-bounce rounded-full bg-sky-blue-400" style={{ animationDelay: "150ms" }} />
+            <div className="h-2 w-2 animate-bounce rounded-full bg-sky-blue-400" style={{ animationDelay: "300ms" }} />
           </div>
           {showTimer && elapsedTime > 5 && (
-            <span className="ml-2 text-xs text-slate-gray-500">
-              {formatTime(elapsedTime)}
-            </span>
+            <span className="ml-2 text-xs text-slate-gray-500">{formatTime(elapsedTime)}</span>
           )}
         </div>
         {showTimer && elapsedTime > 10 && (
-          <p className="mt-2 text-xs text-slate-gray-600">
-            {getStatusMessage(elapsedTime)}
-          </p>
+          <p className="mt-2 text-xs text-slate-gray-600">{getStatusMessage(elapsedTime)}</p>
         )}
         {elapsedTime > 90 && (
           <p className="mt-1 text-xs text-orange-600">
-            This is taking longer than usual. The API may be processing a
-            complex request.
+            This is taking longer than usual. The API may be processing a complex request.
           </p>
         )}
       </div>

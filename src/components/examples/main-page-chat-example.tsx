@@ -5,14 +5,11 @@
 
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  navigateToAgentTool,
-  startNewChatWithMessage,
-} from "@/lib/chat-navigation";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { navigateToAgentTool, startNewChatWithMessage } from "@/lib/chat-navigation";
 
 export function MainPageChatExample() {
   const router = useRouter();
@@ -58,40 +55,21 @@ export function MainPageChatExample() {
 
       {/* Quick actions */}
       <div className="grid grid-cols-2 gap-4">
-        <Button
-          variant="outline"
-          onClick={() =>
-            handleQuickAction("I need help analyzing a contract", "redflag")
-          }
-        >
+        <Button variant="outline" onClick={() => handleQuickAction("I need help analyzing a contract", "redflag")}>
           📄 Analyze Contract
         </Button>
 
-        <Button
-          variant="outline"
-          onClick={() =>
-            handleQuickAction("I need to create a legal document", "template")
-          }
-        >
+        <Button variant="outline" onClick={() => handleQuickAction("I need to create a legal document", "template")}>
           📝 Create Document
         </Button>
 
-        <Button
-          variant="outline"
-          onClick={() => handleQuickAction("I need to find a lawyer")}
-        >
+        <Button variant="outline" onClick={() => handleQuickAction("I need to find a lawyer")}>
           ⚖️ Find Lawyer
         </Button>
 
         <Button
           variant="outline"
-          onClick={() =>
-            handleQuickAction(
-              "I need help with litigation funding",
-              "funding-litigants"
-            )
-          }
-        >
+          onClick={() => handleQuickAction("I need help with litigation funding", "funding-litigants")}>
           💰 Get Funding
         </Button>
       </div>

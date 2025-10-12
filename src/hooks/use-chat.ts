@@ -1,9 +1,6 @@
-import type {
-  Message,
-  WorkflowRecommendation,
-} from "@/components/elements/chat/types";
-import { chatService } from "@/services/chat.service";
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { Message, WorkflowRecommendation } from "@/components/elements/chat/types";
+import { chatService } from "@/services/chat.service";
 
 export interface UseChatOptions {
   conversationId?: string | undefined;
@@ -19,12 +16,10 @@ export function useChat({
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [conversationId, setConversationId] = useState<string | undefined>(
-    initialConversationId
+  const [conversationId, setConversationId] = useState<string | undefined>(initialConversationId);
+  const [workflowRecommendations, setWorkflowRecommendations] = useState<WorkflowRecommendation[]>(
+    []
   );
-  const [workflowRecommendations, setWorkflowRecommendations] = useState<
-    WorkflowRecommendation[]
-  >([]);
   const [error, setError] = useState<string | null>(null);
 
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -68,9 +63,7 @@ export function useChat({
       });
 
       if (response.success && response.data) {
-        const convertedMessages = response.data.map(
-          chatService.convertApiMessageToMessage
-        );
+        const convertedMessages = response.data.map(chatService.convertApiMessageToMessage);
         setMessages(convertedMessages);
       }
     } catch (err) {
@@ -107,9 +100,7 @@ export function useChat({
       setError(null);
 
       try {
-        const conversationType = chatService.getConversationTypeFromTool(
-          toolParam || null
-        );
+        const conversationType = chatService.getConversationTypeFromTool(toolParam || null);
 
         // Prepare request payload
         const requestPayload: any = {
@@ -160,31 +151,22 @@ export function useChat({
           // Handle workflow recommendations with deduplication
           const allRecommendations = [
             ...(response.data.workflow_recommendations || []),
-            ...(response.data.next_suggested_action
-              ? [response.data.next_suggested_action]
-              : []),
+            ...(response.data.next_suggested_action ? [response.data.next_suggested_action] : []),
           ];
 
           console.log("📋 Raw recommendations from API:", {
-            workflow_recommendations:
-              response.data.workflow_recommendations?.length || 0,
-            next_suggested_action: response.data.next_suggested_action
-              ? "present"
-              : "none",
+            workflow_recommendations: response.data.workflow_recommendations?.length || 0,
+            next_suggested_action: response.data.next_suggested_action ? "present" : "none",
             total_before_dedup: allRecommendations.length,
           });
 
           // Deduplicate based on action_type + title + endpoint
-          const uniqueRecommendations = allRecommendations.filter(
-            (rec, index, arr) => {
-              const key = `${rec.action_type}-${rec.title}-${rec.endpoint}`;
-              return (
-                arr.findIndex(
-                  r => `${r.action_type}-${r.title}-${r.endpoint}` === key
-                ) === index
-              );
-            }
-          );
+          const uniqueRecommendations = allRecommendations.filter((rec, index, arr) => {
+            const key = `${rec.action_type}-${rec.title}-${rec.endpoint}`;
+            return (
+              arr.findIndex(r => `${r.action_type}-${r.title}-${r.endpoint}` === key) === index
+            );
+          });
 
           console.log(
             "📋 After deduplication:",
@@ -217,10 +199,7 @@ export function useChat({
     if (initialMessage && !isLoading && !isTyping && messages.length > 0) {
       // Small delay to ensure welcome message is displayed first
       const timer = setTimeout(() => {
-        console.log(
-          "🚀 Sending initial message from main page:",
-          initialMessage
-        );
+        console.log("🚀 Sending initial message from main page:", initialMessage);
         sendMessage(initialMessage);
       }, 500);
 

@@ -31,10 +31,7 @@ export const navigateToAgent = (options: NavigateToAgentOptions = {}) => {
 /**
  * Navigate to agent with a new chat (coming from main page)
  */
-export const startNewChatWithMessage = (
-  message: string,
-  tool?: string | undefined
-) => {
+export const startNewChatWithMessage = (message: string, tool?: string | undefined) => {
   const options: NavigateToAgentOptions = {
     message,
   };
@@ -49,10 +46,7 @@ export const startNewChatWithMessage = (
 /**
  * Navigate to agent with a specific tool
  */
-export const navigateToAgentTool = (
-  tool: string,
-  message?: string | undefined
-) => {
+export const navigateToAgentTool = (tool: string, message?: string | undefined) => {
   const options: NavigateToAgentOptions = {
     tool,
   };
