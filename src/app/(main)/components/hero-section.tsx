@@ -1,9 +1,18 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import RichInput from "../../../components/elements/rich-input";
 import { H1, H2 } from "../../../components/elements/typography";
 import { Badge } from "../../../components/ui/badge";
 import { NAVIGATION_FEATURES } from "../../../data/home.data";
 
 export default function HeroSection() {
+  const router = useRouter();
+
+  const handleSubmit = () => {
+    router.push("/agent");
+  };
+
   return (
     <section className="flex min-h-[90vh] items-center justify-center" aria-labelledby="hero-heading">
       {/* Background decorations */}
@@ -51,7 +60,7 @@ export default function HeroSection() {
 
         {/* Search input */}
         <div className="mt-4 w-full" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="200">
-          <RichInput />
+          <RichInput onSubmit={handleSubmit} />
         </div>
 
         {/* Feature badges */}
