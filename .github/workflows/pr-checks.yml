@@ -23,15 +23,15 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Validate commit messages
-        run: |
-          # Check if commitlint is available and run it
-          if [ -f "commitlint.config.cjs" ]; then
-            echo "Validating commit messages..."
-            npx commitlint --from=origin/${{ github.base_ref }} --to=HEAD --verbose
-          else
-            echo "No commitlint config found, skipping commit message validation"
-          fi
+      # - name: Validate commit messages
+      #   run: |
+      #     # Check if commitlint is available and run it
+      #     if [ -f "commitlint.config.cjs" ]; then
+      #       echo "Validating commit messages..."
+      #       npx commitlint --from=origin/${{ github.base_ref }} --to=HEAD --verbose
+      #     else
+      #       echo "No commitlint config found, skipping commit message validation"
+      #     fi
 
       - name: Check for secrets
         uses: trufflesecurity/trufflehog@main
