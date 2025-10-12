@@ -1,10 +1,6 @@
 import { apiClient } from "@/lib/api-client";
 import { API_CONFIG } from "@/lib/config";
-import type {
-  AuthResponse,
-  AuthSuccessResponse,
-  LoginFormData,
-} from "@/schema/auth";
+import type { AuthResponse, AuthSuccessResponse, LoginFormData } from "@/schema/auth";
 
 export class AuthError extends Error {
   constructor(
@@ -20,9 +16,7 @@ export class AuthError extends Error {
 /**
  * Sign in user with email and password
  */
-export async function signIn(
-  credentials: LoginFormData
-): Promise<AuthSuccessResponse["data"]> {
+export async function signIn(credentials: LoginFormData): Promise<AuthSuccessResponse["data"]> {
   try {
     const response = await apiClient.post<AuthResponse>(
       API_CONFIG.ENDPOINTS.AUTH.SIGNIN,
@@ -36,24 +30,25 @@ export async function signIn(
     }
 
     return data.data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Handle different types of errors
     if (error instanceof AuthError) {
       throw error;
     }
 
-    // Network or other errors
-    if (error.response) {
-      const responseData = error.response.data;
+    // Type guard for axios errors
+    if (error && typeof error === "object" && "response" in error) {
+      const axiosError = error as { response: { data: any; status: number } };
+      const responseData = axiosError.response.data;
       throw new AuthError(
         responseData?.message || "Authentication failed",
-        error.response.status,
+        axiosError.response.status,
         responseData?.errors
       );
     }
 
     // Network errors
-    if (error.request) {
+    if (error && typeof error === "object" && "request" in error) {
       throw new AuthError("Network error. Please check your connection.");
     }
 
@@ -77,14 +72,11 @@ export async function signOut(): Promise<void> {
 /**
  * Refresh access token (for future implementation)
  */
-export async function refreshToken(
-  refreshToken: string
-): Promise<AuthSuccessResponse["data"]> {
+export async function refreshToken(refreshToken: string): Promise<AuthSuccessResponse["data"]> {
   try {
-    const response = await apiClient.post<AuthResponse>(
-      API_CONFIG.ENDPOINTS.AUTH.REFRESH,
-      { refresh_token: refreshToken }
-    );
+    const response = await apiClient.post<AuthResponse>(API_CONFIG.ENDPOINTS.AUTH.REFRESH, {
+      refresh_token: refreshToken,
+    });
 
     const data = response.data;
 
@@ -93,7 +85,7 @@ export async function refreshToken(
     }
 
     return data.data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error instanceof AuthError) {
       throw error;
     }

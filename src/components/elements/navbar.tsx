@@ -1,5 +1,10 @@
 "use client";
 
+import { LogOut, Menu, User } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,17 +21,9 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import {
-  Sheet,
-  SheetContent,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/use-auth";
-import { LogOut, Menu, User } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useAuthStatus } from "@/hooks/use-auth-status";
 import { cn } from "../../lib/utils";
 import { Typography } from "./typography";
 
@@ -36,8 +33,7 @@ const ListItem = ({ href, title }: { href: string; title: string }) => {
       <NavigationMenuLink asChild>
         <Link
           href={href}
-          className="block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-        >
+          className="block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
           <Typography level={"body"}>{title}</Typography>
         </Link>
       </NavigationMenuLink>
@@ -88,7 +84,9 @@ const NAV_ITEMS: NavItemType[] = [
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated } = useAuthStatus();
+  const { logout } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -101,7 +99,10 @@ export function Navbar() {
   }, []);
 
   const handleLogout = async () => {
-    await logout();
+    await logout(() => {
+      // Redirect to login page after successful logout
+      router.push("/login");
+    });
   };
 
   return (
@@ -110,20 +111,12 @@ export function Navbar() {
       className={cn(
         "bg-rgba(245, 245, 245, 0.5) fixed top-4 left-1/2 z-50 w-[90vw] -translate-x-1/2 transform rounded-xl px-1 py-2 shadow-lg backdrop-blur-md transition-all duration-300 sm:top-5 sm:px-2 md:px-3 lg:px-4 xl:px-5",
         isScrolled && "bg-white/70 shadow-lg backdrop-blur-md"
-      )}
-    >
+      )}>
       <NavigationMenuList className="flex w-full items-center justify-between gap-2 sm:gap-4 md:gap-6 lg:gap-8">
         {/* Logo */}
         <NavigationMenuItem className="flex-shrink-0">
           <NavigationMenuLink href="/">
-            <Image
-              src={"/legali.png"}
-              alt="Logo"
-              width={60}
-              height={40}
-              className="h-7 w-auto"
-              priority
-            />
+            <Image src={"/legali.png"} alt="Logo" width={60} height={40} className="h-7 w-auto" priority />
           </NavigationMenuLink>
         </NavigationMenuItem>
 
@@ -135,37 +128,22 @@ export function Navbar() {
               {item.subItems && item.subItems.length > 0 ? (
                 <>
                   <NavigationMenuTrigger className="peer bg-transparent px-2 py-1 hover:bg-transparent">
-                    <Typography
-                      weight="medium"
-                      level="body"
-                      className="text-slate-gray-400 peer-hover:text-black"
-                    >
+                    <Typography weight="medium" level="body" className="text-slate-gray-400 peer-hover:text-black">
                       {item.title}
                     </Typography>
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[200px] gap-2 sm:w-[250px] md:w-[300px]">
                       {item.subItems.map(subItem => (
-                        <ListItem
-                          key={subItem.title}
-                          href={subItem.href}
-                          title={subItem.title}
-                        ></ListItem>
+                        <ListItem key={subItem.title} href={subItem.href} title={subItem.title}></ListItem>
                       ))}
                     </ul>
                   </NavigationMenuContent>
                 </>
               ) : (
                 // Basic Routing
-                <NavigationMenuLink
-                  href={item.href}
-                  className="peer px-2 py-1 hover:bg-transparent"
-                >
-                  <Typography
-                    weight="medium"
-                    level="body"
-                    className="text-slate-gray-400"
-                  >
+                <NavigationMenuLink href={item.href} className="peer px-2 py-1 hover:bg-transparent">
+                  <Typography weight="medium" level="body" className="text-slate-gray-400">
                     {item.title}
                   </Typography>
                 </NavigationMenuLink>
@@ -184,23 +162,12 @@ export function Navbar() {
                 <span className="sr-only hidden">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="w-[300px] rounded-xl px-5 sm:w-[400px]"
-            >
-              <SheetTitle className="sr-only hidden">
-                Navigation Menu
-              </SheetTitle>
+            <SheetContent side="right" className="w-[300px] rounded-xl px-5 sm:w-[400px]">
+              <SheetTitle className="sr-only hidden">Navigation Menu</SheetTitle>
               <div className="mt-6 flex flex-col space-y-6">
                 {/* Logo in mobile menu */}
                 <div className="flex items-center space-x-2">
-                  <Image
-                    src={"/legali.png"}
-                    alt="Logo"
-                    width={40}
-                    height={30}
-                    className="h-8 w-auto"
-                  />
+                  <Image src={"/legali.png"} alt="Logo" width={40} height={30} className="h-8 w-auto" />
                 </div>
 
                 {/* Navigation Items */}
@@ -209,8 +176,7 @@ export function Navbar() {
                     <div key={item.title} className="space-y-2">
                       <Link
                         href={item.href}
-                        className="block py-2 font-medium text-slate-700 transition-colors hover:text-slate-900"
-                      >
+                        className="block py-2 font-medium text-slate-700 transition-colors hover:text-slate-900">
                         {item.title}
                       </Link>
                       {/* Sub items */}
@@ -220,8 +186,7 @@ export function Navbar() {
                             <Link
                               key={subItem.title}
                               href={subItem.href}
-                              className="block py-1 text-slate-600 transition-colors hover:text-slate-800"
-                            >
+                              className="block py-1 text-slate-600 transition-colors hover:text-slate-800">
                               {subItem.title}
                             </Link>
                           ))}
@@ -237,17 +202,16 @@ export function Navbar() {
                     <>
                       <Link
                         href="/profile"
-                        className="flex items-center space-x-2 py-2 text-slate-700 hover:text-slate-900"
-                      >
+                        className="flex items-center space-x-2 py-2 text-slate-700 hover:text-slate-900">
                         <User className="h-4 w-4" />
                         <Typography weight="medium" level="body">
                           Profile
                         </Typography>
                       </Link>
                       <button
+                        type="button"
                         onClick={handleLogout}
-                        className="flex w-full items-center space-x-2 py-2 text-slate-700 hover:text-slate-900"
-                      >
+                        className="flex w-full items-center space-x-2 py-2 text-slate-700 hover:text-slate-900">
                         <LogOut className="h-4 w-4" />
                         <Typography weight="medium" level="body">
                           Log Out
@@ -257,11 +221,7 @@ export function Navbar() {
                   ) : (
                     <Button className="w-full rounded-xl bg-deep-navy-400 hover:bg-deep-navy-500">
                       <Link href="/login" className="w-full">
-                        <Typography
-                          weight="medium"
-                          level="body"
-                          className="text-white"
-                        >
+                        <Typography weight="medium" level="body" className="text-white">
                           Log In
                         </Typography>
                       </Link>
@@ -278,10 +238,7 @@ export function Navbar() {
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="rounded-xl px-3 py-1.5 sm:px-4 sm:py-2"
-                >
+                <Button variant="ghost" className="rounded-xl px-3 py-1.5 sm:px-4 sm:py-2">
                   <User className="mr-2 h-4 w-4" />
                   <Typography weight="medium" level="body">
                     Account
@@ -296,10 +253,7 @@ export function Navbar() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={handleLogout}
-                  className="text-red-600"
-                >
+                <DropdownMenuItem onClick={handleLogout} className="text-red-600">
                   <LogOut className="mr-2 h-4 w-4" />
                   Log Out
                 </DropdownMenuItem>

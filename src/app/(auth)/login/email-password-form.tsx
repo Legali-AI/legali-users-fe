@@ -1,29 +1,21 @@
 "use client";
 
-import TermsConditionsPopup from "@/components/auth/terms-condition-popup";
-import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useAuthErrorHandler, useSignIn } from "@/hooks/use-signin";
-import { type LoginFormData, loginSchema } from "@/schema/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import TermsConditionsPopup from "@/components/auth/terms-condition-popup";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useAuthErrorHandler, useSignIn } from "@/hooks/use-signin";
+import { type LoginFormData, loginSchema } from "@/schema/auth";
 
 export default function EmailPasswordForm() {
   const [error, setError] = useState<string | null>(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showTermsPopup, setShowTermsPopup] = useState(false);
-  const [pendingFormData, setPendingFormData] = useState<LoginFormData | null>(
-    null
-  );
+  const [pendingFormData, setPendingFormData] = useState<LoginFormData | null>(null);
 
   const formatError = useAuthErrorHandler();
   const signInMutation = useSignIn({
@@ -138,8 +130,7 @@ export default function EmailPasswordForm() {
               type="button"
               onClick={handleForgotPassword}
               className="cursor-pointer text-sm text-sky-900 hover:text-sky-800"
-              disabled={isLoading}
-            >
+              disabled={isLoading}>
               Forgot your password?
             </button>
           </div>
@@ -148,8 +139,7 @@ export default function EmailPasswordForm() {
             variant="black"
             type="submit"
             className="h-12 w-full rounded-xl font-semibold text-white"
-            disabled={isLoading}
-          >
+            disabled={isLoading}>
             {isLoading ? "Signing In..." : "Sign In"}
           </Button>
         </form>

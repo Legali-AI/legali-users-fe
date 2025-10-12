@@ -81,6 +81,7 @@ export function FileUploadProgress({ files, onRemoveFile }: FileUploadProgressPr
 
             {onRemoveFile && (
               <button
+                type="button"
                 onClick={() => onRemoveFile(uploadFile.id)}
                 className="text-slate-gray-400 transition-colors hover:text-slate-gray-600">
                 <X className="size-5" />

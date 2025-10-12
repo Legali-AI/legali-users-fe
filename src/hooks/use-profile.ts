@@ -1,10 +1,10 @@
 "use client";
 
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { HARDCODED_USERS } from "@/data/auth.data";
 import type { User } from "@/lib/auth";
 import { getAccessToken } from "@/lib/auth";
 import { getProfileApiAuthProfileGet } from "@/sdk/sdk.gen";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Query key for profile
 export const PROFILE_QUERY_KEY = ["profile"] as const;
@@ -59,21 +59,19 @@ async function fetchProfile(): Promise<User | null> {
 }
 
 // Hook to get user profile
-export function useProfile() {
+export function useProfile(options?: { enabled?: boolean }) {
   const token = typeof window !== "undefined" ? getAccessToken() : null;
+  const shouldFetch = options?.enabled !== false; // Default to true unless explicitly disabled
 
   return useQuery({
     queryKey: PROFILE_QUERY_KEY,
     queryFn: fetchProfile,
-    enabled: !!token, // Only run if we have a token
+    enabled: !!token && shouldFetch, // Only run if we have a token AND it's enabled
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
     retry: (failureCount, error) => {
       // Don't retry if it's an auth error or no token
-      if (
-        !token ||
-        (error instanceof Error && error.message.includes("token"))
-      ) {
+      if (!token || (error instanceof Error && error.message.includes("token"))) {
         return false;
       }
       return failureCount < 2;

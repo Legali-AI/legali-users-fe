@@ -1,10 +1,10 @@
 "use client";
 
-import { setTokens } from "@/lib/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { setTokens } from "@/lib/auth";
 
-import { AuthError, signIn } from "@/services/auth.service";
+import { type AuthError, signIn } from "@/services/auth.service";
 
 interface UseSignInOptions {
   onSuccess?: () => void;

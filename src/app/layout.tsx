@@ -1,6 +1,6 @@
-import { QueryProvider } from "@/lib/query-client";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { QueryProvider } from "@/lib/query-client";
 import "./globals.css";
 
 const inter = Inter({
@@ -41,9 +41,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL || "https://legali.com"
-  ),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://legali.com"),
   alternates: {
     canonical: "/",
   },
@@ -94,8 +92,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${inter.variable} ${inter.className} overflow-x-hidden overflow-y-auto bg-sky-blue-100 antialiased`}
-        suppressHydrationWarning={true}
-      >
+        suppressHydrationWarning={true}>
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
