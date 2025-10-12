@@ -16,11 +16,11 @@ export interface User {
   city_id?: number | null;
 }
 
-// Simple cookie functions
+// Token management functions
 export function setAccessToken(token: string): void {
   Cookies.set(COOKIE_KEYS.ACCESS_TOKEN, token, {
     expires: 7,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
   });
 }
@@ -32,13 +32,19 @@ export function getAccessToken(): string | undefined {
 export function setRefreshToken(token: string): void {
   Cookies.set(COOKIE_KEYS.REFRESH_TOKEN, token, {
     expires: 30,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
   });
 }
 
 export function getRefreshToken(): string | undefined {
   return Cookies.get(COOKIE_KEYS.REFRESH_TOKEN);
+}
+
+// Utility function to set both tokens at once
+export function setTokens(accessToken: string, refreshToken: string): void {
+  setAccessToken(accessToken);
+  setRefreshToken(refreshToken);
 }
 
 // Note: Profile management is now handled by react-query hooks
