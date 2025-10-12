@@ -48,11 +48,74 @@ export function useChat({
 
   const sendMessageMutation = useSendMessage();
 
+  // localStorage helper functions for selectedTool persistence
+  const getStoredSelectedTool = (chatId: string): string | null => {
+    try {
+      const key = `selectedTool_${chatId}`;
+      return localStorage.getItem(key);
+    } catch (error) {
+      console.warn("Failed to get stored selected tool:", error);
+      return null;
+    }
+  };
+
+  const storeSelectedTool = (chatId: string, toolId: string | null) => {
+    try {
+      const key = `selectedTool_${chatId}`;
+      if (toolId) {
+        localStorage.setItem(key, toolId);
+        console.log("💾 Stored selected tool for chat:", chatId, "->", toolId);
+      } else {
+        localStorage.removeItem(key);
+        console.log("🗑️ Removed stored selected tool for chat:", chatId);
+      }
+    } catch (error) {
+      console.warn("Failed to store selected tool:", error);
+    }
+  };
+
+  const cleanupOldStoredTools = () => {
+    try {
+      const keys = Object.keys(localStorage).filter(key =>
+        key.startsWith("selectedTool_")
+      );
+
+      // Keep only the last 50 stored tools to prevent localStorage bloat
+      if (keys.length > 50) {
+        const keysToRemove = keys.slice(0, keys.length - 50);
+        keysToRemove.forEach(key => {
+          localStorage.removeItem(key);
+        });
+        console.log("🧹 Cleaned up", keysToRemove.length, "old stored tools");
+      }
+    } catch (error) {
+      console.warn("Failed to cleanup old stored tools:", error);
+    }
+  };
+
   console.log("💾 Initializing conversation:", {
     fromURL: initialConversationId,
     hasInitialMessage: !!initialMessage,
     final: conversationId,
+    currentSelectedTool: selectedTool,
   });
+
+  // Cleanup old stored tools on initialization
+  useEffect(() => {
+    cleanupOldStoredTools();
+
+    // Debug: Show currently stored tools
+    const storedTools = Object.keys(localStorage)
+      .filter(key => key.startsWith("selectedTool_"))
+      .map(key => ({
+        chatId: key.replace("selectedTool_", ""),
+        tool: localStorage.getItem(key),
+      }));
+
+    if (storedTools.length > 0) {
+      console.log("📋 Currently stored tools:", storedTools);
+    }
+  }, []); // Run once on mount
 
   // Initialize messages - either from query or welcome message
   useEffect(() => {
@@ -74,31 +137,61 @@ export function useChat({
     }
   }, [conversationId, initialConversationId, queryMessages, messages.length]);
 
-  // Handle initial message from main page (Option B: Show welcome briefly, then send)
+  // Load stored selectedTool when conversationId changes (for existing chats)
+  useEffect(() => {
+    if (conversationId && !toolParam) {
+      // Only load from storage if not coming from URL parameter
+      const storedTool = getStoredSelectedTool(conversationId);
+      if (storedTool && storedTool !== selectedTool) {
+        console.log(
+          "📥 Loading stored selected tool for chat:",
+          conversationId,
+          "->",
+          storedTool
+        );
+        setSelectedTool(storedTool);
+      }
+    }
+  }, [conversationId, toolParam, selectedTool]);
+
+  // Direct initial message handler - simplified approach
+  useEffect(() => {
+    if (
+      initialMessage &&
+      !conversationId &&
+      !hasProcessedInitialMessage.current
+    ) {
+      console.log(
+        "🎯 Direct initial message handler triggered:",
+        initialMessage
+      );
+      hasProcessedInitialMessage.current = true;
+
+      // Send immediately - no complex conditions
+      handleSendMessage(initialMessage);
+    }
+  }, [initialMessage, conversationId]); // Run when these change
+
+  // Fallback: Send initial message after a longer delay if not processed yet
   useEffect(() => {
     if (
       initialMessage &&
       !hasProcessedInitialMessage.current &&
-      !conversationId && // Only for new chats
-      messages.length > 0 && // After welcome message is shown
-      !isLoading &&
-      !isTyping
+      !conversationId
     ) {
-      hasProcessedInitialMessage.current = true;
+      console.log("⏰ Setting up fallback timer for initial message");
+      const fallbackTimer = setTimeout(() => {
+        if (!hasProcessedInitialMessage.current) {
+          console.log("⚡ Fallback: Sending initial message after delay");
+          hasProcessedInitialMessage.current = true;
+          handleSendMessage(initialMessage);
+        }
+      }, 2000); // 2 second fallback
 
-      // Brief delay to show welcome message (200ms as discussed)
-      const timer = setTimeout(() => {
-        console.log(
-          "🚀 Sending initial message from main page:",
-          initialMessage
-        );
-        handleSendMessage(initialMessage);
-      }, 200);
-
-      return () => clearTimeout(timer);
+      return () => clearTimeout(fallbackTimer);
     }
     return undefined;
-  }, [initialMessage, conversationId, messages.length, isLoading, isTyping]);
+  }, [initialMessage, conversationId]);
 
   // Update messages when React Query data changes
   useEffect(() => {
@@ -152,6 +245,11 @@ export function useChat({
       if (!conversationId && result.data?.conversation_id) {
         setConversationId(result.data.conversation_id);
 
+        // Store selected tool for new conversation
+        if (selectedTool) {
+          storeSelectedTool(result.data.conversation_id, selectedTool);
+        }
+
         // Update URL with new chat_id
         const currentUrl = new URL(window.location.href);
         currentUrl.searchParams.set("chat_id", result.data.conversation_id);
@@ -163,6 +261,9 @@ export function useChat({
 
         router.replace(currentUrl.pathname + currentUrl.search);
       }
+
+      // Create shared timestamp for AI message and recommendations
+      const responseTimestamp = new Date();
 
       // Replace temporary user message with real data and add AI response
       setMessages(prevMessages => {
@@ -181,12 +282,12 @@ export function useChat({
           conversation_id: result.data?.conversation_id,
         };
 
-        // Create AI response message
+        // Create AI response message with shared timestamp for recommendations
         const aiMessage: Message = {
           id: `ai-${Date.now()}`,
           content: result.data?.output || "",
           isUser: false,
-          timestamp: new Date(),
+          timestamp: responseTimestamp,
           conversation_id: result.data?.conversation_id,
         };
 
@@ -195,6 +296,7 @@ export function useChat({
 
       // Handle workflow recommendations - filter by supported action types
       if (result.data?.workflow_recommendations) {
+        // Use the same timestamp as the AI message to ensure proper chronological ordering
         const supportedRecommendations =
           result.data.workflow_recommendations.filter(
             (rec: WorkflowRecommendation) => {
@@ -212,16 +314,21 @@ export function useChat({
             }
           );
 
-        const uniqueRecommendations = supportedRecommendations.filter(
-          (
-            rec: WorkflowRecommendation,
-            index: number,
-            self: WorkflowRecommendation[]
-          ) =>
-            self.findIndex(
-              r => r.title === rec.title && r.action_type === rec.action_type
-            ) === index
-        );
+        const uniqueRecommendations = supportedRecommendations
+          .filter(
+            (
+              rec: WorkflowRecommendation,
+              index: number,
+              self: WorkflowRecommendation[]
+            ) =>
+              self.findIndex(
+                r => r.title === rec.title && r.action_type === rec.action_type
+              ) === index
+          )
+          .map((rec: WorkflowRecommendation) => ({
+            ...rec,
+            timestamp: responseTimestamp,
+          }));
 
         console.log(
           "✅ Showing supported recommendations:",
@@ -285,10 +392,20 @@ export function useChat({
 
   const selectTool = (toolId: string) => {
     setSelectedTool(toolId);
+
+    // Store in localStorage if we have a conversationId
+    if (conversationId) {
+      storeSelectedTool(conversationId, toolId);
+    }
   };
 
   const clearSelectedTool = () => {
     setSelectedTool(null);
+
+    // Remove from localStorage if we have a conversationId
+    if (conversationId) {
+      storeSelectedTool(conversationId, null);
+    }
   };
 
   return {

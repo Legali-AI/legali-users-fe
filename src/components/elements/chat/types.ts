@@ -38,6 +38,7 @@ export interface WorkflowRecommendation {
   };
   confidence_score: number;
   frontend_route: string;
+  timestamp?: Date;
   frontend_params: Record<string, any>;
   button_text: string;
   icon: string;

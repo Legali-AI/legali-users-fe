@@ -5,6 +5,10 @@ import { ChatHistorySidebar } from "@/components/elements/chat/chat-history-side
 import { ChatInput } from "@/components/elements/chat/chat-input";
 import { ChatMessage } from "@/components/elements/chat/chat-message";
 import { AVAILABLE_TOOLS } from "@/components/elements/chat/tool-suggestion";
+import {
+  Message,
+  WorkflowRecommendation,
+} from "@/components/elements/chat/types";
 import { TypingIndicator } from "@/components/elements/chat/typing-indicator";
 import { WorkflowRecommendations } from "@/components/elements/chat/workflow-recommendations";
 import { H1 } from "@/components/elements/typography";
@@ -22,6 +26,14 @@ export function AgentChatContent() {
   const toolParam = searchParams.get("tools");
   const chatId = searchParams.get("chat_id") || undefined;
   const initialMessage = searchParams.get("message") || undefined;
+
+  // Debug initial message
+  console.log("🔍 Agent page - URL params:", {
+    toolParam,
+    chatId,
+    initialMessage,
+    searchParams: searchParams.toString(),
+  });
 
   // Sidebar state
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -143,11 +155,6 @@ export function AgentChatContent() {
                       : AVAILABLE_TOOLS.find(t => t.id === currentMode)?.name ||
                         "AI Legal Assistant"}
                 </H1>
-                {/* Debug info */}
-                <div className="text-xs text-gray-400">
-                  Debug: selectedTool="{selectedTool}", currentMode="
-                  {currentMode}"
-                </div>
                 {(selectedTool || currentMode !== "general") && (
                   <button
                     onClick={() => {
@@ -210,45 +217,77 @@ export function AgentChatContent() {
               </div>
             </div>
           ) : (
-            messages.map(message => (
-              <ChatMessage key={message.id} message={message} />
-            ))
-          )}
+            (() => {
+              // Create unified timeline of messages and recommendations
+              const timeline: Array<{
+                timestamp: Date;
+                content: 
+                  | { type: "message"; data: Message }
+                  | { type: "recommendations"; data: WorkflowRecommendation[] };
+              }> = [];
 
-          {/* Workflow Recommendations */}
-          {workflowRecommendations.length > 0 && (
-            <div className="flex items-start gap-3">
-              <AgentAvatar size="sm" />
-              <div className="flex-1">
-                <WorkflowRecommendations
-                  recommendations={workflowRecommendations}
-                  disableNavigation={true}
-                  onRecommendationClick={recommendation => {
-                    console.log(
-                      "Workflow recommendation clicked:",
-                      recommendation
-                    );
-                    console.log("Action type:", recommendation.action_type);
+              // Add all messages to timeline
+              messages.forEach(message => {
+                timeline.push({
+                  timestamp: message.timestamp,
+                  content: { type: "message", data: message }
+                });
+              });
 
-                    // Use the new mapping function to get tool ID from action_type
-                    const toolId = chatService.getToolIdFromActionType(
-                      recommendation.action_type
-                    );
-                    console.log("Mapped tool ID:", toolId);
-
-                    if (toolId) {
-                      console.log("Selecting tool:", toolId);
-                      selectTool(toolId);
-                    } else {
-                      console.warn(
-                        "No valid tool ID found for action_type:",
-                        recommendation.action_type
-                      );
+              // Add workflow recommendations to timeline (if any)
+              if (workflowRecommendations.length > 0) {
+                const recTimestamp = workflowRecommendations[0]?.timestamp;
+                if (recTimestamp) {
+                  timeline.push({
+                    timestamp: recTimestamp,
+                    content: {
+                      type: "recommendations",
+                      data: workflowRecommendations,
                     }
-                  }}
-                />
-              </div>
-            </div>
+                  });
+                }
+              }
+
+              // Sort timeline by timestamp
+              timeline.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+
+              return timeline.map((item, index) => {
+                if (item.content.type === "message") {
+                  return <ChatMessage key={item.content.data.id} message={item.content.data} />;
+                } else {
+                  return (
+                    <div key={`recommendations-${index}`} className="space-y-4">
+                      <div className="flex items-start gap-3">
+                        <AgentAvatar size="sm" />
+                        <WorkflowRecommendations
+                          recommendations={item.content.data}
+                          selectedTool={selectedTool}
+                          disableNavigation={true}
+                          onRecommendationClick={(
+                            recommendation: WorkflowRecommendation
+                          ) => {
+                            const toolId = chatService.getToolIdFromActionType(
+                              recommendation.action_type
+                            );
+                            console.log("Mapped tool ID:", toolId);
+
+                            if (toolId) {
+                              console.log("Selecting tool:", toolId);
+                              selectTool(toolId);
+                            } else {
+                              console.warn(
+                                "No valid tool ID found for action_type:",
+                                recommendation.action_type
+                              );
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                  );
+                }
+              });
+            })()
           )}
 
           {/* Error Message */}
