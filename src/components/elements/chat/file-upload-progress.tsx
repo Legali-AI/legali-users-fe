@@ -1,8 +1,8 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { CheckCircle, FileText, Upload, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 export interface UploadingFile {
   file: File;
@@ -16,10 +16,7 @@ interface FileUploadProgressProps {
   onRemoveFile?: (fileId: string) => void;
 }
 
-export function FileUploadProgress({
-  files,
-  onRemoveFile,
-}: FileUploadProgressProps) {
+export function FileUploadProgress({ files, onRemoveFile }: FileUploadProgressProps) {
   const [displayFiles, setDisplayFiles] = useState<UploadingFile[]>(files);
 
   useEffect(() => {
@@ -57,8 +54,7 @@ export function FileUploadProgress({
       {displayFiles.map(uploadFile => (
         <div
           key={uploadFile.id}
-          className="relative overflow-hidden rounded-2xl border border-sky-blue-200 bg-white p-4 shadow-sm"
-        >
+          className="relative overflow-hidden rounded-2xl border border-sky-blue-200 bg-white p-4 shadow-sm">
           {/* Header */}
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -86,8 +82,7 @@ export function FileUploadProgress({
             {onRemoveFile && (
               <button
                 onClick={() => onRemoveFile(uploadFile.id)}
-                className="text-slate-gray-400 transition-colors hover:text-slate-gray-600"
-              >
+                className="text-slate-gray-400 transition-colors hover:text-slate-gray-600">
                 <X className="size-5" />
               </button>
             )}
@@ -101,8 +96,7 @@ export function FileUploadProgress({
                 uploadFile.status === "completed"
                   ? "border-green-200 bg-green-50"
                   : "bg-sky-blue-50 border-sky-blue-200"
-              )}
-            >
+              )}>
               {uploadFile.status === "completed" ? (
                 <CheckCircle className="size-6 text-green-500" />
               ) : (
@@ -112,20 +106,14 @@ export function FileUploadProgress({
 
             <div className="flex-1">
               <div className="flex items-center justify-between">
-                <span className="font-medium text-slate-gray-800">
-                  {uploadFile.file.name}
-                </span>
+                <span className="font-medium text-slate-gray-800">{uploadFile.file.name}</span>
                 <span
                   className={cn(
                     "text-sm font-medium",
-                    uploadFile.status === "completed"
-                      ? "text-green-600"
-                      : "text-sky-blue-600"
-                  )}
-                >
+                    uploadFile.status === "completed" ? "text-green-600" : "text-sky-blue-600"
+                  )}>
                   {uploadFile.status === "completed" && "✓ Uploaded"}
-                  {uploadFile.status === "uploading" &&
-                    `${uploadFile.progress}%`}
+                  {uploadFile.status === "uploading" && `${uploadFile.progress}%`}
                   {uploadFile.status === "error" && "Failed"}
                 </span>
               </div>
