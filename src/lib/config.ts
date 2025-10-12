@@ -25,7 +25,7 @@ export const API_CONFIG = {
     CLIENTS: "/clients",
     CLIENT_BY_ID: (id: string) => `/clients/${id}`,
   },
-  TIMEOUT: 10000,
+  TIMEOUT: 120000, // 2 minutes timeout for chat API calls
 };
 
 export const APP_CONFIG = {
