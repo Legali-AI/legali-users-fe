@@ -27,7 +27,6 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   clearAuth,
-  getAccessToken,
   getRefreshToken,
   isAuthenticated,
   setAccessToken,
@@ -46,16 +45,16 @@ export function useAuth() {
     setMounted(true);
   }, []);
 
-  // Debug logging
-  useEffect(() => {
-    if (mounted) {
-      console.log("Auth Debug:", {
-        authenticated,
-        hasToken: !!getAccessToken(),
-        tokenValue: getAccessToken()?.substring(0, 20) + "...",
-      });
-    }
-  }, [mounted, authenticated]);
+  // // Debug logging
+  // useEffect(() => {
+  //   if (mounted) {
+  //     console.log("Auth Debug:", {
+  //       authenticated,
+  //       hasToken: !!getAccessToken(),
+  //       tokenValue: `${getAccessToken()?.substring(0, 20)}...`,
+  //     });
+  //   }
+  // }, [mounted, authenticated]);
 
   // Basic auth doesn't need loading state from profile
   const isLoading = false;
@@ -98,15 +97,17 @@ export function useAuth() {
   const logout = useCallback(
     async (onSuccess?: () => void) => {
       try {
-        // Note: Logout API not implemented yet
-        // const { signOut } = require("@/services/auth.service");
-        // await signOut();
+        // await signOutService();
+
+        // Clear all authentication data
+        clearAuth();
+        clearProfile();
       } catch (error) {
         console.error("Logout API call failed:", error);
       } finally {
         // Clear all authentication data
-        clearAuth();
-        clearProfile();
+        // clearAuth();
+        // clearProfile();
 
         // Execute success callback (e.g., navigation)
         if (onSuccess) {
