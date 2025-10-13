@@ -1,7 +1,10 @@
+import type {
+  Message,
+  WorkflowRecommendation,
+} from "@/components/elements/chat/types";
+import { chatService } from "@/services/chat.service";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import type { Message, WorkflowRecommendation } from "@/components/elements/chat/types";
-import { chatService } from "@/services/chat.service";
 import { useChatMessages, useSendMessage } from "./use-chat-queries";
 
 export interface UseChatOptions {
@@ -18,18 +21,23 @@ export function useChat({
   const router = useRouter();
 
   // State
-  const [conversationId, setConversationId] = useState<string | undefined>(initialConversationId);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [workflowRecommendations, setWorkflowRecommendations] = useState<WorkflowRecommendation[]>(
-    []
+  const [conversationId, setConversationId] = useState<string | undefined>(
+    initialConversationId
   );
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [workflowRecommendations, setWorkflowRecommendations] = useState<
+    WorkflowRecommendation[]
+  >([]);
   const [error, setError] = useState<string | null>(null);
   const [isTyping, setIsTyping] = useState(false);
-  const [selectedTool, setSelectedTool] = useState<string | null>(toolParam || null);
+  const [selectedTool, setSelectedTool] = useState<string | null>(
+    toolParam || null
+  );
 
   // Refs
   const abortControllerRef = useRef<AbortController | null>(null);
   const hasProcessedInitialMessage = useRef(false);
+  const hasInitializedFromQuery = useRef(false);
 
   // React Query hooks
   const {
@@ -69,7 +77,9 @@ export function useChat({
 
   const cleanupOldStoredTools = () => {
     try {
-      const keys = Object.keys(localStorage).filter(key => key.startsWith("selectedTool_"));
+      const keys = Object.keys(localStorage).filter(key =>
+        key.startsWith("selectedTool_")
+      );
 
       // Keep only the last 50 stored tools to prevent localStorage bloat
       if (keys.length > 50) {
@@ -110,8 +120,8 @@ export function useChat({
 
   // Initialize messages - either from query or welcome message
   useEffect(() => {
-    if (conversationId && initialConversationId) {
-      // For existing conversations, use messages from React Query
+    if (conversationId && initialConversationId && queryMessages.length > 0) {
+      // For existing conversations, use messages from React Query (only once)
       setMessages(queryMessages);
     } else if (!conversationId && messages.length === 0) {
       // For new chats, show welcome message
@@ -126,7 +136,7 @@ export function useChat({
       ];
       setMessages(welcomeMessages);
     }
-  }, [conversationId, initialConversationId, queryMessages, messages.length]);
+  }, [conversationId, initialConversationId]); // Removed queryMessages and messages.length to prevent infinite loop
 
   // Load stored selectedTool when conversationId changes (for existing chats)
   useEffect(() => {
@@ -134,7 +144,12 @@ export function useChat({
       // Only load from storage if not coming from URL parameter
       const storedTool = getStoredSelectedTool(conversationId);
       if (storedTool && storedTool !== selectedTool) {
-        console.log("📥 Loading stored selected tool for chat:", conversationId, "->", storedTool);
+        console.log(
+          "📥 Loading stored selected tool for chat:",
+          conversationId,
+          "->",
+          storedTool
+        );
         setSelectedTool(storedTool);
       }
     }
@@ -142,8 +157,15 @@ export function useChat({
 
   // Direct initial message handler - simplified approach
   useEffect(() => {
-    if (initialMessage && !conversationId && !hasProcessedInitialMessage.current) {
-      console.log("🎯 Direct initial message handler triggered:", initialMessage);
+    if (
+      initialMessage &&
+      !conversationId &&
+      !hasProcessedInitialMessage.current
+    ) {
+      console.log(
+        "🎯 Direct initial message handler triggered:",
+        initialMessage
+      );
       hasProcessedInitialMessage.current = true;
 
       // Send immediately - no complex conditions
@@ -153,7 +175,11 @@ export function useChat({
 
   // Fallback: Send initial message after a longer delay if not processed yet
   useEffect(() => {
-    if (initialMessage && !hasProcessedInitialMessage.current && !conversationId) {
+    if (
+      initialMessage &&
+      !hasProcessedInitialMessage.current &&
+      !conversationId
+    ) {
       console.log("⏰ Setting up fallback timer for initial message");
       const fallbackTimer = setTimeout(() => {
         if (!hasProcessedInitialMessage.current) {
@@ -168,10 +194,16 @@ export function useChat({
     return undefined;
   }, [initialMessage, conversationId]);
 
-  // Update messages when React Query data changes
+  // Update messages when React Query data changes - but only for initial load
   useEffect(() => {
-    if (conversationId && queryMessages.length > 0) {
+    if (
+      conversationId &&
+      queryMessages.length > 0 &&
+      !hasInitializedFromQuery.current
+    ) {
+      console.log("📥 Initial load from React Query");
       setMessages(queryMessages);
+      hasInitializedFromQuery.current = true;
     }
   }, [conversationId, queryMessages]);
 
@@ -243,7 +275,9 @@ export function useChat({
       // Replace temporary user message with real data and add AI response
       setMessages(prevMessages => {
         // Remove the temporary user message
-        const messagesWithoutTemp = prevMessages.filter(msg => msg.id !== userMessage.id);
+        const messagesWithoutTemp = prevMessages.filter(
+          msg => msg.id !== userMessage.id
+        );
 
         // Create real user message
         const realUserMessage: Message = {
@@ -256,53 +290,98 @@ export function useChat({
         };
 
         // Create AI response message with shared timestamp for recommendations
+        console.log("🔍 Full API Response:", JSON.stringify(result, null, 2));
+
+        // Determine report URL from multiple possible sources
+        const reportUrl = result.data?.report_file_path;
+
+        console.log("🔍 Raw reportUrl value:", {
+          reportUrl,
+          type: typeof reportUrl,
+          length: reportUrl?.length,
+        });
+
+        // Create AI message - ALWAYS include report_file_path if present in API response
         const aiMessage: Message = {
-          id: `ai-${Date.now()}`,
+          id: `aix-${Date.now()}`,
           content: result.data?.output || "",
           isUser: false,
           timestamp: responseTimestamp,
           conversation_id: result.data?.conversation_id,
+          // Force include report_file_path from API response regardless of type/validation
+          ...(reportUrl && {
+            report_file_path: reportUrl,
+          }),
         };
 
-        return [...messagesWithoutTemp, realUserMessage, aiMessage];
+        console.log(
+          "🔧 Created aiMessage object:",
+          JSON.stringify(aiMessage, null, 2)
+        );
+
+        const finalMessages = [
+          ...messagesWithoutTemp,
+          realUserMessage,
+          aiMessage,
+        ];
+
+        console.log(
+          "💬 Final messages array (showing last message):",
+          JSON.stringify(finalMessages[finalMessages.length - 1], null, 2)
+        );
+
+        return finalMessages;
       });
 
       // Handle workflow recommendations - filter by supported action types
       if (result.data?.workflow_recommendations) {
         // Use the same timestamp as the AI message to ensure proper chronological ordering
-        const supportedRecommendations = result.data.workflow_recommendations.filter(
-          (rec: WorkflowRecommendation) => {
-            const isSupported = chatService.isSupportedActionType(rec.action_type);
-            if (!isSupported) {
-              console.log(
-                "🚫 Filtering out unsupported recommendation:",
-                rec.action_type,
-                rec.title
+        const supportedRecommendations =
+          result.data.workflow_recommendations.filter(
+            (rec: WorkflowRecommendation) => {
+              const isSupported = chatService.isSupportedActionType(
+                rec.action_type
               );
+              // if (!isSupported) {
+              //   console.log(
+              //     "🚫 Filtering out unsupported recommendation:",
+              //     rec.action_type,
+              //     rec.title
+              //   );
+              // }
+              return isSupported;
             }
-            return isSupported;
-          }
-        );
+          );
 
         const uniqueRecommendations = supportedRecommendations
           .filter(
-            (rec: WorkflowRecommendation, index: number, self: WorkflowRecommendation[]) =>
-              self.findIndex(r => r.title === rec.title && r.action_type === rec.action_type) ===
-              index
+            (
+              rec: WorkflowRecommendation,
+              index: number,
+              self: WorkflowRecommendation[]
+            ) =>
+              self.findIndex(
+                r => r.title === rec.title && r.action_type === rec.action_type
+              ) === index
           )
           .map((rec: WorkflowRecommendation) => ({
             ...rec,
             timestamp: responseTimestamp,
           }));
 
-        console.log("✅ Showing supported recommendations:", uniqueRecommendations);
+        console.log(
+          "✅ Showing supported recommendations:",
+          uniqueRecommendations
+        );
         setWorkflowRecommendations(uniqueRecommendations);
       }
     } catch (err: any) {
       console.error("Failed to send message:", err);
 
       // Remove the temporary user message on error
-      setMessages(prevMessages => prevMessages.filter(msg => msg.id !== userMessage.id));
+      setMessages(prevMessages =>
+        prevMessages.filter(msg => msg.id !== userMessage.id)
+      );
 
       setError(err.message || "Failed to send message");
     } finally {
@@ -317,7 +396,10 @@ export function useChat({
       .find(msg => msg.isUser);
 
     if (lastUserMessage) {
-      await handleSendMessage(lastUserMessage.content, lastUserMessage.attachments);
+      await handleSendMessage(
+        lastUserMessage.content,
+        lastUserMessage.attachments
+      );
     }
   };
 
@@ -364,6 +446,8 @@ export function useChat({
       storeSelectedTool(conversationId, null);
     }
   };
+
+  console.log("messages in useChat:", messages);
 
   return {
     messages,

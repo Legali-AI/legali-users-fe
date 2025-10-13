@@ -6,6 +6,7 @@ export interface Message {
   attachments?: File[] | undefined;
   conversation_id?: string;
   role?: "user" | "assistant" | "system";
+  report_file_path?: string;
 }
 
 // API Response Types
@@ -81,6 +82,9 @@ export interface SendMessageResponse {
     next_suggested_action: WorkflowRecommendation;
     related_recommendations: Record<string, any>;
     active_agent: any;
+    report_file_path?: string;
+    s3_url?: string;
+    metadata?: Record<string, any>;
   };
   meta: Record<string, any>;
   error: any;

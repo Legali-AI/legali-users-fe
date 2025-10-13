@@ -1,7 +1,7 @@
 "use client";
 
-import { Paperclip } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Paperclip } from "lucide-react";
 import { Typography } from "../typography";
 import { AgentAvatar } from "./agent-avatar";
 import { AnalysisReportButton } from "./analysis-report-button";
@@ -55,12 +55,19 @@ function parseTextWithLinks(text: string, isUser: boolean) {
           rel="noopener noreferrer"
           className={cn(
             "inline-flex items-center gap-1 underline hover:no-underline",
-            isUser ? "text-sky-100 hover:text-white" : "text-blue-600 hover:text-blue-800"
+            isUser
+              ? "text-sky-100 hover:text-white"
+              : "text-blue-600 hover:text-blue-800"
           )}
           title={part.url} // Show full URL on hover
         >
           {part.text}
-          <svg className="h-3 w-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="h-3 w-3 opacity-70"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <title>External link</title>
             <path
               strokeLinecap="round"
@@ -82,7 +89,12 @@ interface ChatMessageProps {
 }
 
 export function ChatMessage({ message }: ChatMessageProps) {
-  const { content, isUser, timestamp, attachments } = message;
+  const { content, isUser, timestamp, attachments, report_file_path } = message;
+
+  // if (!isUser) {
+  //   console.log("🔍 ChatMessage: AI message received:", message);
+  //   console.log("🔍 ChatMessage: report_file_path value:", report_file_path);
+  // }
 
   // Special case for analysis report button
   if (content === "VIEW_FULL_ANALYSIS_REPORT" && !isUser) {
@@ -95,46 +107,80 @@ export function ChatMessage({ message }: ChatMessageProps) {
   }
 
   return (
-    <div className={cn("flex items-start gap-3", isUser ? "flex-row-reverse" : "flex-row")}>
-      {/* Avatar */}
-      {!isUser && <AgentAvatar size="sm" />}
-
-      {/* Message Content */}
+    <div className="space-y-4">
+      {/* Main Message */}
       <div
         className={cn(
-          "max-w-xs rounded-2xl px-4 py-3 shadow-sm sm:max-w-md lg:max-w-lg",
-          isUser ? "rounded-tr-md bg-sky-blue-400 text-white" : "rounded-tl-md border border-sky-blue-200 bg-white"
-        )}>
-        {/* Message Text */}
-        <Typography level="body" className={cn("leading-relaxed", isUser ? "text-white" : "text-slate-gray-800")}>
-          {parseTextWithLinks(content, isUser)}
-        </Typography>
-
-        {/* Attachments */}
-        {attachments && attachments.length > 0 && (
-          <div className="mt-3 space-y-2">
-            {attachments.map((file, index) => (
-              <div
-                key={index}
-                className={cn(
-                  "flex items-center gap-2 rounded-lg p-2 text-xs",
-                  isUser ? "bg-sky-blue-500/30 text-white" : "bg-sky-blue-50 text-slate-gray-700"
-                )}>
-                <Paperclip className="size-3" />
-                <span className="truncate">{file.name}</span>
-              </div>
-            ))}
-          </div>
+          "flex items-start gap-3",
+          isUser ? "flex-row-reverse" : "flex-row"
         )}
+      >
+        {/* Avatar */}
+        {!isUser && <AgentAvatar size="sm" />}
 
-        {/* Timestamp */}
-        <Typography level="caption" className={cn("mt-2 opacity-70", isUser ? "text-white" : "text-slate-gray-500")}>
-          {timestamp.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </Typography>
+        {/* Message Content */}
+        <div
+          className={cn(
+            "max-w-xs rounded-2xl px-4 py-3 shadow-sm sm:max-w-md lg:max-w-lg",
+            isUser
+              ? "rounded-tr-md bg-sky-blue-400 text-white"
+              : "rounded-tl-md border border-sky-blue-200 bg-white"
+          )}
+        >
+          {/* Message Text */}
+          <Typography
+            level="body"
+            className={cn(
+              "leading-relaxed",
+              isUser ? "text-white" : "text-slate-gray-800"
+            )}
+          >
+            {parseTextWithLinks(content, isUser)}
+          </Typography>
+
+          {/* Attachments */}
+          {attachments && attachments.length > 0 && (
+            <div className="mt-3 space-y-2">
+              {attachments.map((file, index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    "flex items-center gap-2 rounded-lg p-2 text-xs",
+                    isUser
+                      ? "bg-sky-blue-500/30 text-white"
+                      : "bg-sky-blue-50 text-slate-gray-700"
+                  )}
+                >
+                  <Paperclip className="size-3" />
+                  <span className="truncate">{file.name}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Timestamp */}
+          <Typography
+            level="caption"
+            className={cn(
+              "mt-2 opacity-70",
+              isUser ? "text-white" : "text-slate-gray-500"
+            )}
+          >
+            {timestamp.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </Typography>
+        </div>
       </div>
+
+      {/* Analysis Report Card - Show when report_file_path is present and message is from AI */}
+      {!isUser && report_file_path && (
+        <div className="flex items-start gap-3">
+          <AgentAvatar size="sm" />
+          <AnalysisReportButton reportUrl={report_file_path || ""} />
+        </div>
+      )}
     </div>
   );
 }

@@ -1,21 +1,24 @@
 "use client";
 
-import { AlertCircle, ArrowLeft, Menu, RefreshCw, User } from "lucide-react";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 import { AgentAvatar } from "@/components/elements/chat/agent-avatar";
 import { ChatHistorySidebar } from "@/components/elements/chat/chat-history-sidebar";
 import { ChatInput } from "@/components/elements/chat/chat-input";
 import { ChatMessage } from "@/components/elements/chat/chat-message";
 import { AVAILABLE_TOOLS } from "@/components/elements/chat/tool-suggestion";
-import type { Message, WorkflowRecommendation } from "@/components/elements/chat/types";
+import type {
+  Message,
+  WorkflowRecommendation,
+} from "@/components/elements/chat/types";
 import { TypingIndicator } from "@/components/elements/chat/typing-indicator";
 import { WorkflowRecommendations } from "@/components/elements/chat/workflow-recommendations";
 import { H1 } from "@/components/elements/typography";
 import { Button } from "@/components/ui/button";
 import { useChat } from "@/hooks/use-chat-v2";
 import { chatService } from "@/services/chat.service";
+import { AlertCircle, ArrowLeft, Menu, RefreshCw, User } from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 export function AgentChatContent() {
   const searchParams = useSearchParams();
@@ -25,12 +28,12 @@ export function AgentChatContent() {
   const initialMessage = searchParams.get("message") || undefined;
 
   // Debug initial message
-  console.log("🔍 Agent page - URL params:", {
-    toolParam,
-    chatId,
-    initialMessage,
-    searchParams: searchParams.toString(),
-  });
+  // console.log("🔍 Agent page - URL params:", {
+  //   toolParam,
+  //   chatId,
+  //   initialMessage,
+  //   searchParams: searchParams.toString(),
+  // });
 
   // Sidebar state
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -123,7 +126,11 @@ export function AgentChatContent() {
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <Link href="/">
-              <Button variant="ghost" size="icon" className="hover:bg-sky-blue-100">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-sky-blue-100"
+              >
                 <ArrowLeft className="size-5" />
               </Button>
             </Link>
@@ -132,7 +139,8 @@ export function AgentChatContent() {
               size="icon"
               onClick={() => setIsSidebarOpen(true)}
               className="hover:bg-sky-blue-100"
-              aria-label="Open chat history">
+              aria-label="Open chat history"
+            >
               <Menu className="size-5" />
             </Button>
             <div className="flex items-center gap-3">
@@ -140,10 +148,12 @@ export function AgentChatContent() {
               <div className="flex flex-col">
                 <H1 level="h3" weight="semibold" className="text-deep-navy">
                   {selectedTool
-                    ? AVAILABLE_TOOLS.find(t => t.id === selectedTool)?.name || "AI Legal Assistant"
+                    ? AVAILABLE_TOOLS.find(t => t.id === selectedTool)?.name ||
+                      "AI Legal Assistant"
                     : currentMode === "general"
                       ? "AI Legal Assistant"
-                      : AVAILABLE_TOOLS.find(t => t.id === currentMode)?.name || "AI Legal Assistant"}
+                      : AVAILABLE_TOOLS.find(t => t.id === currentMode)?.name ||
+                        "AI Legal Assistant"}
                 </H1>
                 {(selectedTool || currentMode !== "general") && (
                   <button
@@ -156,10 +166,13 @@ export function AgentChatContent() {
                           newSearchParams.set("chat_id", currentConversationId);
                         }
                         const queryString = newSearchParams.toString();
-                        router.push(`/agent${queryString ? `?${queryString}` : ""}`);
+                        router.push(
+                          `/agent${queryString ? `?${queryString}` : ""}`
+                        );
                       }
                     }}
-                    className="text-left text-xs text-sky-blue-600 hover:text-sky-blue-800">
+                    className="text-left text-xs text-sky-blue-600 hover:text-sky-blue-800"
+                  >
                     ← Back to general chat
                   </button>
                 )}
@@ -174,10 +187,15 @@ export function AgentChatContent() {
                 clearConversation();
                 router.push("/agent");
               }}
-              className="hover:bg-sky-blue-50 text-xs">
+              className="hover:bg-sky-blue-50 text-xs"
+            >
               New Chat
             </Button>
-            <Button variant="ghost" size="icon" className="hover:bg-sky-blue-100">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="hover:bg-sky-blue-100"
+            >
               <User className="size-5" />
             </Button>
           </div>
@@ -187,7 +205,10 @@ export function AgentChatContent() {
       {/* Main Chat Container */}
       <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col pt-20">
         {/* Messages Container */}
-        <div ref={chatContainerRef} className="flex-1 space-y-4 overflow-y-auto px-4 py-6">
+        <div
+          ref={chatContainerRef}
+          className="flex-1 space-y-4 overflow-y-auto px-4 py-6"
+        >
           {isLoading && messages.length === 0 ? (
             <div className="flex h-full items-center justify-center">
               <div className="flex flex-col items-center gap-4">
@@ -207,9 +228,13 @@ export function AgentChatContent() {
 
               // Add all messages to timeline
               messages.forEach(message => {
+                console.log("🔍 Message timestamp:", message);
                 timeline.push({
                   timestamp: message.timestamp,
-                  content: { type: "message", data: message },
+                  content: {
+                    type: "message",
+                    data: message,
+                  },
                 });
               });
 
@@ -228,11 +253,19 @@ export function AgentChatContent() {
               }
 
               // Sort timeline by timestamp
-              timeline.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+              timeline.sort(
+                (a, b) => a.timestamp.getTime() - b.timestamp.getTime()
+              );
 
               return timeline.map((item, index) => {
+                console.log("item:", item);
                 if (item.content.type === "message") {
-                  return <ChatMessage key={item.content.data.id} message={item.content.data} />;
+                  return (
+                    <ChatMessage
+                      key={item.content.data.id}
+                      message={item.content.data}
+                    />
+                  );
                 } else {
                   return (
                     <div key={`recommendations-${index}`} className="space-y-4">
@@ -242,15 +275,20 @@ export function AgentChatContent() {
                           recommendations={item.content.data}
                           selectedTool={selectedTool}
                           disableNavigation={true}
-                          onRecommendationClick={(recommendation: WorkflowRecommendation) => {
-                            const toolId = chatService.getToolIdFromActionType(recommendation.action_type);
-                            console.log("Mapped tool ID:", toolId);
+                          onRecommendationClick={(
+                            recommendation: WorkflowRecommendation
+                          ) => {
+                            const toolId = chatService.getToolIdFromActionType(
+                              recommendation.action_type
+                            );
 
                             if (toolId) {
-                              console.log("Selecting tool:", toolId);
                               selectTool(toolId);
                             } else {
-                              console.warn("No valid tool ID found for action_type:", recommendation.action_type);
+                              console.warn(
+                                "No valid tool ID found for action_type:",
+                                recommendation.action_type
+                              );
                             }
                           }}
                         />
@@ -277,11 +315,17 @@ export function AgentChatContent() {
                     size="sm"
                     variant="outline"
                     onClick={retryLastMessage}
-                    className="border-red-300 text-red-700 hover:bg-red-100">
+                    className="border-red-300 text-red-700 hover:bg-red-100"
+                  >
                     <RefreshCw className="mr-1 size-3" />
                     Retry
                   </Button>
-                  <Button size="sm" variant="ghost" onClick={clearError} className="text-red-700 hover:bg-red-100">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={clearError}
+                    className="text-red-700 hover:bg-red-100"
+                  >
                     Dismiss
                   </Button>
                 </div>
