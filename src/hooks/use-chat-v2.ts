@@ -111,7 +111,7 @@ export function useChat({
     if (conversationId && initialConversationId && queryMessages.length > 0) {
       // For existing conversations, use messages from React Query (only once)
       // Check if we have a welcome message to preserve
-      setMessages((prevMessages) => {
+      setMessages(prevMessages => {
         const hasWelcomeMessage = prevMessages.length > 0 && prevMessages[0].id === "welcome";
         if (hasWelcomeMessage) {
           // Preserve welcome message at the top
@@ -147,7 +147,12 @@ export function useChat({
 
   // Direct initial message handler - simplified approach
   useEffect(() => {
-    if (initialMessage && !conversationId && !hasProcessedInitialMessage.current && messages.length > 0) {
+    if (
+      initialMessage &&
+      !conversationId &&
+      !hasProcessedInitialMessage.current &&
+      messages.length > 0
+    ) {
       hasProcessedInitialMessage.current = true;
 
       // Send immediately - but only after welcome message is set
@@ -157,7 +162,12 @@ export function useChat({
 
   // Fallback: Send initial message after a longer delay if not processed yet
   useEffect(() => {
-    if (initialMessage && !hasProcessedInitialMessage.current && !conversationId && messages.length > 0) {
+    if (
+      initialMessage &&
+      !hasProcessedInitialMessage.current &&
+      !conversationId &&
+      messages.length > 0
+    ) {
       const fallbackTimer = setTimeout(() => {
         if (!hasProcessedInitialMessage.current) {
           hasProcessedInitialMessage.current = true;
@@ -173,7 +183,7 @@ export function useChat({
   // Update messages when React Query data changes - but only for initial load
   useEffect(() => {
     if (conversationId && queryMessages.length > 0 && !hasInitializedFromQuery.current) {
-      setMessages((prevMessages) => {
+      setMessages(prevMessages => {
         const hasWelcomeMessage = prevMessages.length > 0 && prevMessages[0].id === "welcome";
         if (hasWelcomeMessage) {
           // Preserve welcome message at the top

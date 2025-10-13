@@ -18,13 +18,13 @@ export default function HeroSection() {
   // Cycle through texts every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentTextIndex((prevIndex) => (prevIndex + 1) % animatedTexts.length);
+      setCurrentTextIndex(prevIndex => (prevIndex + 1) % animatedTexts.length);
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [animatedTexts.length]);
+  }, []);
 
-  const handleSubmit = (payload: any) => {
+  const handleSubmit = (payload: { text?: string; files?: File[] }) => {
     if (payload.text?.trim()) {
       // Encode the message for URL
       const encodedMessage = encodeURIComponent(payload.text.trim());
@@ -76,8 +76,7 @@ export default function HeroSection() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="inline-block"
-              >
+                className="inline-block">
                 {animatedTexts[currentTextIndex]}
               </motion.span>
             </AnimatePresence>
