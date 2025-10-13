@@ -31,6 +31,9 @@ jobs:
             echo "Starting frontend deployment process..."
             echo "=========================================="
 
+            # Add bun to PATH
+            export PATH="$HOME/.bun/bin:$PATH"
+
             # Navigate to repository
             cd $REPO_PATH
             echo "✓ Changed directory to $REPO_PATH"
