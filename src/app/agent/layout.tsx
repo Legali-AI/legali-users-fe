@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Agent Chat - Legali",
-  description: "Chat with your AI legal assistant",
+  description: "Chat with your AI legal confidant",
 };
 
 export default function AgentLayout({ children }: { children: React.ReactNode }) {

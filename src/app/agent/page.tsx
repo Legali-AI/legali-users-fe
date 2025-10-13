@@ -9,7 +9,7 @@ function AgentChatLoading() {
     <div className="flex h-screen items-center justify-center">
       <div className="flex flex-col items-center gap-4">
         <div className="size-8 animate-spin rounded-full border-2 border-sky-blue-200 border-t-sky-blue-600" />
-        <p className="text-slate-gray-600">Loading AI Legal Assistant...</p>
+        <p className="text-slate-gray-600">Loading AI Legal Confidant...</p>
       </div>
     </div>
   );

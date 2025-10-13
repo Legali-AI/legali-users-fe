@@ -110,14 +110,22 @@ export function useChat({
   useEffect(() => {
     if (conversationId && initialConversationId && queryMessages.length > 0) {
       // For existing conversations, use messages from React Query (only once)
-      setMessages(queryMessages);
+      // Check if we have a welcome message to preserve
+      setMessages(prevMessages => {
+        const hasWelcomeMessage = prevMessages.length > 0 && prevMessages[0].id === "welcome";
+        if (hasWelcomeMessage) {
+          // Preserve welcome message at the top
+          return [prevMessages[0], ...queryMessages];
+        }
+        return queryMessages;
+      });
     } else if (!conversationId && messages.length === 0) {
       // For new chats, show welcome message
       const welcomeMessages: Message[] = [
         {
           id: "welcome",
           content:
-            "👋 Hello! I'm your AI legal assistant. I can help you analyze contracts, answer legal questions, and identify potential issues in documents. What would you like help with today?",
+            "👋 Hello! I'm your AI legal confidant. I can help you analyze contracts, answer legal questions, and identify potential issues in documents. What would you like help with today?",
           isUser: false,
           timestamp: new Date(),
         },
@@ -139,17 +147,27 @@ export function useChat({
 
   // Direct initial message handler - simplified approach
   useEffect(() => {
-    if (initialMessage && !conversationId && !hasProcessedInitialMessage.current) {
+    if (
+      initialMessage &&
+      !conversationId &&
+      !hasProcessedInitialMessage.current &&
+      messages.length > 0
+    ) {
       hasProcessedInitialMessage.current = true;
 
-      // Send immediately - no complex conditions
+      // Send immediately - but only after welcome message is set
       handleSendMessage(initialMessage);
     }
-  }, [initialMessage, conversationId]); // Run when these change
+  }, [initialMessage, conversationId, messages.length]); // Run when these change
 
   // Fallback: Send initial message after a longer delay if not processed yet
   useEffect(() => {
-    if (initialMessage && !hasProcessedInitialMessage.current && !conversationId) {
+    if (
+      initialMessage &&
+      !hasProcessedInitialMessage.current &&
+      !conversationId &&
+      messages.length > 0
+    ) {
       const fallbackTimer = setTimeout(() => {
         if (!hasProcessedInitialMessage.current) {
           hasProcessedInitialMessage.current = true;
@@ -160,12 +178,19 @@ export function useChat({
       return () => clearTimeout(fallbackTimer);
     }
     return undefined;
-  }, [initialMessage, conversationId]);
+  }, [initialMessage, conversationId, messages.length]);
 
   // Update messages when React Query data changes - but only for initial load
   useEffect(() => {
     if (conversationId && queryMessages.length > 0 && !hasInitializedFromQuery.current) {
-      setMessages(queryMessages);
+      setMessages(prevMessages => {
+        const hasWelcomeMessage = prevMessages.length > 0 && prevMessages[0].id === "welcome";
+        if (hasWelcomeMessage) {
+          // Preserve welcome message at the top
+          return [prevMessages[0], ...queryMessages];
+        }
+        return queryMessages;
+      });
       hasInitializedFromQuery.current = true;
     }
   }, [conversationId, queryMessages]);
@@ -350,7 +375,7 @@ export function useChat({
       {
         id: "welcome",
         content:
-          "👋 Hello! I'm your AI legal assistant. I can help you analyze contracts, answer legal questions, and identify potential issues in documents. What would you like help with today?",
+          "👋 Hello! I'm your AI legal confidant. I can help you analyze contracts, answer legal questions, and identify potential issues in documents. What would you like help with today?",
         isUser: false,
         timestamp: new Date(),
       },

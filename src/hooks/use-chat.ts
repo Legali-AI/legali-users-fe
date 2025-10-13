@@ -41,7 +41,7 @@ export function useChat({
         {
           id: "welcome",
           content:
-            "👋 Hello! I'm your AI legal assistant. I can help you analyze contracts, answer legal questions, and identify potential issues in documents. What would you like help with today?",
+            "👋 Hello! I'm your AI legal confidant. I can help you analyze contracts, answer legal questions, and identify potential issues in documents. What would you like help with today?",
           isUser: false,
           timestamp: new Date(),
         },
@@ -234,7 +234,7 @@ export function useChat({
       {
         id: "welcome",
         content:
-          "👋 Hello! I'm your AI legal assistant. I can help you analyze contracts, answer legal questions, and identify potential issues in documents. What would you like help with today?",
+          "👋 Hello! I'm your AI legal confidant. I can help you analyze contracts, answer legal questions, and identify potential issues in documents. What would you like help with today?",
         isUser: false,
         timestamp: new Date(),
       },
