@@ -207,7 +207,7 @@ export function AgentChatContent() {
 
               // Add all messages to timeline
               messages.forEach(message => {
-                console.log("🔍 Message timestamp:", message);
+                // console.log("🔍 Message timestamp:", message);
                 timeline.push({
                   timestamp: message.timestamp,
                   content: {
@@ -235,7 +235,7 @@ export function AgentChatContent() {
               timeline.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
 
               return timeline.map((item, index) => {
-                console.log("item:", item);
+                // console.log("item:", item);
                 if (item.content.type === "message") {
                   return <ChatMessage key={item.content.data.id} message={item.content.data} />;
                 } else {

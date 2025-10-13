@@ -19,7 +19,13 @@ export function ChatHistorySidebar({ currentChatId, isOpen, onClose }: ChatHisto
 
   const handleChatClick = (chatId: string) => {
     if (chatId !== currentChatId) {
-      router.push(`/agent?chat_id=${chatId}`);
+      // The URL you want to open in a new tab
+      const url = `/agent?chat_id=${chatId}`;
+
+      // window.open(url, '_blank') opens the specified URL in a new tab
+      window.open(url, "_blank");
+
+      // Optional: If you want to close a modal or sidebar after clicking
     }
     onClose();
   };
