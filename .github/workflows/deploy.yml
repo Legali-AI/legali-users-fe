@@ -1,0 +1,100 @@
+name: Deploy Frontend to EC2
+
+on:
+  push:
+    branches:
+      - main  # Trigger only on push to main
+
+jobs:
+  deploy:
+    name: Deploy Frontend to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          REPO_PATH: /home/ubuntu/legali-users-fe
+          APP_NAME: legali-fe
+        with:
+          host: ec2-3-131-83-106.us-east-2.compute.amazonaws.com
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          envs: REPO_PATH,APP_NAME
+          script: |
+            set -e  # Exit on any error
+
+            echo "=========================================="
+            echo "Starting frontend deployment process..."
+            echo "=========================================="
+
+            # Navigate to repository
+            cd $REPO_PATH
+            echo "✓ Changed directory to $REPO_PATH"
+
+            # Ensure we're on main branch
+            echo ""
+            echo "Checking out main branch..."
+            git fetch origin
+            git checkout main
+            git reset --hard origin/main
+            echo "✓ Successfully checked out and pulled main branch"
+
+            # Check if PM2 is installed, install if not
+            echo ""
+            echo "Checking PM2 installation..."
+            if ! command -v pm2 &> /dev/null; then
+              echo "PM2 not found, installing..."
+              bun install -g pm2
+              echo "✓ PM2 installed successfully"
+            else
+              echo "✓ PM2 is already installed"
+            fi
+
+            # Install dependencies
+            echo ""
+            echo "Installing dependencies..."
+            bun install
+            echo "✓ Dependencies installed successfully"
+
+            # Build the application
+            echo ""
+            echo "Building Next.js application..."
+            bun run build
+            echo "✓ Build completed successfully"
+
+            # Restart or start the application with PM2
+            echo ""
+            echo "Deploying application with PM2..."
+            if pm2 list | grep -q "$APP_NAME"; then
+              echo "Application is running, restarting..."
+              pm2 restart $APP_NAME
+              echo "✓ Application restarted successfully"
+            else
+              echo "Starting application for the first time..."
+              pm2 start bun --name $APP_NAME -- run start
+              pm2 save
+              echo "✓ Application started successfully"
+            fi
+
+            # Show PM2 status
+            echo ""
+            echo "=========================================="
+            echo "PM2 Process Status:"
+            echo "=========================================="
+            pm2 list
+
+            # Show recent logs
+            echo ""
+            echo "=========================================="
+            echo "Recent Application Logs:"
+            echo "=========================================="
+            pm2 logs $APP_NAME --lines 30 --nostream
+
+            echo ""
+            echo "=========================================="
+            echo "Frontend deployment completed successfully!"
+            echo "=========================================="
