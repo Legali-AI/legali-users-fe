@@ -51,7 +51,7 @@ export const chatService = {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-          timeout: 120000, // 2 minutes timeout for chat API calls
+          timeout: 300000, // 2 minutes timeout for chat API calls
         }
       );
 
