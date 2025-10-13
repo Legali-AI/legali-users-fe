@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { AlertCircle, ArrowLeft, Menu, RefreshCw, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -110,7 +111,11 @@ export function AgentChatContent() {
   };
 
   return (
-    <div className="flex h-screen">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="flex h-screen">
       {/* Chat History Sidebar */}
       <ChatHistorySidebar
         currentChatId={currentConversationId}
@@ -140,10 +145,10 @@ export function AgentChatContent() {
               <div className="flex flex-col">
                 <H1 level="h3" weight="semibold" className="text-deep-navy">
                   {selectedTool
-                    ? AVAILABLE_TOOLS.find(t => t.id === selectedTool)?.name || "AI Legal Assistant"
+                    ? AVAILABLE_TOOLS.find(t => t.id === selectedTool)?.name || "AI Legal Confidant"
                     : currentMode === "general"
-                      ? "AI Legal Assistant"
-                      : AVAILABLE_TOOLS.find(t => t.id === currentMode)?.name || "AI Legal Assistant"}
+                      ? "AI Legal Confidant"
+                      : AVAILABLE_TOOLS.find(t => t.id === currentMode)?.name || "AI Legal Confidant"}
                 </H1>
                 {(selectedTool || currentMode !== "general") && (
                   <button
@@ -307,6 +312,6 @@ export function AgentChatContent() {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

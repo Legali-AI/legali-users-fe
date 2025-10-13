@@ -1,6 +1,8 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import RichInput from "../../../components/elements/rich-input";
 import { H1, H2 } from "../../../components/elements/typography";
 import { Badge } from "../../../components/ui/badge";
@@ -9,8 +11,27 @@ import { NAVIGATION_FEATURES } from "../../../data/home.data";
 export default function HeroSection() {
   const router = useRouter();
 
-  const handleSubmit = () => {
-    router.push("/agent");
+  // Animated text rotation state
+  const animatedTexts = ["AI-law firm", "AI-legal confidant", "AI-legal resources"];
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+
+  // Cycle through texts every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTextIndex((prevIndex) => (prevIndex + 1) % animatedTexts.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [animatedTexts.length]);
+
+  const handleSubmit = (payload: any) => {
+    if (payload.text?.trim()) {
+      // Encode the message for URL
+      const encodedMessage = encodeURIComponent(payload.text.trim());
+      router.push(`/agent?message=${encodedMessage}`);
+    } else {
+      router.push("/agent");
+    }
   };
 
   return (
@@ -44,10 +65,22 @@ export default function HeroSection() {
 
       {/* Hero content */}
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-5">
-        {/* Main headline */}
+        {/* Main headline with animated text */}
         <div data-aos="zoom-in-down" data-aos-duration="600">
           <H1 weight={"semibold"} align={"center"}>
-            Meet your first AI-law firm
+            <span>Meet your first </span>
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={currentTextIndex}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="inline-block"
+              >
+                {animatedTexts[currentTextIndex]}
+              </motion.span>
+            </AnimatePresence>
           </H1>
         </div>
 
