@@ -65,10 +65,8 @@ export function useChat({
       const key = `selectedTool_${chatId}`;
       if (toolId) {
         localStorage.setItem(key, toolId);
-        console.log("💾 Stored selected tool for chat:", chatId, "->", toolId);
       } else {
         localStorage.removeItem(key);
-        console.log("🗑️ Removed stored selected tool for chat:", chatId);
       }
     } catch (error) {
       console.warn("Failed to store selected tool:", error);
@@ -87,35 +85,34 @@ export function useChat({
         keysToRemove.forEach(key => {
           localStorage.removeItem(key);
         });
-        console.log("🧹 Cleaned up", keysToRemove.length, "old stored tools");
       }
     } catch (error) {
       console.warn("Failed to cleanup old stored tools:", error);
     }
   };
 
-  console.log("💾 Initializing conversation:", {
-    fromURL: initialConversationId,
-    hasInitialMessage: !!initialMessage,
-    final: conversationId,
-    currentSelectedTool: selectedTool,
-  });
+  // console.log("💾 Initializing conversation:", {
+  //   fromURL: initialConversationId,
+  //   hasInitialMessage: !!initialMessage,
+  //   final: conversationId,
+  //   currentSelectedTool: selectedTool,
+  // });
 
   // Cleanup old stored tools on initialization
   useEffect(() => {
     cleanupOldStoredTools();
 
     // Debug: Show currently stored tools
-    const storedTools = Object.keys(localStorage)
-      .filter(key => key.startsWith("selectedTool_"))
-      .map(key => ({
-        chatId: key.replace("selectedTool_", ""),
-        tool: localStorage.getItem(key),
-      }));
+    // const storedTools = Object.keys(localStorage)
+    //   .filter(key => key.startsWith("selectedTool_"))
+    //   .map(key => ({
+    //     chatId: key.replace("selectedTool_", ""),
+    //     tool: localStorage.getItem(key),
+    //   }));
 
-    if (storedTools.length > 0) {
-      console.log("📋 Currently stored tools:", storedTools);
-    }
+    // if (storedTools.length > 0) {
+    //   console.log("📋 Currently stored tools:", storedTools);
+    // }
   }, []); // Run once on mount
 
   // Initialize messages - either from query or welcome message
@@ -144,12 +141,6 @@ export function useChat({
       // Only load from storage if not coming from URL parameter
       const storedTool = getStoredSelectedTool(conversationId);
       if (storedTool && storedTool !== selectedTool) {
-        console.log(
-          "📥 Loading stored selected tool for chat:",
-          conversationId,
-          "->",
-          storedTool
-        );
         setSelectedTool(storedTool);
       }
     }
@@ -162,10 +153,6 @@ export function useChat({
       !conversationId &&
       !hasProcessedInitialMessage.current
     ) {
-      console.log(
-        "🎯 Direct initial message handler triggered:",
-        initialMessage
-      );
       hasProcessedInitialMessage.current = true;
 
       // Send immediately - no complex conditions
@@ -180,10 +167,8 @@ export function useChat({
       !hasProcessedInitialMessage.current &&
       !conversationId
     ) {
-      console.log("⏰ Setting up fallback timer for initial message");
       const fallbackTimer = setTimeout(() => {
         if (!hasProcessedInitialMessage.current) {
-          console.log("⚡ Fallback: Sending initial message after delay");
           hasProcessedInitialMessage.current = true;
           handleSendMessage(initialMessage);
         }
@@ -201,7 +186,6 @@ export function useChat({
       queryMessages.length > 0 &&
       !hasInitializedFromQuery.current
     ) {
-      console.log("📥 Initial load from React Query");
       setMessages(queryMessages);
       hasInitializedFromQuery.current = true;
     }
@@ -290,16 +274,10 @@ export function useChat({
         };
 
         // Create AI response message with shared timestamp for recommendations
-        console.log("🔍 Full API Response:", JSON.stringify(result, null, 2));
+        // console.log("🔍 Full API Response:", JSON.stringify(result, null, 2));
 
         // Determine report URL from multiple possible sources
         const reportUrl = result.data?.report_file_path;
-
-        console.log("🔍 Raw reportUrl value:", {
-          reportUrl,
-          type: typeof reportUrl,
-          length: reportUrl?.length,
-        });
 
         // Create AI message - ALWAYS include report_file_path if present in API response
         const aiMessage: Message = {
@@ -314,21 +292,16 @@ export function useChat({
           }),
         };
 
-        console.log(
-          "🔧 Created aiMessage object:",
-          JSON.stringify(aiMessage, null, 2)
-        );
-
         const finalMessages = [
           ...messagesWithoutTemp,
           realUserMessage,
           aiMessage,
         ];
 
-        console.log(
-          "💬 Final messages array (showing last message):",
-          JSON.stringify(finalMessages[finalMessages.length - 1], null, 2)
-        );
+        // console.log(
+        //   "💬 Final messages array (showing last message):",
+        //   JSON.stringify(finalMessages[finalMessages.length - 1], null, 2)
+        // );
 
         return finalMessages;
       });
@@ -369,10 +342,6 @@ export function useChat({
             timestamp: responseTimestamp,
           }));
 
-        console.log(
-          "✅ Showing supported recommendations:",
-          uniqueRecommendations
-        );
         setWorkflowRecommendations(uniqueRecommendations);
       }
     } catch (err: any) {
@@ -447,7 +416,7 @@ export function useChat({
     }
   };
 
-  console.log("messages in useChat:", messages);
+  // console.log("messages in useChat:", messages);
 
   return {
     messages,

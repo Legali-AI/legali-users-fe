@@ -1,7 +1,4 @@
-import type {
-  GetMessagesResponse,
-  SendMessageResponse,
-} from "@/components/elements/chat/types";
+import type { GetMessagesResponse, SendMessageResponse } from "@/components/elements/chat/types";
 import { api } from "@/lib/api-client";
 
 export interface SendMessageRequest {
@@ -22,9 +19,7 @@ export interface GetMessagesRequest {
 
 export const chatService = {
   // Send a message to the chat
-  sendMessage: async (
-    request: SendMessageRequest
-  ): Promise<SendMessageResponse> => {
+  sendMessage: async (request: SendMessageRequest): Promise<SendMessageResponse> => {
     const startTime = Date.now();
     console.log("🚀 Chat API request started at:", new Date().toISOString());
 
@@ -44,16 +39,12 @@ export const chatService = {
     }
 
     try {
-      const response = await api.post<SendMessageResponse>(
-        "/api/chats/sendmessage",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          timeout: 300000, // 2 minutes timeout for chat API calls
-        }
-      );
+      const response = await api.post<SendMessageResponse>("/api/chats/sendmessage", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        timeout: 300000, // 2 minutes timeout for chat API calls
+      });
 
       const endTime = Date.now();
       const duration = endTime - startTime;
@@ -74,9 +65,7 @@ export const chatService = {
   },
 
   // Get messages from a conversation
-  getMessages: async (
-    request: GetMessagesRequest
-  ): Promise<GetMessagesResponse> => {
+  getMessages: async (request: GetMessagesRequest): Promise<GetMessagesResponse> => {
     const params = new URLSearchParams();
 
     if (request.offset !== undefined) {
@@ -113,8 +102,7 @@ export const chatService = {
     timestamp: new Date(apiMessage.created_at || apiMessage.timestamp),
     conversation_id: apiMessage.conversation_id,
     role: apiMessage.role,
-    attachments:
-      apiMessage.attachments?.length > 0 ? apiMessage.attachments : undefined,
+    attachments: apiMessage.attachments?.length > 0 ? apiMessage.attachments : undefined,
     report_file_path: apiMessage.report_file_path,
   }),
 
@@ -177,10 +165,7 @@ export const chatService = {
       console.error("❌ Failed to fetch chat history:", error);
       return {
         success: false,
-        error:
-          error.response?.data?.message ||
-          error.message ||
-          "Failed to fetch chat history",
+        error: error.response?.data?.message || error.message || "Failed to fetch chat history",
       };
     }
   },
@@ -188,9 +173,7 @@ export const chatService = {
   // Helper function to get conversation type from URL params or tool IDs
   // Based on API documentation: red_flag_analysis, litigation_builder, document_builder,
   // case_builder, contract_review, mediation_support, high_value_dispute, support
-  getConversationTypeFromTool: (
-    toolParam: string | null
-  ): string | undefined => {
+  getConversationTypeFromTool: (toolParam: string | null): string | undefined => {
     switch (toolParam) {
       // Full tool IDs (used by selectedTool)
       case "red-flag-analysis":
