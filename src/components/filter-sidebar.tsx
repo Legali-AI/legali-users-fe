@@ -36,6 +36,8 @@ interface FilterSidebarProps {
   onLanguageChange: (values: string[]) => void;
 
   // General
+  showExperience?: boolean;
+  showLanguages?: boolean;
   hasActiveFilters: boolean;
   onClearAll: () => void;
   className?: string;
@@ -54,6 +56,8 @@ export function FilterSidebar({
   languageOptions,
   selectedLanguages,
   onLanguageChange,
+  showExperience = true,
+  showLanguages = true,
   hasActiveFilters,
   onClearAll,
   className = "",
@@ -124,22 +128,26 @@ export function FilterSidebar({
           <PriceRangeFilter title="Hourly Rate" value={priceRange} onChange={onPriceRangeChange} />
 
           {/* Experience Filter */}
-          <CheckboxFilter
-            title="Experience"
-            options={experienceOptions}
-            selectedValues={selectedExperience ? [selectedExperience] : []}
-            onChange={values => onExperienceChange(values[0] as number | undefined)}
-          />
+          {showExperience && (
+            <CheckboxFilter
+              title="Experience"
+              options={experienceOptions}
+              selectedValues={selectedExperience ? [selectedExperience] : []}
+              onChange={values => onExperienceChange(values[0] as number | undefined)}
+            />
+          )}
 
           {/* Languages Filter */}
-          <FilterButton
-            title="Languages"
-            options={languageOptions}
-            selectedValues={selectedLanguages}
-            onChange={onLanguageChange}
-            multiple={true}
-            placeholder="Any language"
-          />
+          {showLanguages && (
+            <FilterButton
+              title="Languages"
+              options={languageOptions}
+              selectedValues={selectedLanguages}
+              onChange={onLanguageChange}
+              multiple={true}
+              placeholder="Any language"
+            />
+          )}
         </CardContent>
       </Card>
     </div>

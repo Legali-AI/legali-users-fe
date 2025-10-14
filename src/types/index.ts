@@ -22,6 +22,18 @@ export interface Lawyer {
   updatedAt: string;
 }
 
+export interface MarketplaceLawyer {
+  id: string;
+  name: string;
+  practiceAreas: string[];
+  minPrice: number;
+  maxPrice: number;
+  about: string;
+  city: string;
+  avgRating: number;
+  totalReview: number;
+}
+
 export interface CaseResult {
   id: string;
   caseType: string;

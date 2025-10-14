@@ -25,16 +25,10 @@ export default function CaseCard({ case: caseData, onClick }: CaseCardProps) {
 
   return (
     <Card className="group cursor-pointer border border-gray-200 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:border-gray-300 hover:bg-white/90 hover:shadow-lg">
-      <div
+      <button
+        type="button"
         onClick={onClick}
-        onKeyDown={e => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            onClick();
-          }
-        }}
-        role="button"
-        tabIndex={0}>
+        className="flex w-full flex-col text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
         <div className="relative overflow-hidden rounded-t-lg">
           <Image
             src={caseData.image}
@@ -107,25 +101,17 @@ export default function CaseCard({ case: caseData, onClick }: CaseCardProps) {
             <div className="mt-1 truncate text-xs text-gray-500">Lead Counsel: {caseData.leadCounsel}</div>
           </div>
         </CardContent>
-      </div>
+      </button>
 
       <CardFooter className="px-4 pt-3 pb-4 sm:px-6 sm:pt-4 sm:pb-6">
         <div className="flex w-full gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 flex-1 text-xs sm:h-9 sm:text-sm"
-            onClick={e => {
-              e.stopPropagation();
-              onClick();
-            }}>
+          <Button variant="outline" size="sm" className="h-8 flex-1 text-xs sm:h-9 sm:text-sm" onClick={onClick}>
             View Details
           </Button>
           <Button
             size="sm"
             className="h-8 flex-1 bg-sky-600 text-xs hover:bg-sky-700 sm:h-9 sm:text-sm"
-            onClick={e => {
-              e.stopPropagation();
+            onClick={() => {
               // Handle invest action
             }}>
             Invest Now

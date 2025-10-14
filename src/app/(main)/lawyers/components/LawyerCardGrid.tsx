@@ -1,8 +1,8 @@
-import type { Lawyer } from "@/types";
+import type { MarketplaceLawyer } from "@/types";
 import { LawyerCard } from "./LawyerCard";
 
 interface LawyerCardGridProps {
-  lawyers: Lawyer[];
+  lawyers: MarketplaceLawyer[];
   variant?: "default" | "featured" | "compact";
   showFullDetails?: boolean;
   columns?: {

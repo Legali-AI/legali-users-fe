@@ -1,10 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { type UseQueryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createBooking,
   getBookingById,
   getFeaturedLawyers,
   getLawyerById,
   getLawyerReviews,
+  type LawyerSearchResponse,
   searchLawyers,
 } from "@/services/lawyer.service";
 import type { Booking, SearchParams } from "@/types";
@@ -24,12 +25,19 @@ export const queryKeys = {
   },
 };
 
+type UseSearchLawyersOptions = Pick<
+  UseQueryOptions<LawyerSearchResponse, Error, LawyerSearchResponse>,
+  "enabled" | "initialData" | "initialDataUpdatedAt" | "staleTime" | "keepPreviousData"
+>;
+
 // Lawyer hooks
-export function useSearchLawyers(params: SearchParams) {
+export function useSearchLawyers(params: SearchParams, options?: UseSearchLawyersOptions) {
   return useQuery({
     queryKey: queryKeys.lawyers.search(params),
     queryFn: () => searchLawyers(params),
     staleTime: 5 * 60 * 1000, // 5 minutes
+    keepPreviousData: true,
+    ...options,
   });
 }
 

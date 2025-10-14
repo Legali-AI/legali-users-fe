@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -21,6 +21,7 @@ export default function TermsConditionsPopup({
 }: TermsConditionsPopupProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const confirmationId = useId();
 
   const isOpen = open !== undefined ? open : internalOpen;
   const setIsOpen = onOpenChange || setInternalOpen;
@@ -122,13 +123,13 @@ export default function TermsConditionsPopup({
               {/* Checkbox */}
               <div className="flex items-start gap-3">
                 <Checkbox
-                  id="terms-confirmation"
+                  id={confirmationId}
                   checked={isConfirmed}
                   onCheckedChange={checked => setIsConfirmed(checked as boolean)}
                   className="mt-0.5 data-[state=checked]:border-gray-600 data-[state=checked]:bg-gray-600"
                 />
                 <label
-                  htmlFor="terms-confirmation"
+                  htmlFor={confirmationId}
                   className="cursor-pointer text-sm leading-relaxed font-medium text-gray-900">
                   I confirm that I have read and accept the terms and conditions and privacy policy.
                 </label>

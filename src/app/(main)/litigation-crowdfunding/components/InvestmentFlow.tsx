@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeft, ArrowRight, CheckCircle, CreditCard, Download, FileText, Shield } from "lucide-react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,6 +30,12 @@ export default function InvestmentFlow({ case: caseData, onBack, onComplete }: I
   });
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
+  const amountId = useId();
+  const noteId = useId();
+  const disclosureId = useId();
+  const riskId = useId();
+  const kycId = useId();
+  const termsId = useId();
 
   const steps: InvestmentStep[] = [
     {
@@ -189,11 +195,11 @@ export default function InvestmentFlow({ case: caseData, onBack, onComplete }: I
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div>
-                      <label htmlFor="amount" className="mb-2 block text-sm font-medium text-gray-700">
+                      <label htmlFor={amountId} className="mb-2 block text-sm font-medium text-gray-700">
                         Investment Amount *
                       </label>
                       <Input
-                        id="amount"
+                        id={amountId}
                         type="number"
                         placeholder={`Minimum ${formatCurrency(caseData.minimumInvestment)}`}
                         value={investmentData.amount}
@@ -205,7 +211,7 @@ export default function InvestmentFlow({ case: caseData, onBack, onComplete }: I
                       </p>
                     </div>
                     <div>
-                      <label className="mb-2 block text-sm font-medium text-gray-700">Expected Return Range</label>
+                      <p className="mb-2 text-sm font-medium text-gray-700">Expected Return Range</p>
                       <div className="rounded-lg border border-green-200 bg-green-50 p-4">
                         <div className="text-lg font-semibold text-green-800">
                           {investmentData.amount
@@ -218,11 +224,11 @@ export default function InvestmentFlow({ case: caseData, onBack, onComplete }: I
                   </div>
 
                   <div>
-                    <label htmlFor="note" className="mb-2 block text-sm font-medium text-gray-700">
+                    <label htmlFor={noteId} className="mb-2 block text-sm font-medium text-gray-700">
                       Investor Note (Optional)
                     </label>
                     <Textarea
-                      id="note"
+                      id={noteId}
                       placeholder="Any comments, questions, or special instructions..."
                       value={investmentData.investorNote}
                       onChange={e => updateInvestmentData({ investorNote: e.target.value })}
@@ -262,7 +268,7 @@ export default function InvestmentFlow({ case: caseData, onBack, onComplete }: I
                   <div className="space-y-4">
                     <div className="flex items-start space-x-3">
                       <Checkbox
-                        id="disclosure"
+                        id={disclosureId}
                         checked={investmentData.disclosureAcknowledged}
                         onCheckedChange={checked =>
                           updateInvestmentData({
@@ -270,7 +276,7 @@ export default function InvestmentFlow({ case: caseData, onBack, onComplete }: I
                           })
                         }
                       />
-                      <label htmlFor="disclosure" className="text-sm leading-relaxed">
+                      <label htmlFor={disclosureId} className="text-sm leading-relaxed">
                         I have read and understood the{" "}
                         <Button variant="link" className="h-auto p-0 font-normal underline">
                           investment disclosure document
@@ -282,11 +288,11 @@ export default function InvestmentFlow({ case: caseData, onBack, onComplete }: I
 
                     <div className="flex items-start space-x-3">
                       <Checkbox
-                        id="risk"
+                        id={riskId}
                         checked={investmentData.riskAcknowledged}
                         onCheckedChange={checked => updateInvestmentData({ riskAcknowledged: !!checked })}
                       />
-                      <label htmlFor="risk" className="text-sm leading-relaxed">
+                      <label htmlFor={riskId} className="text-sm leading-relaxed">
                         I understand that litigation investment carries significant risks, including the possibility of
                         total loss of my investment. I acknowledge this is a speculative investment with no guaranteed
                         returns.
@@ -295,11 +301,11 @@ export default function InvestmentFlow({ case: caseData, onBack, onComplete }: I
 
                     <div className="flex items-start space-x-3">
                       <Checkbox
-                        id="kyc"
+                        id={kycId}
                         checked={investmentData.kycConfirmed}
                         onCheckedChange={checked => updateInvestmentData({ kycConfirmed: !!checked })}
                       />
-                      <label htmlFor="kyc" className="text-sm leading-relaxed">
+                      <label htmlFor={kycId} className="text-sm leading-relaxed">
                         I confirm that I have completed the required KYC (Know Your Customer) verification process and
                         that all my information is accurate and up-to-date.
                       </label>
@@ -350,11 +356,11 @@ export default function InvestmentFlow({ case: caseData, onBack, onComplete }: I
 
                     <div className="flex items-start space-x-3">
                       <Checkbox
-                        id="terms"
+                        id={termsId}
                         checked={investmentData.termsAccepted}
                         onCheckedChange={checked => updateInvestmentData({ termsAccepted: !!checked })}
                       />
-                      <label htmlFor="terms" className="text-sm leading-relaxed">
+                      <label htmlFor={termsId} className="text-sm leading-relaxed">
                         I accept the{" "}
                         <Button variant="link" className="h-auto p-0 font-normal underline">
                           Terms of Service

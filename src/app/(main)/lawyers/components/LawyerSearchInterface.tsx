@@ -1,34 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { SearchBar } from "@/components/search-bar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSearchLawyers } from "@/hooks/use-lawyers";
+import type { LawyerSearchResponse } from "@/services/lawyer.service";
 import type { CaseType, SearchParams } from "@/types";
 import { LawyerCardGrid } from "./LawyerCardGrid";
 
 interface LawyerSearchInterfaceProps {
-  caseTypeOptions: Array<{ label: string; value: CaseType; count: number }>;
-  languageOptions: Array<{ label: string; value: string; count: number }>;
+  caseTypeOptions: Array<{ label: string; value: CaseType; count?: number }>;
+  initialParams: SearchParams;
+  initialResults: LawyerSearchResponse;
+  initialUpdatedAt: number;
 }
 
-export default function LawyerSearchInterface({ caseTypeOptions, languageOptions }: LawyerSearchInterfaceProps) {
-  const [searchParams, setSearchParams] = useState<SearchParams>({
-    query: "",
-    location: "",
-    page: 1,
-    limit: 12,
-    sortBy: "rating",
-    sortOrder: "desc",
-  });
+export default function LawyerSearchInterface({
+  caseTypeOptions,
+  initialParams,
+  initialResults,
+  initialUpdatedAt,
+}: LawyerSearchInterfaceProps) {
+  const baselineParamsRef = useRef<SearchParams>({ ...initialParams });
+  const [searchParams, setSearchParams] = useState<SearchParams>(() => ({ ...initialParams }));
 
   const [showFilters, setShowFilters] = useState(false);
-  const { data: searchResults, isLoading } = useSearchLawyers(searchParams);
+  const {
+    data: searchResults = initialResults,
+    isLoading,
+    isFetching,
+  } = useSearchLawyers(searchParams, {
+    initialData: initialResults,
+    initialDataUpdatedAt: initialUpdatedAt,
+  });
 
-  const updateSearchParams = (updates: Partial<SearchParams>) => {
-    setSearchParams(prev => ({ ...prev, ...updates, page: 1 }));
+  const baselineParams = baselineParamsRef.current;
+
+  const updateSearchParams = (updates: Partial<SearchParams>, shouldResetPage = true) => {
+    setSearchParams(prev => {
+      const nextParams = { ...prev, ...updates };
+      if (shouldResetPage && updates.page === undefined) {
+        nextParams.page = 1;
+      }
+      return nextParams;
+    });
   };
 
   const handleSearch = (query: string) => {
@@ -36,14 +53,7 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
   };
 
   const clearAllFilters = () => {
-    setSearchParams({
-      query: "",
-      location: "",
-      page: 1,
-      limit: 12,
-      sortBy: "rating",
-      sortOrder: "desc",
-    });
+    setSearchParams({ ...baselineParams });
   };
 
   // Stats for the search results
@@ -54,15 +64,22 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
   //   { label: "Success Rate", value: "94%" },
   // ];
 
-  const hasActiveFilters = Boolean(
-    searchParams.query ||
-      searchParams.location ||
-      searchParams.caseType ||
-      searchParams.rating ||
-      searchParams.experience ||
-      searchParams.language ||
-      searchParams.budget
-  );
+  const baselineBudgetMin = baselineParams.budget?.min ?? 0;
+  const baselineBudgetMax = baselineParams.budget?.max ?? 0;
+  const activeBudgetMin = searchParams.budget?.min ?? 0;
+  const activeBudgetMax = searchParams.budget?.max ?? 0;
+
+  const hasActiveFilters =
+    (searchParams.query ?? "") !== (baselineParams.query ?? "") ||
+    (searchParams.location ?? "") !== (baselineParams.location ?? "") ||
+    (searchParams.caseType ?? "") !== (baselineParams.caseType ?? "") ||
+    (searchParams.rating ?? null) !== (baselineParams.rating ?? null) ||
+    ((baselineBudgetMin || baselineBudgetMax || activeBudgetMin || activeBudgetMax) &&
+      (baselineBudgetMin !== activeBudgetMin || baselineBudgetMax !== activeBudgetMax));
+
+  const resultsSummary = searchResults ?? initialResults;
+  const isBusy = isLoading || isFetching;
+  const isInitialLoading = isLoading && resultsSummary.lawyers.length === 0;
 
   return (
     <>
@@ -87,7 +104,7 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
                     onSearch={handleSearch}
                     placeholder="What legal help do you need?"
                     size="lg"
-                    isLoading={isLoading}
+                    isLoading={isBusy}
                     className="h-14 text-base"
                   />
                 </div>
@@ -102,9 +119,9 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
                 <Button
                   size="lg"
                   onClick={() => handleSearch(searchParams.query || "")}
-                  disabled={isLoading}
+                  disabled={isBusy}
                   className="h-14 bg-white px-8 font-semibold text-blue-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-800 disabled:opacity-50">
-                  {isLoading ? "Searching..." : "Search Lawyers"}
+                  {isBusy ? "Searching..." : "Search Lawyers"}
                 </Button>
               </div>
             </div>
@@ -138,21 +155,12 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
                 practiceAreaOptions={caseTypeOptions}
                 selectedPracticeAreas={searchParams.caseType ? [searchParams.caseType] : []}
                 onPracticeAreaChange={values => {
-                  const updates: Partial<SearchParams> = {};
-                  if (values[0]) {
-                    updates.caseType = values[0];
-                  }
-                  updateSearchParams(updates);
+                  const nextCaseType = values[0];
+                  updateSearchParams({ caseType: nextCaseType ?? undefined });
                 }}
-                {...(searchParams.rating !== undefined && {
-                  selectedRating: searchParams.rating,
-                })}
+                selectedRating={searchParams.rating}
                 onRatingChange={rating => {
-                  const updates: Partial<SearchParams> = {};
-                  if (rating !== undefined) {
-                    updates.rating = rating;
-                  }
-                  updateSearchParams(updates);
+                  updateSearchParams({ rating });
                 }}
                 priceRange={{
                   min: searchParams.budget?.min || 0,
@@ -160,28 +168,16 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
                 }}
                 onPriceRangeChange={range =>
                   updateSearchParams({
-                    budget: { min: range.min, max: range.max },
+                    budget: range.min > 0 || range.max > 0 ? { min: range.min, max: range.max } : undefined,
                   })
                 }
-                {...(searchParams.experience !== undefined && {
-                  selectedExperience: searchParams.experience,
-                })}
-                onExperienceChange={experience => {
-                  const updates: Partial<SearchParams> = {};
-                  if (experience !== undefined) {
-                    updates.experience = experience;
-                  }
-                  updateSearchParams(updates);
-                }}
-                languageOptions={languageOptions}
-                selectedLanguages={searchParams.language ? [searchParams.language] : []}
-                onLanguageChange={values => {
-                  const updates: Partial<SearchParams> = {};
-                  if (values[0]) {
-                    updates.language = values[0];
-                  }
-                  updateSearchParams(updates);
-                }}
+                selectedExperience={undefined}
+                onExperienceChange={() => updateSearchParams({ experience: undefined })}
+                languageOptions={[]}
+                selectedLanguages={[]}
+                onLanguageChange={() => updateSearchParams({ language: undefined })}
+                showExperience={false}
+                showLanguages={false}
                 hasActiveFilters={hasActiveFilters}
                 onClearAll={clearAllFilters}
                 className="rounded-lg border bg-white p-6 shadow-sm"
@@ -194,7 +190,14 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
             {/* Results Header */}
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">{searchResults?.total || 0} lawyers found</h1>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-2xl font-bold text-gray-900">{resultsSummary.total} lawyers found</h1>
+                  {isFetching && (
+                    <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
+                      Updating...
+                    </span>
+                  )}
+                </div>
                 {searchParams.query && (
                   <p className="text-gray-600">
                     Results for &ldquo;{searchParams.query}&rdquo;
@@ -215,10 +218,7 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
                   onChange={e => {
                     const [sortBy, sortOrder] = e.target.value.split("-");
                     const updates: Partial<SearchParams> = {};
-                    if (
-                      sortBy &&
-                      (sortBy === "rating" || sortBy === "price" || sortBy === "experience" || sortBy === "reviews")
-                    ) {
+                    if (sortBy && (sortBy === "rating" || sortBy === "price" || sortBy === "reviews")) {
                       updates.sortBy = sortBy;
                     }
                     if (sortOrder && (sortOrder === "asc" || sortOrder === "desc")) {
@@ -229,7 +229,6 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
                   <option value="rating-desc">Highest Rated</option>
                   <option value="price-asc">Lowest Price</option>
                   <option value="price-desc">Highest Price</option>
-                  <option value="experience-desc">Most Experience</option>
                   <option value="reviews-desc">Most Reviews</option>
                 </select>
               </div>
@@ -237,9 +236,9 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
 
             {/* Lawyer Cards Grid */}
             <LawyerCardGrid
-              lawyers={searchResults?.lawyers || []}
+              lawyers={resultsSummary.lawyers}
               variant="default"
-              isLoading={isLoading}
+              isLoading={isInitialLoading}
               columns={{ lg: 2, md: 2, sm: 1 }}
               emptyState={{
                 title: "No lawyers found",
@@ -249,14 +248,14 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
             />
 
             {/* Pagination */}
-            {searchResults && searchResults.totalPages > 1 && (
+            {resultsSummary.totalPages > 1 && (
               <div className="mt-8 flex justify-center">
                 <div className="flex space-x-2">
-                  {Array.from({ length: Math.min(5, searchResults.totalPages) }, (_, i) => (
+                  {Array.from({ length: Math.min(5, resultsSummary.totalPages) }, (_, i) => (
                     <Button
                       key={`page-${i + 1}`}
-                      variant={searchResults.page === i + 1 ? "default" : "outline"}
-                      onClick={() => updateSearchParams({ page: i + 1 })}>
+                      variant={resultsSummary.page === i + 1 ? "default" : "outline"}
+                      onClick={() => updateSearchParams({ page: i + 1 }, false)}>
                       {i + 1}
                     </Button>
                   ))}

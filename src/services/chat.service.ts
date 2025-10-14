@@ -1,3 +1,4 @@
+import type { AxiosError } from "axios";
 import type { GetMessagesResponse, SendMessageResponse } from "@/components/elements/chat/types";
 import { api } from "@/lib/api-client";
 
@@ -161,11 +162,15 @@ export const chatService = {
         success: false,
         error: "Unexpected response format",
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message?: string }>;
       console.error("❌ Failed to fetch chat history:", error);
       return {
         success: false,
-        error: error.response?.data?.message || error.message || "Failed to fetch chat history",
+        error:
+          axiosError.response?.data?.message ??
+          axiosError.message ??
+          "Failed to fetch chat history",
       };
     }
   },

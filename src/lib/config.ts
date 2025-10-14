@@ -24,13 +24,16 @@ export const API_CONFIG = {
     // Client endpoints
     CLIENTS: "/clients",
     CLIENT_BY_ID: (id: string) => `/clients/${id}`,
+
+    // Marketplace endpoints
+    MARKETPLACE_LAWYERS: "/api/marketplaces/lawyers",
   },
   TIMEOUT: 120000, // 2 minutes timeout for chat API calls
 };
 
 export const APP_CONFIG = {
   // Development flags
-  USE_MOCK_DATA: process.env.NEXT_PUBLIC_USE_MOCK === "true" || true, // Default to mock for development
+  USE_MOCK_DATA: process.env.NEXT_PUBLIC_USE_MOCK === "true", // Enable by setting NEXT_PUBLIC_USE_MOCK="true"
 
   // Pagination defaults
   DEFAULT_PAGE_SIZE: 10,

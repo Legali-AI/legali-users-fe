@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertCircle, Search, SlidersHorizontal } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,8 @@ export default function EnhancedCasesList({ onCaseSelect }: EnhancedCasesListPro
   const [sortBy, setSortBy] = useState("newest");
   const [showFilters, setShowFilters] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const riskSelectId = useId();
+  const returnSelectId = useId();
 
   const filteredAndSortedCases = useMemo(() => {
     const filtered = mockCases
@@ -242,13 +244,11 @@ export default function EnhancedCasesList({ onCaseSelect }: EnhancedCasesListPro
             <div className="rounded-lg border bg-white/80 p-3 shadow-sm backdrop-blur-sm sm:p-4">
               <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-3">
                 <div>
-                  <label
-                    htmlFor="risk-profile-select"
-                    className="mb-2 block text-xs font-medium text-gray-700 sm:text-sm">
+                  <label htmlFor={riskSelectId} className="mb-2 block text-xs font-medium text-gray-700 sm:text-sm">
                     Risk Profile
                   </label>
                   <Select value={selectedRiskProfile} onValueChange={setSelectedRiskProfile}>
-                    <SelectTrigger id="risk-profile-select" className="h-10 text-xs sm:h-11 sm:text-sm">
+                    <SelectTrigger id={riskSelectId} className="h-10 text-xs sm:h-11 sm:text-sm">
                       <SelectValue placeholder="All Risk Levels" />
                     </SelectTrigger>
                     <SelectContent>
@@ -263,13 +263,11 @@ export default function EnhancedCasesList({ onCaseSelect }: EnhancedCasesListPro
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="return-range-select"
-                    className="mb-2 block text-xs font-medium text-gray-700 sm:text-sm">
+                  <label htmlFor={returnSelectId} className="mb-2 block text-xs font-medium text-gray-700 sm:text-sm">
                     Expected Return Range
                   </label>
                   <Select value={selectedReturnRange} onValueChange={setSelectedReturnRange}>
-                    <SelectTrigger id="return-range-select" className="h-10 text-xs sm:h-11 sm:text-sm">
+                    <SelectTrigger id={returnSelectId} className="h-10 text-xs sm:h-11 sm:text-sm">
                       <SelectValue placeholder="All Returns" />
                     </SelectTrigger>
                     <SelectContent>

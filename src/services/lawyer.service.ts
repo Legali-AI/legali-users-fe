@@ -1,14 +1,37 @@
 import { mockLawyers, mockReviews } from "@/data/mock-data";
 import { api } from "@/lib/api-client";
 import { API_CONFIG, APP_CONFIG } from "@/lib/config";
-import type { Booking, Lawyer, Review, SearchParams } from "@/types";
+import type { Booking, Lawyer, MarketplaceLawyer, Review, SearchParams } from "@/types";
 
 // Simulate API delay for mock data
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+const MARKETPLACE_CACHE_TTL = 2 * 60 * 1000; // 2 minutes
+
+let cachedMarketplaceLawyers: MarketplaceLawyer[] | null = null;
+let lastMarketplaceFetch = 0;
+
 // Response types for API
-interface LawyerSearchResponse {
-  lawyers: Lawyer[];
+interface MarketplaceLawyerApi {
+  id: string;
+  name: string;
+  practice_area: string[];
+  min_price: number;
+  max_price: number;
+  about: string;
+  city: string;
+  avg_rating: string;
+  total_review: number;
+}
+
+interface MarketplaceLawyerApiResponse {
+  success: boolean;
+  message?: string;
+  data: MarketplaceLawyerApi[];
+}
+
+export interface LawyerSearchResponse {
+  lawyers: MarketplaceLawyer[];
   total: number;
   page: number;
   limit: number;
@@ -20,152 +43,212 @@ interface BookingResponse {
   message?: string;
 }
 
+const normalizeMarketplaceLawyer = (lawyer: MarketplaceLawyerApi): MarketplaceLawyer => ({
+  id: lawyer.id,
+  name: lawyer.name,
+  practiceAreas: Array.isArray(lawyer.practice_area) ? lawyer.practice_area : [],
+  minPrice: Number.isFinite(lawyer.min_price) ? lawyer.min_price : 0,
+  maxPrice: Number.isFinite(lawyer.max_price)
+    ? lawyer.max_price
+    : Number.isFinite(lawyer.min_price)
+      ? lawyer.min_price
+      : 0,
+  about: lawyer.about ?? "",
+  city: lawyer.city ?? "",
+  avgRating: Number.parseFloat(lawyer.avg_rating ?? "0") || 0,
+  totalReview: typeof lawyer.total_review === "number" ? lawyer.total_review : 0,
+});
+
+const mapMockLawyerToMarketplace = (lawyer: Lawyer): MarketplaceLawyer => ({
+  id: lawyer.id,
+  name: lawyer.name,
+  practiceAreas: lawyer.specialties,
+  minPrice: lawyer.hourlyRate,
+  maxPrice: lawyer.hourlyRate,
+  about: lawyer.bio,
+  city: lawyer.jurisdiction[0] ?? "Unknown",
+  avgRating: lawyer.rating,
+  totalReview: lawyer.reviewCount,
+});
+
+async function fetchMarketplaceLawyers(): Promise<MarketplaceLawyer[]> {
+  const now = Date.now();
+
+  if (cachedMarketplaceLawyers && now - lastMarketplaceFetch < MARKETPLACE_CACHE_TTL) {
+    return cachedMarketplaceLawyers;
+  }
+
+  const response = await api.get<MarketplaceLawyerApiResponse>(
+    API_CONFIG.ENDPOINTS.MARKETPLACE_LAWYERS
+  );
+
+  if (!response.success) {
+    throw new Error(response.message ?? "Failed to fetch marketplace lawyers");
+  }
+
+  if (!Array.isArray(response.data)) {
+    throw new Error("Marketplace lawyers response is invalid");
+  }
+
+  const normalized = response.data.map(normalizeMarketplaceLawyer);
+
+  cachedMarketplaceLawyers = normalized;
+  lastMarketplaceFetch = now;
+
+  return normalized;
+}
+
+function applyMarketplaceFilters(
+  lawyers: MarketplaceLawyer[],
+  params: SearchParams
+): MarketplaceLawyer[] {
+  const query = params.query?.toLowerCase().trim();
+  const caseType = params.caseType?.toLowerCase().trim();
+  const location = params.location?.toLowerCase().trim();
+  const minimumRating =
+    typeof params.rating === "number" && params.rating > 0 ? params.rating : undefined;
+  const budgetMin =
+    typeof params.budget?.min === "number" && params.budget?.min > 0
+      ? params.budget.min
+      : undefined;
+  const budgetMax =
+    typeof params.budget?.max === "number" && params.budget?.max > 0
+      ? params.budget.max
+      : undefined;
+
+  return lawyers.filter(lawyer => {
+    if (query) {
+      const matchesQuery =
+        lawyer.name.toLowerCase().includes(query) ||
+        lawyer.about.toLowerCase().includes(query) ||
+        lawyer.practiceAreas.some(area => area.toLowerCase().includes(query));
+
+      if (!matchesQuery) {
+        return false;
+      }
+    }
+
+    if (caseType) {
+      const matchesCaseType = lawyer.practiceAreas.some(area =>
+        area.toLowerCase().includes(caseType)
+      );
+      if (!matchesCaseType) {
+        return false;
+      }
+    }
+
+    if (location) {
+      const matchesLocation = lawyer.city.toLowerCase().includes(location);
+      if (!matchesLocation) {
+        return false;
+      }
+    }
+
+    if (minimumRating !== undefined && lawyer.avgRating < minimumRating) {
+      return false;
+    }
+
+    if (budgetMin !== undefined || budgetMax !== undefined) {
+      const rangeMin = Number.isFinite(lawyer.minPrice) ? lawyer.minPrice : 0;
+      const rangeMax =
+        Number.isFinite(lawyer.maxPrice) && lawyer.maxPrice > 0 ? lawyer.maxPrice : rangeMin;
+
+      if (budgetMin !== undefined && rangeMax < budgetMin) {
+        return false;
+      }
+
+      if (budgetMax !== undefined && rangeMin > budgetMax) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+}
+
+function sortMarketplaceLawyers(
+  lawyers: MarketplaceLawyer[],
+  params: SearchParams
+): MarketplaceLawyer[] {
+  if (!params.sortBy) {
+    return [...lawyers];
+  }
+
+  const direction = params.sortOrder === "asc" ? 1 : -1;
+  const sorted = [...lawyers];
+
+  sorted.sort((a, b) => {
+    let aValue = 0;
+    let bValue = 0;
+
+    switch (params.sortBy) {
+      case "rating":
+        aValue = a.avgRating;
+        bValue = b.avgRating;
+        break;
+      case "price":
+        aValue = a.minPrice;
+        bValue = b.minPrice;
+        break;
+      case "reviews":
+        aValue = a.totalReview;
+        bValue = b.totalReview;
+        break;
+      default:
+        return a.name.localeCompare(b.name);
+    }
+
+    const diff = (aValue - bValue) * direction;
+
+    if (diff > 0) {
+      return 1;
+    }
+
+    if (diff < 0) {
+      return -1;
+    }
+
+    return a.name.localeCompare(b.name);
+  });
+
+  return sorted;
+}
+
+function buildSearchResponse(
+  lawyers: MarketplaceLawyer[],
+  params: SearchParams
+): LawyerSearchResponse {
+  const filtered = applyMarketplaceFilters(lawyers, params);
+  const sorted = sortMarketplaceLawyers(filtered, params);
+  const page = Math.max(1, params.page ?? 1);
+  const limit = Math.max(1, params.limit ?? APP_CONFIG.DEFAULT_PAGE_SIZE);
+  const startIndex = (page - 1) * limit;
+  const endIndex = startIndex + limit;
+  const paginatedLawyers = sorted.slice(startIndex, endIndex);
+
+  return {
+    lawyers: paginatedLawyers,
+    total: filtered.length,
+    page,
+    limit,
+    totalPages: filtered.length === 0 ? 0 : Math.ceil(filtered.length / limit),
+  };
+}
+
 export async function searchLawyers(params: SearchParams): Promise<LawyerSearchResponse> {
   if (APP_CONFIG.USE_MOCK_DATA) {
-    await delay(800);
+    await delay(300);
+    const dataset = mockLawyers.map(mapMockLawyerToMarketplace);
+    return buildSearchResponse(dataset, params);
+  }
 
-    let filteredLawyers = [...mockLawyers];
-
-    // Apply search query filter
-    if (params.query) {
-      const query = params.query.toLowerCase();
-      filteredLawyers = filteredLawyers.filter(
-        lawyer =>
-          lawyer.name.toLowerCase().includes(query) ||
-          lawyer.specialties.some(specialty => specialty.toLowerCase().includes(query)) ||
-          lawyer.bio.toLowerCase().includes(query)
-      );
-    }
-
-    // Apply case type filter
-    if (params.caseType) {
-      filteredLawyers = filteredLawyers.filter(lawyer =>
-        lawyer.specialties.some(specialty =>
-          specialty.toLowerCase().includes(params.caseType?.toLowerCase() ?? "")
-        )
-      );
-    }
-
-    // Apply location filter
-    if (params.location) {
-      filteredLawyers = filteredLawyers.filter(lawyer =>
-        lawyer.jurisdiction.some(jurisdiction =>
-          jurisdiction.toLowerCase().includes(params.location?.toLowerCase() || "")
-        )
-      );
-    }
-
-    // Apply budget filter
-    if (params.budget) {
-      filteredLawyers = filteredLawyers.filter(
-        lawyer =>
-          lawyer.hourlyRate >= (params.budget?.min || 0) &&
-          lawyer.hourlyRate <= (params.budget?.max || 0)
-      );
-    }
-
-    // Apply rating filter
-    if (params.rating) {
-      filteredLawyers = filteredLawyers.filter(lawyer => lawyer.rating >= (params.rating ?? 0));
-    }
-
-    // Apply experience filter
-    if (params.experience) {
-      filteredLawyers = filteredLawyers.filter(
-        lawyer => lawyer.experience >= (params.experience ?? 0)
-      );
-    }
-
-    // Apply language filter
-    if (params.language) {
-      filteredLawyers = filteredLawyers.filter(lawyer =>
-        lawyer.languages.some(lang =>
-          lang.toLowerCase().includes((params.language || "").toLowerCase())
-        )
-      );
-    }
-
-    // Apply availability filter
-    if (params.availability) {
-      filteredLawyers = filteredLawyers.filter(
-        lawyer => lawyer.availability === params.availability
-      );
-    }
-
-    // Apply sorting
-    if (params.sortBy) {
-      filteredLawyers.sort((a, b) => {
-        let aValue: number;
-        let bValue: number;
-
-        switch (params.sortBy) {
-          case "rating":
-            aValue = a.rating;
-            bValue = b.rating;
-            break;
-          case "price":
-            aValue = a.hourlyRate;
-            bValue = b.hourlyRate;
-            break;
-          case "experience":
-            aValue = a.experience;
-            bValue = b.experience;
-            break;
-          case "reviews":
-            aValue = a.reviewCount;
-            bValue = b.reviewCount;
-            break;
-          default:
-            return 0;
-        }
-
-        return params.sortOrder === "desc" ? bValue - aValue : aValue - bValue;
-      });
-    }
-
-    // Apply pagination
-    const page = params.page || 1;
-    const limit = params.limit || 10;
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit;
-
-    const paginatedLawyers = filteredLawyers.slice(startIndex, endIndex);
-
-    return {
-      lawyers: paginatedLawyers,
-      total: filteredLawyers.length,
-      page,
-      limit,
-      totalPages: Math.ceil(filteredLawyers.length / limit),
-    };
-  } else {
-    // Real API implementation
-    const queryParams = new URLSearchParams();
-
-    if (params.query) queryParams.append("query", params.query);
-    if (params.caseType) queryParams.append("caseType", params.caseType);
-    if (params.location) queryParams.append("location", params.location);
-    if (params.rating) queryParams.append("rating", params.rating.toString());
-    if (params.experience) queryParams.append("experience", params.experience.toString());
-    if (params.language) queryParams.append("language", params.language);
-    if (params.availability) queryParams.append("availability", params.availability);
-    if (params.sortBy) queryParams.append("sortBy", params.sortBy);
-    if (params.sortOrder) queryParams.append("sortOrder", params.sortOrder);
-    if (params.budget) {
-      queryParams.append("minPrice", params.budget.min.toString());
-      queryParams.append("maxPrice", params.budget.max.toString());
-    }
-
-    const page = params.page || 1;
-    const limit = params.limit || APP_CONFIG.DEFAULT_PAGE_SIZE;
-    queryParams.append("page", page.toString());
-    queryParams.append("limit", limit.toString());
-
-    const response = await api.get<LawyerSearchResponse>(
-      `${API_CONFIG.ENDPOINTS.LAWYERS}?${queryParams.toString()}`
-    );
-
-    return response;
+  try {
+    const dataset = await fetchMarketplaceLawyers();
+    return buildSearchResponse(dataset, params);
+  } catch (error) {
+    console.error("Failed to fetch marketplace lawyers:", error);
+    const fallbackDataset = mockLawyers.map(mapMockLawyerToMarketplace);
+    return buildSearchResponse(fallbackDataset, params);
   }
 }
 

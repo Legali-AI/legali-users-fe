@@ -1,35 +1,32 @@
-"use client";
+import { searchLawyers } from "@/services/lawyer.service";
+import type { CaseType, SearchParams } from "@/types";
+import LawyerSearchInterface from "./LawyerSearchInterface";
 
-import dynamic from "next/dynamic";
-import type { CaseType } from "@/types";
-
-// Dynamic imports for client-side components
-const LawyerSearchInterface = dynamic(() => import("./LawyerSearchInterface"), {
-  ssr: false, // This component needs client-side state management
-  loading: () => (
-    <div className="animate-pulse">
-      <div className="mb-8 h-24 rounded bg-gray-200"></div>
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
-        <div className="h-96 rounded bg-gray-200 lg:col-span-1"></div>
-        <div className="space-y-4 lg:col-span-3">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-48 rounded bg-gray-200"></div>
-          ))}
-        </div>
-      </div>
-    </div>
-  ),
-});
+const DEFAULT_SEARCH_PARAMS: SearchParams = {
+  query: "",
+  location: "",
+  page: 1,
+  limit: 12,
+  sortBy: "rating",
+  sortOrder: "desc",
+};
 
 interface ClientLawyerWrapperProps {
-  caseTypeOptions: Array<{ label: string; value: CaseType; count: number }>;
-  languageOptions: Array<{ label: string; value: string; count: number }>;
+  caseTypeOptions: Array<{ label: string; value: CaseType; count?: number }>;
 }
 
-export default function ClientLawyerWrapper({ caseTypeOptions, languageOptions }: ClientLawyerWrapperProps) {
+export default async function ClientLawyerWrapper({ caseTypeOptions }: ClientLawyerWrapperProps) {
+  const initialResults = await searchLawyers(DEFAULT_SEARCH_PARAMS);
+  const initialUpdatedAt = Date.now();
+
   return (
     <div className="animate-in duration-500 fade-in">
-      <LawyerSearchInterface caseTypeOptions={caseTypeOptions} languageOptions={languageOptions} />
+      <LawyerSearchInterface
+        caseTypeOptions={caseTypeOptions}
+        initialParams={DEFAULT_SEARCH_PARAMS}
+        initialResults={initialResults}
+        initialUpdatedAt={initialUpdatedAt}
+      />
     </div>
   );
 }
