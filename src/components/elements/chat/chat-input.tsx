@@ -11,6 +11,7 @@ import {
   simulateFileUpload,
   type UploadingFile,
 } from "./file-upload-progress";
+import { FileUploadMenu } from "./file-upload-menu";
 
 interface ChatInputProps {
   onSendMessage: (content: string, files?: File[]) => void;
@@ -23,7 +24,6 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
   const [completedFiles, setCompletedFiles] = useState<File[]>([]);
   const [isRecording, setIsRecording] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = () => {
@@ -47,9 +47,7 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
     }
   };
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = Array.from(e.target.files || []);
-
+  const handleFilesSelected = (selectedFiles: File[]) => {
     // Create uploading file objects and start upload simulation
     const newUploadingFiles = selectedFiles.map(file => {
       const uploadingFile = createUploadingFile(file);
@@ -81,11 +79,6 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
     });
 
     setUploadingFiles(prev => [...prev, ...newUploadingFiles]);
-
-    // Reset file input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
   };
 
   const removeUploadingFile = (fileId: string) => {
@@ -152,16 +145,8 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
 
           {/* Action Buttons Container */}
           <div className="flex shrink-0 items-center gap-2">
-            {/* File Upload Button */}
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="size-10 rounded-xl hover:bg-neutral-100"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={disabled}>
-              <Paperclip className="size-5 text-slate-gray-500" />
-            </Button>
+            {/* File Upload Menu */}
+            <FileUploadMenu onFilesSelected={handleFilesSelected} disabled={disabled} />
 
             {/* Voice Recording Button */}
             <Button
@@ -193,16 +178,6 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
             </Button>
           </div>
         </div>
-
-        {/* Hidden File Input */}
-        <input
-          ref={fileInputRef}
-          type="file"
-          multiple
-          accept="image/*,application/pdf,.doc,.docx,.txt"
-          onChange={handleFileSelect}
-          className="hidden"
-        />
       </div>
     </div>
   );

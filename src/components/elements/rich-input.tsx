@@ -2,6 +2,7 @@
 
 // biome-ignore assist/source/organizeImports: Stupid resolve from biome
 import { FileAttachmentContainer } from "@/components/elements/attachments/file-attachment-container";
+import { FileUploadMenu } from "@/components/elements/chat/file-upload-menu";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Mic, Send, StopCircle } from "lucide-react";
@@ -32,7 +33,6 @@ export default function RichInput({
 }: RichInputProps) {
   const [text, setText] = React.useState("");
   const [files, setFiles] = React.useState<File[]>([]);
-  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
   const [audioBlob, setAudioBlob] = React.useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = React.useState<string | null>(null);
   const [recordMs, setRecordMs] = React.useState<number>(0);
@@ -56,21 +56,11 @@ export default function RichInput({
     };
   }, []);
 
-  const handlePickFiles = () => {
-    if (disabled) return;
-    fileInputRef.current?.click();
-  };
-
-  const handleFilesSelected: React.ChangeEventHandler<HTMLInputElement> = e => {
-    const list = e.target.files;
-    if (!list) return;
-    const newFiles = Array.from(list);
+  const handleFilesSelected = (newFiles: File[]) => {
     setFiles(prev => {
       const merged = [...prev, ...newFiles].slice(0, maxFiles);
       return merged;
     });
-    // reset input to allow re-selecting the same file
-    e.currentTarget.value = "";
   };
 
   const startRecording = async () => {
@@ -198,23 +188,12 @@ export default function RichInput({
       {/* Footer row */}
       <div className="flex w-full items-start justify-between gap-4 md:gap-8 lg:gap-12 xl:gap-16">
         {/* Add files */}
-        <div>
-          <Button type="button" size={"lg"} variant="outline" onClick={handlePickFiles} disabled={disabled}>
-            <span className="flex items-center gap-2">
-              <Typography level="body" className="text-black">
-                Add photos and files
-              </Typography>
-            </span>
-          </Button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept={accept}
-            multiple
-            onChange={handleFilesSelected}
-            className="hidden"
-          />
-        </div>
+        <FileUploadMenu
+          onFilesSelected={handleFilesSelected}
+          disabled={disabled}
+          variant="button"
+          buttonText="Add photos and files"
+        />
 
         {/* Right controls */}
         <div className="flex items-center justify-end gap-2">
