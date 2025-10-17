@@ -1,36 +1,24 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { Paperclip } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import type { RichInputPayload } from "../../../components/elements/rich-input";
 import RichInput from "../../../components/elements/rich-input";
-import { H1, H2 } from "../../../components/elements/typography";
+import { H2 } from "../../../components/elements/typography";
 import { Badge } from "../../../components/ui/badge";
 import { NAVIGATION_FEATURES } from "../../../data/home.data";
-import type { RichInputPayload } from "../../../components/elements/rich-input";
 import { storePendingMessage } from "../../../lib/session-storage";
+import { HeroAnimatedHeadline } from "./hero-section.client";
 
 export default function HeroSection() {
   const router = useRouter();
-
-  // Animated text rotation state
-  const animatedTexts = ["AI-law firm", "AI-legal confidant", "AI-legal resources"];
-  const [currentTextIndex, setCurrentTextIndex] = useState(0);
 
   // Drag and drop state
   const [isDragOver, setIsDragOver] = useState(false);
   const [droppedFiles, setDroppedFiles] = useState<File[]>([]);
   const dragTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Cycle through texts every 3 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTextIndex(prevIndex => (prevIndex + 1) % animatedTexts.length);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -171,29 +159,14 @@ export default function HeroSection() {
       </div>
 
       {/* Hero content */}
-      <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-5">
-        {/* Main headline with animated text */}
-        <div data-aos="zoom-in-down" data-aos-duration="600">
-          <H1 weight={"semibold"} align={"center"}>
-            <span>Meet your first </span>
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={currentTextIndex}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="inline-block">
-                {animatedTexts[currentTextIndex]}
-              </motion.span>
-            </AnimatePresence>
-          </H1>
-        </div>
-
+      <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-8 text-center">
+        <HeroAnimatedHeadline />
         {/* Subtitle */}
-        <div data-aos="zoom-in" data-aos-duration="600" data-aos-delay="100">
-          <H2 level={"title"} className="text-brand-slate" align={"center"}>
-            Legali lets you build cases, manage evidence, and fund litigation—all on one secure AI platform.
+        <div className="max-w-4xl" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="100">
+          <H2 level="title" className="text-brand-slate" align="center">
+            Legali keeps humans in the loop. We pair AI speed with expert guidance to help you build cases, organize
+            evidence, draft documents, spot legal risks, connect with the right attorneys, and even crowdfund litigation
+            on one secure platform.
           </H2>
         </div>
 
@@ -208,25 +181,40 @@ export default function HeroSection() {
 
         {/* Feature badges */}
         <div
-          className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:gap-4"
+          className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-4"
           data-aos="fade-up"
           data-aos-duration="600"
           data-aos-delay="300">
           {NAVIGATION_FEATURES.map((feature, index) => (
-            <div key={feature.label} data-aos="flip-up" data-aos-duration="600" data-aos-delay={400 + index * 50}>
-              <Badge level={"body"} variant={"gradient-blue"} size={"lg"}>
-                <feature.icon size={30} aria-hidden="true" />
-                <span className="sr-only hidden">Feature: </span>
+            <Link
+              key={feature.label}
+              href={feature.href}
+              aria-label={feature.label}
+              className="focus-visible:ring-2 focus-visible:ring-brand-navy/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:outline-none"
+              data-aos="flip-up"
+              data-aos-duration="600"
+              data-aos-delay={400 + index * 50}>
+              <Badge
+                level="body"
+                variant="gradient-blue"
+                size="lg"
+                className="gap-2 border border-white/60 px-5 py-2 shadow-[0_24px_48px_-28px_rgba(15,36,71,0.6)] transition hover:translate-y-0.5 hover:brightness-95">
+                <feature.icon
+                  size={36}
+                  aria-hidden="true"
+                  className="shrink-0"
+                  style={feature.color ? { color: feature.color } : undefined}
+                />
                 {feature.label}
               </Badge>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
 
       {/* Drag and Drop Overlay */}
       {isDragOver && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-sky-blue-50/90 backdrop-blur-sm">
+        <div className="bg-sky-blue-50/90 absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm">
           <div className="text-center">
             <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-sky-blue-100">
               <Paperclip className="h-10 w-10 text-sky-blue-600" />

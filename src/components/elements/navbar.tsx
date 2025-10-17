@@ -1,29 +1,29 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-    NavigationMenu,
-    NavigationMenuContent,
-    NavigationMenuItem,
-    NavigationMenuLink,
-    NavigationMenuList,
-    NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { useAuth } from "@/hooks/use-auth";
-import { useAuthStatus } from "@/hooks/use-auth-status";
 import { LogOut, Menu, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useAuth } from "@/hooks/use-auth";
+import { useAuthStatus } from "@/hooks/use-auth-status";
 import { cn } from "../../lib/utils";
 import { Typography } from "./typography";
 
@@ -48,16 +48,16 @@ type NavItemType = {
 };
 
 const NAV_ITEMS: NavItemType[] = [
-  {
-    title: "Solutions",
-    href: "/solutions",
-    subItems: [
-      {
-        title: "Solution 1",
-        href: "/solutions/solution-1",
-      },
-    ],
-  },
+  // {
+  //   title: "Pricing",
+  //   href: "/pricing",
+  //   // subItems: [
+  //   //   {
+  //   //     title: "Solution 1",
+  //   //     href: "/solutions/solution-1",
+  //   //   },
+  //   // ],
+  // },
   {
     title: "Pricing",
     href: "/pricing",
@@ -67,16 +67,20 @@ const NAV_ITEMS: NavItemType[] = [
     href: "/integration",
   },
   {
-    title: "Attorney",
-    href: "/attorney",
+    title: "Resources",
+    href: "/resources",
   },
   {
-    title: "Support",
-    href: "/support",
+    title: "Litigation 101",
+    href: "/litigation",
     subItems: [
       {
-        title: "Support 1",
-        href: "/support/solution-1",
+        title: "Crowdfunding for Legal Fees",
+        href: "/litigation-crowdfunding",
+      },
+      {
+        title: "Lawyers Marketplace",
+        href: "/lawyers",
       },
     ],
   },

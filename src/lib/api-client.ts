@@ -27,7 +27,7 @@ const createApiClient = (): AxiosInstance => {
       // Handle FormData requests properly
       if (config.data instanceof FormData) {
         // Remove Content-Type header to let axios set it automatically with proper boundary
-        delete config.headers["Content-Type"];
+        config.headers["Content-Type"] = null;
         console.log("🔄 FormData detected, letting axios handle Content-Type header");
       }
 

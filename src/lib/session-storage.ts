@@ -19,7 +19,7 @@ export interface StoredMessagePayload {
   audioUrl?: string | null;
 }
 
-const PENDING_MESSAGE_KEY = 'legali_pending_message';
+const PENDING_MESSAGE_KEY = "legali_pending_message";
 
 /**
  * Convert File to base64 string
@@ -30,7 +30,7 @@ async function fileToBase64(file: File): Promise<string> {
     reader.onload = () => {
       const result = reader.result as string;
       // Remove data URL prefix (e.g., "data:application/pdf;base64,")
-      const base64 = result.split(',')[1];
+      const base64 = result.split(",")[1];
       resolve(base64);
     };
     reader.onerror = reject;
@@ -46,7 +46,7 @@ async function blobToBase64(blob: Blob): Promise<string> {
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
-      const base64 = result.split(',')[1];
+      const base64 = result.split(",")[1];
       resolve(base64);
     };
     reader.onerror = reject;
@@ -97,7 +97,7 @@ export async function storePendingMessage(payload: {
   try {
     // Serialize files
     const serializedFiles = await Promise.all(
-      payload.files.map(async (file) => ({
+      payload.files.map(async file => ({
         name: file.name,
         type: file.type,
         size: file.size,
@@ -125,7 +125,7 @@ export async function storePendingMessage(payload: {
 
     sessionStorage.setItem(PENDING_MESSAGE_KEY, JSON.stringify(storedPayload));
   } catch (error) {
-    console.error('Failed to store pending message:', error);
+    console.error("Failed to store pending message:", error);
     throw error;
   }
 }
@@ -148,7 +148,7 @@ export function getPendingMessage(): {
     const payload: StoredMessagePayload = JSON.parse(stored);
 
     // Reconstruct File objects
-    const files = payload.files.map((fileData) =>
+    const files = payload.files.map(fileData =>
       base64ToFile(fileData.content, fileData.name, fileData.type, fileData.lastModified)
     );
 
@@ -165,7 +165,7 @@ export function getPendingMessage(): {
       audioUrl: payload.audioUrl ?? null,
     };
   } catch (error) {
-    console.error('Failed to retrieve pending message:', error);
+    console.error("Failed to retrieve pending message:", error);
     return null;
   }
 }
@@ -177,6 +177,6 @@ export function clearPendingMessage(): void {
   try {
     sessionStorage.removeItem(PENDING_MESSAGE_KEY);
   } catch (error) {
-    console.error('Failed to clear pending message:', error);
+    console.error("Failed to clear pending message:", error);
   }
 }

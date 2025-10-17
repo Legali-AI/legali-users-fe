@@ -1,57 +1,86 @@
 import {
-  AlertTriangle,
   BriefcaseBusiness,
-  Clock,
   Dices,
   DollarSign,
   FileText,
   Folder,
-  FolderOpen,
-  Gavel,
-  HandHeart,
+  FolderSync,
   Handshake,
   Home,
   type LucideIcon,
+  Scale,
   ScaleIcon,
   ScrollTextIcon,
   SearchIcon,
-  TrendingUp,
-  Users,
+  TriangleAlert,
+  UserRound,
+  Wallet,
+  Wrench,
 } from "lucide-react";
 
 export interface Feature {
   label: string;
   icon: LucideIcon;
+  href: string;
+  color?: string;
 }
 
 export const NAVIGATION_FEATURES: Feature[] = [
   {
-    label: "Red Flag Alerts",
-    icon: AlertTriangle,
+    label: "Red Flag Analysis",
+    icon: TriangleAlert,
+    href: "/red-flag-analysis",
+    color: "#C92F31",
   },
   {
-    label: "Legal Template",
+    label: "Smart Legal Drafter",
     icon: FileText,
+    href: "/smart-legal-drafter",
+    color: "#143473",
+  },
+  {
+    label: "Litigation Case Builder",
+    icon: Wrench,
+    href: "/litigation-case-builder",
+    color: "#792FC9",
   },
   {
     label: "Lawyers Marketplace",
-    icon: Users,
+    icon: Scale,
+    href: "/lawyers-marketplace",
+    color: "#00ABF5",
   },
   {
-    label: "Fund Your Litigation: For Investors",
-    icon: TrendingUp,
+    label: "Fund Your Litigation: Investors",
+    icon: DollarSign,
+    href: "/fund-your-litigation-investors",
+    color: "#0B9601",
   },
   {
-    label: "Legal Dossier Builder",
-    icon: FolderOpen,
+    label: "Fund Your Litigation: Litigants",
+    icon: DollarSign,
+    href: "/fund-your-litigation-litigants",
+    color: "#0B9601",
+  },
+];
+
+export interface JusticeGapStat {
+  value: string;
+  description: string;
+}
+
+export const JUSTICE_GAP_STATS: JusticeGapStat[] = [
+  {
+    value: "15M",
+    description: "Navigate legal system alone yearly",
   },
   {
-    label: "Case and Timeline Builder",
-    icon: Clock,
+    value: "75%",
+    description: "Cases involve unrepresented parties",
   },
   {
-    label: "Fund Your Litigation: For Litigants",
-    icon: HandHeart,
+    value: "4%",
+    description: "Win rate without proper resources",
   },
 ];
 export interface ProblemAboutUs {
@@ -61,19 +90,22 @@ export interface ProblemAboutUs {
 }
 export const CORE_PROBLEMS: ProblemAboutUs[] = [
   {
-    title: 'Stuck in the "missing middle"?',
-    description: "Your case is too big for small claims, too small for big firms.",
-    icon: BriefcaseBusiness,
+    title: '"Self-represented litigants"',
+    description:
+      "15 million Americans navigate the legal system alone each year with just a 4% win rate.",
+    icon: UserRound,
   },
   {
-    title: "Unfair settlements?",
-    description: "Don't feel forced to accept lowball offers.",
-    icon: Gavel,
+    title: '"Stuck in the middle"',
+    description:
+      "Problems too big for small claims court, but not big enough to justify six-figure legal fees.",
+    icon: Scale,
   },
   {
-    title: "Sky-high legal fees?",
-    description: "Stop gambling your future just to stay in the game.",
-    icon: TrendingUp,
+    title: '"Settle for less"',
+    description:
+      "People accept unfair deals—or risk everything—because they can’t afford representation.",
+    icon: Handshake,
   },
 ];
 
@@ -244,10 +276,158 @@ export const ATTORNEYS: Attorney[] = [
   },
 ];
 
+export interface ToolkitItem {
+  title: string;
+  subtitle: string;
+  description: string;
+  icon: LucideIcon;
+  href?: string;
+}
+
+export interface ToolkitCategory {
+  category: "individuals" | "lawyers";
+  items: ToolkitItem[];
+}
+
+export interface ToolkitContent {
+  heading: string;
+  subheading: string;
+  tabIndividuals: string;
+  tabLawyers: string;
+}
+
+export const TOOLKIT_CONTENT: ToolkitContent = {
+  heading: "Your complete legal tool kit.",
+  subheading: "One platform, every legal need.",
+  tabIndividuals: "For Individuals",
+  tabLawyers: "For Lawyers",
+};
+
+export const TOOLKIT_ITEMS: ToolkitCategory[] = [
+  {
+    category: "individuals",
+    items: [
+      {
+        title: "Red Flag Analysis",
+        subtitle: "Start here.",
+        description:
+          "Upload documents or describe your situation. Get instant analysis of legal risks, problematic terms, and key deadlines—explained in plain language. We'll show you what matters and what to do next.",
+        icon: TriangleAlert,
+        href: "/red-flag-analysis",
+      },
+      {
+        title: "Litigation Case Builder",
+        subtitle: "Build your case.",
+        description:
+          "Turn your story into a court-ready case. We organize evidence, build timelines, draft legal arguments, and prepare attorney-ready dossiers. File yourself, hand it to a lawyer, or we'll file it for you.",
+        icon: DollarSign,
+        href: "/litigation-case-builder",
+      },
+      {
+        title: "Lawyers Marketplace",
+        subtitle: "Find the right lawyer.",
+        description:
+          "Browse verified attorneys by location and practice area, share your case instantly through seamless integration, and get upfront pricing with built-in messaging for quick consultations.",
+        icon: Home,
+        href: "/lawyers",
+      },
+      {
+        title: "Smart Legal Drafter",
+        subtitle: "Create your documents.",
+        description:
+          "Generate legally sound, jurisdiction-specific contracts, agreements, demand letters, and filings through simple conversation. Built-in e-signature and instant delivery—no legal expertise required.",
+        icon: SearchIcon,
+        href: "/smart-legal-drafter",
+      },
+      {
+        title: "File Organization & Workflows",
+        subtitle: "Stay organized.",
+        description:
+          "Keep every document and task on track with auto-sorting, attorney-ready summaries, and deadline management. Enterprise clients get secure collaboration with role-based access and encryption.",
+        icon: FolderSync,
+        href: "/file-organization",
+      },
+      {
+        title: "Investing in Litigation",
+        subtitle: "Fund your fight.",
+        description:
+          "Launch transparent campaigns for Lawyers can launch transparent campaigns for investors or public supporters. Investors can access this emerging asset class and track milestones in real time.",
+        icon: Wallet,
+        href: "/litigation-crowdfunding",
+      },
+    ],
+  },
+  {
+    category: "lawyers",
+    items: [
+      {
+        title: "Smart Legal Drafter",
+        subtitle: "Create your documents.",
+        description:
+          "Generate legally sound, jurisdiction-specific contracts, agreements, demand letters, and filings through simple conversation. Built-in e-signature and instant delivery—no legal expertise required.",
+        icon: SearchIcon,
+        href: "/smart-legal-drafter",
+      },
+      {
+        title: "File Organization & Workflows",
+        subtitle: "Stay organized.",
+        description:
+          "Keep every document and task on track with auto-sorting, attorney-ready summaries, and deadline management. Enterprise clients get secure collaboration with role-based access and encryption.",
+        icon: FolderSync,
+        href: "/file-organization",
+      },
+      {
+        title: "Investing in Litigation",
+        subtitle: "Fund your fight.",
+        description:
+          "Launch transparent campaigns for Lawyers can launch transparent campaigns for investors or public supporters. Investors can access this emerging asset class and track milestones in real time.",
+        icon: Wallet,
+        href: "/litigation-crowdfunding",
+      },
+    ],
+  },
+];
+
+export interface LegalEquityPartner {
+  name: string;
+  imageUrl: string;
+}
+
+export interface LegalEquityContent {
+  heading: string;
+}
+
+export const LEGAL_EQUITY_CONTENT: LegalEquityContent = {
+  heading: "Empowering legal equity leaders",
+};
+
+export const LEGAL_EQUITY_PARTNERS: LegalEquityPartner[] = [
+  {
+    name: "Justice Access",
+    imageUrl: "/home/org/1.png",
+  },
+  {
+    name: "Nonprofit Website Insider",
+    imageUrl: "/home/org/2.png",
+  },
+  {
+    name: "RSI Resolution Systems Institute",
+    imageUrl: "/home/org/3.png",
+  },
+  {
+    name: "IAALS",
+    imageUrl: "/home/org/4.png",
+  },
+];
+
 export default {
   NAVIGATION_FEATURES,
   CORE_PROBLEMS,
   BENEFITS,
   PROCESS_STEPS,
   VALUE_PROPOSITIONS,
+  TOOLKIT_CONTENT,
+  TOOLKIT_ITEMS,
+  LEGAL_EQUITY_CONTENT,
+  LEGAL_EQUITY_PARTNERS,
 };

@@ -1,15 +1,22 @@
 "use client";
 
-import { H1 } from "@/components/elements/typography";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { useAuthStatus } from "@/hooks/use-auth-status";
-import { useChatHistory } from "@/hooks/use-chat-queries";
 import { ArrowRight, Clock, MessageSquare, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { H1 } from "@/components/elements/typography";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { useAuthStatus } from "@/hooks/use-auth-status";
+import { useChatHistory } from "@/hooks/use-chat-queries";
 
 export default function HistoryChatsPage() {
   const { isAuthenticated, isLoading: authLoading } = useAuthStatus();
@@ -133,17 +140,15 @@ export default function HistoryChatsPage() {
         </div>
 
         {/* Error card */}
-        <div
-          className="mt-6 w-full max-w-2xl"
-          data-aos="slide-up"
-          data-aos-duration="600"
-          data-aos-delay="100">
+        <div className="mt-6 w-full max-w-2xl" data-aos="slide-up" data-aos-duration="600" data-aos-delay="100">
           <Card>
             <CardContent className="p-6 text-center">
               <MessageSquare className="mx-auto mb-4 h-12 w-12 text-gray-400" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Failed to load chats</h3>
               <p className="text-gray-600 mb-4">Please try again or contact support if the problem persists.</p>
-              <Button onClick={() => refetch()} className="bg-sky-600 hover:bg-sky-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 rounded-lg px-6 py-3">
+              <Button
+                onClick={() => refetch()}
+                className="bg-sky-600 hover:bg-sky-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 rounded-lg px-6 py-3">
                 <RefreshCw className="mr-2 h-4 w-4" />
                 Try Again
               </Button>
@@ -185,17 +190,17 @@ export default function HistoryChatsPage() {
         </div>
 
         {/* Empty state card */}
-        <div
-          className="mt-6 w-full max-w-2xl"
-          data-aos="slide-up"
-          data-aos-duration="600"
-          data-aos-delay="100">
+        <div className="mt-6 w-full max-w-2xl" data-aos="slide-up" data-aos-duration="600" data-aos-delay="100">
           <Card>
             <CardContent className="p-6 text-center">
               <MessageSquare className="mx-auto mb-4 h-12 w-12 text-gray-400" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">No chats found</h3>
-              <p className="text-gray-600 mb-4">Start a conversation with our AI Legal Confidant to see your chat history here.</p>
-              <Button asChild className="bg-sky-600 hover:bg-sky-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 rounded-lg px-6 py-3">
+              <p className="text-gray-600 mb-4">
+                Start a conversation with our AI Legal Confidant to see your chat history here.
+              </p>
+              <Button
+                asChild
+                className="bg-sky-600 hover:bg-sky-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 rounded-lg px-6 py-3">
                 <Link href="/agent">
                   <MessageSquare className="mr-2 h-4 w-4" />
                   Start New Chat
@@ -263,15 +268,15 @@ export default function HistoryChatsPage() {
                         <Clock className="h-4 w-4 text-gray-400" />
                         <p className="text-sm text-gray-500">{formatDate(chat.created_at)}</p>
                       </div>
-                      {chat.summary && (
-                        <p className="text-sm text-gray-600 mt-2 line-clamp-2">{chat.summary}</p>
-                      )}
+                      {chat.summary && <p className="text-sm text-gray-600 mt-2 line-clamp-2">{chat.summary}</p>}
                     </div>
                   </div>
-                  
+
                   {/* Button at right-bottom */}
                   <div className="flex justify-end mt-4">
-                    <Button asChild className="bg-sky-600 hover:bg-sky-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 rounded-lg px-4 py-2">
+                    <Button
+                      asChild
+                      className="bg-sky-600 hover:bg-sky-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 rounded-lg px-4 py-2">
                       <Link href={`/agent?chat_id=${chat.id}&from=history`}>
                         Continue Chat
                         <ArrowRight className="ml-2 h-4 w-4" />
@@ -291,9 +296,9 @@ export default function HistoryChatsPage() {
           <Pagination>
             <PaginationContent>
               <PaginationItem>
-                <PaginationPrevious 
+                <PaginationPrevious
                   href="#"
-                  onClick={(e) => {
+                  onClick={e => {
                     e.preventDefault();
                     if (currentPage > 1) {
                       setCurrentPage(currentPage - 1);
@@ -302,27 +307,26 @@ export default function HistoryChatsPage() {
                   className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                 />
               </PaginationItem>
-              
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
                 <PaginationItem key={page}>
                   <PaginationLink
                     href="#"
-                    onClick={(e) => {
+                    onClick={e => {
                       e.preventDefault();
                       setCurrentPage(page);
                     }}
                     isActive={currentPage === page}
-                    className="cursor-pointer"
-                  >
+                    className="cursor-pointer">
                     {page}
                   </PaginationLink>
                 </PaginationItem>
               ))}
-              
+
               <PaginationItem>
-                <PaginationNext 
+                <PaginationNext
                   href="#"
-                  onClick={(e) => {
+                  onClick={e => {
                     e.preventDefault();
                     if (currentPage < totalPages) {
                       setCurrentPage(currentPage + 1);
@@ -338,7 +342,9 @@ export default function HistoryChatsPage() {
 
       {/* Start new chat button */}
       <div className="mt-8 text-center" data-aos="fade-up" data-aos-duration="600" data-aos-delay="300">
-        <Button asChild className="bg-sky-600 hover:bg-sky-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 rounded-lg px-6 py-3 text-base">
+        <Button
+          asChild
+          className="bg-sky-600 hover:bg-sky-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 rounded-lg px-6 py-3 text-base">
           <Link href="/agent">
             <MessageSquare className="mr-2 h-5 w-5" />
             Start New Chat
@@ -348,4 +354,3 @@ export default function HistoryChatsPage() {
     </main>
   );
 }
-

@@ -1,7 +1,7 @@
-import type { Message, WorkflowRecommendation } from "@/components/elements/chat/types";
-import { chatService } from "@/services/chat.service";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { Message, WorkflowRecommendation } from "@/components/elements/chat/types";
+import { chatService } from "@/services/chat.service";
 import { useChatMessages, useSendMessage } from "./use-chat-queries";
 
 export interface UseChatOptions {
@@ -120,7 +120,7 @@ export function useChat({
   useEffect(() => {
     if (conversationId && queryMessages.length > 0) {
       // For existing conversations, use messages from React Query
-      setMessages(queryMessages);
+      setMessages(queryMessages as Message[]);
     } else if (!conversationId && !hasSetWelcomeMessage.current) {
       // For new chats, show welcome message
       const welcomeMessages: Message[] = [
@@ -166,11 +166,7 @@ export function useChat({
         handleSendMessage(initialMessage);
       }, 0);
     }
-  }, [
-    initialMessage,
-    conversationId,
-  ]);
-
+  }, [initialMessage, conversationId]);
 
   // Reset state when conversationId changes (for chat history navigation)
   useEffect(() => {
@@ -194,198 +190,199 @@ export function useChat({
     }
   }, [messagesError]);
 
-  const handleSendMessage = useCallback(async (content: string, files?: File[]) => {
-    // Prevent duplicate calls
-    if (isSendingMessage.current) {
-      return;
-    }
-    
-    isSendingMessage.current = true;
-
-    // Allow sending files without content, but require at least one of them
-    if (!content.trim() && (!files || files.length === 0)) {
-      console.warn("⚠️ handleSendMessage: Empty content and no files, returning early");
-      isSendingMessage.current = false;
-      return;
-    }
-
-    // Cancel any pending requests
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-
-    // Create new abort controller
-    abortControllerRef.current = new AbortController();
-
-    // IMMEDIATELY add user message to UI (optimistic update)
-    // Use the same logic as mutation params for consistency
-    const displayContent = content || "";
-
-    const userMessage: Message = {
-      id: `temp-user-${Date.now()}`,
-      content: displayContent,
-      isUser: true,
-      timestamp: new Date(),
-      attachments: files || undefined,
-    };
-
-    // Add user message immediately to messages array
-    setMessages(prevMessages => [...prevMessages, userMessage]);
-
-    setIsTyping(true);
-    setError(null);
-
-    try {
-      // Validate files before sending
-      if (files && files.length > 0) {
-
-        // Check if any file is invalid
-        const invalidFiles = files.filter(f => !(f instanceof File) || f.size === 0 || !f.name);
-        if (invalidFiles.length > 0) {
-          throw new Error(
-            `Invalid files detected: ${invalidFiles.length} files are empty or invalid`
-          );
-        }
-
-        // Check file sizes
-        const maxSize = 5 * 1024 * 1024; // 5MB
-        const oversizedFiles = files.filter(f => f.size > maxSize);
-        if (oversizedFiles.length > 0) {
-          const fileNames = oversizedFiles.map(f => f.name).join(", ");
-          const fileSizes = oversizedFiles
-            .map(f => `${(f.size / (1024 * 1024)).toFixed(2)}MB`)
-            .join(", ");
-          throw new Error(
-            `File(s) too large: ${fileNames} (${fileSizes}). Please choose files smaller than 5MB.`
-          );
-        }
+  const handleSendMessage = useCallback(
+    async (content: string, files?: File[]) => {
+      // Prevent duplicate calls
+      if (isSendingMessage.current) {
+        return;
       }
 
-      const mutationParams = {
-        message: content || "", // Send empty message if no content
-        ...(files && { files }),
-        ...(conversationId && { conversationId }),
-        ...(selectedTool && { toolParam: selectedTool }),
+      isSendingMessage.current = true;
+
+      // Allow sending files without content, but require at least one of them
+      if (!content.trim() && (!files || files.length === 0)) {
+        console.warn("⚠️ handleSendMessage: Empty content and no files, returning early");
+        isSendingMessage.current = false;
+        return;
+      }
+
+      // Cancel any pending requests
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+
+      // Create new abort controller
+      abortControllerRef.current = new AbortController();
+
+      // IMMEDIATELY add user message to UI (optimistic update)
+      // Use the same logic as mutation params for consistency
+      const displayContent = content || "";
+
+      const userMessage: Message = {
+        id: `temp-user-${Date.now()}`,
+        content: displayContent,
+        isUser: true,
+        timestamp: new Date(),
+        attachments: files || undefined,
       };
 
+      // Add user message immediately to messages array
+      setMessages(prevMessages => [...prevMessages, userMessage]);
 
-      const result = await sendMessageMutation.mutateAsync(mutationParams);
+      setIsTyping(true);
+      setError(null);
 
-      // Update conversation ID if this was a new conversation
-      if (!conversationId && result.data?.conversation_id) {
-        setConversationId(result.data.conversation_id);
-
-        // Store selected tool for new conversation
-        if (selectedTool) {
-          storeSelectedTool(result.data.conversation_id, selectedTool);
-        }
-
-        // Update URL with new chat_id
-        const currentUrl = new URL(window.location.href);
-        currentUrl.searchParams.set("chat_id", result.data.conversation_id);
-
-        // Remove initial message param after first message
-        if (currentUrl.searchParams.has("message")) {
-          currentUrl.searchParams.delete("message");
-        }
-
-        router.replace(currentUrl.pathname + currentUrl.search);
-      }
-
-      // Create shared timestamp for AI message and recommendations
-      const responseTimestamp = new Date();
-
-      // Replace temporary user message with real data and add AI response
-      setMessages(prevMessages => {
-        // Remove the temporary user message
-        const messagesWithoutTemp = prevMessages.filter(msg => msg.id !== userMessage.id);
-
-        // Create real user message
-        const realUserMessage: Message = {
-          id: `user-${Date.now()}`,
-          content,
-          isUser: true,
-          timestamp: new Date(),
-          attachments: files || undefined,
-          conversation_id: result.data?.conversation_id,
-        };
-
-        // Create AI response message with shared timestamp for recommendations
-        // console.log("🔍 Full API Response:", JSON.stringify(result, null, 2));
-
-        // Determine report URL from multiple possible sources
-        const reportUrl = result.data?.report_file_path;
-
-        // Create AI message - ALWAYS include report_file_path if present in API response
-        const aiMessage: Message = {
-          id: `aix-${Date.now()}`,
-          content: result.data?.output || "",
-          isUser: false,
-          timestamp: responseTimestamp,
-          conversation_id: result.data?.conversation_id,
-          // Force include report_file_path from API response regardless of type/validation
-          ...(reportUrl && {
-            report_file_path: reportUrl,
-          }),
-        };
-
-        const finalMessages = [...messagesWithoutTemp, realUserMessage, aiMessage];
-
-        // console.log(
-        //   "💬 Final messages array (showing last message):",
-        //   JSON.stringify(finalMessages[finalMessages.length - 1], null, 2)
-        // );
-
-        return finalMessages;
-      });
-
-      // Handle workflow recommendations - filter by supported action types
-      if (result.data?.workflow_recommendations) {
-        // Use the same timestamp as the AI message to ensure proper chronological ordering
-        const supportedRecommendations = result.data.workflow_recommendations.filter(
-          (rec: WorkflowRecommendation) => {
-            const isSupported = chatService.isSupportedActionType(rec.action_type);
-            // if (!isSupported) {
-            //   console.log(
-            //     "🚫 Filtering out unsupported recommendation:",
-            //     rec.action_type,
-            //     rec.title
-            //   );
-            // }
-            return isSupported;
+      try {
+        // Validate files before sending
+        if (files && files.length > 0) {
+          // Check if any file is invalid
+          const invalidFiles = files.filter(f => !(f instanceof File) || f.size === 0 || !f.name);
+          if (invalidFiles.length > 0) {
+            throw new Error(
+              `Invalid files detected: ${invalidFiles.length} files are empty or invalid`
+            );
           }
-        );
 
-        const uniqueRecommendations = supportedRecommendations
-          .filter(
-            (rec: WorkflowRecommendation, index: number, self: WorkflowRecommendation[]) =>
-              self.findIndex(r => r.title === rec.title && r.action_type === rec.action_type) ===
-              index
-          )
-          .map((rec: WorkflowRecommendation) => ({
-            ...rec,
+          // Check file sizes
+          const maxSize = 5 * 1024 * 1024; // 5MB
+          const oversizedFiles = files.filter(f => f.size > maxSize);
+          if (oversizedFiles.length > 0) {
+            const fileNames = oversizedFiles.map(f => f.name).join(", ");
+            const fileSizes = oversizedFiles
+              .map(f => `${(f.size / (1024 * 1024)).toFixed(2)}MB`)
+              .join(", ");
+            throw new Error(
+              `File(s) too large: ${fileNames} (${fileSizes}). Please choose files smaller than 5MB.`
+            );
+          }
+        }
+
+        const mutationParams = {
+          message: content || "", // Send empty message if no content
+          ...(files && { files }),
+          ...(conversationId && { conversationId }),
+          ...(selectedTool && { toolParam: selectedTool }),
+        };
+
+        const result = await sendMessageMutation.mutateAsync(mutationParams);
+
+        // Update conversation ID if this was a new conversation
+        if (!conversationId && result.data?.conversation_id) {
+          setConversationId(result.data.conversation_id);
+
+          // Store selected tool for new conversation
+          if (selectedTool) {
+            storeSelectedTool(result.data.conversation_id, selectedTool);
+          }
+
+          // Update URL with new chat_id
+          const currentUrl = new URL(window.location.href);
+          currentUrl.searchParams.set("chat_id", result.data.conversation_id);
+
+          // Remove initial message param after first message
+          if (currentUrl.searchParams.has("message")) {
+            currentUrl.searchParams.delete("message");
+          }
+
+          router.replace(currentUrl.pathname + currentUrl.search);
+        }
+
+        // Create shared timestamp for AI message and recommendations
+        const responseTimestamp = new Date();
+
+        // Replace temporary user message with real data and add AI response
+        setMessages(prevMessages => {
+          // Remove the temporary user message
+          const messagesWithoutTemp = prevMessages.filter(msg => msg.id !== userMessage.id);
+
+          // Create real user message
+          const realUserMessage: Message = {
+            id: `user-${Date.now()}`,
+            content,
+            isUser: true,
+            timestamp: new Date(),
+            attachments: files || undefined,
+            conversation_id: result.data?.conversation_id,
+          };
+
+          // Create AI response message with shared timestamp for recommendations
+          // console.log("🔍 Full API Response:", JSON.stringify(result, null, 2));
+
+          // Determine report URL from multiple possible sources
+          const reportUrl = result.data?.report_file_path;
+
+          // Create AI message - ALWAYS include report_file_path if present in API response
+          const aiMessage: Message = {
+            id: `aix-${Date.now()}`,
+            content: result.data?.output || "",
+            isUser: false,
             timestamp: responseTimestamp,
-          }));
+            conversation_id: result.data?.conversation_id,
+            // Force include report_file_path from API response regardless of type/validation
+            ...(reportUrl && {
+              report_file_path: reportUrl,
+            }),
+          };
 
-        setWorkflowRecommendations(uniqueRecommendations);
+          const finalMessages = [...messagesWithoutTemp, realUserMessage, aiMessage];
+
+          // console.log(
+          //   "💬 Final messages array (showing last message):",
+          //   JSON.stringify(finalMessages[finalMessages.length - 1], null, 2)
+          // );
+
+          return finalMessages;
+        });
+
+        // Handle workflow recommendations - filter by supported action types
+        if (result.data?.workflow_recommendations) {
+          // Use the same timestamp as the AI message to ensure proper chronological ordering
+          const supportedRecommendations = result.data.workflow_recommendations.filter(
+            (rec: WorkflowRecommendation) => {
+              const isSupported = chatService.isSupportedActionType(rec.action_type);
+              // if (!isSupported) {
+              //   console.log(
+              //     "🚫 Filtering out unsupported recommendation:",
+              //     rec.action_type,
+              //     rec.title
+              //   );
+              // }
+              return isSupported;
+            }
+          );
+
+          const uniqueRecommendations = supportedRecommendations
+            .filter(
+              (rec: WorkflowRecommendation, index: number, self: WorkflowRecommendation[]) =>
+                self.findIndex(r => r.title === rec.title && r.action_type === rec.action_type) ===
+                index
+            )
+            .map((rec: WorkflowRecommendation) => ({
+              ...rec,
+              timestamp: responseTimestamp,
+            }));
+
+          setWorkflowRecommendations(uniqueRecommendations);
+        }
+      } catch (err: any) {
+        console.error("Failed to send message:", err);
+
+        // Remove the temporary user message on error
+        setMessages(prevMessages => prevMessages.filter(msg => msg.id !== userMessage.id));
+
+        setError(err.message || "Failed to send message");
+      } finally {
+        setIsTyping(false);
+        isSendingMessage.current = false;
+
+        // Reset initial message flag after processing
+        if (isInitialMessage.current) {
+          isInitialMessage.current = false;
+        }
       }
-    } catch (err: any) {
-      console.error("Failed to send message:", err);
-
-      // Remove the temporary user message on error
-      setMessages(prevMessages => prevMessages.filter(msg => msg.id !== userMessage.id));
-
-      setError(err.message || "Failed to send message");
-    } finally {
-      setIsTyping(false);
-      isSendingMessage.current = false;
-      
-      // Reset initial message flag after processing
-      if (isInitialMessage.current) {
-        isInitialMessage.current = false;
-      }
-    }
-  }, [conversationId, selectedTool, sendMessageMutation]);
+    },
+    [conversationId, selectedTool, sendMessageMutation]
+  );
 
   const retryLastMessage = async () => {
     const lastUserMessage = messages
@@ -394,7 +391,11 @@ export function useChat({
       .find(msg => msg.isUser);
 
     if (lastUserMessage) {
-      await handleSendMessage(lastUserMessage.content, lastUserMessage.attachments);
+      // Only pass File attachments for retry, not ServerAttachments from previous messages
+      const fileAttachments = lastUserMessage.attachments?.filter(
+        (att): att is File => att instanceof File
+      );
+      await handleSendMessage(lastUserMessage.content, fileAttachments);
     }
   };
 
@@ -441,7 +442,6 @@ export function useChat({
       storeSelectedTool(conversationId, null);
     }
   };
-
 
   // console.log("messages in useChat:", messages);
 

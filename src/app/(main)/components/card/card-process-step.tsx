@@ -1,7 +1,6 @@
 import Image from "next/image";
-import { H4, H5, Span } from "../../../../components/elements/typography";
+import { H4, P } from "../../../../components/elements/typography";
 import type { ProcessStep } from "../../../../data/home.data";
-import { cn } from "../../../../lib/utils";
 
 interface CardProcessStepProps {
   processStep: ProcessStep;
@@ -11,36 +10,39 @@ interface CardProcessStepProps {
 export function CardProcessStep({ processStep, index }: CardProcessStepProps) {
   return (
     <div
-      className="flex flex-col gap-2 overflow-hidden rounded-xl border border-white-400 bg-white p-3 md:p-4 lg:p-5"
+      className="flex h-full flex-col gap-4 overflow-hidden rounded-[24px] border border-white/70 bg-white/90 p-5 shadow-[0_20px_40px_-30px_rgba(15,36,71,0.35)] backdrop-blur-sm sm:p-6 lg:p-7"
       style={{
         background: processStep.colorHex
-          ? `linear-gradient(204deg, #FFF 15.34%, ${processStep.colorHex} 127.14%)`
-          : "#FFF",
+          ? `linear-gradient(135deg, #FFFFFF 0%, ${processStep.colorHex} 100%)`
+          : "#FFFFFF",
       }}>
-      <div className="flex items-center gap-4">
-        <Span
-          className="flex aspect-square h-7 w-auto items-center justify-center rounded-md bg-slate-gray-300 text-brand-slate"
-          weight={"semibold"}>
+      {/* Number Badge & Title */}
+      <div className="flex items-start gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#2F7D99] to-[#A4D1E8] text-lg font-bold text-white shadow-md">
           {index + 1}
-        </Span>
-        <H4 level={"h5"} weight={"semibold"}>
+        </div>
+        <H4 level="h5" weight="semibold" className="flex-1 text-deep-navy">
           {processStep.title}
         </H4>
       </div>
-      <H5 level={"body"} className="ml-12 text-brand-slate" align={"left"}>
+
+      {/* Description */}
+      <P level="body" className="text-sm text-brand-slate sm:text-base">
         {processStep.description}
-      </H5>
+      </P>
+
+      {/* Image Section */}
       {processStep.imageUrl && (
-        <Image
-          src={processStep.imageUrl}
-          alt={processStep.title}
-          width={546}
-          height={233}
-          className={cn(
-            "mt-2 h-[180px] w-full rounded-md object-contain  md:h-[200px] lg:h-[233px]",
-            index === 4 ? "-ml-5 object-left-bottom" : "object-center"
-          )}
-        />
+        <div className="mt-2">
+          <Image
+            src={processStep.imageUrl}
+            alt={processStep.title}
+            width={400}
+            height={250}
+            className="h-auto w-full rounded-xl object-contain"
+            priority={index === 0}
+          />
+        </div>
       )}
     </div>
   );
