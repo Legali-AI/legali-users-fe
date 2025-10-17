@@ -1,7 +1,7 @@
-import type { Message, WorkflowRecommendation } from "@/components/elements/chat/types";
-import { chatService } from "@/services/chat.service";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import type { Message, WorkflowRecommendation } from "@/components/elements/chat/types";
+import { chatService } from "@/services/chat.service";
 import { useChatMessages, useSendMessage } from "./use-chat-queries";
 
 export interface UseChatOptions {
@@ -111,7 +111,7 @@ export function useChat({
     // if (storedTools.length > 0) {
     //   console.log("📋 Currently stored tools:", storedTools);
     // }
-  }, []); // Run once on mount
+  }, [cleanupOldStoredTools]); // Run once on mount
 
   // Initialize messages - either from query or welcome message
   useEffect(() => {
@@ -142,7 +142,7 @@ export function useChat({
         setSelectedTool(storedTool);
       }
     }
-  }, [conversationId, toolParam, selectedTool]);
+  }, [conversationId, toolParam, selectedTool, getStoredSelectedTool]);
 
   // Direct initial message handler - simplified approach
   useEffect(() => {
@@ -157,7 +157,11 @@ export function useChat({
       // Send immediately - but only after welcome message is set
       handleSendMessage(initialMessage);
     }
-  }, [initialMessage, conversationId, messages.length]); // Run when these change
+  }, [
+    initialMessage,
+    conversationId,
+    messages.length, // Send immediately - but only after welcome message is set
+  ]); // Run when these change
 
   // Fallback: Send initial message after a longer delay if not processed yet
   useEffect(() => {
@@ -185,14 +189,13 @@ export function useChat({
       // Reset flags when switching conversations
       hasInitializedFromQuery.current = false;
       hasProcessedInitialMessage.current = false;
-      
+
       // Clear current messages to prevent showing old data
       setMessages([]);
       setWorkflowRecommendations([]);
       setError(null);
     }
   }, [conversationId, initialConversationId]);
-
 
   // Handle messages error
   useEffect(() => {
@@ -228,7 +231,7 @@ export function useChat({
     // IMMEDIATELY add user message to UI (optimistic update)
     // Use the same logic as mutation params for consistency
     const displayContent = content || (files && files.length > 0 ? "I send document(s)" : "");
-    
+
     const userMessage: Message = {
       id: `temp-user-${Date.now()}`,
       content: displayContent,
@@ -246,26 +249,35 @@ export function useChat({
     try {
       // Validate files before sending
       if (files && files.length > 0) {
-        console.log("📎 Files validation in handleSendMessage:", files.map(f => ({
-          name: f.name,
-          size: f.size,
-          type: f.type,
-          isValid: f instanceof File && f.size > 0 && f.name.length > 0,
-        })));
-        
+        console.log(
+          "📎 Files validation in handleSendMessage:",
+          files.map(f => ({
+            name: f.name,
+            size: f.size,
+            type: f.type,
+            isValid: f instanceof File && f.size > 0 && f.name.length > 0,
+          }))
+        );
+
         // Check if any file is invalid
         const invalidFiles = files.filter(f => !(f instanceof File) || f.size === 0 || !f.name);
         if (invalidFiles.length > 0) {
-          throw new Error(`Invalid files detected: ${invalidFiles.length} files are empty or invalid`);
+          throw new Error(
+            `Invalid files detected: ${invalidFiles.length} files are empty or invalid`
+          );
         }
-        
+
         // Check file sizes
         const maxSize = 5 * 1024 * 1024; // 5MB
         const oversizedFiles = files.filter(f => f.size > maxSize);
         if (oversizedFiles.length > 0) {
           const fileNames = oversizedFiles.map(f => f.name).join(", ");
-          const fileSizes = oversizedFiles.map(f => `${(f.size / (1024 * 1024)).toFixed(2)}MB`).join(", ");
-          throw new Error(`File(s) too large: ${fileNames} (${fileSizes}). Please choose files smaller than 5MB.`);
+          const fileSizes = oversizedFiles
+            .map(f => `${(f.size / (1024 * 1024)).toFixed(2)}MB`)
+            .join(", ");
+          throw new Error(
+            `File(s) too large: ${fileNames} (${fileSizes}). Please choose files smaller than 5MB.`
+          );
         }
       }
 

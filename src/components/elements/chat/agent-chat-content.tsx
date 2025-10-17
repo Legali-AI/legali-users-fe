@@ -152,6 +152,7 @@ export function AgentChatContent() {
                 </H1>
                 {(selectedTool || currentMode !== "general") && (
                   <button
+                    type="button"
                     onClick={() => {
                       if (selectedTool) {
                         clearSelectedTool();
