@@ -1,7 +1,5 @@
 "use client";
 
-// biome-ignore assist/source/organizeImports: Stupid resolve from biome
-import { FileAttachmentContainer } from "@/components/elements/attachments/file-attachment-container";
 import {
   createUploadingFile,
   FileUploadProgress,
@@ -23,8 +21,6 @@ export interface RichInputPayload {
 
 export interface RichInputProps {
   placeholder?: string;
-  maxFiles?: number;
-  accept?: string;
   disabled?: boolean;
   onSubmit?: (payload: RichInputPayload) => void;
   droppedFiles?: File[];
@@ -33,8 +29,6 @@ export interface RichInputProps {
 
 export default function RichInput({
   placeholder = "Describe your legal issues. Legali listens, organizes, and asks the right questions to build your strongest case.",
-  maxFiles = 8,
-  accept = "image/*,application/pdf",
   disabled = false,
   onSubmit,
   droppedFiles = [],
@@ -316,7 +310,7 @@ export default function RichInput({
           <input
             ref={fileInputRef}
             type="file"
-            accept={accept}
+            accept="image/*,application/pdf"
             multiple
             onChange={handleFilesSelected}
             className="hidden"

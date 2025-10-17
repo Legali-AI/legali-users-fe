@@ -56,8 +56,8 @@ export default function HeroSection() {
         await storePendingMessage({
           text: payload.text || "",
           files: payload.files || [],
-          audioBlob: payload.audioBlob,
-          audioUrl: payload.audioUrl,
+          audioBlob: payload.audioBlob ?? null,
+          audioUrl: payload.audioUrl ?? null,
         });
         // Navigate without message parameter (will be handled by agent page)
         router.push("/agent");

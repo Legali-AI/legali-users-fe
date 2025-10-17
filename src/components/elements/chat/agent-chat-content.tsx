@@ -119,7 +119,7 @@ export function AgentChatContent() {
       clearPendingMessage();
 
       // Send message with files
-      const { text, files, audioBlob } = pendingMessage;
+      const { text, files } = pendingMessage;
 
       // Wait a bit for the chat to initialize
       setTimeout(() => {

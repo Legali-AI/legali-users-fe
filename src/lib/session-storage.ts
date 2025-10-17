@@ -120,7 +120,7 @@ export async function storePendingMessage(payload: {
       text: payload.text,
       files: serializedFiles,
       audioBlob: serializedAudioBlob,
-      audioUrl: payload.audioUrl,
+      audioUrl: payload.audioUrl ?? null,
     };
 
     sessionStorage.setItem(PENDING_MESSAGE_KEY, JSON.stringify(storedPayload));
@@ -162,7 +162,7 @@ export function getPendingMessage(): {
       text: payload.text,
       files,
       audioBlob,
-      audioUrl: payload.audioUrl,
+      audioUrl: payload.audioUrl ?? null,
     };
   } catch (error) {
     console.error('Failed to retrieve pending message:', error);
