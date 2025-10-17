@@ -2,7 +2,6 @@ import { homePageMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 import { H3, P, Span } from "../../components/elements/typography";
 import AboutUsSection from "./components/about-us-section";
-import ConnectAttorneySection from "./components/connect-attorney-section";
 import FAQSection from "./components/faq-section";
 import FeatureSection from "./components/feature-section";
 import HeroSection from "./components/hero-section";
@@ -23,19 +22,11 @@ function App() {
       <div className="h-[90px] w-full bg-brand-gray-50 blur-2xl" />
 
       <div className="flex flex-col gap-20 py-10 sm:gap-32 lg:gap-36">
-        {/* About Us */}
         <AboutUsSection />
-        {/* Toolkit */}
         <ToolkitSection />
-        {/* Built For */}
-        {/* <BuiltForSection /> */}
-        {/* Features */}
         <FeatureSection />
-        {/* FAQ */}
         <FAQSection />
-        {/* Connect */}
-        <ConnectAttorneySection />
-        {/* CTA */}
+        {/* <ConnectAttorneySection /> */}
         <section
           className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-2 py-10 sm:py-16 md:gap-3 lg:gap-5 lg:py-20"
           aria-labelledby="cta-heading"
