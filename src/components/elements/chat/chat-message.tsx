@@ -1,13 +1,12 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { Paperclip } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Typography } from "../typography";
 import { AgentAvatar } from "./agent-avatar";
 import { AnalysisReportButton } from "./analysis-report-button";
 import { MarkdownRenderer } from "./markdown-renderer";
 import type { Message } from "./types";
-
 
 interface ChatMessageProps {
   message: Message;

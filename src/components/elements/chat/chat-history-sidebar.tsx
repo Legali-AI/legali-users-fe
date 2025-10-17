@@ -49,7 +49,19 @@ export function ChatHistorySidebar({ currentChatId, isOpen, onClose }: ChatHisto
   return (
     <>
       {/* Overlay */}
-      {isOpen && <div className="bg-opacity-50 fixed inset-0 z-40 bg-black" onClick={onClose} />}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
+          onClick={onClose}
+          onKeyDown={e => {
+            if (e.key === "Escape") {
+              onClose();
+            }
+          }}
+          role="button"
+          tabIndex={0}
+        />
+      )}
 
       {/* Sidebar */}
       <div
@@ -117,6 +129,7 @@ export function ChatHistorySidebar({ currentChatId, isOpen, onClose }: ChatHisto
             <div className="p-2">
               {chatHistory.map(chat => (
                 <button
+                  type="button"
                   key={chat.id}
                   onClick={() => handleChatClick(chat.id)}
                   className={`mb-1 w-full rounded-lg p-3 text-left transition-colors hover:bg-gray-50 ${

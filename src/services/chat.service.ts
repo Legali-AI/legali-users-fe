@@ -34,7 +34,8 @@ export const validateSendMessageRequest = (request: SendMessageRequest): string[
     errors.push("file must be a File object");
   }
 
-  if (request.file && request.file.size > 5 * 1024 * 1024) { // 5MB limit (reduced from 10MB)
+  if (request.file && request.file.size > 5 * 1024 * 1024) {
+    // 5MB limit (reduced from 10MB)
     errors.push("file size must be less than 5MB");
   }
 
@@ -54,7 +55,7 @@ export const debugFormData = (formData: FormData): void => {
   console.log("🔍 FormData Debug Info:");
   console.log("  - FormData size:", formData.toString().length);
   console.log("  - FormData entries:");
-  
+
   for (const [key, value] of formData.entries()) {
     if (value instanceof File) {
       console.log(`    ${key}: File(${value.name}, ${value.size} bytes, ${value.type})`);
@@ -108,7 +109,7 @@ export const chatService = {
     }
 
     const formData = new FormData();
-    
+
     // Send a default message if user_input is empty but file is provided
     const userInput = request.user_input?.trim() || "I send document(s)";
     formData.append("user_input", userInput);
@@ -159,7 +160,7 @@ export const chatService = {
     } catch (error: any) {
       const endTime = Date.now();
       const duration = endTime - startTime;
-      
+
       // Enhanced error logging
       console.error(
         `❌ Chat API request failed after ${duration}ms (${(duration / 1000).toFixed(2)}s)`
@@ -190,12 +191,15 @@ export const chatService = {
 
       // Provide more specific error messages
       if (error.response?.status === 400) {
-        const errorMessage = error.response?.data?.message || error.response?.data?.error || "Bad Request";
+        const errorMessage =
+          error.response?.data?.message || error.response?.data?.error || "Bad Request";
         throw new Error(`Invalid request: ${errorMessage}`);
       } else if (error.response?.status === 401) {
         throw new Error("Authentication required. Please log in again.");
       } else if (error.response?.status === 413) {
-        const fileSize = request.file ? `${(request.file.size / (1024 * 1024)).toFixed(2)}MB` : "unknown";
+        const fileSize = request.file
+          ? `${(request.file.size / (1024 * 1024)).toFixed(2)}MB`
+          : "unknown";
         throw new Error(`File too large (${fileSize}). Please choose a file smaller than 5MB.`);
       } else if (error.response?.status >= 500) {
         throw new Error("Server error. Please try again later.");

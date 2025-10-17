@@ -48,7 +48,11 @@ export function useChat({
       ];
       setMessages(welcomeMessages);
     }
-  }, [conversationId, messages.length, initialConversationId]);
+  }, [
+    conversationId,
+    messages.length,
+    initialConversationId, // Only load existing messages if we started with a chat_id parameter
+  ]);
 
   const loadMessages = useCallback(async () => {
     if (!conversationId) return;
