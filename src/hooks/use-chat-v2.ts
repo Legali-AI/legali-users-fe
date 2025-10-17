@@ -1,7 +1,7 @@
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 import type { Message, WorkflowRecommendation } from "@/components/elements/chat/types";
 import { chatService } from "@/services/chat.service";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { useChatMessages, useSendMessage } from "./use-chat-queries";
 
 export interface UseChatOptions {
@@ -89,6 +89,13 @@ export function useChat({
   //   currentSelectedTool: selectedTool,
   // });
 
+  // Update conversationId when initialConversationId changes (from URL)
+  useEffect(() => {
+    if (initialConversationId !== conversationId) {
+      setConversationId(initialConversationId);
+    }
+  }, [initialConversationId, conversationId]);
+
   // Cleanup old stored tools on initialization
   useEffect(() => {
     cleanupOldStoredTools();
@@ -108,17 +115,9 @@ export function useChat({
 
   // Initialize messages - either from query or welcome message
   useEffect(() => {
-    if (conversationId && initialConversationId && queryMessages.length > 0) {
-      // For existing conversations, use messages from React Query (only once)
-      // Check if we have a welcome message to preserve
-      setMessages(prevMessages => {
-        const hasWelcomeMessage = prevMessages.length > 0 && prevMessages[0].id === "welcome";
-        if (hasWelcomeMessage) {
-          // Preserve welcome message at the top
-          return [prevMessages[0], ...queryMessages];
-        }
-        return queryMessages;
-      });
+    if (conversationId && queryMessages.length > 0) {
+      // For existing conversations, use messages from React Query
+      setMessages(queryMessages);
     } else if (!conversationId && messages.length === 0) {
       // For new chats, show welcome message
       const welcomeMessages: Message[] = [
@@ -132,7 +131,7 @@ export function useChat({
       ];
       setMessages(welcomeMessages);
     }
-  }, [conversationId, initialConversationId]); // Removed queryMessages and messages.length to prevent infinite loop
+  }, [conversationId, queryMessages, messages.length]);
 
   // Load stored selectedTool when conversationId changes (for existing chats)
   useEffect(() => {
@@ -180,20 +179,20 @@ export function useChat({
     return undefined;
   }, [initialMessage, conversationId, messages.length]);
 
-  // Update messages when React Query data changes - but only for initial load
+  // Reset state when conversationId changes (for chat history navigation)
   useEffect(() => {
-    if (conversationId && queryMessages.length > 0 && !hasInitializedFromQuery.current) {
-      setMessages(prevMessages => {
-        const hasWelcomeMessage = prevMessages.length > 0 && prevMessages[0].id === "welcome";
-        if (hasWelcomeMessage) {
-          // Preserve welcome message at the top
-          return [prevMessages[0], ...queryMessages];
-        }
-        return queryMessages;
-      });
-      hasInitializedFromQuery.current = true;
+    if (conversationId && conversationId !== initialConversationId) {
+      // Reset flags when switching conversations
+      hasInitializedFromQuery.current = false;
+      hasProcessedInitialMessage.current = false;
+      
+      // Clear current messages to prevent showing old data
+      setMessages([]);
+      setWorkflowRecommendations([]);
+      setError(null);
     }
-  }, [conversationId, queryMessages]);
+  }, [conversationId, initialConversationId]);
+
 
   // Handle messages error
   useEffect(() => {
@@ -203,7 +202,20 @@ export function useChat({
   }, [messagesError]);
 
   const handleSendMessage = async (content: string, files?: File[]) => {
-    if (!content.trim() && (!files || files.length === 0)) return;
+    console.log("🎯 handleSendMessage called with:", {
+      content,
+      contentType: typeof content,
+      contentLength: content?.length,
+      files: files?.length || 0,
+      conversationId,
+      selectedTool,
+    });
+
+    // Allow sending files without content, but require at least one of them
+    if (!content.trim() && (!files || files.length === 0)) {
+      console.warn("⚠️ handleSendMessage: Empty content and no files, returning early");
+      return;
+    }
 
     // Cancel any pending requests
     if (abortControllerRef.current) {
@@ -214,9 +226,12 @@ export function useChat({
     abortControllerRef.current = new AbortController();
 
     // IMMEDIATELY add user message to UI (optimistic update)
+    // Use the same logic as mutation params for consistency
+    const displayContent = content || (files && files.length > 0 ? "I send document(s)" : "");
+    
     const userMessage: Message = {
       id: `temp-user-${Date.now()}`,
-      content,
+      content: displayContent,
       isUser: true,
       timestamp: new Date(),
       attachments: files || undefined,
@@ -229,12 +244,45 @@ export function useChat({
     setError(null);
 
     try {
-      const result = await sendMessageMutation.mutateAsync({
-        message: content,
+      // Validate files before sending
+      if (files && files.length > 0) {
+        console.log("📎 Files validation in handleSendMessage:", files.map(f => ({
+          name: f.name,
+          size: f.size,
+          type: f.type,
+          isValid: f instanceof File && f.size > 0 && f.name.length > 0,
+        })));
+        
+        // Check if any file is invalid
+        const invalidFiles = files.filter(f => !(f instanceof File) || f.size === 0 || !f.name);
+        if (invalidFiles.length > 0) {
+          throw new Error(`Invalid files detected: ${invalidFiles.length} files are empty or invalid`);
+        }
+        
+        // Check file sizes
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        const oversizedFiles = files.filter(f => f.size > maxSize);
+        if (oversizedFiles.length > 0) {
+          const fileNames = oversizedFiles.map(f => f.name).join(", ");
+          const fileSizes = oversizedFiles.map(f => `${(f.size / (1024 * 1024)).toFixed(2)}MB`).join(", ");
+          throw new Error(`File(s) too large: ${fileNames} (${fileSizes}). Please choose files smaller than 5MB.`);
+        }
+      }
+
+      const mutationParams = {
+        message: content || (files && files.length > 0 ? "I send document(s)" : ""), // Send default message if content is empty but files exist
         ...(files && { files }),
         ...(conversationId && { conversationId }),
         ...(selectedTool && { toolParam: selectedTool }),
+      };
+
+      console.log("📤 Calling sendMessageMutation with params:", {
+        ...mutationParams,
+        messageLength: mutationParams.message?.length || 0,
+        hasFiles: !!(files && files.length > 0),
       });
+
+      const result = await sendMessageMutation.mutateAsync(mutationParams);
 
       // Update conversation ID if this was a new conversation
       if (!conversationId && result.data?.conversation_id) {

@@ -8,6 +8,62 @@ export interface SendMessageRequest {
   file?: File | undefined;
 }
 
+// Validation function for SendMessageRequest
+export const validateSendMessageRequest = (request: SendMessageRequest): string[] => {
+  const errors: string[] = [];
+
+  // user_input is always required by the API, but we can provide a default for file-only uploads
+  if (!request.user_input || request.user_input.trim() === "") {
+    // This will be handled by providing a default message, so no error needed
+    console.log("⚠️ user_input is empty, will use default message");
+  }
+
+  if (request.user_input && request.user_input.length > 10000) {
+    errors.push("user_input is too long (max 10000 characters)");
+  }
+
+  if (request.conversation_id && typeof request.conversation_id !== "string") {
+    errors.push("conversation_id must be a string");
+  }
+
+  if (request.conversation_type && typeof request.conversation_type !== "string") {
+    errors.push("conversation_type must be a string");
+  }
+
+  if (request.file && !(request.file instanceof File)) {
+    errors.push("file must be a File object");
+  }
+
+  if (request.file && request.file.size > 5 * 1024 * 1024) { // 5MB limit (reduced from 10MB)
+    errors.push("file size must be less than 5MB");
+  }
+
+  if (request.file && request.file.size === 0) {
+    errors.push("file cannot be empty");
+  }
+
+  if (request.file && !request.file.name) {
+    errors.push("file must have a name");
+  }
+
+  return errors;
+};
+
+// Helper function to debug FormData
+export const debugFormData = (formData: FormData): void => {
+  console.log("🔍 FormData Debug Info:");
+  console.log("  - FormData size:", formData.toString().length);
+  console.log("  - FormData entries:");
+  
+  for (const [key, value] of formData.entries()) {
+    if (value instanceof File) {
+      console.log(`    ${key}: File(${value.name}, ${value.size} bytes, ${value.type})`);
+    } else {
+      console.log(`    ${key}: "${value}" (${typeof value})`);
+    }
+  }
+};
+
 export interface GetMessagesRequest {
   id_conversation: string;
   offset?: number;
@@ -22,9 +78,40 @@ export const chatService = {
   sendMessage: async (request: SendMessageRequest): Promise<SendMessageResponse> => {
     const startTime = Date.now();
     console.log("🚀 Chat API request started at:", new Date().toISOString());
+    console.log("📝 Request payload:", {
+      user_input: request.user_input,
+      conversation_id: request.conversation_id,
+      conversation_type: request.conversation_type,
+      has_file: !!request.file,
+      file_name: request.file?.name,
+      file_size: request.file?.size,
+    });
+
+    // Debug the incoming request object
+    console.log("🔍 Raw request object:", {
+      type: typeof request,
+      keys: Object.keys(request),
+      user_input: request.user_input,
+      user_input_type: typeof request.user_input,
+      user_input_length: request.user_input?.length,
+      conversation_id: request.conversation_id,
+      conversation_type: request.conversation_type,
+      file: request.file,
+    });
+
+    // Validate request data
+    const validationErrors = validateSendMessageRequest(request);
+    if (validationErrors.length > 0) {
+      console.error("❌ Validation errors:", validationErrors);
+      console.error("❌ Request object that failed validation:", request);
+      throw new Error(`Validation failed: ${validationErrors.join(", ")}`);
+    }
 
     const formData = new FormData();
-    formData.append("user_input", request.user_input);
+    
+    // Send a default message if user_input is empty but file is provided
+    const userInput = request.user_input?.trim() || "I send document(s)";
+    formData.append("user_input", userInput);
 
     if (request.conversation_id) {
       formData.append("conversation_id", request.conversation_id);
@@ -35,15 +122,25 @@ export const chatService = {
     }
 
     if (request.file) {
+      console.log("📎 Adding file to FormData:", {
+        name: request.file.name,
+        size: request.file.size,
+        type: request.file.type,
+        lastModified: request.file.lastModified,
+      });
       formData.append("file", request.file);
     }
+
+    // Debug FormData contents
+    debugFormData(formData);
 
     try {
       const response = await api.post<SendMessageResponse>("/api/chats/sendmessage", formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          // Don't set Content-Type manually - let axios handle it for FormData
+          // This ensures proper boundary is set for multipart/form-data
         },
-        timeout: 300000, // 2 minutes timeout for chat API calls
+        timeout: 300000, // 5 minutes timeout for chat API calls
       });
 
       const endTime = Date.now();
@@ -51,16 +148,60 @@ export const chatService = {
       console.log(
         `✅ Chat API request completed in ${duration}ms (${(duration / 1000).toFixed(2)}s)`
       );
+      console.log("📥 Response data:", {
+        success: response.success,
+        conversation_id: response.data?.conversation_id,
+        has_output: !!response.data?.output,
+        output_length: response.data?.output?.length || 0,
+      });
 
       return response;
-    } catch (error) {
+    } catch (error: any) {
       const endTime = Date.now();
       const duration = endTime - startTime;
+      
+      // Enhanced error logging
       console.error(
-        `❌ Chat API request failed after ${duration}ms (${(duration / 1000).toFixed(2)}s):`,
-        error
+        `❌ Chat API request failed after ${duration}ms (${(duration / 1000).toFixed(2)}s)`
       );
-      throw error;
+      console.error("❌ Error details:", {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        message: error.message,
+        config: {
+          url: error.config?.url,
+          method: error.config?.method,
+          headers: error.config?.headers,
+        },
+      });
+
+      // Log the actual FormData that was sent
+      console.error("❌ FormData that was sent:");
+      if (error.config?.data instanceof FormData) {
+        for (const [key, value] of error.config.data.entries()) {
+          if (value instanceof File) {
+            console.error(`  ${key}: File(${value.name}, ${value.size} bytes, ${value.type})`);
+          } else {
+            console.error(`  ${key}: "${value}"`);
+          }
+        }
+      }
+
+      // Provide more specific error messages
+      if (error.response?.status === 400) {
+        const errorMessage = error.response?.data?.message || error.response?.data?.error || "Bad Request";
+        throw new Error(`Invalid request: ${errorMessage}`);
+      } else if (error.response?.status === 401) {
+        throw new Error("Authentication required. Please log in again.");
+      } else if (error.response?.status === 413) {
+        const fileSize = request.file ? `${(request.file.size / (1024 * 1024)).toFixed(2)}MB` : "unknown";
+        throw new Error(`File too large (${fileSize}). Please choose a file smaller than 5MB.`);
+      } else if (error.response?.status >= 500) {
+        throw new Error("Server error. Please try again later.");
+      } else {
+        throw error;
+      }
     }
   },
 

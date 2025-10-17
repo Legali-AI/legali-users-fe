@@ -1,9 +1,9 @@
 "use client";
 
-import { Clock, MessageSquare, X } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useChatHistory } from "@/hooks/use-chat-queries";
+import { Clock, MessageSquare, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface ChatHistorySidebarProps {
   currentChatId?: string | undefined;
@@ -19,13 +19,8 @@ export function ChatHistorySidebar({ currentChatId, isOpen, onClose }: ChatHisto
 
   const handleChatClick = (chatId: string) => {
     if (chatId !== currentChatId) {
-      // The URL you want to open in a new tab
-      const url = `/agent?chat_id=${chatId}`;
-
-      // window.open(url, '_blank') opens the specified URL in a new tab
-      window.open(url, "_blank");
-
-      // Optional: If you want to close a modal or sidebar after clicking
+      // Navigate to the chat in the same tab
+      router.push(`/agent?chat_id=${chatId}`);
     }
     onClose();
   };

@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowUp, Mic, Paperclip, StopCircle } from "lucide-react";
-import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { ArrowUp, Mic, Paperclip, StopCircle } from "lucide-react";
+import { useRef, useState } from "react";
 import {
   createUploadingFile,
   FileUploadProgress,
@@ -22,13 +22,35 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
   const [message, setMessage] = useState("");
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
   const [completedFiles, setCompletedFiles] = useState<File[]>([]);
+
+  // Debug logging for state changes
+  console.log("🔍 ChatInput state:", {
+    uploadingFilesCount: uploadingFiles.length,
+    completedFilesCount: completedFiles.length,
+    completedFiles: completedFiles.map(f => ({ name: f.name, size: f.size }))
+  });
   const [isRecording, setIsRecording] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = () => {
     if (message.trim() || completedFiles.length > 0) {
-      onSendMessage(message.trim(), completedFiles);
+      // Validate files before sending
+      const validFiles = completedFiles.filter(file => 
+        file instanceof File && file.size > 0 && file.name.length > 0
+      );
+      
+      console.log("📎 Files being sent from ChatInput:", {
+        originalCount: completedFiles.length,
+        validCount: validFiles.length,
+        files: validFiles.map(f => ({ name: f.name, size: f.size, type: f.type }))
+      });
+      
+      if (validFiles.length !== completedFiles.length) {
+        console.warn("⚠️ Some files were filtered out due to validation");
+      }
+      
+      onSendMessage(message.trim(), validFiles);
       setMessage("");
       setCompletedFiles([]);
       setUploadingFiles([]);
@@ -49,6 +71,19 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || []);
+    
+    console.log("📁 Files selected:", selectedFiles.map(f => ({ name: f.name, size: f.size })));
+
+    // Validate file sizes before processing
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    const oversizedFiles = selectedFiles.filter(file => file.size > maxSize);
+    
+    if (oversizedFiles.length > 0) {
+      const fileNames = oversizedFiles.map(f => f.name).join(", ");
+      const fileSizes = oversizedFiles.map(f => `${(f.size / (1024 * 1024)).toFixed(2)}MB`).join(", ");
+      alert(`File(s) too large: ${fileNames} (${fileSizes}). Please choose files smaller than 5MB.`);
+      return;
+    }
 
     // Create uploading file objects and start upload simulation
     const newUploadingFiles = selectedFiles.map(file => {
@@ -65,7 +100,27 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
           setUploadingFiles(prev => {
             const file = prev.find(f => f.id === fileId)?.file;
             if (file) {
-              setCompletedFiles(completedPrev => [...completedPrev, file]);
+              // Check if file already exists in completedFiles to prevent duplicates
+              setCompletedFiles(completedPrev => {
+                const fileExists = completedPrev.some(f => 
+                  f.name === file.name && 
+                  f.size === file.size && 
+                  f.lastModified === file.lastModified
+                );
+                console.log("📁 Moving file to completed:", { 
+                  fileName: file.name, 
+                  fileSize: file.size,
+                  lastModified: file.lastModified,
+                  fileExists,
+                  currentCompletedCount: completedPrev.length 
+                });
+                if (!fileExists) {
+                  return [...completedPrev, file];
+                } else {
+                  console.warn("⚠️ File already exists in completedFiles, skipping duplicate");
+                }
+                return completedPrev;
+              });
             }
             return prev;
           });
@@ -82,10 +137,16 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
 
     setUploadingFiles(prev => [...prev, ...newUploadingFiles]);
 
-    // Reset file input
+    // Reset file input to prevent duplicate selections
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+    
+    console.log("📁 Uploading files updated:", newUploadingFiles.map(f => ({ 
+      id: f.id, 
+      name: f.file.name, 
+      size: f.file.size 
+    })));
   };
 
   const removeUploadingFile = (fileId: string) => {
@@ -195,14 +256,15 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
         </div>
 
         {/* Hidden File Input */}
-        <input
-          ref={fileInputRef}
-          type="file"
-          multiple
-          accept="image/*,application/pdf,.doc,.docx,.txt"
-          onChange={handleFileSelect}
-          className="hidden"
-        />
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            accept="image/*,application/pdf,.doc,.docx,.txt"
+            onChange={handleFileSelect}
+            className="hidden"
+            title="Upload files (max 5MB each)"
+          />
       </div>
     </div>
   );
