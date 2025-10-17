@@ -40,6 +40,12 @@ const badgeVariants = cva(
   }
 );
 
+type BadgeVariantType = VariantProps<typeof badgeVariants>;
+
+interface BadgeProps extends Omit<React.ComponentProps<"span">, "ref">, BadgeVariantType {
+  asChild?: boolean;
+}
+
 function Badge({
   className,
   variant,
@@ -49,18 +55,16 @@ function Badge({
   size,
   asChild = false,
   ...props
-}: React.ComponentProps<"span"> & BadgeVariantType & { asChild?: boolean }) {
+}: BadgeProps) {
   const Comp = asChild ? Slot : "span";
 
   return (
     <Comp
       data-slot="badge"
       className={cn(badgeVariants({ variant, level, weight, align, size }), className)}
-      {...props}
+      {...(props as any)}
     />
   );
 }
-
-type BadgeVariantType = VariantProps<typeof badgeVariants>;
 
 export { Badge, badgeVariants, type BadgeVariantType };
