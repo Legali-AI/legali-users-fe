@@ -396,6 +396,38 @@ export const TOOLKIT_ITEMS: ToolkitCategory[] = [
   },
 ];
 
+export interface LegalEquityPartner {
+  name: string;
+  imageUrl: string;
+}
+
+export interface LegalEquityContent {
+  heading: string;
+}
+
+export const LEGAL_EQUITY_CONTENT: LegalEquityContent = {
+  heading: "Empowering legal equity leaders",
+};
+
+export const LEGAL_EQUITY_PARTNERS: LegalEquityPartner[] = [
+  {
+    name: "Justice Access",
+    imageUrl: "/home/org/1.png",
+  },
+  {
+    name: "Nonprofit Website Insider",
+    imageUrl: "/home/org/2.png",
+  },
+  {
+    name: "RSI Resolution Systems Institute",
+    imageUrl: "/home/org/3.png",
+  },
+  {
+    name: "IAALS",
+    imageUrl: "/home/org/4.png",
+  },
+];
+
 export default {
   NAVIGATION_FEATURES,
   CORE_PROBLEMS,
@@ -404,4 +436,6 @@ export default {
   VALUE_PROPOSITIONS,
   TOOLKIT_CONTENT,
   TOOLKIT_ITEMS,
+  LEGAL_EQUITY_CONTENT,
+  LEGAL_EQUITY_PARTNERS,
 };

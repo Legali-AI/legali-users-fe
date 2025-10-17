@@ -6,6 +6,7 @@ import FAQSection from "./components/faq-section";
 import FeatureSection from "./components/feature-section";
 import HeroSection from "./components/hero-section";
 import JusticeGapSection from "./components/justice-gap-section";
+import LegalEquitySection from "./components/legal-equity-section";
 import ToolkitSection from "./components/toolkit-section";
 
 export const metadata: Metadata = homePageMetadata;
@@ -25,6 +26,7 @@ function App() {
         <AboutUsSection />
         <ToolkitSection />
         <FeatureSection />
+        <LegalEquitySection />
         <FAQSection />
         {/* <ConnectAttorneySection /> */}
         <section
