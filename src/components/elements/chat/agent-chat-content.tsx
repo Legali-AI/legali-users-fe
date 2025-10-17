@@ -10,10 +10,10 @@ import { TypingIndicator } from "@/components/elements/chat/typing-indicator";
 import { WorkflowRecommendations } from "@/components/elements/chat/workflow-recommendations";
 import { H1 } from "@/components/elements/typography";
 import { Button } from "@/components/ui/button";
-import { useChat } from "@/hooks/use-chat-v2";
+import { useChat } from "@/hooks/use-chat";
 import { chatService } from "@/services/chat.service";
 import { motion } from "framer-motion";
-import { AlertCircle, ArrowLeft, Menu, RefreshCw, User } from "lucide-react";
+import { AlertCircle, ArrowLeft, Menu, Paperclip, RefreshCw, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -36,6 +36,20 @@ export function AgentChatContent() {
 
   // Sidebar state
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
+  // Drag and drop state
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [droppedFiles, setDroppedFiles] = useState<File[]>([]);
+  const dragTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (dragTimeoutRef.current) {
+        clearTimeout(dragTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Use the chat hook
   const {
@@ -111,12 +125,80 @@ export function AgentChatContent() {
     await sendMessage(content, files);
   };
 
+  // Drag and drop handlers
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("🖱️ Chat Drag Enter");
+    
+    // Clear any existing timeout
+    if (dragTimeoutRef.current) {
+      clearTimeout(dragTimeoutRef.current);
+      dragTimeoutRef.current = null;
+    }
+    
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("🖱️ Chat Drag Leave", { relatedTarget: e.relatedTarget });
+    
+    // Clear any existing timeout
+    if (dragTimeoutRef.current) {
+      clearTimeout(dragTimeoutRef.current);
+    }
+    
+    // Only hide overlay if we're actually leaving the container
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      dragTimeoutRef.current = setTimeout(() => {
+        setIsDragOver(false);
+      }, 100);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    console.log("🖱️ Chat Drop", { filesCount: files.length });
+
+    if (files.length > 0) {
+      // Validate file sizes (5MB max per file)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      const validFiles = files.filter(file => {
+        if (file.size > maxSize) {
+          alert(`File "${file.name}" is too large. Maximum size is 5MB.`);
+          return false;
+        }
+        return true;
+      });
+
+      if (validFiles.length > 0) {
+        // Add files to dropped files state instead of auto-sending
+        setDroppedFiles(prev => [...prev, ...validFiles]);
+      }
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="flex h-screen">
+      className="flex h-screen relative"
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}>
       {/* Chat History Sidebar */}
       <ChatHistorySidebar
         currentChatId={currentConversationId}
@@ -319,10 +401,26 @@ export function AgentChatContent() {
             <ChatInput
               onSendMessage={handleSendMessage}
               placeholder="Upload your documents, share your concerns, or simply ask a question—we'll take it from there"
+              droppedFiles={droppedFiles}
+              onClearDroppedFiles={() => setDroppedFiles([])}
             />
           </div>
         </div>
       </div>
+
+      {/* Drag and Drop Overlay */}
+      {isDragOver && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-sky-blue-50/90 backdrop-blur-sm">
+          <div className="text-center">
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-sky-blue-100">
+              <Paperclip className="h-10 w-10 text-sky-blue-600" />
+            </div>
+            <h3 className="mb-2 text-xl font-semibold text-sky-blue-700">Drop files here to upload</h3>
+            <p className="text-sm text-sky-blue-600">Maximum 5MB per file</p>
+            <p className="mt-1 text-xs text-sky-blue-500">Files will be automatically sent to the chat</p>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 }

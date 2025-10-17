@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowUp, Mic, Paperclip, StopCircle } from "lucide-react";
-import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { ArrowUp, Mic, Paperclip, StopCircle } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import {
   createUploadingFile,
   FileUploadProgress,
@@ -16,9 +16,11 @@ interface ChatInputProps {
   onSendMessage: (content: string, files?: File[]) => void;
   placeholder?: string;
   disabled?: boolean;
+  droppedFiles?: File[];
+  onClearDroppedFiles?: () => void;
 }
 
-export function ChatInput({ onSendMessage, placeholder = "Type your message...", disabled = false }: ChatInputProps) {
+export function ChatInput({ onSendMessage, placeholder = "Type your message...", disabled = false, droppedFiles = [], onClearDroppedFiles }: ChatInputProps) {
   const [message, setMessage] = useState("");
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
   const [completedFiles, setCompletedFiles] = useState<File[]>([]);
@@ -28,7 +30,32 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
     uploadingFilesCount: uploadingFiles.length,
     completedFilesCount: completedFiles.length,
     completedFiles: completedFiles.map(f => ({ name: f.name, size: f.size })),
+    droppedFilesCount: droppedFiles.length,
   });
+
+  // Handle dropped files from drag and drop
+  useEffect(() => {
+    if (droppedFiles.length > 0) {
+      console.log("📁 Processing dropped files:", droppedFiles.map(f => ({ name: f.name, size: f.size })));
+      
+      // Add dropped files to completed files (they're already validated)
+      setCompletedFiles(prev => {
+        const newFiles = droppedFiles.filter(droppedFile => 
+          !prev.some(existingFile => 
+            existingFile.name === droppedFile.name && 
+            existingFile.size === droppedFile.size && 
+            existingFile.lastModified === droppedFile.lastModified
+          )
+        );
+        return [...prev, ...newFiles];
+      });
+      
+      // Clear dropped files from parent
+      if (onClearDroppedFiles) {
+        onClearDroppedFiles();
+      }
+    }
+  }, [droppedFiles, onClearDroppedFiles]);
   const [isRecording, setIsRecording] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -158,6 +185,7 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
   const removeCompletedFile = (index: number) => {
     setCompletedFiles(prev => prev.filter((_, i) => i !== index));
   };
+
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
