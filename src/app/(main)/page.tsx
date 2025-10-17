@@ -7,6 +7,7 @@ import ConnectAttorneySection from "./components/connect-attorney-section";
 import FAQSection from "./components/faq-section";
 import FeatureSection from "./components/feature-section";
 import HeroSection from "./components/hero-section";
+import JusticeGapSection from "./components/justice-gap-section";
 
 export const metadata: Metadata = homePageMetadata;
 
@@ -15,6 +16,8 @@ function App() {
     <main className="relative z-10 flex w-full flex-col overflow-x-hidden bg-sky-blue-100 px-4 py-20 sm:px-8 md:px-16 md:py-20 lg:px-32">
       {/* Hero section */}
       <HeroSection />
+      {/* Justice Gap */}
+      <JusticeGapSection />
 
       {/* Blur Splitter */}
       <div className="h-[90px] w-full bg-brand-gray-50 blur-2xl" />

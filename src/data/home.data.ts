@@ -1,57 +1,86 @@
 import {
-  AlertTriangle,
   BriefcaseBusiness,
-  Clock,
   Dices,
   DollarSign,
   FileText,
   Folder,
-  FolderOpen,
   Gavel,
-  HandHeart,
   Handshake,
   Home,
-  type LucideIcon,
+  Scale,
   ScaleIcon,
   ScrollTextIcon,
   SearchIcon,
   TrendingUp,
-  Users,
+  TriangleAlert,
+  Wrench,
+  UserRound,
+  type LucideIcon,
 } from "lucide-react";
 
 export interface Feature {
   label: string;
   icon: LucideIcon;
+  href: string;
+  color?: string;
 }
 
 export const NAVIGATION_FEATURES: Feature[] = [
   {
-    label: "Red Flag Alerts",
-    icon: AlertTriangle,
+    label: "Red Flag Analysis",
+    icon: TriangleAlert,
+    href: "/red-flag-analysis",
+    color: "#C92F31",
   },
   {
-    label: "Legal Template",
+    label: "Smart Legal Drafter",
     icon: FileText,
+    href: "/smart-legal-drafter",
+    color: "#143473",
+  },
+  {
+    label: "Litigation Case Builder",
+    icon: Wrench,
+    href: "/litigation-case-builder",
+    color: "#792FC9",
   },
   {
     label: "Lawyers Marketplace",
-    icon: Users,
+    icon: Scale,
+    href: "/lawyers-marketplace",
+    color: "#00ABF5",
   },
   {
-    label: "Fund Your Litigation: For Investors",
-    icon: TrendingUp,
+    label: "Fund Your Litigation: Investors",
+    icon: DollarSign,
+    href: "/fund-your-litigation-investors",
+    color: "#0B9601",
   },
   {
-    label: "Legal Dossier Builder",
-    icon: FolderOpen,
+    label: "Fund Your Litigation: Litigants",
+    icon: DollarSign,
+    href: "/fund-your-litigation-litigants",
+    color: "#0B9601",
+  },
+];
+
+export interface JusticeGapStat {
+  value: string;
+  description: string;
+}
+
+export const JUSTICE_GAP_STATS: JusticeGapStat[] = [
+  {
+    value: "15M",
+    description: "Navigate legal system alone yearly",
   },
   {
-    label: "Case and Timeline Builder",
-    icon: Clock,
+    value: "75%",
+    description: "Cases involve unrepresented parties",
   },
   {
-    label: "Fund Your Litigation: For Litigants",
-    icon: HandHeart,
+    value: "4%",
+    description: "Win rate without proper resources",
   },
 ];
 export interface ProblemAboutUs {
@@ -61,19 +90,20 @@ export interface ProblemAboutUs {
 }
 export const CORE_PROBLEMS: ProblemAboutUs[] = [
   {
-    title: 'Stuck in the "missing middle"?',
-    description: "Your case is too big for small claims, too small for big firms.",
-    icon: BriefcaseBusiness,
+    title: '"Self-represented litigants"',
+    description: "15 million Americans navigate the legal system alone each year with just a 4% win rate.",
+    icon: UserRound,
   },
   {
-    title: "Unfair settlements?",
-    description: "Don't feel forced to accept lowball offers.",
-    icon: Gavel,
+    title: '"Stuck in the middle"',
+    description:
+      "Problems too big for small claims court, but not big enough to justify six-figure legal fees.",
+    icon: Scale,
   },
   {
-    title: "Sky-high legal fees?",
-    description: "Stop gambling your future just to stay in the game.",
-    icon: TrendingUp,
+    title: '"Settle for less"',
+    description: "People accept unfair deals—or risk everything—because they can’t afford representation.",
+    icon: Handshake,
   },
 ];
 
@@ -107,27 +137,32 @@ export const BENEFITS: Benefits[] = [
     items: [
       {
         title: "Navigating the law blindfolded",
-        description: "Feel lost trying to understand legal processes without guidance.",
+        description:
+          "Feel lost trying to understand legal processes without guidance.",
         icon: ScaleIcon,
       },
       {
         title: "Searching endlessly for answers",
-        description: "Hours wasted Googling legal info and still unsure what's right.",
+        description:
+          "Hours wasted Googling legal info and still unsure what's right.",
         icon: SearchIcon,
       },
       {
         title: "Worried about $400/hour fees",
-        description: "Fear of massive legal bills stopping you from taking action.",
+        description:
+          "Fear of massive legal bills stopping you from taking action.",
         icon: DollarSign,
       },
       {
         title: "Forced into impossible trade-offs",
-        description: "Choosing between pursuing justice or protecting your finances.",
+        description:
+          "Choosing between pursuing justice or protecting your finances.",
         icon: Dices,
       },
       {
         title: "Family/property disputes",
-        description: "Tense disagreements over inheritance, custody, or real estate.",
+        description:
+          "Tense disagreements over inheritance, custody, or real estate.",
         icon: Home,
       },
       {
@@ -143,17 +178,20 @@ export const BENEFITS: Benefits[] = [
     items: [
       {
         title: "Reduce time on paperwork",
-        description: "Automate repetitive legal tasks and focus on higher-value work.",
+        description:
+          "Automate repetitive legal tasks and focus on higher-value work.",
         icon: ScrollTextIcon,
       },
       {
         title: "Take on more clients",
-        description: "Serve more people with streamlined workflows and prepared cases.",
+        description:
+          "Serve more people with streamlined workflows and prepared cases.",
         icon: Handshake,
       },
       {
         title: "Receive well-organized cases",
-        description: "Get neatly packaged evidence and documents, ready to act on.",
+        description:
+          "Get neatly packaged evidence and documents, ready to act on.",
         icon: Folder,
       },
     ],
