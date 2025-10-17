@@ -1,9 +1,16 @@
+// Type for server attachments
+export interface ServerAttachment {
+  id: string;
+  filename: string;
+  url: string;
+}
+
 export interface Message {
   id: string;
   content: string;
   isUser: boolean;
   timestamp: Date;
-  attachments?: File[] | undefined;
+  attachments?: File[] | ServerAttachment[] | undefined;
   conversation_id?: string;
   role?: "user" | "assistant" | "system";
   report_file_path?: string;
@@ -17,7 +24,7 @@ export interface ApiMessage {
   role: "user" | "assistant" | "system";
   content: string;
   timestamp: string;
-  attachments: any[];
+  attachments: ServerAttachment[];
 }
 
 export interface WorkflowRecommendation {

@@ -27,6 +27,13 @@ interface AxiosErrorResponse {
   message?: string;
 }
 
+// Type for server attachments
+interface ServerAttachment {
+  id: string;
+  filename: string;
+  url: string;
+}
+
 // Type for API message from chat history
 interface ApiMessage {
   id: string;
@@ -35,7 +42,7 @@ interface ApiMessage {
   created_at?: string;
   timestamp?: string;
   conversation_id?: string;
-  attachments?: Array<{ id: string; filename: string; url: string }>;
+  attachments?: ServerAttachment[];
   report_file_path?: string;
 }
 
@@ -309,38 +316,49 @@ export const chatService = {
   getChatHistory: async (): Promise<ChatHistoryResponse> => {
     try {
       console.log("📋 Fetching chat history from API...");
-      const response = await api.get<ChatHistoryItem[] | ChatHistoryResponse>("/api/chats");
+      const response = (await api.get("/api/chats")) as { data: ChatHistoryItem[] | ChatHistoryResponse };
       console.log("📋 Raw API response:", response);
-      console.log("📋 Response data:", response.data);
+
+      const data = response.data;
+      console.log("📋 Response data:", data);
 
       // Handle different response formats
-      if (response.data) {
+      if (data) {
         // Case 1: Direct array response (when cached/304)
-        if (Array.isArray(response.data)) {
-          console.log("✅ Chat history fetched (direct array):", response.data);
+        if (Array.isArray(data)) {
+          console.log("✅ Chat history fetched (direct array):", data);
           return {
             success: true,
-            data: response.data,
+            data: data,
           };
         }
 
         // Case 2: Wrapped response with success field
-        if (response.data.success && response.data.data) {
-          console.log("✅ Chat history fetched (wrapped):", response.data.data);
-          return {
+        const wrappedData = data as ChatHistoryResponse;
+        if (wrappedData.success && wrappedData.data) {
+          console.log("✅ Chat history fetched (wrapped):", wrappedData.data);
+          const result: ChatHistoryResponse = {
             success: true,
-            data: response.data.data,
-            message: response.data.message,
+            data: wrappedData.data,
           };
+          if (wrappedData.message) {
+            result.message = wrappedData.message;
+          }
+          return result;
         }
 
         // Case 3: Error response
-        if (response.data.success === false) {
-          console.error("❌ API returned error:", response.data.error);
-          return {
+        if (wrappedData.success === false) {
+          console.error("❌ API returned error:", wrappedData.error);
+          const errorResult: ChatHistoryResponse = {
             success: false,
-            error: response.data.error || "Failed to fetch chat history",
           };
+          if (wrappedData.error) {
+            errorResult.error = wrappedData.error;
+          } else {
+            errorResult.error = "Failed to fetch chat history";
+          }
+          return errorResult;
         }
       }
 

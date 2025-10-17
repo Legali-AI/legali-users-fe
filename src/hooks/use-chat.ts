@@ -120,7 +120,7 @@ export function useChat({
   useEffect(() => {
     if (conversationId && queryMessages.length > 0) {
       // For existing conversations, use messages from React Query
-      setMessages(queryMessages);
+      setMessages(queryMessages as Message[]);
     } else if (!conversationId && !hasSetWelcomeMessage.current) {
       // For new chats, show welcome message
       const welcomeMessages: Message[] = [
@@ -391,7 +391,9 @@ export function useChat({
       .find(msg => msg.isUser);
 
     if (lastUserMessage) {
-      await handleSendMessage(lastUserMessage.content, lastUserMessage.attachments);
+      // Only pass File attachments for retry, not ServerAttachments from previous messages
+      const fileAttachments = lastUserMessage.attachments?.filter((att): att is File => att instanceof File);
+      await handleSendMessage(lastUserMessage.content, fileAttachments);
     }
   };
 

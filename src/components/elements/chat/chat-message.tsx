@@ -49,17 +49,20 @@ export function ChatMessage({ message }: ChatMessageProps) {
           {/* Attachments */}
           {attachments && attachments.length > 0 && (
             <div className="mt-3 space-y-2">
-              {attachments.map((file, index) => (
-                <div
-                  key={index}
-                  className={cn(
-                    "flex items-center gap-2 rounded-lg p-2 text-xs",
-                    isUser ? "bg-sky-blue-500/30 text-white" : "bg-sky-blue-50 text-slate-gray-700"
-                  )}>
-                  <Paperclip className="size-3" />
-                  <span className="truncate">{file.name}</span>
-                </div>
-              ))}
+              {attachments.map((file, index) => {
+                const fileName = file instanceof File ? file.name : file.filename;
+                return (
+                  <div
+                    key={index}
+                    className={cn(
+                      "flex items-center gap-2 rounded-lg p-2 text-xs",
+                      isUser ? "bg-sky-blue-500/30 text-white" : "bg-sky-blue-50 text-slate-gray-700"
+                    )}>
+                    <Paperclip className="size-3" />
+                    <span className="truncate">{fileName}</span>
+                  </div>
+                );
+              })}
             </div>
           )}
 
