@@ -1,6 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Message } from "@/components/elements/chat/types";
 import { chatService } from "@/services/chat.service";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Query keys
 export const chatQueryKeys = {
@@ -75,10 +75,27 @@ export function useSendMessage() {
       conversationId?: string;
       toolParam?: string | null;
     }) => {
+      console.log("🚀 useSendMessage mutation called with:", {
+        message,
+        messageType: typeof message,
+        messageLength: message?.length,
+        files: files?.length || 0,
+        conversationId,
+        toolParam,
+      });
+
+      // Always provide a message - use default if empty
+      const finalMessage = message?.trim() || (files && files.length > 0 ? "I send document(s)" : "");
+      
+      if (!finalMessage && (!files || files.length === 0)) {
+        console.error("❌ Invalid message parameter:", { message, type: typeof message });
+        throw new Error("Message is required when no files are provided");
+      }
+
       const conversationType = chatService.getConversationTypeFromTool(toolParam || null);
 
       const requestPayload: any = {
-        user_input: message,
+        user_input: finalMessage,
       };
 
       if (conversationId) {
@@ -90,8 +107,34 @@ export function useSendMessage() {
       }
 
       if (files && files.length > 0) {
-        requestPayload.file = files[0];
+        const file = files[0];
+        console.log("📎 File from UI:", {
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          lastModified: file.lastModified,
+          isValid: file instanceof File && file.size > 0 && file.name.length > 0,
+        });
+        
+        // Validate file before sending
+        if (!(file instanceof File)) {
+          throw new Error("Invalid file object");
+        }
+        if (file.size === 0) {
+          throw new Error("File is empty");
+        }
+        if (!file.name) {
+          throw new Error("File has no name");
+        }
+        if (file.size > 5 * 1024 * 1024) { // 5MB limit
+          const fileSize = `${(file.size / (1024 * 1024)).toFixed(2)}MB`;
+          throw new Error(`File too large (${fileSize}). Please choose a file smaller than 5MB.`);
+        }
+        
+        requestPayload.file = file;
       }
+
+      console.log("📦 Final request payload:", requestPayload);
 
       const response = await chatService.sendMessage(requestPayload);
 

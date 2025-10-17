@@ -5,8 +5,6 @@ import dynamic from "next/dynamic";
 
 // Dynamic import untuk menghindari masalah SSR
 const ReactMarkdown = dynamic(() => import("react-markdown"), { ssr: false });
-const remarkGfm = dynamic(() => import("remark-gfm"), { ssr: false });
-const rehypeHighlight = dynamic(() => import("rehype-highlight"), { ssr: false });
 
 interface MarkdownRendererProps {
   content: string;
@@ -14,12 +12,27 @@ interface MarkdownRendererProps {
   className?: string;
 }
 
+// Function to process content and remove "Proactive Clarification Needed:" while keeping the content inside
+const processContent = (content: string): string => {
+  // First, remove all instances of "(exhaustive coverage)" from the entire content
+  let processedContent = content.replace(/\(exhaustive coverage\)/gi, '');
+  
+  // Then, remove "### Proactive Clarification Needed:" header while keeping the content inside
+  const pattern = /\n\n### Proactive Clarification Needed:\n([\s\S]*?)(?=\n### |$)/g;
+  
+  return processedContent.replace(pattern, (_, capturedContent) => {
+    // Keep the bullet points "- " and add newline before the content
+    return '\n' + capturedContent;
+  });
+};
+
 export function MarkdownRenderer({ content, isUser = false, className }: MarkdownRendererProps) {
+  // Process content to remove "Proactive Clarification Needed:" header
+  const processedContent = processContent(content);
+  
   return (
     <div className={cn("prose prose-sm max-w-none", className)}>
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeHighlight]}
         components={{
           // Headings
           h1: ({ children, ...props }) => (
@@ -106,7 +119,7 @@ export function MarkdownRenderer({ content, isUser = false, className }: Markdow
           ul: ({ children, ...props }) => (
             <ul
               className={cn(
-                "mb-2 ml-4 space-y-1",
+                "mb-2 ml-4 space-y-1 list-disc",
                 isUser ? "text-white" : "text-slate-gray-800"
               )}
               {...props}
@@ -360,7 +373,7 @@ export function MarkdownRenderer({ content, isUser = false, className }: Markdow
           },
         }}
       >
-        {content}
+        {processedContent}
       </ReactMarkdown>
     </div>
   );
