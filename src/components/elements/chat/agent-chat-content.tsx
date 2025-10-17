@@ -24,6 +24,7 @@ export function AgentChatContent() {
   const toolParam = searchParams.get("tools");
   const chatId = searchParams.get("chat_id") || undefined;
   const initialMessage = searchParams.get("message") || undefined;
+  const fromHistory = searchParams.get("from") === "history";
 
   // Debug initial message
   // console.log("🔍 Agent page - URL params:", {
@@ -127,11 +128,20 @@ export function AgentChatContent() {
       <div className="fixed top-0 right-0 left-0 z-10 border-b border-sky-blue-200 bg-white/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <Link href="/">
-              <Button variant="ghost" size="icon" className="hover:bg-sky-blue-100">
-                <ArrowLeft className="size-5" />
-              </Button>
-            </Link>
+            {/* Back button - conditional based on fromHistory */}
+            {fromHistory ? (
+              <Link href="/history-chats">
+                <Button variant="ghost" size="icon" className="hover:bg-sky-blue-100">
+                  <ArrowLeft className="size-5" />
+                </Button>
+              </Link>
+            ) : (
+              <Link href="/">
+                <Button variant="ghost" size="icon" className="hover:bg-sky-blue-100">
+                  <ArrowLeft className="size-5" />
+                </Button>
+              </Link>
+            )}
             <Button
               variant="ghost"
               size="icon"
