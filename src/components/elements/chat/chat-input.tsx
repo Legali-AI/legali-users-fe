@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowUp, Mic, Paperclip, StopCircle } from "lucide-react";
-import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { ArrowUp, Mic, Paperclip, StopCircle } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import {
   createUploadingFile,
   FileUploadProgress,
@@ -16,19 +16,38 @@ interface ChatInputProps {
   onSendMessage: (content: string, files?: File[]) => void;
   placeholder?: string;
   disabled?: boolean;
+  droppedFiles?: File[];
+  onClearDroppedFiles?: () => void;
 }
 
-export function ChatInput({ onSendMessage, placeholder = "Type your message...", disabled = false }: ChatInputProps) {
+export function ChatInput({ onSendMessage, placeholder = "Type your message...", disabled = false, droppedFiles = [], onClearDroppedFiles }: ChatInputProps) {
   const [message, setMessage] = useState("");
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
   const [completedFiles, setCompletedFiles] = useState<File[]>([]);
 
-  // Debug logging for state changes
-  console.log("🔍 ChatInput state:", {
-    uploadingFilesCount: uploadingFiles.length,
-    completedFilesCount: completedFiles.length,
-    completedFiles: completedFiles.map(f => ({ name: f.name, size: f.size })),
-  });
+
+  // Handle dropped files from drag and drop
+  useEffect(() => {
+    if (droppedFiles.length > 0) {
+      
+      // Add dropped files to completed files (they're already validated)
+      setCompletedFiles(prev => {
+        const newFiles = droppedFiles.filter(droppedFile => 
+          !prev.some(existingFile => 
+            existingFile.name === droppedFile.name && 
+            existingFile.size === droppedFile.size && 
+            existingFile.lastModified === droppedFile.lastModified
+          )
+        );
+        return [...prev, ...newFiles];
+      });
+      
+      // Clear dropped files from parent
+      if (onClearDroppedFiles) {
+        onClearDroppedFiles();
+      }
+    }
+  }, [droppedFiles, onClearDroppedFiles]);
   const [isRecording, setIsRecording] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -38,11 +57,6 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
       // Validate files before sending
       const validFiles = completedFiles.filter(file => file instanceof File && file.size > 0 && file.name.length > 0);
 
-      console.log("📎 Files being sent from ChatInput:", {
-        originalCount: completedFiles.length,
-        validCount: validFiles.length,
-        files: validFiles.map(f => ({ name: f.name, size: f.size, type: f.type })),
-      });
 
       if (validFiles.length !== completedFiles.length) {
         console.warn("⚠️ Some files were filtered out due to validation");
@@ -70,10 +84,6 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || []);
 
-    console.log(
-      "📁 Files selected:",
-      selectedFiles.map(f => ({ name: f.name, size: f.size }))
-    );
 
     // Validate file sizes before processing
     const maxSize = 5 * 1024 * 1024; // 5MB
@@ -106,13 +116,6 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
                 const fileExists = completedPrev.some(
                   f => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified
                 );
-                console.log("📁 Moving file to completed:", {
-                  fileName: file.name,
-                  fileSize: file.size,
-                  lastModified: file.lastModified,
-                  fileExists,
-                  currentCompletedCount: completedPrev.length,
-                });
                 if (!fileExists) {
                   return [...completedPrev, file];
                 } else {
@@ -141,14 +144,6 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
       fileInputRef.current.value = "";
     }
 
-    console.log(
-      "📁 Uploading files updated:",
-      newUploadingFiles.map(f => ({
-        id: f.id,
-        name: f.file.name,
-        size: f.file.size,
-      }))
-    );
   };
 
   const removeUploadingFile = (fileId: string) => {
@@ -158,6 +153,7 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
   const removeCompletedFile = (index: number) => {
     setCompletedFiles(prev => prev.filter((_, i) => i !== index));
   };
+
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);

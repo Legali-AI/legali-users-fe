@@ -19,8 +19,8 @@ export function ChatHistorySidebar({ currentChatId, isOpen, onClose }: ChatHisto
 
   const handleChatClick = (chatId: string) => {
     if (chatId !== currentChatId) {
-      // Navigate to the chat in the same tab
-      router.push(`/agent?chat_id=${chatId}`);
+      // Navigate to the chat in the same tab with from=history parameter
+      router.push(`/agent?chat_id=${chatId}&from=history`);
     }
     onClose();
   };
@@ -65,11 +65,11 @@ export function ChatHistorySidebar({ currentChatId, isOpen, onClose }: ChatHisto
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 z-50 h-full w-80 transform bg-white shadow-lg transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 z-50 h-full w-80 transform bg-white shadow-lg transition-transform duration-300 ease-in-out flex flex-col ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}>
         {/* Header */}
-        <div className="flex items-center justify-between border-b p-4">
+        <div className="flex items-center justify-between border-b p-4 flex-shrink-0">
           <h2 className="text-lg font-semibold text-gray-900">Chat History</h2>
           <div className="flex items-center gap-2">
             <Button
@@ -87,7 +87,7 @@ export function ChatHistorySidebar({ currentChatId, isOpen, onClose }: ChatHisto
         </div>
 
         {/* New Chat Button */}
-        <div className="border-b p-4">
+        <div className="border-b p-4 flex-shrink-0">
           <Button onClick={handleNewChat} className="w-full justify-start" variant="outline">
             <MessageSquare className="mr-2 h-4 w-4" />
             New Chat
@@ -95,7 +95,7 @@ export function ChatHistorySidebar({ currentChatId, isOpen, onClose }: ChatHisto
         </div>
 
         {/* Chat List */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto min-h-0">
           {isLoading ? (
             <div className="flex items-center justify-center p-8">
               <div className="flex flex-col items-center gap-2">

@@ -1,6 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Message } from "@/components/elements/chat/types";
 import { chatService } from "@/services/chat.service";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRef } from "react";
 
 // Query keys
 export const chatQueryKeys = {
@@ -38,14 +39,20 @@ export function useChatHistory() {
   return useQuery({
     queryKey: chatQueryKeys.history(),
     queryFn: async () => {
-      console.log("🔄 Fetching chat history from API...");
       const response = await chatService.getChatHistory();
 
-      console.log("📋 Chat history API response:", response);
-
       if (response.success && response.data) {
-        console.log("✅ Chat history data parsed successfully:", response.data);
-        return response.data;
+        // Deduplicate chat history entries
+        const deduplicatedData = response.data.filter((chat, index, arr) => {
+          // Find first occurrence of this chat
+          const firstIndex = arr.findIndex(c => 
+            c.id === chat.id || 
+            (c.session_name === chat.session_name && c.created_at === chat.created_at)
+          );
+          return firstIndex === index;
+        });
+        
+        return deduplicatedData;
       }
 
       const errorMessage = response.error || "Failed to load chat history";
@@ -62,6 +69,7 @@ export function useChatHistory() {
 // Hook to send a message with optimistic updates
 export function useSendMessage() {
   const queryClient = useQueryClient();
+  const isSendingRef = useRef(false);
 
   return useMutation({
     mutationFn: async ({
@@ -75,14 +83,14 @@ export function useSendMessage() {
       conversationId?: string;
       toolParam?: string | null;
     }) => {
-      console.log("🚀 useSendMessage mutation called with:", {
-        message,
-        messageType: typeof message,
-        messageLength: message?.length,
-        files: files?.length || 0,
-        conversationId,
-        toolParam,
-      });
+      // Prevent duplicate calls
+      if (isSendingRef.current) {
+        console.warn("⚠️ Duplicate sendMessage call prevented");
+        throw new Error("Message is already being sent");
+      }
+      
+      isSendingRef.current = true;
+      
 
       // Always provide a message - use default if empty
       const finalMessage =
@@ -109,13 +117,6 @@ export function useSendMessage() {
 
       if (files && files.length > 0) {
         const file = files[0];
-        console.log("📎 File from UI:", {
-          name: file.name,
-          size: file.size,
-          type: file.type,
-          lastModified: file.lastModified,
-          isValid: file instanceof File && file.size > 0 && file.name.length > 0,
-        });
 
         // Validate file before sending
         if (!(file instanceof File)) {
@@ -136,7 +137,6 @@ export function useSendMessage() {
         requestPayload.file = file;
       }
 
-      console.log("📦 Final request payload:", requestPayload);
 
       const response = await chatService.sendMessage(requestPayload);
 
@@ -219,6 +219,9 @@ export function useSendMessage() {
         // Invalidate chat history to refresh the sidebar
         queryClient.invalidateQueries({ queryKey: chatQueryKeys.history() });
       }
+      
+      // Reset sending flag
+      isSendingRef.current = false;
     },
     onError: (error, variables, context) => {
       // Revert optimistic update on error
@@ -228,6 +231,9 @@ export function useSendMessage() {
       }
 
       console.error("Failed to send message:", error);
+      
+      // Reset sending flag
+      isSendingRef.current = false;
     },
     retry: 2, // Retry failed requests twice
   });
