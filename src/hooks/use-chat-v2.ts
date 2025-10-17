@@ -1,7 +1,7 @@
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 import type { Message, WorkflowRecommendation } from "@/components/elements/chat/types";
 import { chatService } from "@/services/chat.service";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { useChatMessages, useSendMessage } from "./use-chat-queries";
 
 export interface UseChatOptions {
@@ -89,6 +89,13 @@ export function useChat({
   //   currentSelectedTool: selectedTool,
   // });
 
+  // Update conversationId when initialConversationId changes (from URL)
+  useEffect(() => {
+    if (initialConversationId !== conversationId) {
+      setConversationId(initialConversationId);
+    }
+  }, [initialConversationId, conversationId]);
+
   // Cleanup old stored tools on initialization
   useEffect(() => {
     cleanupOldStoredTools();
@@ -108,17 +115,9 @@ export function useChat({
 
   // Initialize messages - either from query or welcome message
   useEffect(() => {
-    if (conversationId && initialConversationId && queryMessages.length > 0) {
-      // For existing conversations, use messages from React Query (only once)
-      // Check if we have a welcome message to preserve
-      setMessages(prevMessages => {
-        const hasWelcomeMessage = prevMessages.length > 0 && prevMessages[0].id === "welcome";
-        if (hasWelcomeMessage) {
-          // Preserve welcome message at the top
-          return [prevMessages[0], ...queryMessages];
-        }
-        return queryMessages;
-      });
+    if (conversationId && queryMessages.length > 0) {
+      // For existing conversations, use messages from React Query
+      setMessages(queryMessages);
     } else if (!conversationId && messages.length === 0) {
       // For new chats, show welcome message
       const welcomeMessages: Message[] = [
@@ -132,7 +131,7 @@ export function useChat({
       ];
       setMessages(welcomeMessages);
     }
-  }, [conversationId, initialConversationId]); // Removed queryMessages and messages.length to prevent infinite loop
+  }, [conversationId, queryMessages, messages.length]);
 
   // Load stored selectedTool when conversationId changes (for existing chats)
   useEffect(() => {
@@ -180,20 +179,20 @@ export function useChat({
     return undefined;
   }, [initialMessage, conversationId, messages.length]);
 
-  // Update messages when React Query data changes - but only for initial load
+  // Reset state when conversationId changes (for chat history navigation)
   useEffect(() => {
-    if (conversationId && queryMessages.length > 0 && !hasInitializedFromQuery.current) {
-      setMessages(prevMessages => {
-        const hasWelcomeMessage = prevMessages.length > 0 && prevMessages[0].id === "welcome";
-        if (hasWelcomeMessage) {
-          // Preserve welcome message at the top
-          return [prevMessages[0], ...queryMessages];
-        }
-        return queryMessages;
-      });
-      hasInitializedFromQuery.current = true;
+    if (conversationId && conversationId !== initialConversationId) {
+      // Reset flags when switching conversations
+      hasInitializedFromQuery.current = false;
+      hasProcessedInitialMessage.current = false;
+      
+      // Clear current messages to prevent showing old data
+      setMessages([]);
+      setWorkflowRecommendations([]);
+      setError(null);
     }
-  }, [conversationId, queryMessages]);
+  }, [conversationId, initialConversationId]);
+
 
   // Handle messages error
   useEffect(() => {

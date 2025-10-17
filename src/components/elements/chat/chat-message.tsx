@@ -1,81 +1,13 @@
 "use client";
 
-import { Paperclip } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Paperclip } from "lucide-react";
 import { Typography } from "../typography";
 import { AgentAvatar } from "./agent-avatar";
 import { AnalysisReportButton } from "./analysis-report-button";
+import { MarkdownRenderer } from "./markdown-renderer";
 import type { Message } from "./types";
 
-// Helper function to parse markdown-style links and create clickable links
-function parseTextWithLinks(text: string, isUser: boolean) {
-  // Regex to match markdown-style links: [text](url)
-  const markdownLinkRegex = /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g;
-
-  // Split text by markdown links while preserving the matches
-  const parts: (string | { text: string; url: string })[] = [];
-  let lastIndex = 0;
-
-  // Use matchAll instead of exec in while loop to avoid assignment in expression
-  const matches = Array.from(text.matchAll(markdownLinkRegex));
-
-  for (const match of matches) {
-    // Add text before the link
-    if (match.index !== undefined && match.index > lastIndex) {
-      parts.push(text.slice(lastIndex, match.index));
-    }
-
-    // Add the link data
-    parts.push({
-      text: match[1], // The text inside [brackets]
-      url: match[2], // The URL inside (parentheses)
-    });
-
-    lastIndex = (match.index || 0) + match[0].length;
-  }
-
-  // Add remaining text after the last link
-  if (lastIndex < text.length) {
-    parts.push(text.slice(lastIndex));
-  }
-
-  // If no markdown links found, return the original text
-  if (parts.length === 0) {
-    return text;
-  }
-
-  return parts.map((part, index) => {
-    if (typeof part === "object") {
-      // This is a link
-      return (
-        <a
-          key={index}
-          href={part.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={cn(
-            "inline-flex items-center gap-1 underline hover:no-underline",
-            isUser ? "text-sky-100 hover:text-white" : "text-blue-600 hover:text-blue-800"
-          )}
-          title={part.url} // Show full URL on hover
-        >
-          {part.text}
-          <svg className="h-3 w-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <title>External link</title>
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-            />
-          </svg>
-        </a>
-      );
-    }
-    // This is regular text
-    return part;
-  });
-}
 
 interface ChatMessageProps {
   message: Message;
@@ -113,9 +45,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
             isUser ? "rounded-tr-md bg-sky-blue-400 text-white" : "rounded-tl-md border border-sky-blue-200 bg-white"
           )}>
           {/* Message Text */}
-          <Typography level="body" className={cn("leading-relaxed", isUser ? "text-white" : "text-slate-gray-800")}>
-            {parseTextWithLinks(content, isUser)}
-          </Typography>
+          <MarkdownRenderer content={content} isUser={isUser} />
 
           {/* Attachments */}
           {attachments && attachments.length > 0 && (
