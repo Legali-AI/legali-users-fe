@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
-
 import { Paperclip } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { RichInputPayload } from "../../../components/elements/rich-input";
@@ -31,8 +30,7 @@ export default function HeroSection() {
   }, []);
 
   const handleSubmit = async (payload: RichInputPayload) => {
-    const hasContent =
-      payload.text?.trim() || payload.files?.length > 0 || payload.audioBlob;
+    const hasContent = payload.text?.trim() || payload.files?.length > 0 || payload.audioBlob;
 
     if (!hasContent) {
       // No content to send, just navigate to agent page
@@ -132,8 +130,7 @@ export default function HeroSection() {
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
-      onDrop={handleDrop}
-    >
+      onDrop={handleDrop}>
       {/* Background decorations */}
       <div aria-hidden="true">
         <div
@@ -165,27 +162,16 @@ export default function HeroSection() {
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-8 text-center">
         <HeroAnimatedHeadline />
         {/* Subtitle */}
-        <div
-          className="max-w-4xl"
-          data-aos="zoom-in"
-          data-aos-duration="600"
-          data-aos-delay="100"
-        >
+        <div className="max-w-4xl" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="100">
           <H2 level="title" className="text-brand-slate" align="center">
-            Legali keeps humans in the loop. We pair AI speed with expert
-            guidance to help you build cases, organize evidence, draft
-            documents, spot legal risks, connect with the right attorneys, and
-            even crowdfund litigation on one secure platform.
+            Legali keeps humans in the loop. We pair AI speed with expert guidance to help you build cases, organize
+            evidence, draft documents, spot legal risks, connect with the right attorneys, and even crowdfund litigation
+            on one secure platform.
           </H2>
         </div>
 
         {/* Search input */}
-        <div
-          className="mt-4 w-full"
-          data-aos="zoom-in"
-          data-aos-duration="600"
-          data-aos-delay="200"
-        >
+        <div className="mt-4 w-full" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="200">
           <RichInput
             onSubmit={handleSubmit}
             droppedFiles={droppedFiles}
@@ -198,8 +184,7 @@ export default function HeroSection() {
           className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-4"
           data-aos="fade-up"
           data-aos-duration="600"
-          data-aos-delay="300"
-        >
+          data-aos-delay="300">
           {NAVIGATION_FEATURES.map((feature, index) => (
             <Link
               key={feature.label}
@@ -208,14 +193,12 @@ export default function HeroSection() {
               className="focus-visible:ring-2 focus-visible:ring-brand-navy/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:outline-none"
               data-aos="flip-up"
               data-aos-duration="600"
-              data-aos-delay={400 + index * 50}
-            >
+              data-aos-delay={400 + index * 50}>
               <Badge
                 level="body"
                 variant="gradient-blue"
                 size="lg"
-                className="gap-2 border border-white/60 px-5 py-2 shadow-[0_24px_48px_-28px_rgba(15,36,71,0.6)] transition hover:translate-y-0.5 hover:brightness-95"
-              >
+                className="gap-2 border border-white/60 px-5 py-2 shadow-[0_24px_48px_-28px_rgba(15,36,71,0.6)] transition hover:translate-y-0.5 hover:brightness-95">
                 <feature.icon
                   size={36}
                   aria-hidden="true"
@@ -236,9 +219,7 @@ export default function HeroSection() {
             <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-sky-blue-100">
               <Paperclip className="h-10 w-10 text-sky-blue-600" />
             </div>
-            <h3 className="mb-2 text-xl font-semibold text-sky-blue-700">
-              Drop files here to upload
-            </h3>
+            <h3 className="mb-2 text-xl font-semibold text-sky-blue-700">Drop files here to upload</h3>
             <p className="text-sm text-sky-blue-600">Maximum 5MB per file</p>
           </div>
         </div>

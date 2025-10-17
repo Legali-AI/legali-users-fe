@@ -392,7 +392,9 @@ export function useChat({
 
     if (lastUserMessage) {
       // Only pass File attachments for retry, not ServerAttachments from previous messages
-      const fileAttachments = lastUserMessage.attachments?.filter((att): att is File => att instanceof File);
+      const fileAttachments = lastUserMessage.attachments?.filter(
+        (att): att is File => att instanceof File
+      );
       await handleSendMessage(lastUserMessage.content, fileAttachments);
     }
   };

@@ -1,5 +1,7 @@
 "use client";
 
+import { Mic, Paperclip, Send, StopCircle } from "lucide-react";
+import * as React from "react";
 import {
   createUploadingFile,
   FileUploadProgress,
@@ -8,8 +10,6 @@ import {
 } from "@/components/elements/chat/file-upload-progress";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Mic, Paperclip, Send, StopCircle } from "lucide-react";
-import * as React from "react";
 import { Typography } from "./typography";
 
 export interface RichInputPayload {

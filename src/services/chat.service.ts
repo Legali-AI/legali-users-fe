@@ -316,7 +316,9 @@ export const chatService = {
   getChatHistory: async (): Promise<ChatHistoryResponse> => {
     try {
       console.log("📋 Fetching chat history from API...");
-      const response = (await api.get("/api/chats")) as { data: ChatHistoryItem[] | ChatHistoryResponse };
+      const response = (await api.get("/api/chats")) as {
+        data: ChatHistoryItem[] | ChatHistoryResponse;
+      };
       console.log("📋 Raw API response:", response);
 
       const data = response.data;

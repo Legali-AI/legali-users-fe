@@ -17,8 +17,8 @@ import { H1 } from "@/components/elements/typography";
 import { Button } from "@/components/ui/button";
 import { useAuthStatus } from "@/hooks/use-auth-status";
 import { useChat } from "@/hooks/use-chat";
+import { clearPendingMessage, getPendingMessage } from "@/lib/session-storage";
 import { chatService } from "@/services/chat.service";
-import { getPendingMessage, clearPendingMessage } from "@/lib/session-storage";
 
 export function AgentChatContent() {
   const searchParams = useSearchParams();
