@@ -1,8 +1,7 @@
-import type { Metadata } from "next";
 import { homePageMetadata } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
 import { H3, P, Span } from "../../components/elements/typography";
 import AboutUsSection from "./components/about-us-section";
-import BuiltForSection from "./components/buiilt-for-section";
 import ConnectAttorneySection from "./components/connect-attorney-section";
 import FAQSection from "./components/faq-section";
 import FeatureSection from "./components/feature-section";
@@ -26,7 +25,7 @@ function App() {
         {/* About Us */}
         <AboutUsSection />
         {/* Built For */}
-        <BuiltForSection />
+        {/* <BuiltForSection /> */}
         {/* Features */}
         <FeatureSection />
         {/* FAQ */}
@@ -39,7 +38,8 @@ function App() {
           aria-labelledby="cta-heading"
           data-aos="fade-up"
           data-aos-duration="800"
-          data-aos-delay="100">
+          data-aos-delay="100"
+        >
           {/* Main headline */}
           <H3
             level={"huge"}
@@ -47,7 +47,8 @@ function App() {
             weight={"semibold"}
             data-aos="zoom-in"
             data-aos-duration="600"
-            data-aos-delay="200">
+            data-aos-delay="200"
+          >
             Legali puts the law on your side.
           </H3>
 
@@ -59,7 +60,8 @@ function App() {
             className="text-brand-navy"
             data-aos="fade-up"
             data-aos-duration="600"
-            data-aos-delay="300">
+            data-aos-delay="300"
+          >
             Your better chance at justice.
           </P>
 
@@ -71,7 +73,8 @@ function App() {
             className="text-brand-navy"
             data-aos="fade-up"
             data-aos-duration="600"
-            data-aos-delay="400">
+            data-aos-delay="400"
+          >
             Let's do it,{" "}
             <Span
               level={"h2"}
@@ -80,7 +83,8 @@ function App() {
               className="text-brand-navy italic"
               data-aos="pulse"
               data-aos-duration="1000"
-              data-aos-delay="500">
+              data-aos-delay="500"
+            >
               legali.
             </Span>
           </P>

@@ -40,7 +40,7 @@ export default function AboutUsSection() {
         <Button
           asChild
           size="lg"
-          className="mx-auto inline-flex rounded-full bg-gradient-to-r from-[#2F7D99] to-[#A4D1E8] px-10 py-3 text-lg text-white shadow-[0_20px_50px_-30px_rgba(31,125,153,0.85)] transition hover:brightness-95"
+          className="mx-auto inline-flex rounded-lg bg-gradient-to-r from-[#2F7D99] to-[#A4D1E8] px-10 py-3 text-lg text-white shadow-[0_20px_50px_-30px_rgba(31,125,153,0.85)] transition hover:brightness-95"
         >
           <Link href="/onboard">Get Started with Legali</Link>
         </Button>
@@ -48,7 +48,7 @@ export default function AboutUsSection() {
 
       {/* Supporting copy */}
       <div
-        className="w-full max-w-4xl space-y-4 sm:space-y-5"
+        className="w-full max-w-5xl space-y-4 sm:space-y-5"
         data-aos="fade-up"
         data-aos-delay="150"
       >
@@ -66,7 +66,6 @@ export default function AboutUsSection() {
       </div>
 
       <div className="w-full space-y-14">
-        {/* Problems grid */}
         <div
           className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
           data-aos="fade-up"
@@ -86,8 +85,7 @@ export default function AboutUsSection() {
           ))}
         </div>
 
-        {/* Value props */}
-        <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
           {VALUE_PROPOSITIONS.map((valueProposition, index) => (
             <div
               key={valueProposition.headline}
