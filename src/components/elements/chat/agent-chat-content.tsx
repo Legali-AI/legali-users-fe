@@ -18,6 +18,7 @@ import { AlertCircle, ArrowLeft, Menu, Paperclip, RefreshCw, User } from "lucide
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { getPendingMessage, clearPendingMessage } from "@/lib/session-storage";
 
 export function AgentChatContent() {
   const searchParams = useSearchParams();
@@ -93,6 +94,7 @@ export function AgentChatContent() {
   const currentMode = getToolIdFromParam(toolParam);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const hasSentPendingMessage = useRef(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -101,6 +103,30 @@ export function AgentChatContent() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Check for pending message from landing page (with files)
+  useEffect(() => {
+    // Only check once and only for new conversations
+    if (hasSentPendingMessage.current || chatId) {
+      return;
+    }
+
+    const pendingMessage = getPendingMessage();
+    if (pendingMessage) {
+      hasSentPendingMessage.current = true;
+
+      // Clear from sessionStorage
+      clearPendingMessage();
+
+      // Send message with files
+      const { text, files } = pendingMessage;
+
+      // Wait a bit for the chat to initialize
+      setTimeout(() => {
+        sendMessage(text, files);
+      }, 100);
+    }
+  }, [chatId, sendMessage]);
 
   // Don't redirect - just get the conversation_id from response
   // useEffect(() => {

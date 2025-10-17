@@ -1,10 +1,14 @@
 "use client";
 
-// biome-ignore assist/source/organizeImports: Stupid resolve from biome
-import { FileAttachmentContainer } from "@/components/elements/attachments/file-attachment-container";
+import {
+  createUploadingFile,
+  FileUploadProgress,
+  simulateFileUpload,
+  type UploadingFile,
+} from "@/components/elements/chat/file-upload-progress";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Mic, Send, StopCircle } from "lucide-react";
+import { Mic, Paperclip, Send, StopCircle } from "lucide-react";
 import * as React from "react";
 import { Typography } from "./typography";
 
@@ -17,21 +21,22 @@ export interface RichInputPayload {
 
 export interface RichInputProps {
   placeholder?: string;
-  maxFiles?: number;
-  accept?: string;
   disabled?: boolean;
   onSubmit?: (payload: RichInputPayload) => void;
+  droppedFiles?: File[];
+  onClearDroppedFiles?: () => void;
 }
 
 export default function RichInput({
   placeholder = "Describe your legal issues. Legali listens, organizes, and asks the right questions to build your strongest case.",
-  maxFiles = 8,
-  accept = "image/*,application/pdf",
   disabled = false,
   onSubmit,
+  droppedFiles = [],
+  onClearDroppedFiles,
 }: RichInputProps) {
   const [text, setText] = React.useState("");
-  const [files, setFiles] = React.useState<File[]>([]);
+  const [uploadingFiles, setUploadingFiles] = React.useState<UploadingFile[]>([]);
+  const [completedFiles, setCompletedFiles] = React.useState<File[]>([]);
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
   const [audioBlob, setAudioBlob] = React.useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = React.useState<string | null>(null);
@@ -56,6 +61,56 @@ export default function RichInput({
     };
   }, []);
 
+  // Handle dropped files from drag and drop
+  React.useEffect(() => {
+    if (droppedFiles.length > 0) {
+      // Process dropped files through upload simulation
+      const newUploadingFiles = droppedFiles.map(file => {
+        const uploadingFile = createUploadingFile(file);
+
+        // Start upload simulation
+        simulateFileUpload(
+          uploadingFile,
+          updatedFile => {
+            setUploadingFiles(prev => prev.map(f => (f.id === updatedFile.id ? updatedFile : f)));
+          },
+          fileId => {
+            // Move to completed files when upload is done
+            setUploadingFiles(prev => {
+              const file = prev.find(f => f.id === fileId)?.file;
+              if (file) {
+                setCompletedFiles(completedPrev => {
+                  const fileExists = completedPrev.some(
+                    f => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified
+                  );
+                  if (!fileExists) {
+                    return [...completedPrev, file];
+                  }
+                  return completedPrev;
+                });
+              }
+              return prev;
+            });
+
+            // Remove from uploading files after a delay to show completion
+            setTimeout(() => {
+              setUploadingFiles(prev => prev.filter(f => f.id !== fileId));
+            }, 2000);
+          }
+        );
+
+        return uploadingFile;
+      });
+
+      setUploadingFiles(prev => [...prev, ...newUploadingFiles]);
+
+      // Clear dropped files from parent
+      if (onClearDroppedFiles) {
+        onClearDroppedFiles();
+      }
+    }
+  }, [droppedFiles, onClearDroppedFiles]);
+
   const handlePickFiles = () => {
     if (disabled) return;
     fileInputRef.current?.click();
@@ -64,11 +119,48 @@ export default function RichInput({
   const handleFilesSelected: React.ChangeEventHandler<HTMLInputElement> = e => {
     const list = e.target.files;
     if (!list) return;
-    const newFiles = Array.from(list);
-    setFiles(prev => {
-      const merged = [...prev, ...newFiles].slice(0, maxFiles);
-      return merged;
+    const selectedFiles = Array.from(list);
+
+    // Process files through upload simulation
+    const newUploadingFiles = selectedFiles.map(file => {
+      const uploadingFile = createUploadingFile(file);
+
+      // Start upload simulation
+      simulateFileUpload(
+        uploadingFile,
+        updatedFile => {
+          setUploadingFiles(prev => prev.map(f => (f.id === updatedFile.id ? updatedFile : f)));
+        },
+        fileId => {
+          // Move to completed files when upload is done
+          setUploadingFiles(prev => {
+            const file = prev.find(f => f.id === fileId)?.file;
+            if (file) {
+              setCompletedFiles(completedPrev => {
+                const fileExists = completedPrev.some(
+                  f => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified
+                );
+                if (!fileExists) {
+                  return [...completedPrev, file];
+                }
+                return completedPrev;
+              });
+            }
+            return prev;
+          });
+
+          // Remove from uploading files after a delay to show completion
+          setTimeout(() => {
+            setUploadingFiles(prev => prev.filter(f => f.id !== fileId));
+          }, 2000);
+        }
+      );
+
+      return uploadingFile;
     });
+
+    setUploadingFiles(prev => [...prev, ...newUploadingFiles]);
+
     // reset input to allow re-selecting the same file
     e.currentTarget.value = "";
   };
@@ -152,18 +244,27 @@ export default function RichInput({
     setRecordMs(0);
   };
 
+  const removeUploadingFile = (fileId: string) => {
+    setUploadingFiles(prev => prev.filter(f => f.id !== fileId));
+  };
+
+  const removeCompletedFile = (index: number) => {
+    setCompletedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = () => {
     if (disabled) return;
     const payload: RichInputPayload = {
       text: text.trim(),
-      files,
+      files: completedFiles,
       audioBlob,
       audioUrl,
     };
     onSubmit?.(payload);
     // reset
     setText("");
-    setFiles([]);
+    setCompletedFiles([]);
+    setUploadingFiles([]);
     clearRecording();
   };
 
@@ -209,7 +310,7 @@ export default function RichInput({
           <input
             ref={fileInputRef}
             type="file"
-            accept={accept}
+            accept="image/*,application/pdf"
             multiple
             onChange={handleFilesSelected}
             className="hidden"
@@ -246,7 +347,7 @@ export default function RichInput({
           <Button
             type="button"
             onClick={handleSubmit}
-            disabled={disabled || (!text.trim() && files.length === 0 && !audioBlob)}
+            disabled={disabled || (!text.trim() && completedFiles.length === 0 && !audioBlob)}
             className="h-10 w-10 rounded-full"
             aria-label="Send">
             <Send className="h-4 w-4 text-white" />
@@ -254,41 +355,49 @@ export default function RichInput({
         </div>
       </div>
 
-      {/* Attachments and audio preview */}
-      {(files.length > 0 || isRecording || !!audioBlob) && (
-        <div className="mt-2 flex w-full flex-col gap-2">
-          {files.length > 0 && (
-            <FileAttachmentContainer
-              attachments={files.map(f => f.name)}
-              maxVisible={8}
-              showRemaining={true}
-              onAttachmentClick={() => {
-                // Optional: Add click handler for individual files
-              }}
-              onRemainingClick={() => {
-                // Optional: Add handler for "+remaining" click
-              }}
-            />
-          )}
+      {/* File Upload Progress */}
+      {uploadingFiles.length > 0 && (
+        <div className="mt-2">
+          <FileUploadProgress files={uploadingFiles} onRemoveFile={removeUploadingFile} />
+        </div>
+      )}
 
-          {/* Recording status or playback */}
-          {isRecording && (
-            <div className="flex items-center gap-3 rounded-md border border-input px-3 py-2">
-              <div className="flex h-2 w-2 animate-pulse rounded-full bg-red-500" />
-              <Typography level="label" className="text-muted-foreground">
-                Recording... {formatMs(recordMs)}
-              </Typography>
+      {/* Completed File Attachments Preview - Only show when no uploading files */}
+      {completedFiles.length > 0 && uploadingFiles.length === 0 && (
+        <div className="mt-2 flex flex-wrap gap-2">
+          {completedFiles.map((file, index) => (
+            <div
+              key={index}
+              className="bg-sky-blue-50 flex items-center gap-2 rounded-lg border border-sky-blue-200 px-3 py-2 text-sm">
+              <Paperclip className="size-4 text-sky-blue-600" />
+              <span className="max-w-32 truncate text-slate-gray-700">{file.name}</span>
+              <button
+                type="button"
+                onClick={() => removeCompletedFile(index)}
+                className="text-slate-gray-400 transition-colors hover:text-slate-gray-600">
+                ×
+              </button>
             </div>
-          )}
+          ))}
+        </div>
+      )}
 
-          {!!audioBlob && audioUrl && (
-            <div className="flex w-full items-center gap-3 rounded-md border border-input px-3 py-2">
-              {/* Visible audio element for playback */}
-              <audio ref={audioRef} src={audioUrl} controls className="max-w-full" aria-label="Recorded audio preview">
-                <track kind="captions" />
-              </audio>
-            </div>
-          )}
+      {/* Recording status or playback */}
+      {isRecording && (
+        <div className="mt-2 flex items-center gap-3 rounded-md border border-input px-3 py-2">
+          <div className="flex h-2 w-2 animate-pulse rounded-full bg-red-500" />
+          <Typography level="label" className="text-muted-foreground">
+            Recording... {formatMs(recordMs)}
+          </Typography>
+        </div>
+      )}
+
+      {!!audioBlob && audioUrl && (
+        <div className="mt-2 flex w-full items-center gap-3 rounded-md border border-input px-3 py-2">
+          {/* Visible audio element for playback */}
+          <audio ref={audioRef} src={audioUrl} controls className="max-w-full" aria-label="Recorded audio preview">
+            <track kind="captions" />
+          </audio>
         </div>
       )}
     </div>
