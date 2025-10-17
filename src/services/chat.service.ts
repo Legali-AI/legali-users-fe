@@ -132,6 +132,9 @@ export const chatService = {
       formData.append("file", request.file);
     }
 
+    // Add stream parameter
+    formData.append("stream", "false");
+
     // Debug FormData contents
     debugFormData(formData);
 
