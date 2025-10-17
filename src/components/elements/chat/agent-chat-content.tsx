@@ -10,6 +10,7 @@ import { TypingIndicator } from "@/components/elements/chat/typing-indicator";
 import { WorkflowRecommendations } from "@/components/elements/chat/workflow-recommendations";
 import { H1 } from "@/components/elements/typography";
 import { Button } from "@/components/ui/button";
+import { useAuthStatus } from "@/hooks/use-auth-status";
 import { useChat } from "@/hooks/use-chat";
 import { chatService } from "@/services/chat.service";
 import { motion } from "framer-motion";
@@ -21,6 +22,7 @@ import { useEffect, useRef, useState } from "react";
 export function AgentChatContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { isAuthenticated } = useAuthStatus();
   const toolParam = searchParams.get("tools");
   const chatId = searchParams.get("chat_id") || undefined;
   const initialMessage = searchParams.get("message") || undefined;
@@ -191,19 +193,21 @@ export function AgentChatContent() {
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
       onDrop={handleDrop}>
-      {/* Chat History Sidebar */}
-      <ChatHistorySidebar
-        currentChatId={currentConversationId}
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-      />
+      {/* Chat History Sidebar - Only show if user is authenticated */}
+      {isAuthenticated && (
+        <ChatHistorySidebar
+          currentChatId={currentConversationId}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
+      )}
 
       {/* Header */}
       <div className="fixed top-0 right-0 left-0 z-10 border-b border-sky-blue-200 bg-white/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             {/* Back button - conditional based on fromHistory */}
-            {fromHistory ? (
+            {fromHistory && isAuthenticated ? (
               <Link href="/history-chats">
                 <Button variant="ghost" size="icon" className="hover:bg-sky-blue-100">
                   <ArrowLeft className="size-5" />
@@ -216,14 +220,17 @@ export function AgentChatContent() {
                 </Button>
               </Link>
             )}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsSidebarOpen(true)}
-              className="hover:bg-sky-blue-100"
-              aria-label="Open chat history">
-              <Menu className="size-5" />
-            </Button>
+            {/* Only show menu button if user is authenticated */}
+            {isAuthenticated && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsSidebarOpen(true)}
+                className="hover:bg-sky-blue-100"
+                aria-label="Open chat history">
+                <Menu className="size-5" />
+              </Button>
+            )}
             <div className="flex items-center gap-3">
               <AgentAvatar />
               <div className="flex flex-col">

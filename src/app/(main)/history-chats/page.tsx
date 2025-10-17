@@ -4,15 +4,43 @@ import { H1 } from "@/components/elements/typography";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { useAuthStatus } from "@/hooks/use-auth-status";
 import { useChatHistory } from "@/hooks/use-chat-queries";
 import { ArrowRight, Clock, MessageSquare, RefreshCw } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
 export default function HistoryChatsPage() {
+  const { isAuthenticated, isLoading: authLoading } = useAuthStatus();
+  const router = useRouter();
   const { data: chatHistory = [], isLoading, error, refetch } = useChatHistory();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8; // 8 items per page for 2x4 grid
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isAuthenticated, authLoading, router]);
+
+  // Show loading while checking auth
+  if (authLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="size-8 animate-spin rounded-full border-2 border-sky-blue-200 border-t-sky-blue-600" />
+          <p className="text-slate-gray-600">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render anything if not authenticated (will redirect)
+  if (!isAuthenticated) {
+    return null;
+  }
 
   // Pagination logic
   const paginatedData = useMemo(() => {
