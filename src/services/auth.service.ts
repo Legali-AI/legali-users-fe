@@ -38,7 +38,12 @@ export async function signIn(credentials: LoginFormData): Promise<AuthSuccessRes
 
     // Type guard for axios errors
     if (error && typeof error === "object" && "response" in error) {
-      const axiosError = error as { response: { data: any; status: number } };
+      const axiosError = error as {
+        response: {
+          data: { message?: string; errors?: Array<{ field: string; message: string }> };
+          status: number;
+        };
+      };
       const responseData = axiosError.response.data;
       throw new AuthError(
         responseData?.message || "Authentication failed",

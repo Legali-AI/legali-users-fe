@@ -8,6 +8,53 @@ export interface SendMessageRequest {
   file?: File | undefined;
 }
 
+// Type for error responses from axios
+interface AxiosErrorResponse {
+  response?: {
+    status?: number;
+    statusText?: string;
+    data?: {
+      message?: string;
+      error?: string;
+    };
+  };
+  config?: {
+    url?: string;
+    method?: string;
+    headers?: Record<string, string>;
+    data?: FormData;
+  };
+  message?: string;
+}
+
+// Type for API message from chat history
+interface ApiMessage {
+  id: string;
+  content: string;
+  role: "user" | "assistant" | "system";
+  created_at?: string;
+  timestamp?: string;
+  conversation_id?: string;
+  attachments?: Array<{ id: string; filename: string; url: string }>;
+  report_file_path?: string;
+}
+
+// Type for chat history response
+interface ChatHistoryItem {
+  id: string;
+  user_id: string;
+  session_name: string;
+  summary: string | null;
+  created_at: string;
+}
+
+interface ChatHistoryResponse {
+  success: boolean;
+  data?: ChatHistoryItem[];
+  message?: string;
+  error?: string;
+}
+
 // Validation function for SendMessageRequest
 export const validateSendMessageRequest = (request: SendMessageRequest): string[] => {
   const errors: string[] = [];
@@ -160,7 +207,8 @@ export const chatService = {
       });
 
       return response;
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const axiosError = error as AxiosErrorResponse;
       const endTime = Date.now();
       const duration = endTime - startTime;
 
@@ -169,21 +217,21 @@ export const chatService = {
         `❌ Chat API request failed after ${duration}ms (${(duration / 1000).toFixed(2)}s)`
       );
       console.error("❌ Error details:", {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-        message: error.message,
+        status: axiosError.response?.status,
+        statusText: axiosError.response?.statusText,
+        data: axiosError.response?.data,
+        message: axiosError.message,
         config: {
-          url: error.config?.url,
-          method: error.config?.method,
-          headers: error.config?.headers,
+          url: axiosError.config?.url,
+          method: axiosError.config?.method,
+          headers: axiosError.config?.headers,
         },
       });
 
       // Log the actual FormData that was sent
       console.error("❌ FormData that was sent:");
-      if (error.config?.data instanceof FormData) {
-        for (const [key, value] of error.config.data.entries()) {
+      if (axiosError.config?.data instanceof FormData) {
+        for (const [key, value] of axiosError.config.data.entries()) {
           if (value instanceof File) {
             console.error(`  ${key}: File(${value.name}, ${value.size} bytes, ${value.type})`);
           } else {
@@ -193,18 +241,18 @@ export const chatService = {
       }
 
       // Provide more specific error messages
-      if (error.response?.status === 400) {
+      if (axiosError.response?.status === 400) {
         const errorMessage =
-          error.response?.data?.message || error.response?.data?.error || "Bad Request";
+          axiosError.response?.data?.message || axiosError.response?.data?.error || "Bad Request";
         throw new Error(`Invalid request: ${errorMessage}`);
-      } else if (error.response?.status === 401) {
+      } else if (axiosError.response?.status === 401) {
         throw new Error("Authentication required. Please log in again.");
-      } else if (error.response?.status === 413) {
+      } else if (axiosError.response?.status === 413) {
         const fileSize = request.file
           ? `${(request.file.size / (1024 * 1024)).toFixed(2)}MB`
           : "unknown";
         throw new Error(`File too large (${fileSize}). Please choose a file smaller than 5MB.`);
-      } else if (error.response?.status >= 500) {
+      } else if (axiosError.response?.status && axiosError.response.status >= 500) {
         throw new Error("Server error. Please try again later.");
       } else {
         throw error;
@@ -243,33 +291,25 @@ export const chatService = {
   },
 
   // Helper function to convert API message to local message format
-  convertApiMessageToMessage: (apiMessage: any) => ({
+  convertApiMessageToMessage: (apiMessage: ApiMessage) => ({
     id: apiMessage.id,
     content: apiMessage.content,
     isUser: apiMessage.role === "user",
-    timestamp: new Date(apiMessage.created_at || apiMessage.timestamp),
+    timestamp: new Date(apiMessage.created_at || apiMessage.timestamp || Date.now()),
     conversation_id: apiMessage.conversation_id,
     role: apiMessage.role,
-    attachments: apiMessage.attachments?.length > 0 ? apiMessage.attachments : undefined,
+    attachments:
+      apiMessage.attachments?.length && apiMessage.attachments.length > 0
+        ? apiMessage.attachments
+        : undefined,
     report_file_path: apiMessage.report_file_path,
   }),
 
   // Get chat history for the current user
-  getChatHistory: async (): Promise<{
-    success: boolean;
-    data?: Array<{
-      id: string;
-      user_id: string;
-      session_name: string;
-      summary: string | null;
-      created_at: string;
-    }>;
-    message?: string;
-    error?: string;
-  }> => {
+  getChatHistory: async (): Promise<ChatHistoryResponse> => {
     try {
       console.log("📋 Fetching chat history from API...");
-      const response = (await api.get("/api/chats")) as any;
+      const response = await api.get<ChatHistoryItem[] | ChatHistoryResponse>("/api/chats");
       console.log("📋 Raw API response:", response);
       console.log("📋 Response data:", response.data);
 
@@ -309,11 +349,15 @@ export const chatService = {
         success: false,
         error: "Unexpected response format",
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const axiosError = error as AxiosErrorResponse;
       console.error("❌ Failed to fetch chat history:", error);
       return {
         success: false,
-        error: error.response?.data?.message || error.message || "Failed to fetch chat history",
+        error:
+          axiosError.response?.data?.message ||
+          axiosError.message ||
+          "Failed to fetch chat history",
       };
     }
   },
