@@ -1,70 +1,87 @@
-import { H3, H4 } from "../../../components/elements/typography";
-import { BENEFITS } from "../../../data/home.data";
-import { CardBenefit } from "./card/card-benefit";
+import Image from "next/image";
+import { H3, H4, P } from "../../../components/elements/typography";
+import { CORE_PROBLEMS, VALUE_PROPOSITIONS } from "../../../data/home.data";
+import { CardProblem } from "./card/card-problem";
 
 export default function BuiltForSection() {
   return (
-    <section className="flex flex-col gap-3" aria-labelledby="built-for-heading">
-      {/* Main text */}
-      <div data-aos="zoom-in-down" data-aos-duration="600">
-        <H3 level={"h2"} className="mx-auto max-w-5xl" weight={"semibold"} align={"center"}>
-          Built For You.
+    <section className="flex flex-col gap-12 sm:gap-16 lg:gap-20" aria-labelledby="built-for-heading">
+      {/* Main Heading */}
+      <div data-aos="fade-up" data-aos-duration="600">
+        <H3
+          id="built-for-heading"
+          level="h2"
+          align="center"
+          weight="semibold"
+          className="mx-auto max-w-4xl text-3xl text-brand-navy sm:text-[38px] md:text-[44px] lg:text-[50px]">
+          We build Legali so everyone can navigate the legal system better.
         </H3>
       </div>
 
-      {/* Subtitle */}
-      <div data-aos="slide-up" data-aos-duration="600" data-aos-delay="100">
-        <H4 level={"body"} className="mx-auto max-w-6xl text-brand-slate" align={"center"}>
-          Helping the 'stuck in the middle' crowd and the lawyers who serve them.
-        </H4>
+      {/* Core Problems Grid */}
+      <div
+        className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+        data-aos="fade-up"
+        data-aos-duration="600"
+        data-aos-delay="200">
+        {CORE_PROBLEMS.map((problem, index) => (
+          <div
+            key={problem.title}
+            className="flex justify-center"
+            data-aos="flip-right"
+            data-aos-duration="600"
+            data-aos-delay={300 + index * 120}>
+            <CardProblem problem={problem} />
+          </div>
+        ))}
       </div>
 
-      {/* Benefits content */}
-      <div className="relative z-10 bg-sky-blue-100 p-4 sm:p-6 lg:p-10">
-        {/* Background */}
-        <div aria-hidden="true">
-          <div
-            className="absolute top-0 left-1/2 -z-10 aspect-square h-auto w-[400px] -translate-x-1/2 blur-2xl"
-            style={{ backgroundColor: "rgba(200, 241, 255, 0.75)" }}
-          />
-          <div
-            className="absolute bottom-0 -left-20 -z-10 aspect-square h-auto w-[400px] blur-2xl"
-            style={{ backgroundColor: "rgba(200, 241, 255, 0.75)" }}
-          />
-          <div
-            className="absolute -right-20 bottom-0 -z-10 aspect-square h-auto w-[400px] blur-2xl"
-            style={{ backgroundColor: "rgba(200, 241, 255, 0.75)" }}
+      {/* Legali Revolutionizes Section */}
+      <div
+        className="mx-auto flex w-full max-w-5xl flex-col items-center gap-6 rounded-[32px] bg-white/90 p-6 shadow-[0_40px_80px_-60px_rgba(15,36,71,0.45)] backdrop-blur-sm sm:flex-row sm:gap-12 lg:p-8"
+        data-aos="fade-up"
+        data-aos-duration="600"
+        data-aos-delay="400">
+        {/* SVG Image */}
+        <div className="w-full max-w-[546px] shrink-0">
+          <Image
+            src="/legali-revolutionize.svg"
+            alt="Legali revolutionizes access to justice"
+            width={546}
+            height={254}
+            className="h-auto w-full"
+            priority
           />
         </div>
 
-        {/* Benefits */}
-        {BENEFITS.map((b, benefitIndex) => (
-          <div
-            key={b.title}
-            className="my-6 flex flex-col gap-7 md:my-8 xl:my-10"
-            data-aos="flip-up"
-            data-aos-duration="600"
-            data-aos-delay={200 + benefitIndex * 100}>
-            <H4
-              id={`benefit-${b.title.toLowerCase().replace(/\s+/g, "-")}`}
-              level={"h5"}
-              weight={"semibold"}
-              className="mx-auto w-fit rounded-full border border-white-400 bg-white px-6 py-2">
-              {b.title}
-            </H4>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-              {b.items.map((benefit, index) => (
-                <div
-                  key={benefit.title}
-                  data-aos="zoom-in"
-                  data-aos-duration="600"
-                  data-aos-delay={300 + benefitIndex * 100 + index * 50}>
-                  <CardBenefit benefit={benefit} />
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
+        {/* Text Content */}
+        <div className="flex-1 space-y-3 text-center sm:space-y-4 sm:text-left">
+          <H4 level="h3" weight="semibold" className="text-brand-navy">
+            {VALUE_PROPOSITIONS[0].headline}
+          </H4>
+          <P level="title" className="text-base text-brand-slate sm:text-lg">
+            {VALUE_PROPOSITIONS[0].description}
+          </P>
+        </div>
+      </div>
+
+      {/* We Built Legali from Experience Section */}
+      <div
+        className="mx-auto w-full max-w-5xl space-y-4 rounded-[32px] bg-white/90 p-6 shadow-[0_40px_80px_-60px_rgba(15,36,71,0.45)] backdrop-blur-sm lg:p-8"
+        data-aos="fade-up"
+        data-aos-duration="600"
+        data-aos-delay="500">
+        <H4 level="h3" weight="semibold" className="text-brand-navy">
+          {VALUE_PROPOSITIONS[1].headline}
+        </H4>
+        <div className="space-y-3">
+          <P level="title" className="text-base text-brand-slate sm:text-lg">
+            Even the smartest people get trapped in a legal system that's too complex to navigate.
+          </P>
+          <P level="title" className="text-base text-brand-slate sm:text-lg">
+            Education doesn't protect you—access does.
+          </P>
+        </div>
       </div>
     </section>
   );
