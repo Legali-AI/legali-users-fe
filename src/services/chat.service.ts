@@ -110,8 +110,8 @@ export const chatService = {
 
     const formData = new FormData();
 
-    // Send a default message if user_input is empty but file is provided
-    const userInput = request.user_input?.trim() || "I send document(s)";
+    // Send empty message if user_input is empty
+    const userInput = request.user_input?.trim() || "";
     formData.append("user_input", userInput);
 
     if (request.conversation_id) {

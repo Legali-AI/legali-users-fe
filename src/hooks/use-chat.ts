@@ -219,7 +219,7 @@ export function useChat({
 
     // IMMEDIATELY add user message to UI (optimistic update)
     // Use the same logic as mutation params for consistency
-    const displayContent = content || (files && files.length > 0 ? "I send document(s)" : "");
+    const displayContent = content || "";
 
     const userMessage: Message = {
       id: `temp-user-${Date.now()}`,
@@ -262,7 +262,7 @@ export function useChat({
       }
 
       const mutationParams = {
-        message: content || (files && files.length > 0 ? "I send document(s)" : ""), // Send default message if content is empty but files exist
+        message: content || "", // Send empty message if no content
         ...(files && { files }),
         ...(conversationId && { conversationId }),
         ...(selectedTool && { toolParam: selectedTool }),

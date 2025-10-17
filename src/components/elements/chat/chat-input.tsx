@@ -29,18 +29,48 @@ export function ChatInput({ onSendMessage, placeholder = "Type your message...",
   // Handle dropped files from drag and drop
   useEffect(() => {
     if (droppedFiles.length > 0) {
-      
-      // Add dropped files to completed files (they're already validated)
-      setCompletedFiles(prev => {
-        const newFiles = droppedFiles.filter(droppedFile => 
-          !prev.some(existingFile => 
-            existingFile.name === droppedFile.name && 
-            existingFile.size === droppedFile.size && 
-            existingFile.lastModified === droppedFile.lastModified
-          )
+      // Process dropped files through upload simulation like selected files
+      const newUploadingFiles = droppedFiles.map(file => {
+        const uploadingFile = createUploadingFile(file);
+        
+        // Start upload simulation
+        simulateFileUpload(
+          uploadingFile,
+          updatedFile => {
+            setUploadingFiles(prev => prev.map(f => (f.id === updatedFile.id ? updatedFile : f)));
+          },
+          fileId => {
+            // Move to completed files when upload is done
+            setUploadingFiles(prev => {
+              const file = prev.find(f => f.id === fileId)?.file;
+              if (file) {
+                // Check if file already exists in completedFiles to prevent duplicates
+                setCompletedFiles(completedPrev => {
+                  const fileExists = completedPrev.some(
+                    f => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified
+                  );
+                  if (!fileExists) {
+                    return [...completedPrev, file];
+                  } else {
+                    console.warn("⚠️ File already exists in completedFiles, skipping duplicate");
+                  }
+                  return completedPrev;
+                });
+              }
+              return prev;
+            });
+
+            // Remove from uploading files after a delay to show completion
+            setTimeout(() => {
+              setUploadingFiles(prev => prev.filter(f => f.id !== fileId));
+            }, 2000);
+          }
         );
-        return [...prev, ...newFiles];
+
+        return uploadingFile;
       });
+
+      setUploadingFiles(prev => [...prev, ...newUploadingFiles]);
       
       // Clear dropped files from parent
       if (onClearDroppedFiles) {

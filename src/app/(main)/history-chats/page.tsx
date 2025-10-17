@@ -25,6 +25,15 @@ export default function HistoryChatsPage() {
     }
   }, [isAuthenticated, authLoading, router]);
 
+  // Pagination logic
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return chatHistory.slice(startIndex, endIndex);
+  }, [chatHistory, currentPage, itemsPerPage]);
+
+  const totalPages = Math.ceil(chatHistory.length / itemsPerPage);
+
   // Show loading while checking auth
   if (authLoading) {
     return (
@@ -41,15 +50,6 @@ export default function HistoryChatsPage() {
   if (!isAuthenticated) {
     return null;
   }
-
-  // Pagination logic
-  const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return chatHistory.slice(startIndex, endIndex);
-  }, [chatHistory, currentPage, itemsPerPage]);
-
-  const totalPages = Math.ceil(chatHistory.length / itemsPerPage);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
