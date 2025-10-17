@@ -71,10 +71,6 @@ const NAV_ITEMS: NavItemType[] = [
     href: "/attorney",
   },
   {
-    title: "History Chats",
-    href: "/history-chats",
-  },
-  {
     title: "Support",
     href: "/support",
     subItems: [
@@ -86,11 +82,21 @@ const NAV_ITEMS: NavItemType[] = [
   },
 ];
 
+const AUTHENTICATED_NAV_ITEMS: NavItemType[] = [
+  {
+    title: "History Chats",
+    href: "/history-chats",
+  },
+];
+
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const { isAuthenticated } = useAuthStatus();
   const { logout } = useAuth();
   const router = useRouter();
+
+  // Combine nav items based on authentication status
+  const navItems = isAuthenticated ? [...NAV_ITEMS, ...AUTHENTICATED_NAV_ITEMS] : NAV_ITEMS;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -126,7 +132,7 @@ export function Navbar() {
 
         {/* Routing - Hidden on mobile, visible on tablet+ */}
         <div className="hidden flex-1 items-center justify-center gap-2 sm:gap-4 md:gap-6 lg:flex lg:gap-8">
-          {NAV_ITEMS.map(item => (
+          {navItems.map(item => (
             <NavigationMenuItem key={item.title} className="relative">
               {/* Sub menu dropdown routing */}
               {item.subItems && item.subItems.length > 0 ? (
@@ -176,7 +182,7 @@ export function Navbar() {
 
                 {/* Navigation Items */}
                 <nav className="flex flex-col space-y-4">
-                  {NAV_ITEMS.map(item => (
+                  {navItems.map(item => (
                     <div key={item.title} className="space-y-2">
                       <Link
                         href={item.href}
