@@ -1,12 +1,15 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { Paperclip } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import RichInput from "../../../components/elements/rich-input";
 import { H1, H2 } from "../../../components/elements/typography";
 import { Badge } from "../../../components/ui/badge";
 import { NAVIGATION_FEATURES } from "../../../data/home.data";
+import type { RichInputPayload } from "../../../components/elements/rich-input";
+import { storePendingMessage } from "../../../lib/session-storage";
 
 export default function HeroSection() {
   const router = useRouter();
@@ -14,6 +17,11 @@ export default function HeroSection() {
   // Animated text rotation state
   const animatedTexts = ["AI-law firm", "AI-legal confidant", "AI-legal resources"];
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
+
+  // Drag and drop state
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [droppedFiles, setDroppedFiles] = useState<File[]>([]);
+  const dragTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Cycle through texts every 3 seconds
   useEffect(() => {
@@ -24,9 +32,41 @@ export default function HeroSection() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleSubmit = (payload: { text?: string; files?: File[] }) => {
-    if (payload.text?.trim()) {
-      // Encode the message for URL
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (dragTimeoutRef.current) {
+        clearTimeout(dragTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleSubmit = async (payload: RichInputPayload) => {
+    const hasContent = payload.text?.trim() || payload.files?.length > 0 || payload.audioBlob;
+
+    if (!hasContent) {
+      // No content to send, just navigate to agent page
+      router.push("/agent");
+      return;
+    }
+
+    // If there are files or audio, store in sessionStorage
+    if (payload.files?.length > 0 || payload.audioBlob) {
+      try {
+        await storePendingMessage({
+          text: payload.text || "",
+          files: payload.files || [],
+          audioBlob: payload.audioBlob,
+          audioUrl: payload.audioUrl,
+        });
+        // Navigate without message parameter (will be handled by agent page)
+        router.push("/agent");
+      } catch (error) {
+        console.error("Failed to store pending message:", error);
+        alert("Failed to prepare files for upload. Please try again.");
+      }
+    } else if (payload.text?.trim()) {
+      // Only text, use URL parameter as before
       const encodedMessage = encodeURIComponent(payload.text.trim());
       router.push(`/agent?message=${encodedMessage}`);
     } else {
@@ -34,8 +74,75 @@ export default function HeroSection() {
     }
   };
 
+  // Drag and drop handlers
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Clear any existing timeout
+    if (dragTimeoutRef.current) {
+      clearTimeout(dragTimeoutRef.current);
+      dragTimeoutRef.current = null;
+    }
+
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Clear any existing timeout
+    if (dragTimeoutRef.current) {
+      clearTimeout(dragTimeoutRef.current);
+    }
+
+    // Only hide overlay if we're actually leaving the container
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      dragTimeoutRef.current = setTimeout(() => {
+        setIsDragOver(false);
+      }, 100);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+
+    const files = Array.from(e.dataTransfer.files);
+
+    if (files.length > 0) {
+      // Validate file sizes (5MB max per file)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      const validFiles = files.filter(file => {
+        if (file.size > maxSize) {
+          alert(`File "${file.name}" is too large. Maximum size is 5MB.`);
+          return false;
+        }
+        return true;
+      });
+
+      if (validFiles.length > 0) {
+        // Add files to dropped files state
+        setDroppedFiles(prev => [...prev, ...validFiles]);
+      }
+    }
+  };
+
   return (
-    <section className="flex min-h-[90vh] items-center justify-center" aria-labelledby="hero-heading">
+    <section
+      className="relative flex min-h-[90vh] items-center justify-center"
+      aria-labelledby="hero-heading"
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}>
       {/* Background decorations */}
       <div aria-hidden="true">
         <div
@@ -92,7 +199,11 @@ export default function HeroSection() {
 
         {/* Search input */}
         <div className="mt-4 w-full" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="200">
-          <RichInput onSubmit={handleSubmit} />
+          <RichInput
+            onSubmit={handleSubmit}
+            droppedFiles={droppedFiles}
+            onClearDroppedFiles={() => setDroppedFiles([])}
+          />
         </div>
 
         {/* Feature badges */}
@@ -112,6 +223,19 @@ export default function HeroSection() {
           ))}
         </div>
       </div>
+
+      {/* Drag and Drop Overlay */}
+      {isDragOver && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-sky-blue-50/90 backdrop-blur-sm">
+          <div className="text-center">
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-sky-blue-100">
+              <Paperclip className="h-10 w-10 text-sky-blue-600" />
+            </div>
+            <h3 className="mb-2 text-xl font-semibold text-sky-blue-700">Drop files here to upload</h3>
+            <p className="text-sm text-sky-blue-600">Maximum 5MB per file</p>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
