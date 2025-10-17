@@ -1,9 +1,9 @@
 "use client";
 
-import { Clock, MessageSquare, X } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useChatHistory } from "@/hooks/use-chat-queries";
+import { Clock, MessageSquare, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface ChatHistorySidebarProps {
   currentChatId?: string | undefined;
@@ -51,7 +51,7 @@ export function ChatHistorySidebar({ currentChatId, isOpen, onClose }: ChatHisto
       {/* Overlay */}
       {isOpen && (
         <div
-          className="bg-opacity-50 fixed inset-0 z-40 bg-black"
+          className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
           onClick={onClose}
           onKeyDown={e => {
             if (e.key === "Escape") {
