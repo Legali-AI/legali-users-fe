@@ -92,9 +92,8 @@ export function useSendMessage() {
       isSendingRef.current = true;
       
 
-      // Always provide a message - use default if empty
-      const finalMessage =
-        message?.trim() || (files && files.length > 0 ? "I send document(s)" : "");
+      // Allow empty message if files are provided
+      const finalMessage = message?.trim() || "";
 
       if (!finalMessage && (!files || files.length === 0)) {
         console.error("❌ Invalid message parameter:", { message, type: typeof message });
