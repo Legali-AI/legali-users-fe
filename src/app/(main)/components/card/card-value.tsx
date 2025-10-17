@@ -17,8 +17,7 @@ export function CardValue({ valueProposition, index }: CardValueProps) {
       className={cn(
         "flex flex-col items-center gap-6 rounded-[32px] bg-white/90 p-6 shadow-[0_40px_80px_-60px_rgba(15,36,71,0.45)] backdrop-blur-sm sm:flex-row sm:gap-12 lg:p-8",
         index % 2 === 1 && "sm:flex-row-reverse"
-      )}
-    >
+      )}>
       {/* Image */}
       {shouldShowSVG ? (
         <div className="w-full max-w-[546px] shrink-0">

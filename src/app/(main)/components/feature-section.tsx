@@ -4,9 +4,7 @@ import { CardProcessStep } from "./card/card-process-step";
 
 export default function FeatureSection() {
   return (
-    <section
-      className="flex flex-col gap-10 sm:gap-12 lg:gap-16"
-      aria-labelledby="features-heading">
+    <section className="flex flex-col gap-10 sm:gap-12 lg:gap-16" aria-labelledby="features-heading">
       {/* Heading */}
       <div data-aos="fade-up" data-aos-duration="600">
         <H3
@@ -28,11 +26,7 @@ export default function FeatureSection() {
           data-aos-duration="600"
           data-aos-delay="100">
           {PROCESS_STEPS.slice(0, 3).map((processStep, index) => (
-            <div
-              key={processStep.title}
-              data-aos="zoom-in"
-              data-aos-duration="600"
-              data-aos-delay={150 + index * 100}>
+            <div key={processStep.title} data-aos="zoom-in" data-aos-duration="600" data-aos-delay={150 + index * 100}>
               <CardProcessStep processStep={processStep} index={index} />
             </div>
           ))}
@@ -45,11 +39,7 @@ export default function FeatureSection() {
           data-aos-duration="600"
           data-aos-delay="400">
           {PROCESS_STEPS.slice(3, 5).map((processStep, index) => (
-            <div
-              key={processStep.title}
-              data-aos="zoom-in"
-              data-aos-duration="600"
-              data-aos-delay={450 + index * 100}>
+            <div key={processStep.title} data-aos="zoom-in" data-aos-duration="600" data-aos-delay={450 + index * 100}>
               <CardProcessStep processStep={processStep} index={index + 3} />
             </div>
           ))}

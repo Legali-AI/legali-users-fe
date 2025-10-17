@@ -1,5 +1,10 @@
 "use client";
 
+import { motion } from "framer-motion";
+import { AlertCircle, ArrowLeft, Menu, Paperclip, RefreshCw, User } from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { AgentAvatar } from "@/components/elements/chat/agent-avatar";
 import { ChatHistorySidebar } from "@/components/elements/chat/chat-history-sidebar";
 import { ChatInput } from "@/components/elements/chat/chat-input";
@@ -29,15 +34,13 @@ export function AgentChatContent() {
   const initialMessage = searchParams.get("message") || undefined;
   const fromHistory = searchParams.get("from") === "history";
 
-
   // Sidebar state
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
+
   // Drag and drop state
   const [isDragOver, setIsDragOver] = useState(false);
   const [droppedFiles, setDroppedFiles] = useState<File[]>([]);
   const dragTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -47,7 +50,6 @@ export function AgentChatContent() {
       }
     };
   }, []);
-
 
   // Use the chat hook
   const {
@@ -152,25 +154,25 @@ export function AgentChatContent() {
   const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     // Clear any existing timeout
     if (dragTimeoutRef.current) {
       clearTimeout(dragTimeoutRef.current);
       dragTimeoutRef.current = null;
     }
-    
+
     setIsDragOver(true);
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     // Clear any existing timeout
     if (dragTimeoutRef.current) {
       clearTimeout(dragTimeoutRef.current);
     }
-    
+
     // Only hide overlay if we're actually leaving the container
     if (!e.currentTarget.contains(e.relatedTarget as Node)) {
       dragTimeoutRef.current = setTimeout(() => {
@@ -327,7 +329,6 @@ export function AgentChatContent() {
                   | { type: "message"; data: Message }
                   | { type: "recommendations"; data: WorkflowRecommendation[] };
               }> = [];
-
 
               // Add all messages to timeline
               messages.forEach(message => {

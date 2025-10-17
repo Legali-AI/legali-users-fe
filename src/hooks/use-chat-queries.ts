@@ -1,7 +1,7 @@
-import type { Message } from "@/components/elements/chat/types";
-import { chatService } from "@/services/chat.service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
+import type { Message } from "@/components/elements/chat/types";
+import { chatService } from "@/services/chat.service";
 
 // Query keys
 export const chatQueryKeys = {
@@ -45,13 +45,14 @@ export function useChatHistory() {
         // Deduplicate chat history entries
         const deduplicatedData = response.data.filter((chat, index, arr) => {
           // Find first occurrence of this chat
-          const firstIndex = arr.findIndex(c => 
-            c.id === chat.id || 
-            (c.session_name === chat.session_name && c.created_at === chat.created_at)
+          const firstIndex = arr.findIndex(
+            c =>
+              c.id === chat.id ||
+              (c.session_name === chat.session_name && c.created_at === chat.created_at)
           );
           return firstIndex === index;
         });
-        
+
         return deduplicatedData;
       }
 
@@ -88,9 +89,8 @@ export function useSendMessage() {
         console.warn("⚠️ Duplicate sendMessage call prevented");
         throw new Error("Message is already being sent");
       }
-      
+
       isSendingRef.current = true;
-      
 
       // Allow empty message if files are provided
       const finalMessage = message?.trim() || "";
@@ -135,7 +135,6 @@ export function useSendMessage() {
 
         requestPayload.file = file;
       }
-
 
       const response = await chatService.sendMessage(requestPayload);
 
@@ -218,7 +217,7 @@ export function useSendMessage() {
         // Invalidate chat history to refresh the sidebar
         queryClient.invalidateQueries({ queryKey: chatQueryKeys.history() });
       }
-      
+
       // Reset sending flag
       isSendingRef.current = false;
     },
@@ -230,7 +229,7 @@ export function useSendMessage() {
       }
 
       console.error("Failed to send message:", error);
-      
+
       // Reset sending flag
       isSendingRef.current = false;
     },

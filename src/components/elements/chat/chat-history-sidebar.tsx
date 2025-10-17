@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useChatHistory } from "@/hooks/use-chat-queries";
 import { Clock, MessageSquare, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { useChatHistory } from "@/hooks/use-chat-queries";
 
 interface ChatHistorySidebarProps {
   currentChatId?: string | undefined;

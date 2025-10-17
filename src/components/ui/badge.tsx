@@ -48,16 +48,7 @@ interface BadgeProps extends Omit<React.ComponentProps<"span">, "ref">, BadgeVar
   asChild?: boolean;
 }
 
-function Badge({
-  className,
-  variant,
-  level,
-  weight,
-  align,
-  size,
-  asChild = false,
-  ...props
-}: BadgeProps) {
+function Badge({ className, variant, level, weight, align, size, asChild = false, ...props }: BadgeProps) {
   const Comp = asChild ? Slot : "span";
 
   return (

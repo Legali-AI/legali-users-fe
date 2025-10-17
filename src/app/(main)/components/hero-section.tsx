@@ -174,17 +174,11 @@ export default function HeroSection() {
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-8 text-center">
         <HeroAnimatedHeadline />
         {/* Subtitle */}
-        <div
-          className="max-w-4xl"
-          data-aos="zoom-in"
-          data-aos-duration="600"
-          data-aos-delay="100"
-        >
+        <div className="max-w-4xl" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="100">
           <H2 level="title" className="text-brand-slate" align="center">
-            Legali keeps humans in the loop. We pair AI speed with expert
-            guidance to help you build cases, organize evidence, draft
-            documents, spot legal risks, connect with the right attorneys, and
-            even crowdfund litigation on one secure platform.
+            Legali keeps humans in the loop. We pair AI speed with expert guidance to help you build cases, organize
+            evidence, draft documents, spot legal risks, connect with the right attorneys, and even crowdfund litigation
+            on one secure platform.
           </H2>
         </div>
 
@@ -202,8 +196,7 @@ export default function HeroSection() {
           className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-4"
           data-aos="fade-up"
           data-aos-duration="600"
-          data-aos-delay="300"
-        >
+          data-aos-delay="300">
           {NAVIGATION_FEATURES.map((feature, index) => (
             <Link
               key={feature.label}
@@ -212,14 +205,12 @@ export default function HeroSection() {
               className="focus-visible:ring-2 focus-visible:ring-brand-navy/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:outline-none"
               data-aos="flip-up"
               data-aos-duration="600"
-              data-aos-delay={400 + index * 50}
-            >
+              data-aos-delay={400 + index * 50}>
               <Badge
                 level="body"
                 variant="gradient-blue"
                 size="lg"
-                className="gap-2 border border-white/60 px-5 py-2 shadow-[0_24px_48px_-28px_rgba(15,36,71,0.6)] transition hover:translate-y-0.5 hover:brightness-95"
-              >
+                className="gap-2 border border-white/60 px-5 py-2 shadow-[0_24px_48px_-28px_rgba(15,36,71,0.6)] transition hover:translate-y-0.5 hover:brightness-95">
                 <feature.icon
                   size={36}
                   aria-hidden="true"

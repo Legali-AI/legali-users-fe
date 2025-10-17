@@ -4,9 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
-import RichInput, {
-  type RichInputPayload,
-} from "../../../components/elements/rich-input";
+import RichInput, { type RichInputPayload } from "../../../components/elements/rich-input";
 import { H1 } from "../../../components/elements/typography";
 
 const animatedPhrases = ["AI legal ally", "AI-law firm", "AI legal confidant"];
@@ -24,19 +22,10 @@ export function HeroAnimatedHeadline() {
     };
   }, []);
 
-  const currentPhrase = useMemo(
-    () => animatedPhrases[currentIndex],
-    [currentIndex]
-  );
+  const currentPhrase = useMemo(() => animatedPhrases[currentIndex], [currentIndex]);
 
   return (
-    <H1
-      id="hero-heading"
-      weight="semibold"
-      align="center"
-      data-aos="zoom-in-down"
-      data-aos-duration="600"
-    >
+    <H1 id="hero-heading" weight="semibold" align="center" data-aos="zoom-in-down" data-aos-duration="600">
       <span>Meet your own </span>
       <AnimatePresence mode="wait" initial={false}>
         <motion.span
@@ -45,8 +34,7 @@ export function HeroAnimatedHeadline() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
-          className="inline-block text-brand-navy"
-        >
+          className="inline-block text-brand-navy">
           {currentPhrase}
         </motion.span>
       </AnimatePresence>
@@ -67,16 +55,8 @@ export function HeroPrompt() {
   };
 
   return (
-    <div
-      className="w-full max-w-4xl sm:max-w-4xl"
-      data-aos="zoom-in"
-      data-aos-duration="600"
-      data-aos-delay="200"
-    >
-      <RichInput
-        placeholder="Upload your words, voice, or photos — we can make it work."
-        onSubmit={handleSubmit}
-      />
+    <div className="w-full max-w-4xl sm:max-w-4xl" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="200">
+      <RichInput placeholder="Upload your words, voice, or photos — we can make it work." onSubmit={handleSubmit} />
     </div>
   );
 }

@@ -11,35 +11,21 @@ type TabType = "individuals" | "lawyers";
 export default function ToolkitSection() {
   const [activeTab, setActiveTab] = useState<TabType>("individuals");
 
-  const activeItems =
-    TOOLKIT_ITEMS.find(cat => cat.category === activeTab)?.items || [];
+  const activeItems = TOOLKIT_ITEMS.find(cat => cat.category === activeTab)?.items || [];
 
   return (
-    <section
-      className="flex flex-col gap-10 sm:gap-12 lg:gap-16"
-      aria-labelledby="toolkit-heading"
-    >
+    <section className="flex flex-col gap-10 sm:gap-12 lg:gap-16" aria-labelledby="toolkit-heading">
       {/* Heading */}
-      <div
-        className="space-y-2 text-center"
-        data-aos="fade-up"
-        data-aos-duration="600"
-      >
+      <div className="space-y-2 text-center" data-aos="fade-up" data-aos-duration="600">
         <H3
           id="toolkit-heading"
           level="h2"
           align="center"
           weight="semibold"
-          className="mx-auto max-w-4xl text-3xl text-brand-navy sm:text-[38px] md:text-[44px] lg:text-[50px]"
-        >
+          className="mx-auto max-w-4xl text-3xl text-brand-navy sm:text-[38px] md:text-[44px] lg:text-[50px]">
           {TOOLKIT_CONTENT.heading}
         </H3>
-        <H4
-          level="h3"
-          align="center"
-          weight="semibold"
-          className="mx-auto max-w-3xl text-brand-navy"
-        >
+        <H4 level="h3" align="center" weight="semibold" className="mx-auto max-w-3xl text-brand-navy">
           {TOOLKIT_CONTENT.subheading}
         </H4>
       </div>
@@ -50,8 +36,7 @@ export default function ToolkitSection() {
         data-aos-duration="600"
         data-aos-delay="100"
         role="tablist"
-        aria-label="Toolkit categories"
-      >
+        aria-label="Toolkit categories">
         <button
           role="tab"
           aria-selected={activeTab === "individuals"}
@@ -62,8 +47,7 @@ export default function ToolkitSection() {
             activeTab === "individuals"
               ? "bg-gradient-to-br from-[#2F7D99] to-[#A4D1E8] text-white shadow-md"
               : "hover:bg-sky-blue-50 text-brand-slate"
-          )}
-        >
+          )}>
           {TOOLKIT_CONTENT.tabIndividuals}
         </button>
         <button
@@ -76,8 +60,7 @@ export default function ToolkitSection() {
             activeTab === "lawyers"
               ? "bg-gradient-to-br from-[#2F7D99] to-[#A4D1E8] text-white shadow-md"
               : "hover:bg-sky-blue-50 text-brand-slate"
-          )}
-        >
+          )}>
           {TOOLKIT_CONTENT.tabLawyers}
         </button>
       </div>
@@ -90,15 +73,9 @@ export default function ToolkitSection() {
         className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-6 md:grid-cols-2"
         data-aos="fade-up"
         data-aos-duration="600"
-        data-aos-delay="200"
-      >
+        data-aos-delay="200">
         {activeItems.map((item, index) => (
-          <div
-            key={item.title}
-            data-aos="zoom-in"
-            data-aos-duration="600"
-            data-aos-delay={250 + index * 100}
-          >
+          <div key={item.title} data-aos="zoom-in" data-aos-duration="600" data-aos-delay={250 + index * 100}>
             <CardToolkit item={item} />
           </div>
         ))}

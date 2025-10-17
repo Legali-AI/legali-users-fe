@@ -353,11 +353,7 @@ interface SidebarGroupLabelProps extends Omit<React.ComponentProps<"div">, "ref"
   asChild?: boolean;
 }
 
-function SidebarGroupLabel({
-  className,
-  asChild = false,
-  ...props
-}: SidebarGroupLabelProps) {
+function SidebarGroupLabel({ className, asChild = false, ...props }: SidebarGroupLabelProps) {
   const Comp = asChild ? Slot : "div";
 
   return (
@@ -378,11 +374,7 @@ interface SidebarGroupActionProps extends Omit<React.ComponentProps<"button">, "
   asChild?: boolean;
 }
 
-function SidebarGroupAction({
-  className,
-  asChild = false,
-  ...props
-}: SidebarGroupActionProps) {
+function SidebarGroupAction({ className, asChild = false, ...props }: SidebarGroupActionProps) {
   const Comp = asChild ? Slot : "button";
 
   return (
@@ -508,12 +500,7 @@ interface SidebarMenuActionProps extends Omit<React.ComponentProps<"button">, "r
   showOnHover?: boolean;
 }
 
-function SidebarMenuAction({
-  className,
-  asChild = false,
-  showOnHover = false,
-  ...props
-}: SidebarMenuActionProps) {
+function SidebarMenuAction({ className, asChild = false, showOnHover = false, ...props }: SidebarMenuActionProps) {
   const Comp = asChild ? Slot : "button";
 
   return (

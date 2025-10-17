@@ -30,7 +30,10 @@ export function FAQAnswerContent({ blocks }: { blocks: FAQAnswerBlock[] }) {
       {blocks.map((block, index) => {
         if (block.type === "paragraph") {
           return (
-            <P key={`paragraph-${index}`} level={"body"} className="text-sm leading-relaxed text-brand-navy/80 sm:text-base">
+            <P
+              key={`paragraph-${index}`}
+              level={"body"}
+              className="text-sm leading-relaxed text-brand-navy/80 sm:text-base">
               {block.content}
             </P>
           );
@@ -108,7 +111,11 @@ export default function FAQSection() {
       data-aos-duration="600">
       <div className="flex flex-col gap-12 sm:gap-16">
         <header className="flex flex-col items-center gap-4 text-center" data-aos="fade-up" data-aos-duration="600">
-          <H3 level={"h3"} weight={"semibold"} align={"center"} className="text-2xl text-brand-navy sm:text-3xl md:text-4xl">
+          <H3
+            level={"h3"}
+            weight={"semibold"}
+            align={"center"}
+            className="text-2xl text-brand-navy sm:text-3xl md:text-4xl">
             Frequently Asked Questions
           </H3>
           <P level={"title"} align={"center"} className="max-w-3xl text-brand-navy/80">
@@ -140,7 +147,9 @@ export default function FAQSection() {
                 <AccordionContent
                   id={`faq-answer-${item.id}`}
                   className="flex flex-col gap-4 border-t border-sky-blue-100/50 pt-4 mt-3">
-                  <Small className="text-xs font-medium uppercase tracking-[0.15em] text-brand-navy/60">{categoryTitle}</Small>
+                  <Small className="text-xs font-medium uppercase tracking-[0.15em] text-brand-navy/60">
+                    {categoryTitle}
+                  </Small>
                   <FAQAnswerContent blocks={item.answer} />
                 </AccordionContent>
               </AccordionItem>
