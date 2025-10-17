@@ -4,6 +4,7 @@ import {
   DollarSign,
   FileText,
   Folder,
+  FolderSync,
   Handshake,
   Home,
   Scale,
@@ -11,8 +12,9 @@ import {
   ScrollTextIcon,
   SearchIcon,
   TriangleAlert,
-  Wrench,
   UserRound,
+  Wallet,
+  Wrench,
   type LucideIcon,
 } from "lucide-react";
 
@@ -89,7 +91,8 @@ export interface ProblemAboutUs {
 export const CORE_PROBLEMS: ProblemAboutUs[] = [
   {
     title: '"Self-represented litigants"',
-    description: "15 million Americans navigate the legal system alone each year with just a 4% win rate.",
+    description:
+      "15 million Americans navigate the legal system alone each year with just a 4% win rate.",
     icon: UserRound,
   },
   {
@@ -100,7 +103,8 @@ export const CORE_PROBLEMS: ProblemAboutUs[] = [
   },
   {
     title: '"Settle for less"',
-    description: "People accept unfair deals—or risk everything—because they can’t afford representation.",
+    description:
+      "People accept unfair deals—or risk everything—because they can’t afford representation.",
     icon: Handshake,
   },
 ];
@@ -280,10 +284,124 @@ export const ATTORNEYS: Attorney[] = [
   },
 ];
 
+export interface ToolkitItem {
+  title: string;
+  subtitle: string;
+  description: string;
+  icon: LucideIcon;
+  href?: string;
+}
+
+export interface ToolkitCategory {
+  category: "individuals" | "lawyers";
+  items: ToolkitItem[];
+}
+
+export interface ToolkitContent {
+  heading: string;
+  subheading: string;
+  tabIndividuals: string;
+  tabLawyers: string;
+}
+
+export const TOOLKIT_CONTENT: ToolkitContent = {
+  heading: "Your complete legal tool kit.",
+  subheading: "One platform, every legal need.",
+  tabIndividuals: "For Individuals",
+  tabLawyers: "For Lawyers",
+};
+
+export const TOOLKIT_ITEMS: ToolkitCategory[] = [
+  {
+    category: "individuals",
+    items: [
+      {
+        title: "Red Flag Analysis",
+        subtitle: "Start here.",
+        description:
+          "Upload documents or describe your situation. Get instant analysis of legal risks, problematic terms, and key deadlines—explained in plain language. We'll show you what matters and what to do next.",
+        icon: TriangleAlert,
+        href: "/red-flag-analysis",
+      },
+      {
+        title: "Litigation Case Builder",
+        subtitle: "Build your case.",
+        description:
+          "Turn your story into a court-ready case. We organize evidence, build timelines, draft legal arguments, and prepare attorney-ready dossiers. File yourself, hand it to a lawyer, or we'll file it for you.",
+        icon: DollarSign,
+        href: "/litigation-case-builder",
+      },
+      {
+        title: "Lawyers Marketplace",
+        subtitle: "Find the right lawyer.",
+        description:
+          "Browse verified attorneys by location and practice area, share your case instantly through seamless integration, and get upfront pricing with built-in messaging for quick consultations.",
+        icon: Home,
+        href: "/lawyers",
+      },
+      {
+        title: "Smart Legal Drafter",
+        subtitle: "Create your documents.",
+        description:
+          "Generate legally sound, jurisdiction-specific contracts, agreements, demand letters, and filings through simple conversation. Built-in e-signature and instant delivery—no legal expertise required.",
+        icon: SearchIcon,
+        href: "/smart-legal-drafter",
+      },
+      {
+        title: "File Organization & Workflows",
+        subtitle: "Stay organized.",
+        description:
+          "Keep every document and task on track with auto-sorting, attorney-ready summaries, and deadline management. Enterprise clients get secure collaboration with role-based access and encryption.",
+        icon: FolderSync,
+        href: "/file-organization",
+      },
+      {
+        title: "Investing in Litigation",
+        subtitle: "Fund your fight.",
+        description:
+          "Launch transparent campaigns for Lawyers can launch transparent campaigns for investors or public supporters. Investors can access this emerging asset class and track milestones in real time.",
+        icon: Wallet,
+        href: "/litigation-crowdfunding",
+      },
+    ],
+  },
+  {
+    category: "lawyers",
+    items: [
+      {
+        title: "Smart Legal Drafter",
+        subtitle: "Create your documents.",
+        description:
+          "Generate legally sound, jurisdiction-specific contracts, agreements, demand letters, and filings through simple conversation. Built-in e-signature and instant delivery—no legal expertise required.",
+        icon: SearchIcon,
+        href: "/smart-legal-drafter",
+      },
+      {
+        title: "File Organization & Workflows",
+        subtitle: "Stay organized.",
+        description:
+          "Keep every document and task on track with auto-sorting, attorney-ready summaries, and deadline management. Enterprise clients get secure collaboration with role-based access and encryption.",
+        icon: FolderSync,
+        href: "/file-organization",
+      },
+      {
+        title: "Investing in Litigation",
+        subtitle: "Fund your fight.",
+        description:
+          "Launch transparent campaigns for Lawyers can launch transparent campaigns for investors or public supporters. Investors can access this emerging asset class and track milestones in real time.",
+        icon: Wallet,
+        href: "/litigation-crowdfunding",
+      },
+    ],
+  },
+];
+
 export default {
   NAVIGATION_FEATURES,
   CORE_PROBLEMS,
   BENEFITS,
   PROCESS_STEPS,
   VALUE_PROPOSITIONS,
+  TOOLKIT_CONTENT,
+  TOOLKIT_ITEMS,
 };

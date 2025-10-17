@@ -7,6 +7,7 @@ import FAQSection from "./components/faq-section";
 import FeatureSection from "./components/feature-section";
 import HeroSection from "./components/hero-section";
 import JusticeGapSection from "./components/justice-gap-section";
+import ToolkitSection from "./components/toolkit-section";
 
 export const metadata: Metadata = homePageMetadata;
 
@@ -24,6 +25,8 @@ function App() {
       <div className="flex flex-col gap-20 py-10 sm:gap-32 lg:gap-36">
         {/* About Us */}
         <AboutUsSection />
+        {/* Toolkit */}
+        <ToolkitSection />
         {/* Built For */}
         {/* <BuiltForSection /> */}
         {/* Features */}

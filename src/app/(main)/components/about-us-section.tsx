@@ -29,9 +29,12 @@ export default function AboutUsSection() {
             Everyone else loses.
           </Span>
         </H4>
-        <P className="mx-auto max-w-3xl text-base text-brand-slate sm:text-lg lg:text-xl">
+        <P
+          align="center"
+          className="mx-auto max-w-3xl text-base text-brand-slate sm:text-lg lg:text-xl"
+        >
           That&apos;s exactly why{" "}
-          <Span className="text-[#2F7D99]" weight="semibold">
+          <Span className="text-[#2F7D99] lg:text-xl" weight="semibold">
             Legali
           </Span>{" "}
           exists—to level the playing field with accessible legal tools and
@@ -60,7 +63,10 @@ export default function AboutUsSection() {
         >
           We build Legali so everyone can navigate the legal system better.
         </H4>
-        <P className="mx-auto max-w-3xl text-base text-brand-slate/80 sm:text-lg">
+        <P
+          align="center"
+          className="mx-auto max-w-3xl text-base text-brand-slate/80 sm:text-lg lg:text-lg"
+        >
           Real people deserve real legal muscle—without six-figure retainers.
         </P>
       </div>
