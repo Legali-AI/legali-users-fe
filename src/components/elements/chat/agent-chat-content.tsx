@@ -26,13 +26,6 @@ export function AgentChatContent() {
   const initialMessage = searchParams.get("message") || undefined;
   const fromHistory = searchParams.get("from") === "history";
 
-  // Debug initial message
-  // console.log("🔍 Agent page - URL params:", {
-  //   toolParam,
-  //   chatId,
-  //   initialMessage,
-  //   searchParams: searchParams.toString(),
-  // });
 
   // Sidebar state
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -42,6 +35,7 @@ export function AgentChatContent() {
   const [droppedFiles, setDroppedFiles] = useState<File[]>([]);
   const dragTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+
   // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
@@ -50,6 +44,7 @@ export function AgentChatContent() {
       }
     };
   }, []);
+
 
   // Use the chat hook
   const {
@@ -105,20 +100,20 @@ export function AgentChatContent() {
     scrollToBottom();
   }, [messages]);
 
-  // Update URL with chat_id when conversation ID becomes available (after first message)
-  useEffect(() => {
-    if (currentConversationId && !chatId) {
-      const newSearchParams = new URLSearchParams(searchParams.toString());
-      newSearchParams.set("chat_id", currentConversationId);
+  // Don't redirect - just get the conversation_id from response
+  // useEffect(() => {
+  //   if (currentConversationId && !chatId) {
+  //     const newSearchParams = new URLSearchParams(searchParams.toString());
+  //     newSearchParams.set("chat_id", currentConversationId);
 
-      // Clean up initial message param after first message is sent
-      if (newSearchParams.has("message")) {
-        newSearchParams.delete("message");
-      }
+  //     // Clean up initial message param after first message is sent
+  //     if (newSearchParams.has("message")) {
+  //       newSearchParams.delete("message");
+  //     }
 
-      router.replace(`/agent?${newSearchParams.toString()}`);
-    }
-  }, [currentConversationId, chatId, searchParams, router]);
+  //     router.replace(`/agent?${newSearchParams.toString()}`);
+  //   }
+  // }, [currentConversationId, chatId, searchParams, router]);
 
   const handleSendMessage = async (content: string, files?: File[]) => {
     if (!content.trim() && (!files || files.length === 0)) return;
@@ -129,7 +124,6 @@ export function AgentChatContent() {
   const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("🖱️ Chat Drag Enter");
     
     // Clear any existing timeout
     if (dragTimeoutRef.current) {
@@ -143,7 +137,6 @@ export function AgentChatContent() {
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("🖱️ Chat Drag Leave", { relatedTarget: e.relatedTarget });
     
     // Clear any existing timeout
     if (dragTimeoutRef.current) {
@@ -169,7 +162,6 @@ export function AgentChatContent() {
     setIsDragOver(false);
 
     const files = Array.from(e.dataTransfer.files);
-    console.log("🖱️ Chat Drop", { filesCount: files.length });
 
     if (files.length > 0) {
       // Validate file sizes (5MB max per file)
@@ -302,6 +294,7 @@ export function AgentChatContent() {
                   | { type: "message"; data: Message }
                   | { type: "recommendations"; data: WorkflowRecommendation[] };
               }> = [];
+
 
               // Add all messages to timeline
               messages.forEach(message => {

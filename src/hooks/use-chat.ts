@@ -161,7 +161,10 @@ export function useChat({
       isInitialMessage.current = true; // Mark as initial message
 
       // Send immediately - but only after welcome message is set
-      handleSendMessage(initialMessage);
+      // Use setTimeout to avoid dependency issues
+      setTimeout(() => {
+        handleSendMessage(initialMessage);
+      }, 0);
     }
   }, [
     initialMessage,
@@ -174,7 +177,8 @@ export function useChat({
     if (conversationId && conversationId !== initialConversationId) {
       // Reset flags when switching conversations
       hasInitializedFromQuery.current = false;
-      hasProcessedInitialMessage.current = false;
+      // Don't reset hasProcessedInitialMessage to prevent re-sending initial message
+      // hasProcessedInitialMessage.current = false;
 
       // Clear current messages to prevent showing old data
       setMessages([]);
@@ -234,15 +238,6 @@ export function useChat({
     try {
       // Validate files before sending
       if (files && files.length > 0) {
-        console.log(
-          "📎 Files validation in handleSendMessage:",
-          files.map(f => ({
-            name: f.name,
-            size: f.size,
-            type: f.type,
-            isValid: f instanceof File && f.size > 0 && f.name.length > 0,
-          }))
-        );
 
         // Check if any file is invalid
         const invalidFiles = files.filter(f => !(f instanceof File) || f.size === 0 || !f.name);
@@ -273,11 +268,6 @@ export function useChat({
         ...(selectedTool && { toolParam: selectedTool }),
       };
 
-      console.log("📤 Calling sendMessageMutation with params:", {
-        ...mutationParams,
-        messageLength: mutationParams.message?.length || 0,
-        hasFiles: !!(files && files.length > 0),
-      });
 
       const result = await sendMessageMutation.mutateAsync(mutationParams);
 

@@ -117,13 +117,6 @@ export function useSendMessage() {
 
       if (files && files.length > 0) {
         const file = files[0];
-        console.log("📎 File from UI:", {
-          name: file.name,
-          size: file.size,
-          type: file.type,
-          lastModified: file.lastModified,
-          isValid: file instanceof File && file.size > 0 && file.name.length > 0,
-        });
 
         // Validate file before sending
         if (!(file instanceof File)) {
@@ -144,7 +137,6 @@ export function useSendMessage() {
         requestPayload.file = file;
       }
 
-      console.log("📦 Final request payload:", requestPayload);
 
       const response = await chatService.sendMessage(requestPayload);
 
