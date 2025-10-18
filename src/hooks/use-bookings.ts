@@ -1,12 +1,12 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/config";
 import {
-  cancelBooking,
-  createBooking,
-  getBookingById,
-  getUserBookings,
+    cancelBooking,
+    createBooking,
+    getBookingById,
+    getUserBookings,
 } from "@/services/lawyer.service";
 import type { Booking } from "@/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Hook for creating a new booking
 export const useCreateBooking = () => {

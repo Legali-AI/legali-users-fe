@@ -13,17 +13,25 @@ export function QuickInfo({ lawyer }: QuickInfoProps) {
         <CardTitle className="text-gray-900 text-base sm:text-lg">Quick Information</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3 text-sm p-4 sm:p-6 pt-0">
-        <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0 hidden">
           <span className="text-gray-600">Response Time:</span>
           <span className="font-medium text-gray-900">Within 2 hours</span>
         </div>
-        <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0 hidden">
           <span className="text-gray-600">Consultation Type:</span>
           <span className="font-medium text-gray-900 text-right sm:text-right">Phone, Video, In-person</span>
         </div>
-        <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0 hidden">
           <span className="text-gray-600">Payment:</span>
           <span className="font-medium text-gray-900">Secure escrow</span>
+        </div>
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+          <span className="text-gray-600">Completed Cases:</span>
+          <span className="font-medium text-gray-900">{lawyer.completedCases}</span>
+        </div>
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
+          <span className="text-gray-600">Ongoing Cases:</span>
+          <span className="font-medium text-gray-900">{lawyer.ongoingCases}</span>
         </div>
         <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-0">
           <span className="text-gray-600">Member Since:</span>

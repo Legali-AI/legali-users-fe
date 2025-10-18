@@ -89,7 +89,6 @@ export function FilterButton({
           ${hasSelection ? "border-blue-200 bg-blue-50" : ""}
         `}>
         <div className="flex min-w-0 flex-1 items-center">
-          <span className="mr-2 text-sm font-medium text-gray-700">{title}:</span>
           <span
             className={`
               truncate text-sm
@@ -101,12 +100,11 @@ export function FilterButton({
 
         <div className="ml-2 flex items-center">
           {clearable && hasSelection && !disabled && (
-            <button
-              type="button"
+            <div
               onClick={handleClear}
-              className="mr-1 rounded-full p-1 transition-colors hover:bg-gray-200">
+              className="mr-1 rounded-full p-1 transition-colors hover:bg-gray-200 cursor-pointer">
               <X className="h-4 w-4 text-gray-400" />
-            </button>
+            </div>
           )}
           <ChevronDown
             className={`
@@ -158,8 +156,7 @@ export function FilterButton({
 
       {/* Click outside to close */}
       {isOpen && (
-        <button
-          type="button"
+        <div
           className="fixed inset-0 z-5 cursor-default"
           onClick={() => setIsOpen(false)}
           onKeyDown={e => {

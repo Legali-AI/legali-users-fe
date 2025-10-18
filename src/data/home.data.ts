@@ -47,7 +47,7 @@ export const NAVIGATION_FEATURES: Feature[] = [
   {
     label: "Lawyers Marketplace",
     icon: Scale,
-    href: "/lawyers-marketplace",
+    href: "/lawyers",
     color: "#00ABF5",
   },
   {

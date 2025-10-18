@@ -1,7 +1,7 @@
-import { Clock, MapPin, Shield, Star } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
 import type { Lawyer } from "@/types";
+import { MapPin, Shield, Star } from "lucide-react";
 
 interface LawyerHeaderProps {
   lawyer: Lawyer;
@@ -29,10 +29,6 @@ export function LawyerHeader({ lawyer }: LawyerHeaderProps) {
                 <span className="ml-1 text-gray-600">({lawyer.reviewCount} reviews)</span>
               </div>
               <div className="flex items-center text-gray-600">
-                <Clock className="mr-1 h-4 w-4" />
-                <span>{lawyer.experience}+ years experience</span>
-              </div>
-              <div className="flex items-center text-gray-600">
                 <MapPin className="mr-1 h-4 w-4" />
                 <span>{lawyer.jurisdiction.join(", ")}</span>
               </div>
@@ -48,7 +44,9 @@ export function LawyerHeader({ lawyer }: LawyerHeaderProps) {
             </div>
           </div>
           <div className="border-t pt-4 text-left sm:border-t-0 sm:pt-0 sm:text-right">
-            <div className="text-2xl font-bold text-gray-900 sm:text-3xl">{formatCurrency(lawyer.hourlyRate)}</div>
+            <div className="text-2xl font-bold text-gray-900 sm:text-3xl">
+              {formatCurrency(lawyer.minPrice)} - {formatCurrency(lawyer.maxPrice)}
+            </div>
             <div className="text-sm text-gray-600">per hour</div>
             <div
               className={`mt-2 inline-flex items-center rounded-full border px-2 py-1 text-xs ${

@@ -4,12 +4,17 @@ export interface Lawyer {
   email: string;
   profileImage?: string;
   credentials: string[];
+  educations: string[];
   jurisdiction: string[];
   specialties: string[];
   experience: number; // years
   rating: number; // 1-5
   reviewCount: number;
   hourlyRate: number;
+  minPrice: number;
+  maxPrice: number;
+  completedCases: number;
+  ongoingCases: number;
   availability: "available" | "busy" | "offline";
   languages: string[];
   bio: string;
@@ -91,7 +96,6 @@ export interface SearchFilters {
     max: number;
   };
   rating?: number;
-  experience?: number;
   language?: string;
   availability?: string;
   specialty?: string;
@@ -101,7 +105,7 @@ export interface SearchParams extends SearchFilters {
   query?: string;
   page?: number;
   limit?: number;
-  sortBy?: "rating" | "price" | "experience" | "reviews";
+  sortBy?: "rating" | "price" | "name";
   sortOrder?: "asc" | "desc";
 }
 
@@ -130,4 +134,64 @@ export type LawyerSpecialty =
 
 export interface FormErrors {
   [key: string]: string | undefined;
+}
+
+// API Response Types
+export interface ApiLawyer {
+  id: string;
+  name: string;
+  practice_area: string[];
+  min_price: number;
+  max_price: number;
+  about: string;
+  city: string;
+  avg_rating: string;
+  total_review: number;
+  languages?: string[]; // Added for filtering
+}
+
+export interface LawyersApiResponse {
+  success: boolean;
+  message: string;
+  data: ApiLawyer[];
+  meta: number;
+  error: null | string;
+  timestamp: string;
+}
+
+// Lawyer Detail API Response
+export interface LawyerDetailApiResponse {
+  success: boolean;
+  message: string;
+  data: LawyerDetailApi;
+  meta: {};
+  error: null | string;
+  timestamp: string;
+}
+
+export interface LawyerDetailApi {
+  id: string;
+  name: string;
+  practice_area: string[];
+  jurisdictions: string[];
+  educations: string[];
+  credentials: string[];
+  languages: string[];
+  min_price: number;
+  max_price: number;
+  about: string;
+  city: string;
+  avg_rating: string;
+  total_review: number;
+  client_reviews: ClientReview[];
+  member_since: string;
+  completed_cases: number;
+  on_going_cases: number;
+}
+
+export interface ClientReview {
+  name: string;
+  scheduled_at: string | null;
+  review: string;
+  rate: number;
 }

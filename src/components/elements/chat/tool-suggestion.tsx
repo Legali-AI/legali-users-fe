@@ -1,8 +1,8 @@
 "use client";
 
-import { AlertTriangle, Clock, FileText, Folder, Gavel, TrendingUp, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { AlertTriangle, Clock, FileText, Folder, Gavel, TrendingUp, Users } from "lucide-react";
 import { Typography } from "../typography";
 
 export interface Tool {
@@ -26,7 +26,7 @@ export const AVAILABLE_TOOLS: Tool[] = [
     description: "Generate legal document templates",
   },
   {
-    id: "lawyers-marketplace",
+    id: "lawyers",
     name: "Lawyers Marketplace",
     icon: Users,
     description: "Find qualified legal professionals",
@@ -103,7 +103,7 @@ export function ToolSuggestion({ tools, onToolSelect, className }: ToolSuggestio
                   description:
                     "Access professional legal document templates and customize them for your specific needs",
                 };
-              case "lawyers-marketplace":
+              case "lawyers":
                 return {
                   bgColor: "bg-purple-100",
                   iconColor: "text-purple-600",

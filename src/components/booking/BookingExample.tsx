@@ -5,8 +5,6 @@
 
 "use client";
 
-import type React from "react";
-import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,6 +13,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useCancelBooking, useCreateBooking, useUserBookings } from "@/hooks/use-bookings";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import type { Booking } from "@/types";
+import type React from "react";
+import { useId, useState } from "react";
 
 interface BookingFormProps {
   lawyerId: string;

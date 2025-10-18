@@ -75,7 +75,7 @@ export function AgentChatContent() {
       case "template":
         return "legal-template";
       case "lawyers":
-        return "lawyers-marketplace";
+        return "lawyers";
       case "funding-investors":
         return "litigation-funding-investors";
       case "funding-litigants":
