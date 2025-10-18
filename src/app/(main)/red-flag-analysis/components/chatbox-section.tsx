@@ -22,9 +22,7 @@ export default function ChatboxSection() {
       <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6">
         {/* Section Title */}
         <div className="text-center" data-aos="fade-up" data-aos-duration="600">
-          <h2 className="mb-4 text-3xl font-bold text-brand-navy sm:text-4xl md:text-5xl">
-            Try it now
-          </h2>
+          <h2 className="mb-4 text-3xl font-bold text-brand-navy sm:text-4xl md:text-5xl">Try it now</h2>
           <p className="text-lg text-brand-navy/80 sm:text-xl">
             Upload your words, voice, or photos — we can make it work
           </p>
@@ -32,10 +30,7 @@ export default function ChatboxSection() {
 
         {/* Rich Input Chatbox */}
         <div className="w-full" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
-          <RichInput
-            placeholder="Upload your file or enter case details..."
-            onSubmit={handleSubmit}
-          />
+          <RichInput placeholder="Upload your file or enter case details..." onSubmit={handleSubmit} />
         </div>
       </div>
     </section>
