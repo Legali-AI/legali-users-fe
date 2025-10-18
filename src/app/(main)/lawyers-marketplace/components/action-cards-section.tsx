@@ -49,7 +49,12 @@ function ActionCard({ title, description, buttonText, buttonHref, backgroundColo
       <p className="text-sm leading-relaxed text-white/90 sm:text-base">{description}</p>
 
       {/* CTA Button */}
-      <Button asChild variant="default" size="lg" weight="semibold" className="bg-white text-brand-navy hover:bg-white/90">
+      <Button
+        asChild
+        variant="default"
+        size="lg"
+        weight="semibold"
+        className="bg-white text-brand-navy hover:bg-white/90">
         <Link href={buttonHref}>{buttonText}</Link>
       </Button>
     </div>

@@ -1,4 +1,13 @@
-import { Scale, Users, Briefcase, FileText, Link2, MessageCircle, DollarSign, type LucideIcon } from "lucide-react";
+import {
+  Briefcase,
+  DollarSign,
+  FileText,
+  Link2,
+  type LucideIcon,
+  MessageCircle,
+  Scale,
+  Users,
+} from "lucide-react";
 
 // Hero Section Content
 export interface HeroContent {
@@ -39,12 +48,14 @@ export const PROBLEMS: ProblemCard[] = [
   {
     icon: Users,
     title: "Many go unrepresented",
-    description: "For those in rural communities, one in five Americans struggle to find legal help.",
+    description:
+      "For those in rural communities, one in five Americans struggle to find legal help.",
   },
   {
     icon: Briefcase,
     title: "Rural areas hit harder",
-    description: "Over 70% of Americans with civil issues struggle to find affordable professional advice.",
+    description:
+      "Over 70% of Americans with civil issues struggle to find affordable professional advice.",
   },
   {
     icon: FileText,
@@ -60,7 +71,8 @@ export const SOLUTIONS: ProblemCard[] = [
   {
     icon: Link2,
     title: "Instantly connect with verified attorneys",
-    description: "Over 70% of Americans with civil issues struggle to find affordable professional advice.",
+    description:
+      "Over 70% of Americans with civil issues struggle to find affordable professional advice.",
   },
   {
     icon: MessageCircle,
@@ -70,7 +82,8 @@ export const SOLUTIONS: ProblemCard[] = [
   {
     icon: DollarSign,
     title: "Transparent pricing",
-    description: "Over 70% of Americans with civil issues struggle to find affordable professional advice.",
+    description:
+      "Over 70% of Americans with civil issues struggle to find affordable professional advice.",
   },
   {
     icon: MessageCircle,
@@ -104,7 +117,8 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
   },
   {
     title: "Real-time connection and support",
-    description: "Connect with lawyers right away. Book a free call or chat with them directly in the app to get answers fast, not days later.",
+    description:
+      "Connect with lawyers right away. Book a free call or chat with them directly in the app to get answers fast, not days later.",
     details: [
       "Work with your lawyer to review documents, make drafts, or negotiate deals. Easily from your phone or computer.",
       "You'll get phone alerts so you can track progress and never miss a deadline.",
@@ -113,7 +127,8 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
   },
   {
     title: "Transparent pricing and honest reviews",
-    description: "You can see pricing and payment options up front, with no hidden fees or surprises. Compare costs for similar cases in your state and read reviews from other clients.",
+    description:
+      "You can see pricing and payment options up front, with no hidden fees or surprises. Compare costs for similar cases in your state and read reviews from other clients.",
     details: [
       "After your case is done, you can share your experience and help build a trustworthy legal community for everyone.",
     ],
@@ -122,7 +137,8 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
   },
   {
     title: "Secure, private, and compliant",
-    description: "Every lawyer is pre-screened, licensed, and verified to practice in your state. All files and messages are encrypted, and your data is never shared with anyone but your selected attorney.",
+    description:
+      "Every lawyer is pre-screened, licensed, and verified to practice in your state. All files and messages are encrypted, and your data is never shared with anyone but your selected attorney.",
     details: [
       "We always follow the strictest ethical and privacy standards for American clients and attorneys.",
     ],
@@ -131,7 +147,8 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
   },
   {
     title: "Fast, accessible, and mobile-first!",
-    description: "You can use legali on your phone, tablet, or computer. It's easy to use no matter what device you have.",
+    description:
+      "You can use legali on your phone, tablet, or computer. It's easy to use no matter what device you have.",
     details: [
       "Our guides explain how legal matters work, and our team is here to help.",
       "We offer support in different languages and guides in plain English so everyone gets the help they need.",
@@ -160,14 +177,16 @@ export const ACTION_CARDS: ActionCard[] = [
   },
   {
     title: "Need help getting started?",
-    description: "Access self-help tools, explainer videos, or live chat with our 24/7 support team.",
+    description:
+      "Access self-help tools, explainer videos, or live chat with our 24/7 support team.",
     buttonText: "Get Help",
     buttonHref: "/support",
     backgroundColor: "#5A8C9C",
   },
   {
     title: "Browse attorney profiles",
-    description: "Explore verified attorney profiles, read reviews, and compare pricing before you connect.",
+    description:
+      "Explore verified attorney profiles, read reviews, and compare pricing before you connect.",
     buttonText: "Browse Now",
     buttonHref: "/lawyers",
     backgroundColor: "#6A9CAC",

@@ -302,23 +302,23 @@ export const chatService = {
     // Use timestamp field if it exists and has Z suffix (UTC format)
     // Otherwise use created_at and add Z if missing
     let timestampString = null;
-    
-    if (apiMessage.timestamp && apiMessage.timestamp.endsWith('Z')) {
+
+    if (apiMessage.timestamp && apiMessage.timestamp.endsWith("Z")) {
       timestampString = apiMessage.timestamp;
     } else if (apiMessage.created_at) {
       // Add Z suffix to created_at if missing to ensure UTC format
-      timestampString = apiMessage.created_at.endsWith('Z') 
-        ? apiMessage.created_at 
-        : apiMessage.created_at + 'Z';
+      timestampString = apiMessage.created_at.endsWith("Z")
+        ? apiMessage.created_at
+        : `${apiMessage.created_at}Z`;
     }
-    
+
     // Fallback to current time if neither exists
     if (!timestampString) {
       timestampString = new Date().toISOString();
     }
-    
+
     const convertedDate = new Date(timestampString);
-    
+
     return {
       id: apiMessage.id,
       content: apiMessage.content,

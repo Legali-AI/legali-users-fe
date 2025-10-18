@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useChatHistory } from "@/hooks/use-chat-queries";
 import { Clock, MessageSquare, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { useChatHistory } from "@/hooks/use-chat-queries";
 
 interface ChatHistorySidebarProps {
   currentChatId?: string | undefined;
@@ -46,10 +46,10 @@ export function ChatHistorySidebar({ currentChatId, isOpen, onClose }: ChatHisto
     const dateOnly = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
 
     if (dateOnly.getTime() === today.getTime()) {
-      return dateObj.toLocaleTimeString(undefined, { 
-        hour: "numeric", 
+      return dateObj.toLocaleTimeString(undefined, {
+        hour: "numeric",
         minute: "2-digit",
-        hour12: true 
+        hour12: true,
       });
     } else if (dateOnly.getTime() === yesterday.getTime()) {
       return "Yesterday";

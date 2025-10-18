@@ -1,10 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import {
-  PROBLEM_BADGE,
-  PROBLEMS,
-  SOLUTION_BADGE,
-  SOLUTIONS,
-} from "../../../../data/lawyers-marketplace.data";
+import { PROBLEM_BADGE, PROBLEMS, SOLUTION_BADGE, SOLUTIONS } from "../../../../data/lawyers-marketplace.data";
 
 // Server Component
 export default function ProblemSolutionSection() {

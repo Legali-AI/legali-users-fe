@@ -1,5 +1,9 @@
 "use client";
 
+import { ArrowRight, Clock, MessageSquare, RefreshCw } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { H1 } from "@/components/elements/typography";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,10 +17,6 @@ import {
 } from "@/components/ui/pagination";
 import { useAuthStatus } from "@/hooks/use-auth-status";
 import { useChatHistory } from "@/hooks/use-chat-queries";
-import { ArrowRight, Clock, MessageSquare, RefreshCw } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
 
 export default function HistoryChatsPage() {
   const { isAuthenticated, isLoading: authLoading } = useAuthStatus();
@@ -74,10 +74,10 @@ export default function HistoryChatsPage() {
     const dateOnly = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
 
     if (dateOnly.getTime() === today.getTime()) {
-      return dateObj.toLocaleTimeString(undefined, { 
-        hour: "numeric", 
+      return dateObj.toLocaleTimeString(undefined, {
+        hour: "numeric",
         minute: "2-digit",
-        hour12: true 
+        hour12: true,
       });
     } else if (dateOnly.getTime() === yesterday.getTime()) {
       return "Yesterday";
