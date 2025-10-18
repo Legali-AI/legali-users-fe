@@ -1,9 +1,5 @@
 "use client";
 
-import { ArrowRight, Clock, MessageSquare, RefreshCw } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
 import { H1 } from "@/components/elements/typography";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,6 +13,10 @@ import {
 } from "@/components/ui/pagination";
 import { useAuthStatus } from "@/hooks/use-auth-status";
 import { useChatHistory } from "@/hooks/use-chat-queries";
+import { ArrowRight, Clock, MessageSquare, RefreshCw } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
 export default function HistoryChatsPage() {
   const { isAuthenticated, isLoading: authLoading } = useAuthStatus();
@@ -59,18 +59,32 @@ export default function HistoryChatsPage() {
   }
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    if (!dateString) return "Invalid Date";
 
-    if (diffInDays === 0) {
-      return "Today";
-    } else if (diffInDays === 1) {
+    const dateObj = new Date(dateString);
+    if (isNaN(dateObj.getTime())) return "Invalid Date";
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(today.getDate() - 7);
+
+    const dateOnly = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
+
+    if (dateOnly.getTime() === today.getTime()) {
+      return dateObj.toLocaleTimeString(undefined, { 
+        hour: "numeric", 
+        minute: "2-digit",
+        hour12: true 
+      });
+    } else if (dateOnly.getTime() === yesterday.getTime()) {
       return "Yesterday";
-    } else if (diffInDays < 7) {
-      return `${diffInDays} days ago`;
+    } else if (dateOnly.getTime() > sevenDaysAgo.getTime()) {
+      return dateObj.toLocaleDateString(undefined, { weekday: "long" });
     } else {
-      return date.toLocaleDateString();
+      return dateObj.toLocaleDateString(undefined, { day: "numeric", month: "numeric", year: "2-digit" });
     }
   };
 
@@ -265,7 +279,7 @@ export default function HistoryChatsPage() {
                         {chat.session_name || "Untitled Chat"}
                       </h3>
                       <div className="flex items-center space-x-2 mt-1">
-                        <Clock className="h-4 w-4 text-gray-400" />
+                        <Clock className="h-4 w-4 text-gray-400 flex-shrink-0" />
                         <p className="text-sm text-gray-500">{formatDate(chat.created_at)}</p>
                       </div>
                       {chat.summary && <p className="text-sm text-gray-600 mt-2 line-clamp-2">{chat.summary}</p>}
