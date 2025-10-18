@@ -23,11 +23,14 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         "gradient-blue": "bg-gradient-to-b from-white to-[#A4D1E8] font-semibold text-black",
+        "gradient-teal":
+          "bg-gradient-to-r from-[#2F7D99] to-[#A4D1E8] text-white shadow-md hover:from-[#2A6F8A] hover:to-[#5199B0] hover:shadow-lg",
       },
       size: {
         default: "px-4 py-2",
         sm: "h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5",
         lg: "rounded-xl px-6 py-3 has-[>svg]:px-4",
+        xl: "rounded-xl px-8 py-4 text-lg has-[>svg]:px-6",
         icon: "px-0 py-0",
       },
       level: typographyConfig.variants.level,
@@ -54,7 +57,10 @@ function Button({ className, variant, size, level, weight, align, asChild = fals
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, level, weight, align, className }))}
+      className={cn(
+        buttonVariants({ variant, size, level, weight, align, className }),
+        variant === "gradient-teal" ? "gradient-teal" : ""
+      )}
       {...(props as any)}
     />
   );

@@ -600,3 +600,31 @@
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
+.gradient-teal {
+  /* bg-gradient-to-r from-[#2F7D99] to-[#A4D1E8] */
+  background-image: linear-gradient(to right, #2f7d99, #a4d1e8);
+
+  /* text-white */
+  color: #ffffff;
+
+  /* shadow-md */
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+  /* Menambahkan transisi agar hover-nya halus */
+  transition-property: background-image, box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.gradient-teal:hover {
+  /* hover:from-[#2A6F8A] hover:to-[#5199B0] */
+  background-image: linear-gradient(to right, #2a6f8a, #5199b0);
+
+  /* hover:shadow-lg */
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
