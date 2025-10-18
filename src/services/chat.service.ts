@@ -420,7 +420,7 @@ export const chatService = {
         return "case_builder";
       case "litigation-funding-investors":
         return "litigation_builder";
-      case "lawyers-marketplace":
+      case "lawyers":
         return "support";
 
       // Legacy URL param formats (for backward compatibility)
@@ -470,11 +470,11 @@ export const chatService = {
       case "contract_review":
         return "red-flag-analysis"; // closest match for contract analysis
       case "mediation_support":
-        return "lawyers-marketplace"; // legal professionals for mediation
+        return "lawyers"; // legal professionals for mediation
       case "high_value_dispute":
         return "litigation-funding-investors"; // high-value cases often need funding
       case "support":
-        return "lawyers-marketplace";
+        return "lawyers";
       default:
         return null;
     }

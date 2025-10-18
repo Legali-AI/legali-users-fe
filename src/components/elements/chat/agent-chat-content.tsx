@@ -75,7 +75,7 @@ export function AgentChatContent() {
       case "template":
         return "legal-template";
       case "lawyers":
-        return "lawyers-marketplace";
+        return "lawyers";
       case "funding-investors":
         return "litigation-funding-investors";
       case "funding-litigants":
@@ -100,7 +100,7 @@ export function AgentChatContent() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
   // Check for pending message from landing page (with files)
   useEffect(() => {

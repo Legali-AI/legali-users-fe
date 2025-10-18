@@ -1,20 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { SearchBar } from "@/components/search-bar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useSearchLawyers } from "@/hooks/use-lawyers";
-import type { CaseType, SearchParams } from "@/types";
-import { LawyerCardGrid } from "./LawyerCardGrid";
+import { useLawyers } from "@/hooks/use-lawyers";
+import { setTestToken } from "@/lib/auth-token";
+import type { SearchParams } from "@/types";
+import { ApiLawyerCardGrid } from "./ApiLawyerCardGrid";
 
-interface LawyerSearchInterfaceProps {
-  caseTypeOptions: Array<{ label: string; value: CaseType; count: number }>;
-  languageOptions: Array<{ label: string; value: string; count: number }>;
-}
+type LawyerSearchInterfaceProps = Record<string, never>;
 
-export default function LawyerSearchInterface({ caseTypeOptions, languageOptions }: LawyerSearchInterfaceProps) {
+export default function LawyerSearchInterface(_props: LawyerSearchInterfaceProps) {
   const [searchParams, setSearchParams] = useState<SearchParams>({
     query: "",
     location: "",
@@ -23,16 +21,49 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
     sortBy: "rating",
     sortOrder: "desc",
   });
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+  const [selectedPracticeAreas, setSelectedPracticeAreas] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 0 });
 
   const [showFilters, setShowFilters] = useState(false);
-  const { data: searchResults, isLoading } = useSearchLawyers(searchParams);
+  const {
+    lawyers,
+    loading: isLoading,
+    filterCounts,
+    searchLawyers,
+  } = useLawyers({
+    ...(searchParams.query && { searchQuery: searchParams.query }),
+    ...(selectedPracticeAreas.length > 0 && { practiceAreas: selectedPracticeAreas }),
+    ...(priceRange.min > 0 && { minPrice: priceRange.min }),
+    ...(priceRange.max > 0 && { maxPrice: priceRange.max }),
+    ...(searchParams.rating && { minRating: searchParams.rating }),
+    ...(selectedLanguages.length > 0 && { languages: selectedLanguages }),
+    ...(searchParams.sortBy && { sortBy: searchParams.sortBy }),
+    ...(searchParams.sortOrder && { sortOrder: searchParams.sortOrder }),
+  });
+
+  // Set test token for API access
+  useEffect(() => {
+    setTestToken();
+  }, []);
+
+  // Initialize price range with data from API
+  useEffect(() => {
+    if (filterCounts.priceRange.min > 0 && filterCounts.priceRange.max > 0) {
+      setPriceRange(prev => ({
+        min: prev.min || filterCounts.priceRange.min,
+        max: prev.max || filterCounts.priceRange.max,
+      }));
+    }
+  }, [filterCounts.priceRange]);
 
   const updateSearchParams = (updates: Partial<SearchParams>) => {
     setSearchParams(prev => ({ ...prev, ...updates, page: 1 }));
   };
 
-  const handleSearch = (query: string) => {
+  const handleSearch = async (query: string) => {
     updateSearchParams({ query });
+    await searchLawyers(query);
   };
 
   const clearAllFilters = () => {
@@ -44,6 +75,9 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
       sortBy: "rating",
       sortOrder: "desc",
     });
+    setSelectedLanguages([]);
+    setSelectedPracticeAreas([]);
+    setPriceRange({ min: 0, max: 0 });
   };
 
   // Stats for the search results
@@ -57,11 +91,11 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
   const hasActiveFilters = Boolean(
     searchParams.query ||
       searchParams.location ||
-      searchParams.caseType ||
+      selectedPracticeAreas.length > 0 ||
       searchParams.rating ||
-      searchParams.experience ||
-      searchParams.language ||
-      searchParams.budget
+      selectedLanguages.length > 0 ||
+      priceRange.min > 0 ||
+      priceRange.max > 0
   );
 
   return (
@@ -130,23 +164,18 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
           </div>
         </div> */}
 
-        <div className="grid animate-in grid-cols-1 gap-8 delay-300 duration-500 slide-in-from-bottom-4 lg:grid-cols-4">
+        <div className="grid animate-in grid-cols-1 gap-8 delay-300 duration-500 slide-in-from-bottom-4 lg:grid-cols-6">
           {/* Filters Sidebar */}
-          <div className={`lg:col-span-1 ${showFilters ? "block" : "hidden lg:block"}`}>
+          <div className={`lg:col-span-2 ${showFilters ? "block" : "hidden lg:block"}`}>
             <div className="sticky top-6">
               <FilterSidebar
-                practiceAreaOptions={caseTypeOptions}
-                selectedPracticeAreas={searchParams.caseType ? [searchParams.caseType] : []}
-                onPracticeAreaChange={values => {
-                  const updates: Partial<SearchParams> = {};
-                  if (values[0]) {
-                    updates.caseType = values[0];
-                  }
-                  updateSearchParams(updates);
-                }}
+                practiceAreaOptions={filterCounts.practiceAreas}
+                selectedPracticeAreas={selectedPracticeAreas}
+                onPracticeAreaChange={setSelectedPracticeAreas}
                 {...(searchParams.rating !== undefined && {
                   selectedRating: searchParams.rating,
                 })}
+                ratingCounts={filterCounts.ratings}
                 onRatingChange={rating => {
                   const updates: Partial<SearchParams> = {};
                   if (rating !== undefined) {
@@ -155,32 +184,15 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
                   updateSearchParams(updates);
                 }}
                 priceRange={{
-                  min: searchParams.budget?.min || 0,
-                  max: searchParams.budget?.max || 0,
+                  min: priceRange.min || filterCounts.priceRange.min,
+                  max: priceRange.max || filterCounts.priceRange.max,
                 }}
-                onPriceRangeChange={range =>
-                  updateSearchParams({
-                    budget: { min: range.min, max: range.max },
-                  })
-                }
-                {...(searchParams.experience !== undefined && {
-                  selectedExperience: searchParams.experience,
-                })}
-                onExperienceChange={experience => {
-                  const updates: Partial<SearchParams> = {};
-                  if (experience !== undefined) {
-                    updates.experience = experience;
-                  }
-                  updateSearchParams(updates);
-                }}
-                languageOptions={languageOptions}
-                selectedLanguages={searchParams.language ? [searchParams.language] : []}
+                onPriceRangeChange={setPriceRange}
+                languageOptions={filterCounts.languages}
+                selectedLanguages={selectedLanguages}
                 onLanguageChange={values => {
-                  const updates: Partial<SearchParams> = {};
-                  if (values[0]) {
-                    updates.language = values[0];
-                  }
-                  updateSearchParams(updates);
+                  // Convert to lowercase to match the filtering logic
+                  setSelectedLanguages(values.map(v => v.toLowerCase()));
                 }}
                 hasActiveFilters={hasActiveFilters}
                 onClearAll={clearAllFilters}
@@ -190,11 +202,11 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
           </div>
 
           {/* Results */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-4">
             {/* Results Header */}
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">{searchResults?.total || 0} lawyers found</h1>
+                <h1 className="text-2xl font-bold text-gray-900">{lawyers.length} lawyers found</h1>
                 {searchParams.query && (
                   <p className="text-gray-600">
                     Results for &ldquo;{searchParams.query}&rdquo;
@@ -215,29 +227,27 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
                   onChange={e => {
                     const [sortBy, sortOrder] = e.target.value.split("-");
                     const updates: Partial<SearchParams> = {};
-                    if (
-                      sortBy &&
-                      (sortBy === "rating" || sortBy === "price" || sortBy === "experience" || sortBy === "reviews")
-                    ) {
-                      updates.sortBy = sortBy;
+                    if (sortBy && (sortBy === "rating" || sortBy === "price" || sortBy === "name")) {
+                      updates.sortBy = sortBy as "rating" | "price" | "name";
                     }
                     if (sortOrder && (sortOrder === "asc" || sortOrder === "desc")) {
-                      updates.sortOrder = sortOrder;
+                      updates.sortOrder = sortOrder as "asc" | "desc";
                     }
                     updateSearchParams(updates);
                   }}>
                   <option value="rating-desc">Highest Rated</option>
+                  <option value="rating-asc">Lowest Rated</option>
                   <option value="price-asc">Lowest Price</option>
                   <option value="price-desc">Highest Price</option>
-                  <option value="experience-desc">Most Experience</option>
-                  <option value="reviews-desc">Most Reviews</option>
+                  <option value="name-asc">Name A-Z</option>
+                  <option value="name-desc">Name Z-A</option>
                 </select>
               </div>
             </div>
 
             {/* Lawyer Cards Grid */}
-            <LawyerCardGrid
-              lawyers={searchResults?.lawyers || []}
+            <ApiLawyerCardGrid
+              lawyers={lawyers}
               variant="default"
               isLoading={isLoading}
               columns={{ lg: 2, md: 2, sm: 1 }}
@@ -247,22 +257,6 @@ export default function LawyerSearchInterface({ caseTypeOptions, languageOptions
                 action: hasActiveFilters ? <Button onClick={clearAllFilters}>Clear All Filters</Button> : undefined,
               }}
             />
-
-            {/* Pagination */}
-            {searchResults && searchResults.totalPages > 1 && (
-              <div className="mt-8 flex justify-center">
-                <div className="flex space-x-2">
-                  {Array.from({ length: Math.min(5, searchResults.totalPages) }, (_, i) => (
-                    <Button
-                      key={`page-${i + 1}`}
-                      variant={searchResults.page === i + 1 ? "default" : "outline"}
-                      onClick={() => updateSearchParams({ page: i + 1 })}>
-                      {i + 1}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>

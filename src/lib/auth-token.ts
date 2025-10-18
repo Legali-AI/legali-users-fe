@@ -1,0 +1,11 @@
+// Temporary token for testing API integration
+// In production, this should be handled by your authentication system
+export const TEST_AUTH_TOKEN =
+  "eyJhbGciOiJIUzI1NiIsImtpZCI6InMvenU1OXh0R2ZXYnYzWkQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL21lcW5hcnptdWRmY3dpbGhsc2dvLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJjNTZmMTIwNS1lOTFmLTQyZWQtOTkxYS03MjQwOWI1Mjg3NTMiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzYwNzA3NTk4LCJpYXQiOjE3NjA3MDM5OTgsImVtYWlsIjoic2FyYWguam9obnNvbkBlbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7ImVtYWlsX3ZlcmlmaWVkIjp0cnVlfSwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJwYXNzd29yZCIsInRpbWVzdGFtcCI6MTc2MDcwMzk5OH1dLCJzZXNzaW9uX2lkIjoiMDU4MWIwODItNmU0Yi00MWMzLWI0NTUtYTkyNzZkNGRlZWNhIiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.rFR6OvabwqFVISbCpPFbVR4jbFsvFyS3McQOIh41p-o";
+
+// Function to set token in localStorage for testing
+export function setTestToken() {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("auth_token", TEST_AUTH_TOKEN);
+  }
+}

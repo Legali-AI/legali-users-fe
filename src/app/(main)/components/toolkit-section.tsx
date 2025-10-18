@@ -38,6 +38,7 @@ export default function ToolkitSection() {
         role="tablist"
         aria-label="Toolkit categories">
         <button
+          type="button"
           role="tab"
           aria-selected={activeTab === "individuals"}
           aria-controls="individuals-panel"
@@ -51,6 +52,7 @@ export default function ToolkitSection() {
           {TOOLKIT_CONTENT.tabIndividuals}
         </button>
         <button
+          type="button"
           role="tab"
           aria-selected={activeTab === "lawyers"}
           aria-controls="lawyers-panel"

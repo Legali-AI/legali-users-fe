@@ -37,7 +37,7 @@ export default function HistoryChatsPage() {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     return chatHistory.slice(startIndex, endIndex);
-  }, [chatHistory, currentPage, itemsPerPage]);
+  }, [chatHistory, currentPage]);
 
   const totalPages = Math.ceil(chatHistory.length / itemsPerPage);
 
@@ -62,7 +62,7 @@ export default function HistoryChatsPage() {
     if (!dateString) return "Invalid Date";
 
     const dateObj = new Date(dateString);
-    if (isNaN(dateObj.getTime())) return "Invalid Date";
+    if (Number.isNaN(dateObj.getTime())) return "Invalid Date";
 
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());

@@ -174,7 +174,7 @@ export function UserBookingsList({ userId }: UserBookingsListProps) {
     return <div>Error loading bookings: {error.message}</div>;
   }
 
-  if (!bookingsData || bookingsData.bookings.length === 0) {
+  if (!bookingsData || bookingsData.length === 0) {
     return <div>No bookings found.</div>;
   }
 
@@ -182,7 +182,7 @@ export function UserBookingsList({ userId }: UserBookingsListProps) {
     <div className="space-y-4">
       <h2 className="text-2xl font-bold">Your Bookings</h2>
 
-      {bookingsData.bookings.map(booking => (
+      {bookingsData.map((booking: any) => (
         <Card key={booking.id}>
           <CardContent className="p-4">
             <div className="flex items-start justify-between">
@@ -242,10 +242,13 @@ export function UserBookingsList({ userId }: UserBookingsListProps) {
         </Button>
 
         <span>
-          Page {page} of {bookingsData.totalPages}
+          Page {page} of {Math.ceil(bookingsData.length / 10)}
         </span>
 
-        <Button variant="outline" onClick={() => setPage(p => p + 1)} disabled={page >= bookingsData.totalPages}>
+        <Button
+          variant="outline"
+          onClick={() => setPage(p => p + 1)}
+          disabled={page >= Math.ceil(bookingsData.length / 10)}>
           Next
         </Button>
       </div>

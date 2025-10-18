@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 // import { Header } from "@/components/header";
 import { useLawyerDetails, useLawyerReviews } from "@/hooks/use-lawyers";
+import { setTestToken } from "@/lib/auth-token";
 import { BookingModal } from "../components/BookingModal";
 import { ContactActions } from "../components/ContactActions";
 import { LawyerAbout } from "../components/LawyerAbout";
@@ -21,6 +22,9 @@ interface LawyerProfileClientProps {
 }
 
 export default function LawyerProfileClient({ id }: LawyerProfileClientProps) {
+  // Set test token for API access
+  setTestToken();
+
   const { data: lawyer, isLoading: lawyerLoading } = useLawyerDetails(id);
   const { data: reviews, isLoading: reviewsLoading } = useLawyerReviews(id);
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
@@ -60,7 +64,7 @@ export default function LawyerProfileClient({ id }: LawyerProfileClientProps) {
   }
 
   return (
-    <div className="mobile-safe-bottom min-h-screen bg-gray-50">
+    <div className="mobile-safe-bottom min-h-screen bg-gray-50 pt-20">
       {/* <Header /> */}
 
       <div className="mx-auto max-w-7xl px-4 py-4 pb-8 sm:px-6 sm:py-8 sm:pb-12 lg:px-8">
@@ -82,8 +86,10 @@ export default function LawyerProfileClient({ id }: LawyerProfileClientProps) {
             {/* Credentials & Experience */}
             <LawyerCredentials lawyer={lawyer} />
 
-            {/* Case Results */}
-            <LawyerCaseResults lawyer={lawyer} />
+            {/* Case Results - Hidden */}
+            <div className="hidden">
+              <LawyerCaseResults lawyer={lawyer} />
+            </div>
 
             {/* Reviews */}
             <LawyerReviews reviews={reviews} isLoading={reviewsLoading} />
@@ -91,8 +97,10 @@ export default function LawyerProfileClient({ id }: LawyerProfileClientProps) {
 
           {/* Sidebar */}
           <div className="order-2 space-y-4 pb-6 lg:order-none lg:space-y-6 lg:pb-0">
-            {/* Pricing Packages */}
-            <ServicePackages lawyer={lawyer} selectedPackage={selectedPackage} onPackageSelect={setSelectedPackage} />
+            {/* Pricing Packages - Hidden */}
+            <div className="hidden">
+              <ServicePackages lawyer={lawyer} selectedPackage={selectedPackage} onPackageSelect={setSelectedPackage} />
+            </div>
 
             {/* Contact Actions */}
             <ContactActions

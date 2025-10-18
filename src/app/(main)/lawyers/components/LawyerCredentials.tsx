@@ -18,13 +18,32 @@ export function LawyerCredentials({ lawyer }: LawyerCredentialsProps) {
             <Award className="mr-2 h-4 w-4 flex-shrink-0" />
             Education & Credentials
           </h3>
-          <ul className="space-y-1">
-            {lawyer.credentials.map(credential => (
-              <li key={credential} className="text-sm text-gray-700 sm:text-base">
-                • {credential}
-              </li>
-            ))}
-          </ul>
+          <div className="space-y-3">
+            {lawyer.educations.length > 0 && (
+              <div>
+                <h4 className="mb-1 text-xs font-medium text-gray-600 uppercase tracking-wide">Education</h4>
+                <ul className="space-y-1">
+                  {lawyer.educations.map(education => (
+                    <li key={education} className="text-sm text-gray-700 sm:text-base">
+                      • {education}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {lawyer.credentials.length > 0 && (
+              <div>
+                <h4 className="mb-1 text-xs font-medium text-gray-600 uppercase tracking-wide">Credentials</h4>
+                <ul className="space-y-1">
+                  {lawyer.credentials.map(credential => (
+                    <li key={credential} className="text-sm text-gray-700 sm:text-base">
+                      • {credential}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
 
         <div>
