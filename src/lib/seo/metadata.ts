@@ -304,3 +304,26 @@ export const litigationCaseBuilderMetadata = createPublicMetadata(
   ],
   "/og-litigation-case-builder.jpg"
 );
+
+export const lawyersMarketplaceMetadata = createPublicMetadata(
+  "Lawyers Marketplace - Connect with Verified Attorneys",
+  "Find trusted legal help fast. Our lawyer marketplace connects you with verified US attorneys for any case, transaction, or legal question. Get transparent pricing, instant messaging, and state-specific guidance.",
+  "/lawyers-marketplace",
+  [
+    "find a lawyer",
+    "attorney marketplace",
+    "legal help",
+    "hire attorney",
+    "verified lawyers",
+    "attorney directory",
+    "legal consultation",
+    "lawyer reviews",
+    "affordable legal help",
+    "attorney fees",
+    "legal advice online",
+    "connect with lawyer",
+    "attorney search",
+    "legal professionals",
+  ],
+  "/og-lawyers-marketplace.jpg"
+);

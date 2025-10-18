@@ -53,13 +53,13 @@ export const NAVIGATION_FEATURES: Feature[] = [
   {
     label: "Fund Your Litigation: Investors",
     icon: DollarSign,
-    href: "/fund-your-litigation-investors",
+    href: "/litigation-crowdfunding",
     color: "#0B9601",
   },
   {
     label: "Fund Your Litigation: Litigants",
     icon: DollarSign,
-    href: "/fund-your-litigation-litigants",
+    href: "/litigation-crowdfunding",
     color: "#0B9601",
   },
 ];
