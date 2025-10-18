@@ -460,5 +460,6 @@ export function useChat({
     refetchMessages,
     selectTool,
     clearSelectedTool,
+    isSendingMessage: isSendingMessage.current,
   };
 }
