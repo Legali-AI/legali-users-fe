@@ -303,7 +303,7 @@ export const chatService = {
     // Otherwise use created_at and add Z if missing
     let timestampString = null;
 
-    if (apiMessage.timestamp?.endsWith("Z")) {
+    if (apiMessage.timestamp && apiMessage.timestamp.endsWith("Z")) {
       timestampString = apiMessage.timestamp;
     } else if (apiMessage.created_at) {
       // Add Z suffix to created_at if missing to ensure UTC format

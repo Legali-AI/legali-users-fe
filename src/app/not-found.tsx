@@ -34,7 +34,6 @@ export default function NotFound() {
             Back to Home
           </Link>
           <button
-            type="button"
             onClick={() => window.history.back()}
             className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-brand-navy/20 bg-white/80 px-8 py-3.5 text-base font-semibold text-brand-navy backdrop-blur-sm transition-all hover:border-brand-navy/40 hover:bg-white">
             <ArrowLeft className="size-5" />

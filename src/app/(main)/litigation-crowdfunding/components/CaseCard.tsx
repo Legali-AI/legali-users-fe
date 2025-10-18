@@ -1,10 +1,10 @@
-import { Clock, MapPin, Scale, TrendingUp, Users } from "lucide-react";
-import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import type { LitigationCase } from "@/types/litigation";
+import { Clock, MapPin, Scale, TrendingUp, Users } from "lucide-react";
+import Image from "next/image";
 import { riskLevels } from "../mock-data";
 
 interface CaseCardProps {
