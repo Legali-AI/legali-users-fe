@@ -1,7 +1,7 @@
 "use client";
 
-import { Paperclip } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Paperclip } from "lucide-react";
 import { Typography } from "../typography";
 import { AgentAvatar } from "./agent-avatar";
 import { AnalysisReportButton } from "./analysis-report-button";
@@ -14,6 +14,41 @@ interface ChatMessageProps {
 
 export function ChatMessage({ message }: ChatMessageProps) {
   const { content, isUser, timestamp, attachments, report_file_path } = message;
+
+
+  const formatDate = (dateObj: Date | string) => {
+    if (!dateObj) return "Invalid Date";
+
+    // Convert to Date object if it's a string
+    const date = typeof dateObj === 'string' ? new Date(dateObj) : dateObj;
+    
+    if (isNaN(date.getTime())) return "Invalid Date";
+
+
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(today.getDate() - 7);
+
+    const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+    if (dateOnly.getTime() === today.getTime()) {
+      return date.toLocaleTimeString(undefined, { 
+        hour: "numeric", 
+        minute: "2-digit",
+        hour12: true 
+      });
+    } else if (dateOnly.getTime() === yesterday.getTime()) {
+      return "Yesterday";
+    } else if (dateOnly.getTime() > sevenDaysAgo.getTime()) {
+      return date.toLocaleDateString(undefined, { weekday: "long" });
+    } else {
+      return date.toLocaleDateString(undefined, { day: "numeric", month: "numeric", year: "2-digit" });
+    }
+  };
 
   // if (!isUser) {
   //   console.log("🔍 ChatMessage: AI message received:", message);
@@ -68,10 +103,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
 
           {/* Timestamp */}
           <Typography level="caption" className={cn("mt-2 opacity-70", isUser ? "text-white" : "text-slate-gray-500")}>
-            {timestamp.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+            {formatDate(timestamp)}
           </Typography>
         </div>
       </div>

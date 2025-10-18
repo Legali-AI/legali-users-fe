@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowUp, Mic, Paperclip, StopCircle } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { ArrowUp, Mic, Paperclip, StopCircle } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import {
   createUploadingFile,
   FileUploadProgress,
@@ -13,11 +13,12 @@ import {
 } from "./file-upload-progress";
 
 interface ChatInputProps {
-  onSendMessage: (content: string, files?: File[]) => void;
+  onSendMessage: (content: string, files?: File[]) => Promise<void>;
   placeholder?: string;
   disabled?: boolean;
   droppedFiles?: File[];
   onClearDroppedFiles?: () => void;
+  isSending?: boolean;
 }
 
 export function ChatInput({
@@ -26,6 +27,7 @@ export function ChatInput({
   disabled = false,
   droppedFiles = [],
   onClearDroppedFiles,
+  isSending = false,
 }: ChatInputProps) {
   const [message, setMessage] = useState("");
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
@@ -87,7 +89,7 @@ export function ChatInput({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (message.trim() || completedFiles.length > 0) {
       // Validate files before sending
       const validFiles = completedFiles.filter(file => file instanceof File && file.size > 0 && file.name.length > 0);
@@ -96,14 +98,18 @@ export function ChatInput({
         console.warn("⚠️ Some files were filtered out due to validation");
       }
 
-      onSendMessage(message.trim(), validFiles);
-      setMessage("");
-      setCompletedFiles([]);
-      setUploadingFiles([]);
+      try {
+        await onSendMessage(message.trim(), validFiles);
+      } finally {
+        // Reset form after sending (regardless of success/failure)
+        setMessage("");
+        setCompletedFiles([]);
+        setUploadingFiles([]);
 
-      // Reset textarea height
-      if (textareaRef.current) {
-        textareaRef.current.style.height = "auto";
+        // Reset textarea height
+        if (textareaRef.current) {
+          textareaRef.current.style.height = "auto";
+        }
       }
     }
   };
@@ -273,12 +279,12 @@ export function ChatInput({
               size="icon"
               className={cn(
                 "size-10 rounded-full shadow-sm transition-all",
-                message.trim() || completedFiles.length > 0
+                (message.trim() || completedFiles.length > 0) && !isSending
                   ? "bg-deep-navy text-white hover:bg-deep-navy/90"
                   : "cursor-not-allowed bg-neutral-200 text-neutral-400 hover:bg-neutral-200"
               )}
               onClick={handleSubmit}
-              disabled={disabled || (!message.trim() && completedFiles.length === 0)}>
+              disabled={disabled || isSending || (!message.trim() && completedFiles.length === 0)}>
               <ArrowUp className="size-5" />
             </Button>
           </div>

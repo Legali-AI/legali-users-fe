@@ -1,7 +1,7 @@
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
 import type { Message, WorkflowRecommendation } from "@/components/elements/chat/types";
 import { chatService } from "@/services/chat.service";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useChatMessages, useSendMessage } from "./use-chat-queries";
 
 export interface UseChatOptions {
@@ -460,5 +460,6 @@ export function useChat({
     refetchMessages,
     selectTool,
     clearSelectedTool,
+    isSendingMessage: isSendingMessage.current,
   };
 }

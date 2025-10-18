@@ -298,19 +298,41 @@ export const chatService = {
   },
 
   // Helper function to convert API message to local message format
-  convertApiMessageToMessage: (apiMessage: ApiMessage) => ({
-    id: apiMessage.id,
-    content: apiMessage.content,
-    isUser: apiMessage.role === "user",
-    timestamp: new Date(apiMessage.created_at || apiMessage.timestamp || Date.now()),
-    conversation_id: apiMessage.conversation_id,
-    role: apiMessage.role,
-    attachments:
-      apiMessage.attachments?.length && apiMessage.attachments.length > 0
-        ? apiMessage.attachments
-        : undefined,
-    report_file_path: apiMessage.report_file_path,
-  }),
+  convertApiMessageToMessage: (apiMessage: ApiMessage) => {
+    // Use timestamp field if it exists and has Z suffix (UTC format)
+    // Otherwise use created_at and add Z if missing
+    let timestampString = null;
+    
+    if (apiMessage.timestamp && apiMessage.timestamp.endsWith('Z')) {
+      timestampString = apiMessage.timestamp;
+    } else if (apiMessage.created_at) {
+      // Add Z suffix to created_at if missing to ensure UTC format
+      timestampString = apiMessage.created_at.endsWith('Z') 
+        ? apiMessage.created_at 
+        : apiMessage.created_at + 'Z';
+    }
+    
+    // Fallback to current time if neither exists
+    if (!timestampString) {
+      timestampString = new Date().toISOString();
+    }
+    
+    const convertedDate = new Date(timestampString);
+    
+    return {
+      id: apiMessage.id,
+      content: apiMessage.content,
+      isUser: apiMessage.role === "user",
+      timestamp: convertedDate,
+      conversation_id: apiMessage.conversation_id,
+      role: apiMessage.role,
+      attachments:
+        apiMessage.attachments?.length && apiMessage.attachments.length > 0
+          ? apiMessage.attachments
+          : undefined,
+      report_file_path: apiMessage.report_file_path,
+    };
+  },
 
   // Get chat history for the current user
   getChatHistory: async (): Promise<ChatHistoryResponse> => {

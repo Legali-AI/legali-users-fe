@@ -1,9 +1,9 @@
 "use client";
 
-import { Clock, MessageSquare, X } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useChatHistory } from "@/hooks/use-chat-queries";
+import { Clock, MessageSquare, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface ChatHistorySidebarProps {
   currentChatId?: string | undefined;
@@ -31,18 +31,32 @@ export function ChatHistorySidebar({ currentChatId, isOpen, onClose }: ChatHisto
   };
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    if (!dateString) return "Invalid Date";
 
-    if (diffInDays === 0) {
-      return "Today";
-    } else if (diffInDays === 1) {
+    const dateObj = new Date(dateString);
+    if (isNaN(dateObj.getTime())) return "Invalid Date";
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(today.getDate() - 7);
+
+    const dateOnly = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
+
+    if (dateOnly.getTime() === today.getTime()) {
+      return dateObj.toLocaleTimeString(undefined, { 
+        hour: "numeric", 
+        minute: "2-digit",
+        hour12: true 
+      });
+    } else if (dateOnly.getTime() === yesterday.getTime()) {
       return "Yesterday";
-    } else if (diffInDays < 7) {
-      return `${diffInDays} days ago`;
+    } else if (dateOnly.getTime() > sevenDaysAgo.getTime()) {
+      return dateObj.toLocaleDateString(undefined, { weekday: "long" });
     } else {
-      return date.toLocaleDateString();
+      return dateObj.toLocaleDateString(undefined, { day: "numeric", month: "numeric", year: "2-digit" });
     }
   };
 
@@ -142,7 +156,7 @@ export function ChatHistorySidebar({ currentChatId, isOpen, onClose }: ChatHisto
                         {chat.session_name || "Untitled Chat"}
                       </p>
                       <div className="mt-1 flex items-center gap-1">
-                        <Clock className="h-3 w-3 text-gray-400" />
+                        <Clock className="h-3 w-3 text-gray-400 flex-shrink-0" />
                         <p className="text-xs text-gray-500">{formatDate(chat.created_at)}</p>
                       </div>
                     </div>
