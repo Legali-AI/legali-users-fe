@@ -258,3 +258,26 @@ export const redFlagAnalysisMetadata = createPublicMetadata(
   ],
   "/og-red-flag-analysis.jpg"
 );
+
+export const smartLegalDrafterMetadata = createPublicMetadata(
+  "Smart Legal Drafter - AI Document Templates for Self-Represented Litigants",
+  "Draft legal documents with confidence using attorney-reviewed templates. Create court pleadings, contracts, agreements, and legal forms with step-by-step guidance. No legal experience required.",
+  "/smart-legal-drafter",
+  [
+    "legal document templates",
+    "legal drafter",
+    "self-represented litigant",
+    "pro se litigant",
+    "legal forms",
+    "court pleadings",
+    "legal document generator",
+    "contract templates",
+    "legal document creation",
+    "DIY legal documents",
+    "attorney-reviewed templates",
+    "legal paperwork",
+    "document automation",
+    "legal form builder",
+  ],
+  "/og-smart-legal-drafter.jpg"
+);
