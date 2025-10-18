@@ -1,15 +1,15 @@
 import {
-  FileText,
+  Brain,
+  CheckCircle,
   Clock,
-  Shield,
   Download,
-  Users,
+  FileText,
+  type LucideIcon,
   MousePointerClick,
   Network,
-  Brain,
+  Shield,
   Sparkles,
-  CheckCircle,
-  type LucideIcon,
+  Users,
 } from "lucide-react";
 
 // Hero Section Content
@@ -96,7 +96,8 @@ export const DIFFERENTIATORS: Feature[] = [
   {
     icon: Brain,
     title: "AI-powered structure",
-    description: "We organize, timestamp, and connect your evidence to events as you upload, all in real time.",
+    description:
+      "We organize, timestamp, and connect your evidence to events as you upload, all in real time.",
   },
   {
     icon: Sparkles,
@@ -107,7 +108,8 @@ export const DIFFERENTIATORS: Feature[] = [
   {
     icon: CheckCircle,
     title: "Litigation-focused",
-    description: "Reminders, tracked documents, and filing tools tailored for real-world legal processes.",
+    description:
+      "Reminders, tracked documents, and filing tools tailored for real-world legal processes.",
   },
 ];
 
