@@ -237,3 +237,24 @@ export const messagesMetadata = createPrivateMetadata(
   ],
   "/og-messages.jpg"
 );
+
+export const redFlagAnalysisMetadata = createPublicMetadata(
+  "Red Flag Analysis - AI Legal Document Review",
+  "Upload your legal documents and get instant AI-powered red flag analysis. Legali automatically highlights clauses, conflicts, and risks in plain English, with personalized recommendations for next steps.",
+  "/red-flag-analysis",
+  [
+    "document review",
+    "legal red flags",
+    "contract analysis",
+    "AI document scanner",
+    "legal risk detection",
+    "clause analysis",
+    "compliance check",
+    "legal document AI",
+    "contract review",
+    "legal risk assessment",
+    "automated legal review",
+    "document risk analysis",
+  ],
+  "/og-red-flag-analysis.jpg"
+);
