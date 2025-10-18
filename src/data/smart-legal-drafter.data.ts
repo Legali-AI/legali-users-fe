@@ -1,4 +1,12 @@
-import { FileCheck, FileText, HelpCircle, Lock, Smartphone, CheckCircle, type LucideIcon } from "lucide-react";
+import {
+  CheckCircle,
+  FileCheck,
+  FileText,
+  HelpCircle,
+  Lock,
+  type LucideIcon,
+  Smartphone,
+} from "lucide-react";
 
 // Hero Section Content
 export interface HeroContent {
@@ -49,7 +57,8 @@ export interface Feature {
 }
 
 export const FEATURES_GRID_HEADING = "legali changes that for you";
-export const FEATURES_GRID_SUBHEADING = "No legal jargon or uncertainty, just step-by-step clarity for the self-represented user.";
+export const FEATURES_GRID_SUBHEADING =
+  "No legal jargon or uncertainty, just step-by-step clarity for the self-represented user.";
 
 export const FEATURES: Feature[] = [
   {
@@ -106,7 +115,8 @@ export interface ExperienceContent {
 
 export const EXPERIENCE_CONTENT: ExperienceContent = {
   heading: "Experience the difference",
-  subheading: "Try a free template and discover just how approachable, accurate, and empowering legal paperwork can be.",
+  subheading:
+    "Try a free template and discover just how approachable, accurate, and empowering legal paperwork can be.",
   ctaText: "Start Your Free Template",
   ctaHref: "/agent?conversation_type=legal-drafter",
   stats: [

@@ -25,7 +25,13 @@ export default function FeaturesGridSection() {
       {/* Features Grid */}
       <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-10">
         {FEATURES.map((feature, index) => (
-          <FeatureCard key={index} icon={feature.icon} title={feature.title} description={feature.description} index={index} />
+          <FeatureCard
+            key={index}
+            icon={feature.icon}
+            title={feature.title}
+            description={feature.description}
+            index={index}
+          />
         ))}
       </div>
     </section>
