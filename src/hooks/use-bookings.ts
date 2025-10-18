@@ -96,8 +96,7 @@ export const useCancelBooking = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ bookingId }: { bookingId: string; reason?: string }) =>
-      cancelBooking(bookingId),
+    mutationFn: ({ bookingId }: { bookingId: string; reason?: string }) => cancelBooking(bookingId),
     onSuccess: cancelledBooking => {
       // Update the booking in cache
       queryClient.setQueryData([QUERY_KEYS.BOOKING_DETAILS, cancelledBooking.id], cancelledBooking);

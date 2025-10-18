@@ -100,7 +100,7 @@ export function AgentChatContent() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
   // Check for pending message from landing page (with files)
   useEffect(() => {

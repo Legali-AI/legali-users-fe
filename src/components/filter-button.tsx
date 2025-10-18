@@ -163,7 +163,6 @@ export function FilterButton({
               setIsOpen(false);
             }
           }}
-          aria-label="Close dropdown"
         />
       )}
     </div>

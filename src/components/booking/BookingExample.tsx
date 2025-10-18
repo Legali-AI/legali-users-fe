@@ -245,7 +245,10 @@ export function UserBookingsList({ userId }: UserBookingsListProps) {
           Page {page} of {Math.ceil(bookingsData.length / 10)}
         </span>
 
-        <Button variant="outline" onClick={() => setPage(p => p + 1)} disabled={page >= Math.ceil(bookingsData.length / 10)}>
+        <Button
+          variant="outline"
+          onClick={() => setPage(p => p + 1)}
+          disabled={page >= Math.ceil(bookingsData.length / 10)}>
           Next
         </Button>
       </div>
