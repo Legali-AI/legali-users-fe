@@ -1,9 +1,9 @@
 "use client";
 
+import { Star } from "lucide-react";
 import { FilterButton } from "@/components/filter-button";
 import { PriceRangeFilter } from "@/components/price-range-filter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Star } from "lucide-react";
 
 interface FilterOption {
   label: string;
@@ -53,7 +53,6 @@ export function FilterSidebar({
   onClearAll,
   className = "",
 }: FilterSidebarProps) {
-
   return (
     <div className={className}>
       <Card className="sticky top-6 border border-gray-200 bg-white shadow-lg">
@@ -121,7 +120,6 @@ export function FilterSidebar({
             <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Hourly Rate</h3>
             <PriceRangeFilter value={priceRange} onChange={onPriceRangeChange} />
           </div>
-
 
           {/* Languages Filter */}
           <div className="space-y-3">

@@ -1,5 +1,10 @@
 "use client";
 
+import { motion } from "framer-motion";
+import { AlertCircle, ArrowLeft, Menu, Paperclip, RefreshCw, User } from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { AgentAvatar } from "@/components/elements/chat/agent-avatar";
 import { ChatHistorySidebar } from "@/components/elements/chat/chat-history-sidebar";
 import { ChatInput } from "@/components/elements/chat/chat-input";
@@ -14,11 +19,6 @@ import { useAuthStatus } from "@/hooks/use-auth-status";
 import { useChat } from "@/hooks/use-chat";
 import { clearPendingMessage, getPendingMessage } from "@/lib/session-storage";
 import { chatService } from "@/services/chat.service";
-import { motion } from "framer-motion";
-import { AlertCircle, ArrowLeft, Menu, Paperclip, RefreshCw, User } from "lucide-react";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 
 export function AgentChatContent() {
   const searchParams = useSearchParams();

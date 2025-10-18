@@ -1,9 +1,9 @@
+import { ArrowRight, MapPin, Star } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
 import type { ApiLawyer } from "@/types";
-import { ArrowRight, MapPin, Star } from "lucide-react";
-import Link from "next/link";
 
 interface ApiLawyerCardProps {
   lawyer: ApiLawyer;
@@ -38,9 +38,7 @@ export function ApiLawyerCard({ lawyer, variant = "default", showFullDetails = f
             </div>
           </div>
           <div className="text-right">
-            <div className={`${isFeatured ? "text-lg" : "text-base"} font-bold text-gray-900`}>
-              {priceRange}
-            </div>
+            <div className={`${isFeatured ? "text-lg" : "text-base"} font-bold text-gray-900`}>{priceRange}</div>
             <div className="text-sm text-gray-600">per hour</div>
           </div>
         </div>
@@ -67,9 +65,7 @@ export function ApiLawyerCard({ lawyer, variant = "default", showFullDetails = f
           </div>
 
           {/* Bio (only if not compact) */}
-          {!isCompact && (
-            <p className="line-clamp-2 text-sm leading-relaxed text-gray-700">{lawyer.about}</p>
-          )}
+          {!isCompact && <p className="line-clamp-2 text-sm leading-relaxed text-gray-700">{lawyer.about}</p>}
 
           {/* Footer with action */}
           <div className="flex items-center justify-between pt-2">

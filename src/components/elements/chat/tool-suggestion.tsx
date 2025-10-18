@@ -1,8 +1,8 @@
 "use client";
 
+import { AlertTriangle, Clock, FileText, Folder, Gavel, TrendingUp, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { AlertTriangle, Clock, FileText, Folder, Gavel, TrendingUp, Users } from "lucide-react";
 import { Typography } from "../typography";
 
 export interface Tool {

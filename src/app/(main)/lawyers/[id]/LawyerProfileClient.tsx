@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 // import { Header } from "@/components/header";
 import { useLawyerDetails, useLawyerReviews } from "@/hooks/use-lawyers";
 import { setTestToken } from "@/lib/auth-token";
@@ -24,7 +24,7 @@ interface LawyerProfileClientProps {
 export default function LawyerProfileClient({ id }: LawyerProfileClientProps) {
   // Set test token for API access
   setTestToken();
-  
+
   const { data: lawyer, isLoading: lawyerLoading } = useLawyerDetails(id);
   const { data: reviews, isLoading: reviewsLoading } = useLawyerReviews(id);
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);

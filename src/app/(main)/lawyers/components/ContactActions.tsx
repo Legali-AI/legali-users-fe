@@ -1,6 +1,6 @@
+import { Calendar, MessageCircle, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, MessageCircle, Video } from "lucide-react";
 
 interface ContactActionsProps {
   lawyerName: string;
@@ -27,7 +27,9 @@ export function ContactActions({ lawyerName, selectedPackage, onBookingClick }: 
           <Video className="h-4 w-4 mr-2" />
           Video Consultation
         </Button>
-        {!selectedPackage && <p className="text-xs text-gray-500 text-center mt-2 hidden">Select a service package to book</p>}
+        {!selectedPackage && (
+          <p className="text-xs text-gray-500 text-center mt-2 hidden">Select a service package to book</p>
+        )}
       </CardContent>
     </Card>
   );

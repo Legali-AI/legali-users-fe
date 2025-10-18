@@ -22,7 +22,6 @@ interface FilterButtonProps {
 }
 
 export function FilterButton({
-  title,
   options,
   selectedValues,
   onChange,

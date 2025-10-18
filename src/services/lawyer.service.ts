@@ -1,4 +1,9 @@
-import { ApiLawyer, LawyerDetailApi, LawyerDetailApiResponse, LawyersApiResponse } from "@/types";
+import type {
+  ApiLawyer,
+  LawyerDetailApi,
+  LawyerDetailApiResponse,
+  LawyersApiResponse,
+} from "@/types";
 
 const API_BASE_URL = "https://api.legali.io/api";
 
@@ -12,8 +17,8 @@ export class LawyerService {
   }
 
   private static async makeRequest<T>(endpoint: string): Promise<T> {
-    const token = await this.getAuthToken();
-    
+    const token = await LawyerService.getAuthToken();
+
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: "GET",
       headers: {
@@ -31,8 +36,8 @@ export class LawyerService {
 
   static async getLawyers(): Promise<ApiLawyer[]> {
     try {
-      const response = await this.makeRequest<LawyersApiResponse>("/marketplaces/lawyers");
-      
+      const response = await LawyerService.makeRequest<LawyersApiResponse>("/marketplaces/lawyers");
+
       if (!response.success) {
         throw new Error(response.message || "Failed to fetch lawyers");
       }
@@ -40,7 +45,7 @@ export class LawyerService {
       // Add languages to each lawyer (simulated data since API doesn't provide it)
       const lawyersWithLanguages = response.data.map(lawyer => ({
         ...lawyer,
-        languages: this.generateRandomLanguages()
+        languages: LawyerService.generateRandomLanguages(),
       }));
 
       return lawyersWithLanguages;
@@ -51,7 +56,16 @@ export class LawyerService {
   }
 
   private static generateRandomLanguages(): string[] {
-    const allLanguages = ["English", "Spanish", "French", "German", "Italian", "Portuguese", "Chinese", "Japanese"];
+    const allLanguages = [
+      "English",
+      "Spanish",
+      "French",
+      "German",
+      "Italian",
+      "Portuguese",
+      "Chinese",
+      "Japanese",
+    ];
     const numLanguages = Math.floor(Math.random() * 3) + 1; // 1-3 languages
     const shuffled = allLanguages.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, numLanguages);
@@ -59,7 +73,7 @@ export class LawyerService {
 
   static async getLawyerById(id: string): Promise<ApiLawyer | null> {
     try {
-      const lawyers = await this.getLawyers();
+      const lawyers = await LawyerService.getLawyers();
       return lawyers.find(lawyer => lawyer.id === id) || null;
     } catch (error) {
       console.error("Error fetching lawyer by ID:", error);
@@ -69,8 +83,10 @@ export class LawyerService {
 
   static async getLawyerDetail(id: string): Promise<LawyerDetailApi | null> {
     try {
-      const response = await this.makeRequest<LawyerDetailApiResponse>(`/marketplaces/lawyers/${id}`);
-      
+      const response = await LawyerService.makeRequest<LawyerDetailApiResponse>(
+        `/marketplaces/lawyers/${id}`
+      );
+
       if (!response.success) {
         throw new Error(response.message || "Failed to fetch lawyer detail");
       }
@@ -84,20 +100,19 @@ export class LawyerService {
 
   static async searchLawyers(query: string): Promise<ApiLawyer[]> {
     try {
-      const lawyers = await this.getLawyers();
-      
+      const lawyers = await LawyerService.getLawyers();
+
       if (!query.trim()) {
         return lawyers;
       }
 
       const searchTerm = query.toLowerCase();
-      return lawyers.filter(lawyer => 
-        lawyer.name.toLowerCase().includes(searchTerm) ||
-        lawyer.about.toLowerCase().includes(searchTerm) ||
-        lawyer.city.toLowerCase().includes(searchTerm) ||
-        lawyer.practice_area.some(area => 
-          area.toLowerCase().includes(searchTerm)
-        )
+      return lawyers.filter(
+        lawyer =>
+          lawyer.name.toLowerCase().includes(searchTerm) ||
+          lawyer.about.toLowerCase().includes(searchTerm) ||
+          lawyer.city.toLowerCase().includes(searchTerm) ||
+          lawyer.practice_area.some(area => area.toLowerCase().includes(searchTerm))
       );
     } catch (error) {
       console.error("Error searching lawyers:", error);
@@ -107,16 +122,14 @@ export class LawyerService {
 
   static async filterLawyersByPracticeArea(practiceArea: string): Promise<ApiLawyer[]> {
     try {
-      const lawyers = await this.getLawyers();
-      
+      const lawyers = await LawyerService.getLawyers();
+
       if (!practiceArea.trim()) {
         return lawyers;
       }
 
-      return lawyers.filter(lawyer => 
-        lawyer.practice_area.some(area => 
-          area.toLowerCase().includes(practiceArea.toLowerCase())
-        )
+      return lawyers.filter(lawyer =>
+        lawyer.practice_area.some(area => area.toLowerCase().includes(practiceArea.toLowerCase()))
       );
     } catch (error) {
       console.error("Error filtering lawyers by practice area:", error);
@@ -126,11 +139,9 @@ export class LawyerService {
 
   static async filterLawyersByPriceRange(minPrice: number, maxPrice: number): Promise<ApiLawyer[]> {
     try {
-      const lawyers = await this.getLawyers();
-      
-      return lawyers.filter(lawyer => 
-        lawyer.min_price >= minPrice && lawyer.max_price <= maxPrice
-      );
+      const lawyers = await LawyerService.getLawyers();
+
+      return lawyers.filter(lawyer => lawyer.min_price >= minPrice && lawyer.max_price <= maxPrice);
     } catch (error) {
       console.error("Error filtering lawyers by price range:", error);
       throw error;
@@ -139,11 +150,9 @@ export class LawyerService {
 
   static async filterLawyersByRating(minRating: number): Promise<ApiLawyer[]> {
     try {
-      const lawyers = await this.getLawyers();
-      
-      return lawyers.filter(lawyer => 
-        parseFloat(lawyer.avg_rating) >= minRating
-      );
+      const lawyers = await LawyerService.getLawyers();
+
+      return lawyers.filter(lawyer => parseFloat(lawyer.avg_rating) >= minRating);
     } catch (error) {
       console.error("Error filtering lawyers by rating:", error);
       throw error;

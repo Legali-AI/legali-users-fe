@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { SearchBar } from "@/components/search-bar";
 import { Button } from "@/components/ui/button";
@@ -7,12 +8,11 @@ import { Input } from "@/components/ui/input";
 import { useLawyers } from "@/hooks/use-lawyers";
 import { setTestToken } from "@/lib/auth-token";
 import type { SearchParams } from "@/types";
-import { useEffect, useState } from "react";
 import { ApiLawyerCardGrid } from "./ApiLawyerCardGrid";
 
-interface LawyerSearchInterfaceProps {}
+type LawyerSearchInterfaceProps = Record<string, never>;
 
-export default function LawyerSearchInterface({}: LawyerSearchInterfaceProps) {
+export default function LawyerSearchInterface(_props: LawyerSearchInterfaceProps) {
   const [searchParams, setSearchParams] = useState<SearchParams>({
     query: "",
     location: "",
@@ -26,7 +26,12 @@ export default function LawyerSearchInterface({}: LawyerSearchInterfaceProps) {
   const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 0 });
 
   const [showFilters, setShowFilters] = useState(false);
-  const { lawyers, loading: isLoading, filterCounts, searchLawyers } = useLawyers({
+  const {
+    lawyers,
+    loading: isLoading,
+    filterCounts,
+    searchLawyers,
+  } = useLawyers({
     ...(searchParams.query && { searchQuery: searchParams.query }),
     ...(selectedPracticeAreas.length > 0 && { practiceAreas: selectedPracticeAreas }),
     ...(priceRange.min > 0 && { minPrice: priceRange.min }),
@@ -171,7 +176,7 @@ export default function LawyerSearchInterface({}: LawyerSearchInterfaceProps) {
                   selectedRating: searchParams.rating,
                 })}
                 ratingCounts={filterCounts.ratings}
-                onRatingChange={(rating) => {
+                onRatingChange={rating => {
                   const updates: Partial<SearchParams> = {};
                   if (rating !== undefined) {
                     updates.rating = rating;
@@ -185,7 +190,7 @@ export default function LawyerSearchInterface({}: LawyerSearchInterfaceProps) {
                 onPriceRangeChange={setPriceRange}
                 languageOptions={filterCounts.languages}
                 selectedLanguages={selectedLanguages}
-                onLanguageChange={(values) => {
+                onLanguageChange={values => {
                   // Convert to lowercase to match the filtering logic
                   setSelectedLanguages(values.map(v => v.toLowerCase()));
                 }}
@@ -219,13 +224,10 @@ export default function LawyerSearchInterface({}: LawyerSearchInterfaceProps) {
                 <select
                   className="rounded-md border px-4 py-2 text-gray-700"
                   value={`${searchParams.sortBy}-${searchParams.sortOrder}`}
-                  onChange={(e) => {
+                  onChange={e => {
                     const [sortBy, sortOrder] = e.target.value.split("-");
                     const updates: Partial<SearchParams> = {};
-                    if (
-                      sortBy &&
-                      (sortBy === "rating" || sortBy === "price" || sortBy === "name")
-                    ) {
+                    if (sortBy && (sortBy === "rating" || sortBy === "price" || sortBy === "name")) {
                       updates.sortBy = sortBy as "rating" | "price" | "name";
                     }
                     if (sortOrder && (sortOrder === "asc" || sortOrder === "desc")) {
@@ -255,7 +257,6 @@ export default function LawyerSearchInterface({}: LawyerSearchInterfaceProps) {
                 action: hasActiveFilters ? <Button onClick={clearAllFilters}>Clear All Filters</Button> : undefined,
               }}
             />
-
           </div>
         </div>
       </div>

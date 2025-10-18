@@ -37,7 +37,9 @@ export function PriceRangeFilter({
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-3">
           <div className="relative">
-            <div className="absolute top-1/2 left-3 -translate-y-1/2 transform text-sm font-medium text-gray-500">{currency}</div>
+            <div className="absolute top-1/2 left-3 -translate-y-1/2 transform text-sm font-medium text-gray-500">
+              {currency}
+            </div>
             <Input
               type="number"
               placeholder={minPlaceholder}
@@ -47,7 +49,9 @@ export function PriceRangeFilter({
             />
           </div>
           <div className="relative">
-            <div className="absolute top-1/2 left-3 -translate-y-1/2 transform text-sm font-medium text-gray-500">{currency}</div>
+            <div className="absolute top-1/2 left-3 -translate-y-1/2 transform text-sm font-medium text-gray-500">
+              {currency}
+            </div>
             <Input
               type="number"
               placeholder={maxPlaceholder}

@@ -164,7 +164,7 @@ export interface LawyerDetailApiResponse {
   success: boolean;
   message: string;
   data: LawyerDetailApi;
-  meta: {};
+  meta: Record<string, unknown>;
   error: null | string;
   timestamp: string;
 }

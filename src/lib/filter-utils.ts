@@ -1,4 +1,4 @@
-import { ApiLawyer } from "@/types";
+import type { ApiLawyer } from "@/types";
 
 export interface FilterCounts {
   practiceAreas: Array<{ label: string; value: string; count: number }>;
@@ -90,14 +90,14 @@ export function getFilteredCounts(
   }
 
   if (filters.minPrice !== undefined && filters.maxPrice !== undefined) {
-    filteredLawyers = filteredLawyers.filter(lawyer =>
-      lawyer.min_price >= filters.minPrice! && lawyer.max_price <= filters.maxPrice!
+    filteredLawyers = filteredLawyers.filter(
+      lawyer => lawyer.min_price >= filters.minPrice! && lawyer.max_price <= filters.maxPrice!
     );
   }
 
   if (filters.minRating !== undefined) {
-    filteredLawyers = filteredLawyers.filter(lawyer =>
-      parseFloat(lawyer.avg_rating) >= filters.minRating!
+    filteredLawyers = filteredLawyers.filter(
+      lawyer => parseFloat(lawyer.avg_rating) >= filters.minRating!
     );
   }
 

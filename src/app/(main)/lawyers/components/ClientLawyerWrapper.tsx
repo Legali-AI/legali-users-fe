@@ -20,9 +20,9 @@ const LawyerSearchInterface = dynamic(() => import("./LawyerSearchInterface"), {
   ),
 });
 
-interface ClientLawyerWrapperProps {}
+type ClientLawyerWrapperProps = Record<string, never>;
 
-export default function ClientLawyerWrapper({}: ClientLawyerWrapperProps) {
+export default function ClientLawyerWrapper(_props: ClientLawyerWrapperProps) {
   return (
     <div className="animate-in duration-500 fade-in">
       <LawyerSearchInterface />

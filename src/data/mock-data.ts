@@ -13,8 +13,13 @@ export const mockLawyers: Lawyer[] = [
     rating: 4.8,
     reviewCount: 127,
     hourlyRate: 450,
+    minPrice: 400,
+    maxPrice: 500,
+    completedCases: 200,
+    ongoingCases: 15,
     availability: "available",
     languages: ["English", "Spanish"],
+    educations: ["J.D. Harvard Law School", "B.A. Economics, Stanford University"],
     bio: "Experienced corporate attorney with over 12 years specializing in mergers and acquisitions, contract negotiations, and corporate governance. Successfully closed over $2B in transactions.",
     caseResults: [
       {
@@ -68,8 +73,13 @@ export const mockLawyers: Lawyer[] = [
     rating: 4.9,
     reviewCount: 89,
     hourlyRate: 350,
+    minPrice: 300,
+    maxPrice: 400,
+    completedCases: 150,
+    ongoingCases: 25,
     availability: "available",
     languages: ["English", "Mandarin", "Cantonese"],
+    educations: ["J.D. Stanford Law School", "B.A. International Relations, UC Berkeley"],
     bio: "Dedicated immigration attorney helping families and businesses navigate complex immigration processes. Fluent in multiple languages with a track record of successful visa applications.",
     caseResults: [
       {
@@ -115,8 +125,13 @@ export const mockLawyers: Lawyer[] = [
     rating: 4.7,
     reviewCount: 203,
     hourlyRate: 400,
+    minPrice: 350,
+    maxPrice: 450,
+    completedCases: 300,
+    ongoingCases: 40,
     availability: "busy",
     languages: ["English", "Spanish"],
+    educations: ["J.D. UCLA Law School", "B.A. Psychology, UC San Diego"],
     bio: "Compassionate family law attorney with 15 years of experience helping families through difficult transitions. Specializes in collaborative divorce and child-focused solutions.",
     caseResults: [
       {

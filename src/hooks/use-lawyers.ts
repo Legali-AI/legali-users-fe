@@ -1,19 +1,21 @@
-import { calculateFilterCounts, FilterCounts } from "@/lib/filter-utils";
-import { LawyerService } from "@/services/lawyer.service";
-import { ApiLawyer, Lawyer, LawyerDetailApi } from "@/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { calculateFilterCounts, type FilterCounts } from "@/lib/filter-utils";
+import { LawyerService } from "@/services/lawyer.service";
+import type { ApiLawyer, Lawyer, LawyerDetailApi } from "@/types";
 
 // Adapter function to convert LawyerDetailApi to Lawyer
 function adaptLawyerDetailApiToLawyer(lawyerDetail: LawyerDetailApi): Lawyer {
   // Calculate experience from member_since date
   const memberSince = new Date(lawyerDetail.member_since);
   const now = new Date();
-  const experienceYears = Math.floor((now.getTime() - memberSince.getTime()) / (1000 * 60 * 60 * 24 * 365));
+  const experienceYears = Math.floor(
+    (now.getTime() - memberSince.getTime()) / (1000 * 60 * 60 * 24 * 365)
+  );
 
   return {
     id: lawyerDetail.id,
     name: lawyerDetail.name,
-    email: `${lawyerDetail.name.toLowerCase().replace(/\s+/g, '.')}@example.com`,
+    email: `${lawyerDetail.name.toLowerCase().replace(/\s+/g, ".")}@example.com`,
     profileImage: "",
     credentials: lawyerDetail.credentials,
     educations: lawyerDetail.educations,
@@ -36,15 +38,15 @@ function adaptLawyerDetailApiToLawyer(lawyerDetail: LawyerDetailApi): Lawyer {
         caseType: lawyerDetail.practice_area[0] || "Legal Consultation",
         year: new Date().getFullYear() - 1,
         outcome: "Successful Resolution",
-        description: `Successfully handled ${lawyerDetail.completed_cases} cases with positive outcomes.`
+        description: `Successfully handled ${lawyerDetail.completed_cases} cases with positive outcomes.`,
       },
       {
         id: `${lawyerDetail.id}-case-2`,
         caseType: "Client Consultation",
         year: new Date().getFullYear(),
         outcome: "Ongoing Support",
-        description: `Currently managing ${lawyerDetail.on_going_cases} active cases with dedicated client support.`
-      }
+        description: `Currently managing ${lawyerDetail.on_going_cases} active cases with dedicated client support.`,
+      },
     ],
     pricingPackages: [
       {
@@ -53,25 +55,24 @@ function adaptLawyerDetailApiToLawyer(lawyerDetail: LawyerDetailApi): Lawyer {
         description: "Initial consultation",
         price: lawyerDetail.min_price,
         duration: "1 hour",
-        features: ["Case review", "Legal advice", "Next steps"]
+        features: ["Case review", "Legal advice", "Next steps"],
       },
       {
-        id: "2", 
+        id: "2",
         name: "Full Representation",
         description: "Complete legal representation",
         price: lawyerDetail.max_price,
         duration: "Case duration",
-        features: ["Full representation", "Court appearances", "Document preparation"]
-      }
+        features: ["Full representation", "Court appearances", "Document preparation"],
+      },
     ],
     videoIntroUrl: "",
     verificationStatus: "verified" as const,
     disciplinaryHistory: [],
     createdAt: lawyerDetail.member_since,
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
   };
 }
-
 
 export interface UseLawyersOptions {
   searchQuery?: string;
@@ -116,7 +117,7 @@ export function useLawyers(options: UseLawyersOptions = {}): UseLawyersReturn {
       const data = await LawyerService.getLawyers();
       setAllLawyers(data);
       setLawyers(data);
-      
+
       // Calculate filter counts
       const counts = calculateFilterCounts(data);
       setFilterCounts(counts);
@@ -179,7 +180,6 @@ export function useLawyers(options: UseLawyersOptions = {}): UseLawyersReturn {
     }
   }, []);
 
-
   const clearFilters = useCallback(async () => {
     setLawyers(allLawyers);
   }, [allLawyers]);
@@ -189,16 +189,19 @@ export function useLawyers(options: UseLawyersOptions = {}): UseLawyersReturn {
   }, [fetchLawyers]);
 
   // Memoize options to prevent infinite re-renders
-  const memoizedOptions = useMemo(() => options, [
-    options.searchQuery,
-    options.practiceAreas,
-    options.minPrice,
-    options.maxPrice,
-    options.minRating,
-    options.languages,
-    options.sortBy,
-    options.sortOrder,
-  ]);
+  const memoizedOptions = useMemo(
+    () => options,
+    [
+      options.searchQuery,
+      options.practiceAreas,
+      options.minPrice,
+      options.maxPrice,
+      options.minRating,
+      options.languages,
+      options.sortBy,
+      options.sortOrder,
+    ]
+  );
 
   // Apply initial filters when options change
   useEffect(() => {
@@ -207,20 +210,21 @@ export function useLawyers(options: UseLawyersOptions = {}): UseLawyersReturn {
     let filteredLawyers = [...allLawyers];
 
     if (memoizedOptions.searchQuery) {
-      filteredLawyers = filteredLawyers.filter(lawyer => 
-        lawyer.name.toLowerCase().includes(memoizedOptions.searchQuery!.toLowerCase()) ||
-        lawyer.about.toLowerCase().includes(memoizedOptions.searchQuery!.toLowerCase()) ||
-        lawyer.city.toLowerCase().includes(memoizedOptions.searchQuery!.toLowerCase()) ||
-        lawyer.practice_area.some(area => 
-          area.toLowerCase().includes(memoizedOptions.searchQuery!.toLowerCase())
-        )
+      filteredLawyers = filteredLawyers.filter(
+        lawyer =>
+          lawyer.name.toLowerCase().includes(memoizedOptions.searchQuery!.toLowerCase()) ||
+          lawyer.about.toLowerCase().includes(memoizedOptions.searchQuery!.toLowerCase()) ||
+          lawyer.city.toLowerCase().includes(memoizedOptions.searchQuery!.toLowerCase()) ||
+          lawyer.practice_area.some(area =>
+            area.toLowerCase().includes(memoizedOptions.searchQuery!.toLowerCase())
+          )
       );
     }
 
     if (memoizedOptions.practiceAreas && memoizedOptions.practiceAreas.length > 0) {
-      filteredLawyers = filteredLawyers.filter(lawyer => 
-        memoizedOptions.practiceAreas!.some(selectedArea => 
-          lawyer.practice_area.some(lawyerArea => 
+      filteredLawyers = filteredLawyers.filter(lawyer =>
+        memoizedOptions.practiceAreas!.some(selectedArea =>
+          lawyer.practice_area.some(lawyerArea =>
             lawyerArea.toLowerCase().includes(selectedArea.toLowerCase())
           )
         )
@@ -234,27 +238,28 @@ export function useLawyers(options: UseLawyersOptions = {}): UseLawyersReturn {
         const lawyerMax = lawyer.max_price;
         const selectedMin = memoizedOptions.minPrice || 0;
         const selectedMax = memoizedOptions.maxPrice || Infinity;
-        
+
         // Lawyer is included if their price range overlaps with selected range
         return lawyerMin <= selectedMax && lawyerMax >= selectedMin;
       });
     }
 
     if (memoizedOptions.minRating !== undefined) {
-      filteredLawyers = filteredLawyers.filter(lawyer => 
-        parseFloat(lawyer.avg_rating) >= memoizedOptions.minRating!
+      filteredLawyers = filteredLawyers.filter(
+        lawyer => parseFloat(lawyer.avg_rating) >= memoizedOptions.minRating!
       );
     }
 
     // Language filtering based on lawyer.languages
     if (memoizedOptions.languages && memoizedOptions.languages.length > 0) {
-      filteredLawyers = filteredLawyers.filter(lawyer => 
-        lawyer.languages && 
-        memoizedOptions.languages!.some(selectedLang => 
-          lawyer.languages!.some(lawyerLang => 
-            lawyerLang.toLowerCase() === selectedLang.toLowerCase()
+      filteredLawyers = filteredLawyers.filter(
+        lawyer =>
+          lawyer.languages &&
+          memoizedOptions.languages!.some(selectedLang =>
+            lawyer.languages!.some(
+              lawyerLang => lawyerLang.toLowerCase() === selectedLang.toLowerCase()
+            )
           )
-        )
       );
     }
 
@@ -262,7 +267,7 @@ export function useLawyers(options: UseLawyersOptions = {}): UseLawyersReturn {
     if (memoizedOptions.sortBy && memoizedOptions.sortOrder) {
       filteredLawyers.sort((a, b) => {
         let comparison = 0;
-        
+
         switch (memoizedOptions.sortBy) {
           case "rating":
             comparison = parseFloat(a.avg_rating) - parseFloat(b.avg_rating);
@@ -274,7 +279,7 @@ export function useLawyers(options: UseLawyersOptions = {}): UseLawyersReturn {
             comparison = a.name.localeCompare(b.name);
             break;
         }
-        
+
         return memoizedOptions.sortOrder === "asc" ? comparison : -comparison;
       });
     }
@@ -344,7 +349,7 @@ export function useLawyerReviews(id: string) {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const lawyerDetail = await LawyerService.getLawyerDetail(id);
       if (lawyerDetail && lawyerDetail.client_reviews) {
         const reviews = lawyerDetail.client_reviews.map((review, index) => ({

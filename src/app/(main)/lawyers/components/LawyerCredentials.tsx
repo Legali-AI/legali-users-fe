@@ -1,6 +1,6 @@
+import { Award, Languages } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Lawyer } from "@/types";
-import { Award, Languages } from "lucide-react";
 
 interface LawyerCredentialsProps {
   lawyer: Lawyer;

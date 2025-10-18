@@ -1,7 +1,7 @@
+import { MapPin, Shield, Star } from "lucide-react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
 import type { Lawyer } from "@/types";
-import { MapPin, Shield, Star } from "lucide-react";
 
 interface LawyerHeaderProps {
   lawyer: Lawyer;
