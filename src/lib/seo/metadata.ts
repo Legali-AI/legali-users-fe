@@ -281,3 +281,26 @@ export const smartLegalDrafterMetadata = createPublicMetadata(
   ],
   "/og-smart-legal-drafter.jpg"
 );
+
+export const litigationCaseBuilderMetadata = createPublicMetadata(
+  "Litigation Case Builder - AI-Powered Case Management Platform",
+  "Build and manage your legal case with AI-powered tools. Organize evidence, create timelines, collaborate with your team, and generate court-ready documents all in one integrated workspace.",
+  "/litigation-case-builder",
+  [
+    "case management",
+    "litigation software",
+    "legal case builder",
+    "evidence management",
+    "legal timeline",
+    "case organization",
+    "legal workspace",
+    "court documents",
+    "legal collaboration",
+    "case tracking",
+    "legal project management",
+    "litigation tools",
+    "self-represented litigant tools",
+    "pro se case management",
+  ],
+  "/og-litigation-case-builder.jpg"
+);
